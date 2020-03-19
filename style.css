@@ -1,0 +1,16 @@
+body  {
+  background-color: #ccc;
+}
+
+.content  {
+  font-family: Arial, sans-serif;
+  font-size: 25px;
+  color: #000;
+  padding: 10px 5px 10px 5px;
+  font-weight: normal;
+  text-decoration: none;
+  font-style: normal;
+  font-variant: normal;
+  text-transform: none;
+}
+
