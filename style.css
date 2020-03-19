@@ -1,0 +1,73 @@
+html {
+  box-sizing: border-box;
+  font-size: 24px; /* fallback font size */
+  font-size: min(max(16px, 4vw), 24px); /* responsive font size */
+
+  --mainBg: #fbfbfb;
+  --textHighEmph: hsla(0, 0%, 0%, .87);
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) { /* remove all animations and transitions for people who prefer not to see them */
+  * {
+    animation-play-state: paused;
+    transition: none;
+    scroll-behavior: auto;
+  }
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 40px 40px;
+  background-color: var(--mainBg); /* background to changes based on UA pref */
+  color: var(--textHighEmph);
+  font-family: 'Roboto', sans-serif;
+  padding: 10px 5px 10px 5px;
+  font-weight: normal;
+  line-height: 1.5;
+  text-decoration: none;
+  font-style: normal;
+  font-variant: normal;
+  text-transform: none;
+}
+
+p {
+  max-width: 66ch;
+}
+
+h1 {
+
+}
+
+.visual {
+  margin: 2rem 0;
+}
+
+.bigger {
+  font-size: 1.25rem;
+}
+
+.embold {
+  font-weight: bold;
+}
+
+.pic {
+  max-width: 100%;
+  max-height: 92vh;
+  height: auto;
+  object-fit: scale-down;
+}
+
+.centerText {
+  text-align: center;
+}
+
+.end {
+  margin-bottom: 80px;
+}
