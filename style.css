@@ -24,11 +24,11 @@ html, body {
 }
 
 body {
-  margin: 40px 40px;
-  background-color: var(--mainBg); /* background to changes based on UA pref */
+  margin: 20px;
+  background-color: var(--mainBg);
   color: var(--textHighEmph);
   font-family: 'Roboto', sans-serif;
-  padding: 10px 5px 10px 5px;
+  padding: 20px 0;
   font-weight: normal;
   line-height: 1.5;
   text-decoration: none;
@@ -37,8 +37,18 @@ body {
   text-transform: none;
 }
 
+@media screen and (min-width: 600px) {
+  body {
+    margin: 40px;
+  }
+}
+
 p {
   max-width: 66ch;
+}
+
+.addTopMargin {
+  margin-top: 40px;
 }
 
 h1 {
