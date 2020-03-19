@@ -25,7 +25,7 @@ html, body {
 
 body {
   margin: 40px 40px;
-  background-color: var(--mainBg); /* background to changes based on UA pref */
+  background-color: var(--mainBg);
   color: var(--textHighEmph);
   font-family: 'Roboto', sans-serif;
   padding: 10px 5px 10px 5px;
@@ -39,10 +39,6 @@ body {
 
 p {
   max-width: 66ch;
-}
-
-h1 {
-
 }
 
 .visual {
