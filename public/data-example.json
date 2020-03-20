@@ -1,0 +1,93 @@
+{
+  "range": "moderated!A1:Z1000",
+  "majorDimension": "ROWS",
+  "values": [
+    [
+      "Approved",
+      "Timestamp",
+      "What is the name of the hospital or clinic?",
+      "What is its address?",
+      "Drop off instructions, eg curbside procedure or mailing address:",
+      "What are they accepting?"
+    ],
+    [
+      "x",
+      "3/19/2020 10:54:55",
+      "Seattle Children's",
+      "Seattle Children’s Administrative Building\n6901 Sand Point Way NE\nSeattle, WA 98115",
+      "",
+      "Surgical masks and isolation masks unopened and FDA approved"
+    ],
+    [
+      "",
+      "3/19/2020 11:14:25",
+      "Swedish Ballard ",
+      "Ballard Seattle ",
+      "Don’t know yet. I called charge nurse but they must be overwhelmed. Will update when I get exact instructions. "
+    ],
+    [
+      "",
+      "3/19/2020 14:37:04",
+      "Zuckerberg San Francisco General Hospital",
+      "1001 Potrero Ave, San Francisco, CA 94110",
+      "For now, call ahead: call the switchboard (628-206-8000), ask for \"Patient Experience\" or the front desk to arrange drop-off at the main entrance off 23rd St.",
+      "N95s unopened, Masks are most needed"
+    ],
+    [
+      "x",
+      "3/19/2020 14:54:26",
+      "Lahey Hospital and Medical Center",
+      "41 Burlington Mall Road, Burlington, MA 01805",
+      "https://patch.com/massachusetts/burlington/coronavirus-lahey-hospital-seeks-volunteers-sew-masks?fbclid=IwAR02-DpMm_WMVFrlhZOwspDeIhJu9qB7o5DUVvZd7iwiD-_m_fasWX0twco",
+      "I do not work for Lahey, but I've heard they are asking for volunteers to make masks - link above"
+    ],
+    [
+      "",
+      "3/19/2020 14:58:12",
+      "Winchester Hospital",
+      "41 Highland Avenue, Winchester, MA 01890",
+      "I do not work at Winchester Hospital, but I heard from a nurse who works there that they are very low on masks and in search of masks.  Details below.",
+      "I do not work at Winchester Hospital, but this is from a friend who works at Winchester Hospital: \"Hi everyone! Most of you know that I am a nurse working at Winchester hospital. There is a nationwide shortage of personal protective equipment, and we are in dire need of supplies. We are in need of masks (surgical, cone or n95) to safely do our job caring for patients, while also trying to protect ourselves. We are reusing masks and trying to conserve as best as we can, but we are running critically low. If anyone has any they are willing to donate, please let me know. If you do see any in store, please grab them! I will gladly reimburse you. Feel free to share this and PM me if you or anyone you know has any supplies they can donate. Thank you all!\""
+    ],
+    [
+      "",
+      "3/19/2020 15:11:30",
+      "Franciscan Women's Health Associates - Burien",
+      "16045 1st Ave S, Burien, WA 98148",
+      "Bring up stairs to the Women's care desk or call and a staff member will come down to get them",
+      "N95s unopened, N95s in open box or bag, Surgical masks unopened, Surgical masks opened"
+    ],
+    [
+      "",
+      "3/19/2020 15:19:46",
+      "Moab Regional Hospital, Moab UT",
+      "",
+      "",
+      "N95s unopened, N95s in open box or bag, Surgical masks unopened, Surgical masks opened, Safety goggles"
+    ],
+    [
+      "",
+      "3/19/2020 15:40:17",
+      "Santa Clara Valley Medical Center",
+      "2400 Clove Dr San Jose, CA 95128",
+      "While Chris Wilder, CEO of the Valley Medical Center Foundation, said there is a lot of construction and mesh fences, they have parking right outside and would be very happy to receive your donations of face shields and N-95s. They are open from 8 am to 5 pm. Monday through Friday.",
+      "N95s unopened, N95s in open box or bag, face shields"
+    ],
+    [
+      "",
+      "3/19/2020 15:52:02",
+      "Northern nevada medical center",
+      "2375 E. Prater Way, Sparks, NV, 89431",
+      "Mail to: Alexa Parker, Emergency Dept.- NNMC, 2375 E Prater Way, Sparks, NV, 89431",
+      "N95s unopened, N95s in open box or bag, Surgical masks unopened, Surgical masks opened, Disposable booties, Safety goggles, Gloves "
+    ],
+    [
+      "",
+      "3/19/2020 18:19:30",
+      "Jackson County Memorial Hospital ",
+      "1200 East Pecan St. Altus OK 73521",
+      "Call 580-379-5000 and ask for Mary Jencks",
+      "N95s unopened, Surgical masks unopened, Face shields"
+    ]
+  ]
+}
