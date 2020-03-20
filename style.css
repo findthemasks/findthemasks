@@ -5,6 +5,7 @@ html {
 
   --mainBg: #fbfbfb;
   --textHighEmph: hsla(0, 0%, 0%, .87);
+  --textMedEmph: hsla(0, 0%, 0%, .75);
 }
 
 *, *:before, *:after {
@@ -108,6 +109,22 @@ body {
 
 .centerText {
   text-align: center;
+}
+
+.addMoreTopMargin {
+  margin-top: 2em;
+}
+
+.marginBottomZero {
+  margin-bottom: 0;
+}
+
+.marginTopZero {
+  margin-top: 0;
+}
+
+.medEmph {
+  color: var(--textMedEmph);
 }
 
 .end {
