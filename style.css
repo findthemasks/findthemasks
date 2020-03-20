@@ -50,7 +50,6 @@ body {
 
 .container {
   display: grid;
-  justify-self: center;
 }
 
 .maxWidth {
@@ -58,7 +57,7 @@ body {
 }
 
 .addTopMargin {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 .gridCenter {
@@ -66,7 +65,7 @@ body {
 }
 
 .visual {
-  margin: 2rem 0;
+  margin: 1rem 0;
 }
 
 .gridJustStart {
@@ -93,7 +92,7 @@ body {
 }
 
 .addMoreTopMargin {
-  margin-top: 2em;
+  margin-top: 1.5rem;
 }
 
 .marginBottomZero {
