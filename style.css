@@ -5,6 +5,7 @@ html {
 
   --mainBg: #fbfbfb;
   --textHighEmph: hsla(0, 0%, 0%, .87);
+  --textMedEmph: hsla(0, 0%, 0%, .75);
 }
 
 *, *:before, *:after {
@@ -43,21 +44,32 @@ body {
   }
 }
 
-p {
+.content {
+  display: grid;
+}
+
+.container {
+  display: grid;
+}
+
+.maxWidth {
   max-width: 66ch;
 }
 
-<<<<<<< HEAD
 .addTopMargin {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
-h1 {
-
+.gridCenter {
+  justify-self: center;
 }
 
 .visual {
-  margin: 2rem 0;
+  margin: 1rem 0;
+}
+
+.gridJustStart {
+  justify-self: start;
 }
 
 .bigger {
@@ -77,6 +89,22 @@ h1 {
 
 .centerText {
   text-align: center;
+}
+
+.addMoreTopMargin {
+  margin-top: 1.5rem;
+}
+
+.marginBottomZero {
+  margin-bottom: 0;
+}
+
+.marginTopZero {
+  margin-top: 0;
+}
+
+.medEmph {
+  color: var(--textMedEmph);
 }
 
 .end {
