@@ -17,7 +17,7 @@ const CONFIG_SHEET_ID = functions.config().googleapi.sheet_id;
 const FUNCTIONS_REDIRECT = `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com/oauthcallback`;
 
 // setup for authGoogleAPI
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 const functionsOauthClient = new OAuth2Client(CONFIG_CLIENT_ID, CONFIG_CLIENT_SECRET,
   FUNCTIONS_REDIRECT);
 
@@ -64,28 +64,24 @@ async function getAuthorizedClient() {
   return functionsOauthClient;
 }
 
-function getSpreadsheet(client) {
-  return new Promise((resolve, reject) => {
-    const sheets = google.sheets('v4');
-    const request = {
-      spreadsheetId: CONFIG_SHEET_ID,
-      range: 'A:F',
-      auth: client };
-    return sheets.spreadsheets.values.get(request, (err, response) => {
-        if (err) {
-          console.error(`The API returned an error: ${err}`);
-          return reject(err);
-        }
-        return resolve(response.data);
-      });
-  });
+async function getSpreadsheet(client) {
+  const sheets = google.sheets('v4');
+  const request = {
+    spreadsheetId: CONFIG_SHEET_ID,
+    range: 'moderated'};
+  request.auth = client;
+  console.log("Request", request);
+
+  const response = await sheets.spreadsheets.values.get(request);
+  return response.data;
 }
 
 // HTTPS function to write new data to CONFIG_DATA_PATH, for testing
-exports.testsheetwrite = functions.https.onRequest(async (req, res) => {
+exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
   // Talk to sheets.
   const client = await getAuthorizedClient();
-  const data = await getSpreadsheet();
+  // Talk to sheets.
+  const data = await getSpreadsheet(client);
 
-  res.send(data);
+  res.send('done');
 });
