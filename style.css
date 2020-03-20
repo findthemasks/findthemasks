@@ -69,6 +69,10 @@ body {
   margin: 2rem 0;
 }
 
+.gridJustStart {
+  justify-self: start;
+}
+
 .bigger {
   font-size: 1.25rem;
 }
