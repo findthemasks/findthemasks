@@ -18,25 +18,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
     <meta name=”description” content=”Help #findthemasks for covid-19” />
     <meta name=”keywords” content=”#findthemasks, masks, n95, coronavirus, covid-19” />
-    <style>
-.filters-list div {
-  display: inline-block;
-  margin: 0.5rem 0;
-}
 
-.filters-list input {
-  display: none;
-}
-
-.filters-list label {
-  border: 1px black solid;
-  padding: 0.5rem;
-}
-
-.filters-list label.selected {
-  background-color: #aff;
-}
-    </style>
 </head>
 
 <body>
@@ -84,10 +66,10 @@
             <p>If you find a hospital taking donations from the public, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a> so we can add them to the site.</p>
         </article>
 
-        <article>
-            <h1>List of donation sites</h1>
+        <article class="donation-sites">
+            <h2>List of donation sites</h2>
 
-            <h2>Filters</h2>
+            <h1>Filters</h1>
             <form name="filters" class="filters-list"></form>
 
             <div class="locations-list"></div>
