@@ -37,10 +37,13 @@ function toDataByLocation(data) {
 
 function toHtmlSnippets(data_by_location) {
   const lines = [];
+  const state_nav = [];
 
   for (const state of Object.keys(data_by_location).sort()) {
     lines.push(`<div class=state>`);
-    lines.push(`<h2>${state}</h2>`);
+    lines.push(`<h2 id="${state}">${state}</h2>`);
+
+    state_nav.push(`<a href="#${state}">${state}</a>`);
 
     const cities = data_by_location[state];
     for (const city of Object.keys(cities).sort()) {
@@ -78,6 +81,8 @@ function toHtmlSnippets(data_by_location) {
     }
     lines.push('</div>');
   }
+
+  lines.unshift(`BY STATE: ` + state_nav.join(`&nbsp;|&nbsp;`) + `<br/>`);
   return lines;
 }
 
