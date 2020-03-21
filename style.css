@@ -52,6 +52,16 @@ body {
   display: grid;
 }
 
+.container.maxWidth {
+  margin: 0 auto;
+  max-width: 1600px;
+}
+
+.body-wrapper {
+  margin:0 auto; 
+  max-width:960px;
+}
+
 .maxWidth {
   max-width: 66ch;
 }
@@ -64,12 +74,25 @@ body {
   justify-self: center;
 }
 
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+}
 .visual {
   margin: 1rem 0;
 }
 
 .gridJustStart {
   justify-self: start;
+}
+.visual.gridJustStart, .grid-item {
+  flex: calc(100% / 3);
+  box-sizing: border-box;
+}
+
+.grid > .grid-item {
+  flex: calc(100% / 4);
+  margin: 12px;
 }
 
 .bigger {
@@ -109,4 +132,10 @@ body {
 
 .end {
   margin-bottom: 80px;
+}
+
+.make-it-stand-out {
+  font-size: 60px;
+  font-weight: bold;
+  line-height: 1.2;
 }
