@@ -193,7 +193,11 @@ body {
   cursor: pointer;
 }
 
+.filters-list label:hover {
+  background-color: #efefef;
+}
+
 .filters-list label.selected {
-  background-color: #aff;
+  background-color: #ccc;
 }
 
