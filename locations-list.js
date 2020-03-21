@@ -64,9 +64,14 @@ function createFiltersListHTML() {
           type="checkbox"
           name="states"
           value="${state}"
-          onchange="onFilterChange()"
+          onchange="onFilterChange(this)"
           />
-        <label for="state-${state}">${state}</label>
+        <label
+          id="state-${state}-label"
+          for="state-${state}"
+          >
+          ${state}
+        </label>
       </div>
     `);
   }
@@ -81,9 +86,14 @@ function createFiltersListHTML() {
           type="checkbox"
           name="accept-open"
           value="${id}"
-          onchange="onFilterChange()"
+          onchange="onFilterChange(this)"
           />
-        <label for="accept-open-${id}">${f}</label>
+        <label
+          id="accept-open-${id}-label"
+          for="accept-open-${id}"
+          >
+          ${f}
+        </label>
       </div>
     `);
   }
@@ -95,7 +105,9 @@ function toHTMLID(name) {
   let s = '';
   for (let i = 0; i < name.length; i++) {
     let c = name.charAt(i);
-    if (c.match(/^[a-z0-9_:.]+$/i)) {
+    // We remove `.` from IDs because selection using jQuery failed when they
+    // appeared in IDs. TODO This should be investigated further.
+    if (c.match(/^[a-z0-9_:]+$/i)) {
       s += c;
     } else {
       s += '-';
@@ -184,7 +196,19 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 
-function onFilterChange() {
+function onFilterChange(elem) {
+  // This is a hacky approach to programatically highlighting selected items as
+  // it uses hard-coded ID references. We use this approach for now for
+  // simplicity, speed of implementation and performance, but it should ideally
+  // be replaced with a more robust solution if time allows and performance
+  // isn't affected.
+  let label = $("#" + elem.id + "-label");
+  if (elem.checked) {
+    label.addClass("selected");
+  } else {
+    label.removeClass("selected");
+  }
+
   let states = null;
   document.filters['states'].forEach((state) => {
     if (state.checked) {
