@@ -29,7 +29,6 @@ body {
   background-color: var(--mainBg);
   color: var(--textHighEmph);
   font-family: 'Roboto', sans-serif;
-  padding: 20px 0;
   font-weight: normal;
   line-height: 1.5;
   text-decoration: none;
@@ -46,6 +45,7 @@ body {
 
 .content {
   display: grid;
+  margin-bottom: 40px;
 }
 
 .container {
