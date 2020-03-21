@@ -35,10 +35,28 @@ function toDataByLocation(data) {
   return data_by_location;
 }
 
-function createFilters() {
-  const filters = [];
+function createFiltersListHTML() {
+  // We use objects here as a quick approach to removing duplicates.
+
+  // TODO Remove case-sensitive duplicates.
+
+  const states = {};
+  const acceptOpenFilters = {};
 
   for (const state of Object.keys(data_by_location).sort()) {
+    states[state] = true;
+
+    const cities = data_by_location[state];
+    for (const city of Object.keys(cities).sort()) {
+      for (const entry of cities[city]) {
+        acceptOpenFilters[entry["Will they accept open boxes/bags?"]] = true;
+      }
+    }
+  }
+
+  const filters = [];
+  filters.push(`<h3>States</h3>`);
+  for (const state of Object.keys(states)) {
     filters.push(`
       <div>
         <input
@@ -53,25 +71,52 @@ function createFilters() {
     `);
   }
 
+  filters.push(`<h3>Accepts Open Boxes/bags</h3>`);
+  for (const f of Object.keys(acceptOpenFilters)) {
+    let id = toHTMLID(f);
+    filters.push(`
+      <div>
+        <input
+          id="accept-open-${id}"
+          type="checkbox"
+          name="accept-open"
+          value="${id}"
+          onchange="onFilterChange()"
+          />
+        <label for="accept-open-${id}">${f}</label>
+      </div>
+    `);
+  }
+
   return filters;
 }
 
-function toHtmlSnippets(data_by_location, stateFilters) {
+function toHTMLID(name) {
+  let s = '';
+  for (let i = 0; i < name.length; i++) {
+    let c = name.charAt(i);
+    if (c.match(/^[a-z0-9_:.]+$/i)) {
+      s += c;
+    } else {
+      s += '-';
+    }
+  }
+  return s.toLowerCase();
+}
+
+function toHtmlSnippets(data_by_location, filters) {
   const lines = [];
 
   for (const state of Object.keys(data_by_location).sort()) {
-    if (stateFilters && !stateFilters[state]) {
+    if (filters && filters.states && !filters.states[state]) {
       continue;
     }
 
-    lines.push(`<div class=state>`);
-    lines.push(`<h2>${state}</h2>`);
+    const cityLines = [];
 
     const cities = data_by_location[state];
     for (const city of Object.keys(cities).sort()) {
-      lines.push(`<div class=city>`)
-      lines.push(`<h3>${city}</h3>`);
-
+      const entryLines = [];
       for (const entry of cities[city]) {
         const name = entry["What is the name of the hospital or clinic?"];
         const address = entry["Street address for dropoffs?"];
@@ -79,30 +124,50 @@ function toHtmlSnippets(data_by_location, stateFilters) {
         const accepting = entry["What are they accepting?"];
         const will_they_accept = entry["Will they accept open boxes/bags?"];
 
-        lines.push(`<div class=location>`)
-        lines.push(`<h4 class="marginBottomZero">${name}</h4>`);
+        if (filters && filters.acceptOpens) {
+          if (!filters.acceptOpens[toHTMLID(will_they_accept)]) {
+            continue;
+          }
+        }
 
-        lines.push(`<label>Address</label>`)
-        lines.push(`<p class="marginTopZero medEmph">${address.replace(/\n/g,'<br>')}</p>`);
+        entryLines.push(`<div class=location>`)
+        entryLines.push(`<h4 class="marginBottomZero">${name}</h4>`);
+
+        entryLines.push(`<label>Address</label>`)
+        entryLines.push(`<p class="marginTopZero medEmph">${address.replace(/\n/g,'<br>')}</p>`);
 
         if (instructions !== "") {
-          lines.push(`<label>Instructions</label>`)
-          lines.push(`<p>${instructions}</p>`);
+          entryLines.push(`<label>Instructions</label>`)
+          entryLines.push(`<p>${instructions}</p>`);
         }
         if (accepting !== "") {
-          lines.push(`<label>Accepting</label>`)
-          lines.push(`<p>${accepting}</p>`);
+          entryLines.push(`<label>Accepting</label>`)
+          entryLines.push(`<p>${accepting}</p>`);
         }
         if (will_they_accept !== "") {
-          lines.push(`<label>Open packages?</label>`)
-          lines.push(`<p>${will_they_accept}</p>`);
+          entryLines.push(`<label>Open packages?</label>`)
+          entryLines.push(`<p>${will_they_accept}</p>`);
         }
-        lines.push('</div>');
+        entryLines.push('</div>');
       }
+
+      if (entryLines.length > 0) {
+        cityLines.push(`<div class=city>`)
+        cityLines.push(`<h3>${city}</h3>`);
+        cityLines.push(entryLines.join('\n'));
+        cityLines.push('</div>');
+      }
+
+    }
+
+    if (cityLines.length > 0) {
+      lines.push(`<div class=state>`);
+      lines.push(`<h2>${state}</h2>`);
+      lines.push(cityLines.join('\n'));
       lines.push('</div>');
     }
-    lines.push('</div>');
   }
+
   return lines;
 }
 
@@ -112,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function() {
     window.locations = result;
     window.data_by_location = toDataByLocation(locations);
 
-    $(".filters-list").html(createFilters(data_by_location).join(" "));
+    $(".filters-list").html(createFiltersListHTML(data_by_location).join(" "));
 
     const htmlSnippets = toHtmlSnippets(data_by_location, null);
     $(".locations-list").html(htmlSnippets.join(" "));
@@ -121,8 +186,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function onFilterChange() {
   let states = null;
-
-  document.filters.states.forEach((state) => {
+  document.filters['states'].forEach((state) => {
     if (state.checked) {
       if (states === null) {
         states = {};
@@ -131,6 +195,18 @@ function onFilterChange() {
     }
   });
 
-  const htmlSnippets = toHtmlSnippets(window.data_by_location, states);
+  let acceptOpens = null;
+  document.filters['accept-open'].forEach((acceptOpen) => {
+    if (acceptOpen.checked) {
+      if (acceptOpens === null) {
+        acceptOpens = {};
+      }
+      acceptOpens[acceptOpen.value] = true;
+    }
+  });
+
+  const filters = {states, acceptOpens};
+  console.log(filters);
+  const htmlSnippets = toHtmlSnippets(window.data_by_location, filters);
   $(".locations-list").html(htmlSnippets.join(" "));
 }
