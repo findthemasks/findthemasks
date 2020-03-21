@@ -206,7 +206,6 @@ function onFilterChange() {
   });
 
   const filters = {states, acceptOpens};
-  console.log(filters);
   const htmlSnippets = toHtmlSnippets(window.data_by_location, filters);
   $(".locations-list").html(htmlSnippets.join(" "));
 }
