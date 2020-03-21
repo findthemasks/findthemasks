@@ -45,11 +45,11 @@ body {
 }
 
 .content {
-  display: grid;
+
 }
 
 .container {
-  display: grid;
+
 }
 
 .maxWidth {
@@ -161,4 +161,3 @@ body {
   font-weight: 600;
   text-transform: uppercase;
 }
-
