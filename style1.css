@@ -29,7 +29,6 @@ body {
   background-color: var(--mainBg);
   color: var(--textHighEmph);
   font-family: 'Roboto', sans-serif;
-  padding: 20px 0;
   font-weight: normal;
   line-height: 1.5;
   text-decoration: none;
@@ -46,6 +45,7 @@ body {
 
 .content {
   display: grid;
+  margin-bottom: 40px;
 }
 
 .container {
@@ -113,6 +113,7 @@ body {
 
 /* Styling for the JS generated locations list */
 
+
 .locations-list {
   padding-bottom: 10px;
   border-bottom: 1px solid #efefef;
@@ -160,5 +161,43 @@ body {
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
+}
+
+.donation-sites h1 {
+  margin-bottom: -10px;
+}
+
+.filters-list {
+  margin-bottom: 30px;
+}
+
+.filters-list div {
+  display: inline-block;
+  margin-top: 0.5rem;
+}
+
+.filters-list h4 {
+  font-size: 20px;
+  text-transform: uppercase;
+  margin-top: 30px;
+  margin-bottom: 10px;}
+
+.filters-list input {
+  display: none;
+}
+
+.filters-list label {
+  border: 1px black solid;
+  font-size: 18px;
+  padding: 0.3rem 0.4rem;
+  cursor: pointer;
+}
+
+.filters-list label:hover {
+  background-color: #efefef;
+}
+
+.filters-list label.selected {
+  background-color: #ccc;
 }
 
