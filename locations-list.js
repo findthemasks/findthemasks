@@ -35,10 +35,35 @@ function toDataByLocation(data) {
   return data_by_location;
 }
 
-function toHtmlSnippets(data_by_location) {
+function createFilters() {
+  const filters = [];
+
+  for (const state of Object.keys(data_by_location).sort()) {
+    filters.push(`
+      <div>
+        <input
+          id="state-${state}"
+          type="checkbox"
+          name="states"
+          value="${state}"
+          onchange="onFilterChange()"
+          />
+        <label for="state-${state}">${state}</label>
+      </div>
+    `);
+  }
+
+  return filters;
+}
+
+function toHtmlSnippets(data_by_location, stateFilters) {
   const lines = [];
 
   for (const state of Object.keys(data_by_location).sort()) {
+    if (stateFilters && !stateFilters[state]) {
+      continue;
+    }
+
     lines.push(`<div class=state>`);
     lines.push(`<h2>${state}</h2>`);
 
@@ -86,7 +111,26 @@ document.addEventListener("DOMContentLoaded", function() {
     // may end up using this for search / filtering...
     window.locations = result;
     window.data_by_location = toDataByLocation(locations);
-    html_snippets = toHtmlSnippets(data_by_location);
-    $(".locations-list").append(html_snippets.join(" "));
+
+    $(".filters-list").html(createFilters(data_by_location).join(" "));
+
+    const htmlSnippets = toHtmlSnippets(data_by_location, null);
+    $(".locations-list").html(htmlSnippets.join(" "));
   });
 });
+
+function onFilterChange() {
+  let states = null;
+
+  document.filters.states.forEach((state) => {
+    if (state.checked) {
+      if (states === null) {
+        states = {};
+      }
+      states[state.value] = true;
+    }
+  });
+
+  const htmlSnippets = toHtmlSnippets(window.data_by_location, states);
+  $(".locations-list").html(htmlSnippets.join(" "));
+}
