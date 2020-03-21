@@ -54,7 +54,7 @@ function createFiltersListHTML() {
   }
 
   const filters = [];
-  filters.push(`<h3>States</h3>`);
+  filters.push(`<h4>States</h4>`);
   for (const state of Object.keys(states)) {
     filters.push(`
       <div>
@@ -75,27 +75,27 @@ function createFiltersListHTML() {
     `);
   }
 
-  filters.push(`<h3>Accepts Open Boxes/bags</h3>`);
-  for (const id of Object.keys(acceptOpenFilters)) {
-    const val = acceptOpenFilters[id];
-    filters.push(`
-      <div>
-        <input
-          id="accept-open-${id}"
-          type="checkbox"
-          name="accept-open"
-          value="${id}"
-          onchange="onFilterChange(this)"
-          />
-        <label
-          id="accept-open-${id}-label"
-          for="accept-open-${id}"
-          >
-          ${val}
-        </label>
-      </div>
-    `);
-  }
+//  filters.push(`<h3>Accepts Open Boxes/bags</h3>`);
+//  for (const id of Object.keys(acceptOpenFilters)) {
+//    const val = acceptOpenFilters[id];
+//    filters.push(`
+//      <div>
+//        <input
+//          id="accept-open-${id}"
+//          type="checkbox"
+//          name="accept-open"
+//          value="${id}"
+//          onchange="onFilterChange(this)"
+//          />
+//        <label
+//          id="accept-open-${id}-label"
+//          for="accept-open-${id}"
+//          >
+//          ${val}
+//        </label>
+//      </div>
+//    `);
+//  }
 
   const acceptedItemsFilter = [
     'n95s',
@@ -110,7 +110,7 @@ function createFiltersListHTML() {
     'gowns',
     'respirators',
   ];
-  filters.push(`<h3>Accepted Items</h3>`);
+  filters.push(`<h4>Accepted Items</h4>`);
   for (const val of acceptedItemsFilter) {
     const id = toHTMLID(val);
     filters.push(`
@@ -171,9 +171,9 @@ function toHtmlSnippets(data_by_location, filters) {
         const will_they_accept = entry["Will they accept open boxes/bags?"];
 
         if (filters) {
-          if (filters.acceptOpens && !filters.acceptOpens[toHTMLID(will_they_accept)]) {
-            continue;
-          }
+//          if (filters.acceptOpens && !filters.acceptOpens[toHTMLID(will_they_accept)]) {
+//            continue;
+//          }
           if (filters.acceptItems) {
             let acc = accepting.toLowerCase();
             if (!Object.keys(filters.acceptItems).some(s => acc.includes(s))) {
@@ -259,15 +259,15 @@ function onFilterChange(elem) {
     }
   });
 
-  let acceptOpens = null;
-  document.filters['accept-open'].forEach((acceptOpen) => {
-    if (acceptOpen.checked) {
-      if (acceptOpens === null) {
-        acceptOpens = {};
-      }
-      acceptOpens[acceptOpen.value] = true;
-    }
-  });
+//  let acceptOpens = null;
+//  document.filters['accept-open'].forEach((acceptOpen) => {
+//    if (acceptOpen.checked) {
+//      if (acceptOpens === null) {
+//        acceptOpens = {};
+//      }
+//      acceptOpens[acceptOpen.value] = true;
+//    }
+//  });
 
   let acceptItems = null;
   document.filters['accept-item'].forEach((acceptItem) => {
@@ -279,7 +279,7 @@ function onFilterChange(elem) {
     }
   });
 
-  const filters = {states, acceptOpens, acceptItems};
+  const filters = {states, acceptItems};
   const htmlSnippets = toHtmlSnippets(window.data_by_location, filters);
   $(".locations-list").html(htmlSnippets.join(" "));
 }
