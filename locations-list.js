@@ -111,21 +111,22 @@ function createFiltersListHTML() {
     'respirators',
   ];
   filters.push(`<h3>Accepted Items</h3>`);
-  for (const id of acceptedItemsFilter) {
+  for (const val of acceptedItemsFilter) {
+    const id = toHTMLID(val);
     filters.push(`
       <div>
         <input
           id="accept-item-${id}"
           type="checkbox"
           name="accept-item"
-          value="${id}"
+          value="${val}"
           onchange="onFilterChange(this)"
           />
         <label
           id="accept-item-${id}-label"
           for="accept-item-${id}"
           >
-          ${id}
+          ${val}
         </label>
       </div>
     `);
