@@ -38,8 +38,6 @@ function toDataByLocation(data) {
 function createFiltersListHTML() {
   // We use objects here as a quick approach to removing duplicates.
 
-  // TODO Remove case-sensitive duplicates.
-
   const states = {};
   const acceptOpenFilters = {};
 
@@ -49,7 +47,8 @@ function createFiltersListHTML() {
     const cities = data_by_location[state];
     for (const city of Object.keys(cities).sort()) {
       for (const entry of cities[city]) {
-        acceptOpenFilters[entry["Will they accept open boxes/bags?"]] = true;
+        const v = entry["Will they accept open boxes/bags?"];
+        acceptOpenFilters[toHTMLID(v)] = v;
       }
     }
   }
@@ -77,8 +76,8 @@ function createFiltersListHTML() {
   }
 
   filters.push(`<h3>Accepts Open Boxes/bags</h3>`);
-  for (const f of Object.keys(acceptOpenFilters)) {
-    let id = toHTMLID(f);
+  for (const id of Object.keys(acceptOpenFilters)) {
+    const val = acceptOpenFilters[id];
     filters.push(`
       <div>
         <input
@@ -92,7 +91,7 @@ function createFiltersListHTML() {
           id="accept-open-${id}-label"
           for="accept-open-${id}"
           >
-          ${f}
+          ${val}
         </label>
       </div>
     `);
