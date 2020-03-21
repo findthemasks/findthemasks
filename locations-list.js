@@ -224,7 +224,7 @@ function toHtmlSnippets(data_by_location, filters) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  $.getJSON("https://storage.googleapis.com/findthemasks.appspot.com/data.json", function(result){
+  $.getJSON("https://findthemasks.com/data.json", function(result){
     // may end up using this for search / filtering...
     window.locations = result;
     window.data_by_location = toDataByLocation(locations);
