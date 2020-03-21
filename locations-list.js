@@ -97,6 +97,40 @@ function createFiltersListHTML() {
     `);
   }
 
+  const acceptedItemsFilter = [
+    'n95s',
+    'masks',
+    'face shields',
+    'booties',
+    'goggles',
+    'gloves',
+    'kleenex',
+    'sanitizer',
+    'overalls',
+    'gowns',
+    'respirators',
+  ];
+  filters.push(`<h3>Accepted Items</h3>`);
+  for (const id of acceptedItemsFilter) {
+    filters.push(`
+      <div>
+        <input
+          id="accept-item-${id}"
+          type="checkbox"
+          name="accept-item"
+          value="${id}"
+          onchange="onFilterChange(this)"
+          />
+        <label
+          id="accept-item-${id}-label"
+          for="accept-item-${id}"
+          >
+          ${id}
+        </label>
+      </div>
+    `);
+  }
+
   return filters;
 }
 
@@ -135,9 +169,15 @@ function toHtmlSnippets(data_by_location, filters) {
         const accepting = entry["What are they accepting?"];
         const will_they_accept = entry["Will they accept open boxes/bags?"];
 
-        if (filters && filters.acceptOpens) {
-          if (!filters.acceptOpens[toHTMLID(will_they_accept)]) {
+        if (filters) {
+          if (filters.acceptOpens && !filters.acceptOpens[toHTMLID(will_they_accept)]) {
             continue;
+          }
+          if (filters.acceptItems) {
+            let acc = accepting.toLowerCase();
+            if (!Object.keys(filters.acceptItems).some(s => acc.includes(s))) {
+              continue;
+            }
           }
         }
 
@@ -228,7 +268,17 @@ function onFilterChange(elem) {
     }
   });
 
-  const filters = {states, acceptOpens};
+  let acceptItems = null;
+  document.filters['accept-item'].forEach((acceptItem) => {
+    if (acceptItem.checked) {
+      if (acceptItems === null) {
+        acceptItems = {};
+      }
+      acceptItems[acceptItem.value] = true;
+    }
+  });
+
+  const filters = {states, acceptOpens, acceptItems};
   const htmlSnippets = toHtmlSnippets(window.data_by_location, filters);
   $(".locations-list").html(htmlSnippets.join(" "));
 }
