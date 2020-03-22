@@ -97,22 +97,23 @@ function createFiltersListHTML() {
 //    `);
 //  }
 
-  const acceptedItemsFilter = [
-    'n95s',
-    'masks',
-    'face shields',
-    'booties',
-    'goggles',
-    'gloves',
-    'kleenex',
-    'sanitizer',
-    'overalls',
-    'gowns',
-    'respirators',
-  ];
+  const acceptedItemsFilter = {
+    'n95s': 'N95 masks/respirators',
+    'masks': 'surgical masks',
+    'face shields': 'face shields',
+    'booties': 'medical booties',
+    'goggles': 'safety goggles',
+    'gloves': 'gloves',
+    'kleenex': 'kleenex',
+    'sanitizer': 'hand-sanitizer',
+    'overalls': 'medical overalls',
+    'gowns': 'gowns',
+    'respirators': 'advanced respirators (PAPR/CAPR/etc.)',
+  };
   filters.push(`<h4>Accepted Items</h4>`);
-  for (const val of acceptedItemsFilter) {
+  for (const val of Object.keys(acceptedItemsFilter)) {
     const id = toHTMLID(val);
+    const descr = acceptedItemsFilter[val];
     filters.push(`
       <div>
         <input
@@ -126,7 +127,7 @@ function createFiltersListHTML() {
           id="accept-item-${id}-label"
           for="accept-item-${id}"
           >
-          ${val}
+          ${descr}
         </label>
       </div>
     `);
@@ -228,6 +229,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // may end up using this for search / filtering...
     window.locations = result;
     window.data_by_location = toDataByLocation(locations);
+    initMap();
 
     $(".filters-list").html(createFiltersListHTML(data_by_location).join(" "));
 
@@ -282,4 +284,90 @@ function onFilterChange(elem) {
   const filters = {states, acceptItems};
   const htmlSnippets = toHtmlSnippets(window.data_by_location, filters);
   $(".locations-list").html(htmlSnippets.join(" "));
+}
+
+
+ function initMap() {
+     var data_by_location = window.data_by_location;
+     var geocoder = new google.maps.Geocoder();
+     var middle_of_us = { lat: 39.0567939, lng: -94.6065124};
+
+     var element = document.getElementById('map');
+     
+     if (element == null) {
+         alert('could not find map div');
+     } 
+         
+     // The map, roughly zoomed to show the entire US.
+     var map = new google.maps.Map( element, {zoom: 4, center: middle_of_us});
+
+     // Uncomment block below if you want map to default to centering at user's location.
+     /*  if (navigator.geolocation) {
+         navigator.geolocation.getCurrentPosition(function(position) {
+             var cur_location = {
+                 lat: position.coords.latitude,
+                 lng: position.coords.longitude
+             };
+
+             map.setCenter(cur_location);
+             map.setZoom(10);
+         }, function() {
+             alert('Could not get user location');
+         });
+     } else {
+         // Browser doesn't support Geolocation
+         alert('Could not get user location');
+     }*/
+     
+     var i = 0;
+     for (const state of Object.keys(data_by_location).sort()) {
+         const cities = data_by_location[state];
+         for (const city of Object.keys(cities).sort()) {
+             const entryLines = [];
+             for (const entry of cities[city]) {
+                 const name = entry["What is the name of the hospital or clinic?"];
+                 const address = entry["Street address for dropoffs?"];
+                 const instructions = entry["Drop off instructions, eg curbside procedure or mailing address ATTN: instructions:"];
+                 const accepting = entry["What are they accepting?"];
+                 const open_accepted = entry["Will they accept open boxes/bags?"];
+
+                 if (address != "N/A") {
+                     addMarkerToMap(map, geocoder, address, name, instructions, accepting, open_accepted);
+                     i++;
+                     if (i > 3) {  
+                        return;
+                     }
+                 }
+             }
+         }
+     }
+ }
+
+function addMarkerToMap(map, geocoder, address, name, instructions, accepting, open_accepted) {      
+    geocoder.geocode( { 'address': address}, function(results, status) {        
+        if (status == 'OK') {
+            // Text to go into InfoWindow
+            var contentString =
+                '<h4>' + name + '</h4><br>' +
+                '<b>Address:</b> ' + address + '<br>' +
+                '<b>Instructions:</b> ' + instructions + '<br>' +
+                '<b>Accepting:</b> ' + accepting + '<br>' +
+                '<b>Open Packages?:</b> ' + open_accepted + '<br>';            
+            
+            // InfoWindow will pop up when user clicks on marker
+            var infowindow = new google.maps.InfoWindow({
+              content: contentString
+            });
+            var marker = new google.maps.Marker({
+                position: results[0].geometry.location,
+                title: name,
+                map: map
+            });
+            marker.addListener('click', function() {
+                infowindow.open(map, marker);
+            });
+        } else {
+            alert('Geocode was not successful for the following reason: ' + status);
+        }
+    });
 }
