@@ -6,8 +6,8 @@ As of March 21 the most useful contribution is still identifying more drop off l
 ## Current setup
  - The website reads from a google sheet, generates a json blob, which is used to generate static HTML.
 
-## Dev chatroom
- - We are currently using fb messenger. Please friend request facebook.com/rachelpopkin to be added, if you are changing code and want to real-time coordinate.
+## Volunteer Slack
+ - https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp-p8~9oKuXtV_gn7wEBZGGoA
 
 ## Diretory structure.
   * `/public` - The client-side code for the website. Currently has some symlinks to legacy file locations.
