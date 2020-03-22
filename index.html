@@ -57,15 +57,10 @@
           font-variant: normal;
           text-transform: none;
         }
-
-        @media screen and (max-width: 600px) {
-          body {
-            margin: 15px;
-          }
-        }
       
         h1 {
-          margin-top: 30px;
+          display: block;
+          margin-top: 60px;
           margin-bottom: 10px;
         }
 
@@ -83,9 +78,27 @@
             height: 35rem;
           }
         }
+        .masks-container {
+          position: relative;
+          display: flex;
+          flex-direction: row;
+        }
+        
+        .mask-container {
+          width: 50%;
+          margin-bottom: 20px;
+          margin-right: 10px;
+        }
+
+        .mask-img {
+          width: calc(100% - 10px);
+          margin-bottom: 15px;
+        }
+
         .intro {
           margin-top: 30px;
           margin-bottom: 50px;
+          width: 60%;
         }
 
         .locations-list {
@@ -123,7 +136,7 @@
 
         .city p {
           margin: 0px;
-          font-size: 16px;
+          font-size: 1rem;
         }
 
         .location {
@@ -183,6 +196,18 @@
         .end {
           margin-bottom: 80px;
         }
+
+        @media screen and (max-width: 600px) {
+          body {
+            margin: 15px;
+          }
+          h1 {
+            margin-top: 40px;
+          }
+          .intro {
+            width: 100%;
+          }
+        }
     </style>
     <meta property="og:title" content="#findthemasks"/>
     <meta property="og:url" content="https://findthemasks.com/"/>
@@ -216,27 +241,25 @@
 
 
         <hr/>
-        <h2>We need to find the masks</h2>
-        <div class="container">
-            <div class="row">
-                <div style="padding: 0" class="col-md-6">
-                    <p>Look in your basement, your emergency kit, your bug out bag, your workbench for <span class="embold">N95 masks</span>. They look like this:</p>
-                    <img src="images/n95.jpg" style="width: 100%; padding-bottom: 20px;" alt="Three particulate respirator masks. The first is white with a filter cartridge on the front labelled &ldquo;3M NIOSH N100&rdquo;, the second is white with large black letters that say N95, the third is turquoise" class="visual pic gridCenter"/>
-                </div>
-                <div style="padding: 0" class="col-md-6">
-                    <p>If you find <span class="embold">surgical masks</span>, those are also in short supply, and in many places are being used in place of N95s. They look like this:</p>
-                    <img src="images/surgical.jpg" style="width: 100%; padding-bottom: 20px;" alt="A blue surgical mask, it has multiple layers of material and ear loops" width="700" class="visual pic gridCenter"/>
-                </div>
-            </div>
+        <h2>We Need To Find The Masks</h2>
+        <div class="masks-container">
+          <div class="mask-container">
+            <img class="mask-img" src="images/n95.jpg" alt="Three particulate respirator masks. The first is white with a filter cartridge on the front labelled &ldquo;3M NIOSH N100&rdquo;, the second is white with large black letters that say N95, the third is turquoise" class="visual pic gridCenter"/>
+            <p>Look for <b>N95 masks</b> in your basement, your emergency kit, your bug out bag, your workbench.</p>
+          </div>
+          <div class="mask-container">
+            <img class="mask-img" src="images/surgical.jpg" alt="A blue surgical mask, it has multiple layers of material and ear loops" width="700" class="visual pic gridCenter"/>
+            <p><b>Surgical masks</b> are also in short supply, and in many places are being used in place of N95s.</p>
+          </div>
         </div>
 
         <div>
           <p>All of these masks can save lives now if you get them into the hands of healthcare workers.</p>
-          <p>Disposable <span class=embold>booties</span>, <span class=embold>safety goggles</span>, and <span class=embold>disposable suits</span> are also in short supply. If you have these things or know someone who might (HVAC installers? Construction workers?) please share this site with them!</p>
+          <p><b>Disposable booties</b>, <b>safety goggles</b>, and <b>disposable suits</b> are also in short supply. If you have these things or know someone who might (e.g. HVAC, construction workers) please share this site with them!</p>
         </div>
 
         <hr/>
-        <h2>How to donate</h2>
+        <h2>How To Donate</h2>
         <ol>
             <li> Call your local hospital and ask to speak to the charge nurse.
             <li> Say what you have.
@@ -246,7 +269,7 @@
         <p>If you find a hospital taking donations from the public, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a> so we can add them to the site.</p>
 
         <hr/>
-        <h2>List of donation sites</h2>
+        <h2>List of Donation Sites</h2>
 
         <form name="filters" class="filters-list"></form>
         <div class="locations-list"></div>
