@@ -97,22 +97,23 @@ function createFiltersListHTML() {
 //    `);
 //  }
 
-  const acceptedItemsFilter = [
-    'n95s',
-    'masks',
-    'face shields',
-    'booties',
-    'goggles',
-    'gloves',
-    'kleenex',
-    'sanitizer',
-    'overalls',
-    'gowns',
-    'respirators',
-  ];
+  const acceptedItemsFilter = {
+    'n95s': 'N95 masks/respirators',
+    'masks': 'surgical masks',
+    'face shields': 'face shields',
+    'booties': 'medical booties',
+    'goggles': 'safety goggles',
+    'gloves': 'gloves',
+    'kleenex': 'kleenex',
+    'sanitizer': 'hand-sanitizer',
+    'overalls': 'medical overalls',
+    'gowns': 'gowns',
+    'respirators': 'advanced respirators (PAPR/CAPR/etc.)',
+  };
   filters.push(`<h4>Accepted Items</h4>`);
-  for (const val of acceptedItemsFilter) {
+  for (const val of Object.keys(acceptedItemsFilter)) {
     const id = toHTMLID(val);
+    const descr = acceptedItemsFilter[val];
     filters.push(`
       <div>
         <input
@@ -126,7 +127,7 @@ function createFiltersListHTML() {
           id="accept-item-${id}-label"
           for="accept-item-${id}"
           >
-          ${val}
+          ${descr}
         </label>
       </div>
     `);
