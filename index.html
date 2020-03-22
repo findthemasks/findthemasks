@@ -20,12 +20,72 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <style>
 
-        /* Styling for the JS generated locations list */
+        html {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          --mainBg: #fbfbfb;
+          --textHighEmph: hsla(0, 0%, 0%, .87);
+          --textMedEmph: hsla(0, 0%, 0%, .75);
+        }
+
+        *, *:before, *:after {
+          box-sizing: inherit;
+        }
+
+        @media (prefers-reduced-motion: reduce) { /* remove all animations and transitions for people who prefer not to see them */
+          * {
+            animation-play-state: paused;
+            transition: none;
+            scroll-behavior: auto;
+          }
+        }
+
+        html, body {
+          height: 100%;
+        }
+
+        body {
+          margin: 20px;
+          background-color: var(--mainBg);
+          color: var(--textHighEmph);
+          font-family: 'Roboto', sans-serif;
+          font-weight: normal;
+          line-height: 1.5;
+          text-decoration: none;
+          font-style: normal;
+          font-variant: normal;
+          text-transform: none;
+        }
+
+        @media screen and (max-width: 600px) {
+          body {
+            margin: 15px;
+          }
+        }
+      
+        h1 {
+          margin-top: 30px;
+          margin-bottom: 10px;
+        }
+
+        h2 {
+          padding-top: 20px;
+          padding-bottom: 20px;
+        }
+
+        h5 {
+          margin-bottom: 20px;
+        }
 
         @media (min-width: 768px) {
           .twitter-container {
             height: 35rem;
           }
+        }
+        .intro {
+          margin-top: 30px;
+          margin-bottom: 50px;
         }
 
         .locations-list {
@@ -63,7 +123,7 @@
 
         .city p {
           margin: 0px;
-          font-size: 18px;
+          font-size: 16px;
         }
 
         .location {
@@ -95,19 +155,20 @@
 
         .filters-list h4 {
           font-size: 20px;
-          text-transform: uppercase;
           margin-top: 30px;
           margin-bottom: 10px;}
 
         .filters-list input {
           display: none;
         }
-
+        
         .filters-list label {
           border: 1px black solid;
+          border-radius: 4px;
           font-size: 18px;
-          padding: 0.3rem 0.4rem;
+          padding: 0.3rem 0.5rem;
           cursor: pointer;
+          margin-right: 0.4rem;
         }
 
         .filters-list label:hover {
@@ -115,7 +176,12 @@
         }
 
         .filters-list label.selected {
-          background-color: #ccc;
+          background-color: #333;
+          color: white;
+        }
+ 
+        .end {
+          margin-bottom: 80px;
         }
     </style>
     <meta property="og:title" content="#findthemasks"/>
@@ -127,8 +193,12 @@
 <body>
 <main class="content">
     <div class="container" style="padding-bottom: 40px;">
-        <h1 style="padding: 20px 0px 10px 0px;">#findthemasks</h1>
-        <h5 style="padding-bottom: 20px;">America&rsquo;s frontline healthcare workers are treating COVID19 patients without adequate protective gear, risking their lives! They have taken to Twitter on <a href="https://twitter.com/search?q=%23GetMePPE&src=typeahead_click">#GetMePPE</a> to ask for help:</h5>
+        <h1>#findthemasks</h1>
+        <h5>Let&rsquo;s help the helpers</h5>
+        <div class="intro">
+          <em>America&rsquo;s frontline healthcare workers are treating COVID19 patients without adequate protective gear, risking their lives! They have taken to Twitter on <a href="https://twitter.com/search?q=%23GetMePPE">#GetMePPE</a> to ask for help.</em>
+        </div>
+
 
         <div class="container twitter-container">
             <div class="row">
@@ -144,33 +214,29 @@
             </div>
         </div>
 
-        <p style="padding-top: 30px; font-weight: 700">We need to help the helpers, right now.</p>
 
-        <h3 style="padding-bottom: 30px">We need to find the masks.</h3>
-
+        <hr/>
+        <h2>We need to find the masks</h2>
         <div class="container">
             <div class="row">
-                <div class="col-md-6">
+                <div style="padding: 0" class="col-md-6">
                     <p>Look in your basement, your emergency kit, your bug out bag, your workbench for <span class="embold">N95 masks</span>. They look like this:</p>
                     <img src="images/n95.jpg" style="width: 100%; padding-bottom: 20px;" alt="Three particulate respirator masks. The first is white with a filter cartridge on the front labelled &ldquo;3M NIOSH N100&rdquo;, the second is white with large black letters that say N95, the third is turquoise" class="visual pic gridCenter"/>
                 </div>
-                <div class="col-md-6">
+                <div style="padding: 0" class="col-md-6">
                     <p>If you find <span class="embold">surgical masks</span>, those are also in short supply, and in many places are being used in place of N95s. They look like this:</p>
                     <img src="images/surgical.jpg" style="width: 100%; padding-bottom: 20px;" alt="A blue surgical mask, it has multiple layers of material and ear loops" width="700" class="visual pic gridCenter"/>
                 </div>
             </div>
         </div>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <p>All of these masks can save lives now if you get them into the hands of healthcare workers.</p>
-                    <p>Disposable <span class=embold>booties</span>, <span class=embold>safety goggles</span>, and <span class=embold>disposable suits</span> are also in short supply. If you have these things or know someone who might (HVAC installers? Construction workers?) please share this site with them!</p>
-                </div>
-            </div>
+        <div>
+          <p>All of these masks can save lives now if you get them into the hands of healthcare workers.</p>
+          <p>Disposable <span class=embold>booties</span>, <span class=embold>safety goggles</span>, and <span class=embold>disposable suits</span> are also in short supply. If you have these things or know someone who might (HVAC installers? Construction workers?) please share this site with them!</p>
         </div>
 
-        <h2 style="padding: 20px 0px;">How to donate</h2>
+        <hr/>
+        <h2>How to donate</h2>
         <ol>
             <li> Call your local hospital and ask to speak to the charge nurse.
             <li> Say what you have.
@@ -179,15 +245,16 @@
         </ol>
         <p>If you find a hospital taking donations from the public, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a> so we can add them to the site.</p>
 
-        <h2 style="padding: 20px 0px;">List of donation sites</h2>
+        <hr/>
+        <h2>List of donation sites</h2>
 
-        <h4>Filters</h4>
         <form name="filters" class="filters-list"></form>
         <div class="locations-list"></div>
 
-        <p style="padding-top: 30px;">Got a comment or suggestion? Want to help? contact@findthemasks.com or add directly on <a href="https://github.com/r-pop/findthemasks">our Github</a>.</p>
+        <p style="padding-top: 30px;">Got a comment or suggestion? Want to help? contact@findthemasks.com or contribute on <a target="_blank" rel="noreferrer noopener" href="https://github.com/r-pop/findthemasks">our Github</a>.</p>
         <p class="centerText">made with <3 in Seattle</p>
-        <a href="whoweare.html" class="end">who we are</a>
+        <a href="whoweare.html">who we are</a>
+        <div class="end"></div>
     </div>
 </main>
 </body>
