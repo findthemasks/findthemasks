@@ -86,7 +86,7 @@ async function snapshotData(filename) {
   await datafileRef.save(JSON.stringify(data), {
     gzip: true,
     metadata: {
-      cacheControl: "public, max-age=300",
+      cacheControl: "public, max-age=20",
       contentType: "application/json"
     },
     predefinedAcl: "publicRead",
