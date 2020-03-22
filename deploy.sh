@@ -40,11 +40,11 @@ if [[ $(git diff origin/master | wc -c) -ne 0 ]]; then
   #  We found a diff. Let's copy over.
   git reset --hard origin/master
   git clean -f
-  rsync --copy-links -r --delete --exclude data.json ~/src/findthemasks/public/ ~/findthemasks.com-new
+  rsync --copy-links -r --delete --exclude data.json ~/src/findthemasks/public/ ~/findthemasks.com
 fi
 
 popd > /dev/null
 
 # Get latest data.
-curl --fail https://storage.googleapis.com/findthemasks.appspot.com/data.json > ~/findthemasks.com-new/data.json_
-mv ~/findthemasks.com-new/data.json_ ~/findthemasks.com-new/data.json
+curl --fail https://storage.googleapis.com/findthemasks.appspot.com/data.json > ~/findthemasks.com/data.json_
+mv ~/findthemasks.com/data.json_ ~/findthemasks.com/data.json
