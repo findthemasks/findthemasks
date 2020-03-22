@@ -12,5 +12,5 @@ mv "$proj_dir"/data.json{_,}
 DATA=$(cat "$proj_dir/data.json") \
   JS=$(cat "$proj_dir/ssr-locations-list.js") \
   envsubst \
-  < ssr-index-template.html \
-  > ssr-index.html
+  < "$proj_dir/ssr-index-template.html" \
+  > "$proj_dir/ssr-index.html"
