@@ -7,4 +7,8 @@ As of March 21 the most useful contribution is still identifying more drop off l
  - The website reads from a google sheet, generates a json blob, which is used to generate static HTML.
 
 ## Dev chatroom
-- We are currently using fb messenger. Please friend request facebook.com/rachelpopkin to be added, if you are changing code and want to real-time coordinate.
+ - We are currently using fb messenger. Please friend request facebook.com/rachelpopkin to be added, if you are changing code and want to real-time coordinate.
+
+## Diretory structure.
+  * `/public` - The client-side code for the website. Currently has some symlinks to legacy file locations.
+  * `/functions` - The cloud function used to generate data.json. Not needed for frontend work.
