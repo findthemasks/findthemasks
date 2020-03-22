@@ -5,7 +5,7 @@ set -e
 ###### 
 ## Hacky race guard logic
 
-TIMESTAMP_FILE=timestamp.txt
+TIMESTAMP_FILE=~/deploy_timestamp.txt
 
 if [ ! -f ${TIMESTAMP_FILE} ]; then
   echo 0 > ${TIMESTAMP_FILE}
