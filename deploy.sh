@@ -43,5 +43,6 @@ rsync --copy-links -r --delete --exclude data.json ~/src/findthemasks/public/ ~/
 popd > /dev/null
 
 # Get latest data.
+curl --fail -s https://us-central1-findthemasks.cloudfunctions.net/reloadsheetdata > /dev/null
 curl --fail https://storage.googleapis.com/findthemasks.appspot.com/data.json > ~/findthemasks.com/data.json_
 mv ~/findthemasks.com/data.json_ ~/findthemasks.com/data.json
