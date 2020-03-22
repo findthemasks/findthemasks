@@ -343,11 +343,11 @@ function onFilterChange(elem) {
 function addMarkerToMap(map, latitude, longitude, address, name, instructions, accepting, open_accepted) {      
     // Text to go into InfoWindow
     var contentString =
-        '<h4>' + name + '</h4><br>' +
-        '<b>Address:</b> ' + address + '<br>' +
-        '<b>Instructions:</b> ' + instructions + '<br>' +
-        '<b>Accepting:</b> ' + accepting + '<br>' +
-        '<b>Open Packages?:</b> ' + open_accepted + '<br>';            
+        '<h5>' + name + '</h5>' +
+        '<div class=label>Address:</div><div class=value>' + address + '</div>' +
+        '<div class=label>Instructions:</div><div class=value>' + instructions + '</div>' +
+        '<div class=label>Accepting:</div><div class=value>' + accepting + '</div>' +
+        '<div class=label>Open Packages?:</div><div class=value>' + open_accepted + '</div>';
 
     // InfoWindow will pop up when user clicks on marker
     var infowindow = new google.maps.InfoWindow({
