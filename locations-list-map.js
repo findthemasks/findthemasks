@@ -289,7 +289,6 @@ function onFilterChange(elem) {
 
  function initMap() {
      var data_by_location = window.data_by_location;
-     var geocoder = new google.maps.Geocoder();
      var middle_of_us = { lat: 39.0567939, lng: -94.6065124};
 
      var element = document.getElementById('map');
@@ -323,51 +322,44 @@ function onFilterChange(elem) {
      for (const state of Object.keys(data_by_location).sort()) {
          const cities = data_by_location[state];
          for (const city of Object.keys(cities).sort()) {
-             const entryLines = [];
              for (const entry of cities[city]) {
                  const name = entry["What is the name of the hospital or clinic?"];
                  const address = entry["Street address for dropoffs?"];
+                 const latitude = entry["Lat"];
+                 const longitude = entry["Lng"];
                  const instructions = entry["Drop off instructions, eg curbside procedure or mailing address ATTN: instructions:"];
                  const accepting = entry["What are they accepting?"];
                  const open_accepted = entry["Will they accept open boxes/bags?"];
-
-                 if (address != "N/A") {
-                     addMarkerToMap(map, geocoder, address, name, instructions, accepting, open_accepted);
-                     i++;
-                     if (i > 3) {  
-                        return;
-                     }
+                 // Convert the lat and lng fields to numbers
+                 if (!isNaN(Number(latitude))) {
+                     addMarkerToMap(map, Number(latitude), Number(longitude),
+                                    address, name, instructions, accepting, open_accepted);
                  }
              }
          }
      }
  }
 
-function addMarkerToMap(map, geocoder, address, name, instructions, accepting, open_accepted) {      
-    geocoder.geocode( { 'address': address}, function(results, status) {        
-        if (status == 'OK') {
-            // Text to go into InfoWindow
-            var contentString =
-                '<h4>' + name + '</h4><br>' +
-                '<b>Address:</b> ' + address + '<br>' +
-                '<b>Instructions:</b> ' + instructions + '<br>' +
-                '<b>Accepting:</b> ' + accepting + '<br>' +
-                '<b>Open Packages?:</b> ' + open_accepted + '<br>';            
-            
-            // InfoWindow will pop up when user clicks on marker
-            var infowindow = new google.maps.InfoWindow({
-              content: contentString
-            });
-            var marker = new google.maps.Marker({
-                position: results[0].geometry.location,
-                title: name,
-                map: map
-            });
-            marker.addListener('click', function() {
-                infowindow.open(map, marker);
-            });
-        } else {
-            alert('Geocode was not successful for the following reason: ' + status);
-        }
+function addMarkerToMap(map, latitude, longitude, address, name, instructions, accepting, open_accepted) {      
+    // Text to go into InfoWindow
+    var contentString =
+        '<h4>' + name + '</h4><br>' +
+        '<b>Address:</b> ' + address + '<br>' +
+        '<b>Instructions:</b> ' + instructions + '<br>' +
+        '<b>Accepting:</b> ' + accepting + '<br>' +
+        '<b>Open Packages?:</b> ' + open_accepted + '<br>';            
+
+    // InfoWindow will pop up when user clicks on marker
+    var infowindow = new google.maps.InfoWindow({
+        content: contentString
+    });
+    var location = { lat: latitude, lng: longitude }; 
+    var marker = new google.maps.Marker({
+        position: location,
+        title: name,
+        map: map
+    });
+    marker.addListener('click', function() {
+        infowindow.open(map, marker);
     });
 }

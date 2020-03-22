@@ -10,11 +10,11 @@
   gtag('config', 'UA-161442455-1');
 </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <!-- MAP WILL NOT LOAD WITHOUT ADDING API KEY below -->
+    <!-- API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info. -->
     <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=API_KEY_GOES_HERE">        
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s">
     </script>    
-    <script src="locations-list.js"></script>
+    <script src="locations-list-map.js"></script>
     <title>#Findthemasks</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -122,8 +122,6 @@
 </head>
 
 <body>
-<!--The div element for the map -->
-<div id="map"></div>
 
 <main class="content">
             
@@ -153,11 +151,11 @@
             <div class="row">
                 <div class="col-md-6">
                     <p>Look in your basement, your emergency kit, your bug out bag, your workbench for <span class="embold">N95 masks</span>. They look like this:</p>
-                    <img src="n95.jpg" style="width: 100%; padding-bottom: 20px;" alt="three particulate respirator masks. The first is white with a filter cartridge on the front labelled &ldquo;3M NIOSH N100&rdquo;, the second is white with large black letters that say N95, the third is turquoise" class="visual pic gridCenter"/>
+                    <img src="images/n95.jpg" style="width: 100%; padding-bottom: 20px;" alt="three particulate respirator masks. The first is white with a filter cartridge on the front labelled &ldquo;3M NIOSH N100&rdquo;, the second is white with large black letters that say N95, the third is turquoise" class="visual pic gridCenter"/>
                 </div>
                 <div class="col-md-6">
                     <p>If you find <span class="embold">surgical masks</span>, those are also in short supply, and in many places are being used in place of N95s. They look like this:</p>
-                    <img src="surgical.jpg" style="width: 100%; padding-bottom: 20px;" alt="A blue surgical mask, it has multiple layers of material and ear loops" width="700" class="visual pic gridCenter"/>
+                    <img src="images/surgical.jpg" style="width: 100%; padding-bottom: 20px;" alt="A blue surgical mask, it has multiple layers of material and ear loops" width="700" class="visual pic gridCenter"/>
                 </div>
             </div>
         </div>
@@ -179,8 +177,10 @@
         </ol>
         <p>If you find a hospital taking donations from the public, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a> so we can add them to the site.</p>
 
-        
-        <h2 style="padding: 20px 0px;">List of donation sites</h2>        
+        <h2 style="padding: 20px 0px;">Map of donation sites</h2>
+        <div id="map"></div>
+
+        <h2 style="padding: 30px 0px 20px 0px;">List of donation sites</h2>
         <h4>Filters</h4>
         <form name="filters" class="filters-list"></form>
         <div class="locations-list"></div>
