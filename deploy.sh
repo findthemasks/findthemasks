@@ -36,12 +36,9 @@ pushd ~/src/findthemasks > /dev/null
 
 # Update the git repository
 git fetch
-if [[ $(git diff origin/master | wc -c) -ne 0 ]]; then
-  #  We found a diff. Let's copy over.
-  git reset --hard origin/master
-  git clean -f
-  rsync --copy-links -r --delete --exclude data.json ~/src/findthemasks/public/ ~/findthemasks.com
-fi
+git reset --hard origin/master
+git clean -f
+rsync --copy-links -r --delete --exclude data.json ~/src/findthemasks/public/ ~/findthemasks.com
 
 popd > /dev/null
 
