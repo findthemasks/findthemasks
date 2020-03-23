@@ -1,6 +1,12 @@
 RewriteCond %{HTTPS} !=on
 RewriteRule ^(.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+<IfModule mod_headers.c>
+  <Files "data.json">
+    Header set Access-Control-Allow-Origin "*"
+  </Files>
+</IfModule>
+
 <IfModule mod_expires.c>  
   # Turn on the module.
   ExpiresActive on
