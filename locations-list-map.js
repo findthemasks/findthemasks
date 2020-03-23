@@ -340,6 +340,8 @@ function onFilterChange(elem) {
      }
  }
 
+let openInfoWindows = [];
+
 function addMarkerToMap(map, latitude, longitude, address, name, instructions, accepting, open_accepted) {      
     // Text to go into InfoWindow
     var contentString =
@@ -349,17 +351,20 @@ function addMarkerToMap(map, latitude, longitude, address, name, instructions, a
         '<div class=label>Accepting:</div><div class=value>' + accepting + '</div>' +
         '<div class=label>Open Packages?:</div><div class=value>' + open_accepted + '</div>';
 
-    // InfoWindow will pop up when user clicks on marker
-    var infowindow = new google.maps.InfoWindow({
-        content: contentString
-    });
     var location = { lat: latitude, lng: longitude }; 
     var marker = new google.maps.Marker({
         position: location,
         title: name,
         map: map
     });
+    // InfoWindow will pop up when user clicks on marker
+    marker.infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
     marker.addListener('click', function() {
-        infowindow.open(map, marker);
+      openInfoWindows.forEach(infowindow => infowindow.close());
+      openInfoWindows = [];
+      marker.infowindow.open(map, marker);
+      openInfoWindows.push(marker.infowindow);
     });
 }
