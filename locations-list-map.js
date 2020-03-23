@@ -349,7 +349,7 @@ function centerMapToNearestMarkers(map, markers) {
             }
 
             // sort the distances and set bounds to closest three
-            distances.sort((a, b) => a - b)
+            distances.sort((a, b) => a - b);
 
 
             // center the map on the user
@@ -374,12 +374,7 @@ function centerMapToNearestMarkers(map, markers) {
             }
             map.fitBounds(bounds);       // auto-zoom
             map.panToBounds(bounds);     // auto-center
-        }, function () {
-            alert('Could not get user location');
-        });
-    } else {
-        // Browser doesn't support Geolocation
-        alert('Could not get user location');
+        })
     }
 }
 
