@@ -1,23 +1,23 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-161442455-1"></script>    
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-161442455-1"></script>
     <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'UA-161442455-1');
-</script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-161442455-1');
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!-- API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info. -->
     <script async defer
-      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s">
-    </script>    
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s&libraries=geometry">
+    </script>
     <script src="locations-list-map.js"></script>
     <title>#Findthemasks</title>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
     <meta name=”description” content=”Help #findthemasks for covid-19” />
     <meta name=”keywords” content=”#findthemasks, masks, n95, coronavirus, covid-19” />
@@ -28,110 +28,111 @@
 
 
         .locations-list {
-          padding-bottom: 10px;
-          border-bottom: 1px solid #efefef;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #efefef;
         }
 
         .state h2 {
-          font-size: 28px;
-          padding-top: 20px;
-          padding-bottom: 20px;
-          margin: 0px;
-          font-weight: 400;
-          border-top: 1px solid #efefef;
+            font-size: 28px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            margin: 0px;
+            font-weight: 400;
+            border-top: 1px solid #efefef;
         }
 
         .city h3 {
-          font-size: 20px;
-          padding-bottom: 20px;
-          margin: 0px;
-          text-transform: uppercase;
+            font-size: 20px;
+            padding-bottom: 20px;
+            margin: 0px;
+            text-transform: uppercase;
         }
 
         .city {
-          line-height: 1.2;
-          padding-bottom: 10px;
+            line-height: 1.2;
+            padding-bottom: 10px;
         }
 
-        .city h4 {
-          font-size: 18px;
-          font-weight: 600;
-          padding-bottom: 10px;
-          margin: 0px;
-        }
+            .city h4 {
+                font-size: 18px;
+                font-weight: 600;
+                padding-bottom: 10px;
+                margin: 0px;
+            }
 
-        .city p {
-          margin: 0px;
-          font-size: 18px;
-        }
+            .city p {
+                margin: 0px;
+                font-size: 18px;
+            }
 
         .location {
-          padding-bottom: 20px;
+            padding-bottom: 20px;
         }
 
-        .location label {
-          color: #777;
-          font-size: 11px;
-          font-weight: 600;
-          text-transform: uppercase;
-        }
+            .location label {
+                color: #777;
+                font-size: 11px;
+                font-weight: 600;
+                text-transform: uppercase;
+            }
 
         .donation-sites h1 {
-          margin-bottom: -10px;
+            margin-bottom: -10px;
         }
 
         .filters-list {
-          margin-bottom: 30px;
+            margin-bottom: 30px;
         }
 
-        .filters-list div {
-          display: inline-block;
-          margin-top: 0.5rem;
-        }
+            .filters-list div {
+                display: inline-block;
+                margin-top: 0.5rem;
+            }
 
-        .filters-list h4 {
-          font-size: 20px;
-          text-transform: uppercase;
-          margin-top: 30px;
-          margin-bottom: 10px;}
+            .filters-list h4 {
+                font-size: 20px;
+                text-transform: uppercase;
+                margin-top: 30px;
+                margin-bottom: 10px;
+            }
 
-        .filters-list input {
-          display: none;
-        }
+            .filters-list input {
+                display: none;
+            }
 
-        .filters-list label {
-          border: 1px black solid;
-          font-size: 18px;
-          padding: 0.3rem 0.4rem;
-          cursor: pointer;
-        }
+            .filters-list label {
+                border: 1px black solid;
+                font-size: 18px;
+                padding: 0.3rem 0.4rem;
+                cursor: pointer;
+            }
 
-        .filters-list label:hover {
-          background-color: #efefef;
-        }
+                .filters-list label:hover {
+                    background-color: #efefef;
+                }
 
-        .filters-list label.selected {
-          background-color: #ccc;
-        }
-        
+                .filters-list label.selected {
+                    background-color: #ccc;
+                }
+
         #map {
-          height: 400px;  /* The height is 400 pixels */
-          width: 100%;  /* The width is the width of the web page */
+            height: 400px; /* The height is 400 pixels */
+            width: 100%; /* The width is the width of the web page */
         }
 
-        #map .label {
-          width: 105px;
-          padding-top: 6px;
-          padding-bottom: 2px;
-          text-transform: uppercase;
-          color: #888;
-          font-size: 11px;
-          font-weight: 400;
-        }
+            #map .label {
+                width: 105px;
+                padding-top: 6px;
+                padding-bottom: 2px;
+                text-transform: uppercase;
+                color: #888;
+                font-size: 11px;
+                font-weight: 400;
+            }
 
-        #map .value {
-          font-weight: 400
-        }
+            #map .value {
+                font-weight: 400
+            }
     </style>
 </head>
 
