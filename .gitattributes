@@ -1,0 +1,8 @@
+*.sh	eol=lf
+*.txt	eol=lf
+*.php	eol=lf
+*.json	eol=lf
+*.yml	eol=lf
+.gitattributes	eol=lf
+framework/sake	eol=lf
+scripts/flush	eol=lf
