@@ -1,5 +1,5 @@
-# findthemasks
-Website for findthemasks.com
+# getusppe.org backend v1
+This repo hosts the code used to power the v1 backend of getusppe.org, as well as the current website of findthemasks.com
 
 new dev? please look at Issues and comment on something to grab it!
 
@@ -18,7 +18,7 @@ not a dev? The most useful contribution is identifying more drop off locations a
 <iframe style="width: 100%; height: 800px; border: none;" src="https://findthemasks.com/give.html"></iframe>
 ```
 
-## Volunteer Slack
+## Volunteer Slack for Backend v1 dev contributions, data merges, data cleaning
  - https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp-p8~9oKuXtV_gn7wEBZGGoA
 
 ## Diretory structure.
