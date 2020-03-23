@@ -8,8 +8,8 @@ function toDataByLocation(data) {
   const published_entries = data.values.slice(1).filter((entry) => entry[approvedIndex] === "x");
 
   published_entries.forEach( entry => {
-    const state = entry[stateIndex];
-    const city = entry[cityIndex];
+    const state = entry[stateIndex].trim();
+    const city = entry[cityIndex].trim();
     let entry_array;
     if (!(state in data_by_location) || !(city in data_by_location[state])) {
       entry_array = [];
@@ -24,9 +24,9 @@ function toDataByLocation(data) {
     const entry_obj = {};
     headers.forEach( (value, index) => {
       if (entry[index] !== undefined) {
-        entry_obj[value] = entry[index]
+        entry_obj[value] = entry[index];
       } else {
-        entry_obj[value] = ""
+        entry_obj[value] = "";
       }
     });
     entry_array.push(entry_obj);
@@ -417,3 +417,4 @@ function addMarkerToMap(map, latitude, longitude, address, name, instructions, a
 
     return marker;
 }
+
