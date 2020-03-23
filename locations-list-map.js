@@ -225,7 +225,7 @@ function toHtmlSnippets(data_by_location, filters) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-  $.getJSON("https://findthemasks.com/data.json", function(result){
+    $.getJSON("https://findthemasks.com/data.json", function(result){
     // may end up using this for search / filtering...
     window.locations = result;
     window.data_by_location = toDataByLocation(locations);
@@ -300,24 +300,7 @@ function onFilterChange(elem) {
      // The map, roughly zoomed to show the entire US.
      var map = new google.maps.Map( element, {zoom: 4, center: middle_of_us});
 
-     // Uncomment block below if you want map to default to centering at user's location.
-     /*  if (navigator.geolocation) {
-         navigator.geolocation.getCurrentPosition(function(position) {
-             var cur_location = {
-                 lat: position.coords.latitude,
-                 lng: position.coords.longitude
-             };
-
-             map.setCenter(cur_location);
-             map.setZoom(10);
-         }, function() {
-             alert('Could not get user location');
-         });
-     } else {
-         // Browser doesn't support Geolocation
-         alert('Could not get user location');
-     }*/
-     
+     var markers = [];
      var i = 0;
      for (const state of Object.keys(data_by_location).sort()) {
          const cities = data_by_location[state];
@@ -332,13 +315,73 @@ function onFilterChange(elem) {
                  const open_accepted = entry["Will they accept open boxes/bags?"];
                  // Convert the lat and lng fields to numbers
                  if (!isNaN(Number(latitude))) {
-                     addMarkerToMap(map, Number(latitude), Number(longitude),
-                                    address, name, instructions, accepting, open_accepted);
+                     var marker = addMarkerToMap(map, Number(latitude), Number(longitude),
+                         address, name, instructions, accepting, open_accepted);
+                     markers.push(marker);
                  }
              }
          }
      }
- }
+
+     // Center the map on the nearest markers to the user if possible
+     centerMapToNearestMarkers(map, markers);
+}
+
+function centerMapToNearestMarkers(map, markers) {
+    // First check to see if the user will accept getting their location, if not, silently return
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var user_latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+            //Compute the distances of all markers from the user
+            var markerDistances = new Map(); // an associative array containing the marker referenced by the computed distance
+            var distances = []; // all the distances, so we can sort and then call markerDistances
+            for (const marker of markers) {
+                var distance = google.maps.geometry.spherical.computeDistanceBetween(marker.position, user_latlng);
+
+                // HACK: In the unlikely event that the exact same distance is computed, add one meter to the distance to give it a unique distance
+                // This could occur if a marker was added twice to the same location.
+                if (markerDistances.has(distance)) { distance = distance + 1; }
+
+                markerDistances[distance] = marker;
+
+                distances.push(distance);
+            }
+
+            // sort the distances and set bounds to closest three
+            distances.sort((a, b) => a - b)
+
+
+            // center the map on the user
+            bounds = new google.maps.LatLngBounds();
+            bounds.extend(user_latlng);
+
+            // Extend the bounds to contain the three closest markers
+            i = 0;
+            while (i < 3) {
+                // Get one of the closest markers
+                var distance = distances[i]
+                var marker = markerDistances[distance];
+
+                // Add to the iterator first just in case something fails later to avoid infinite loop
+                i++;
+
+                marker_lat = marker.position.lat();
+                marker_lng = marker.position.lng();
+
+                loc = new google.maps.LatLng(marker_lat, marker_lng);
+                bounds.extend(loc);
+            }
+            map.fitBounds(bounds);       // auto-zoom
+            map.panToBounds(bounds);     // auto-center
+        }, function () {
+            alert('Could not get user location');
+        });
+    } else {
+        // Browser doesn't support Geolocation
+        alert('Could not get user location');
+    }
+}
 
 function addMarkerToMap(map, latitude, longitude, address, name, instructions, accepting, open_accepted) {      
     // Text to go into InfoWindow
@@ -362,4 +405,6 @@ function addMarkerToMap(map, latitude, longitude, address, name, instructions, a
     marker.addListener('click', function() {
         infowindow.open(map, marker);
     });
+
+    return marker;
 }
