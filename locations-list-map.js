@@ -235,6 +235,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const htmlSnippets = toHtmlSnippets(data_by_location, null);
     $(".locations-list").html(htmlSnippets.join(" "));
+
+    const searchParams = new URLSearchParams((new URL(window.location)).search);
+    const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
+    const states = stateParams.map(param => param.split(',')).flat();
+    states.forEach(state => {
+      elem = document.getElementById(`state-${state}`);
+      elem.checked = true;
+      onFilterChange(elem);
+    });
   });
 });
 
