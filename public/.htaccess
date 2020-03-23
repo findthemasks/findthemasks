@@ -4,7 +4,7 @@ RewriteRule ^(.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 <IfModule mod_headers.c>
   <Files "data.json">
     Header set Access-Control-Allow-Origin "*"
-  </FilesMatch>
+  </Files>
 </IfModule>
 
 <IfModule mod_expires.c>  
