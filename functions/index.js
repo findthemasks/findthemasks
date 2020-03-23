@@ -161,13 +161,13 @@ function toHtmlSnippets(data_by_location) {
 
         lines.push(`${padding}<p class="marginTopZero medEmph">${address.replace(/\n/g,'<br>')}</p>`);
         if (instructions !== "") {
-          lines.push(`${padding}<p">${instructions}</p>`);
+          lines.push(`${padding}<p>${instructions}</p>`);
         }
         if (accepting !== "") {
-          lines.push(`${padding}<p">${accepting}</p>`);
+          lines.push(`${padding}<p>${accepting}</p>`);
         }
         if (will_they_accept !== "") {
-          lines.push(`${padding}<p">${will_they_accept}</p>`);
+          lines.push(`${padding}<p>${will_they_accept}</p>`);
         }
 
         padding = padding.substring(0, padding.length - 2);
