@@ -229,14 +229,24 @@ document.addEventListener("DOMContentLoaded", function() {
     // may end up using this for search / filtering...
     window.locations = result;
     window.data_by_location = toDataByLocation(locations);
-    initMap();
+
+    const searchParams = new URLSearchParams((new URL(window.location)).search);
+
+    // show map unless hide-map="true"
+    if (!searchParams.get('hide-map') || searchParams.get('hide-map') !== 'true') {
+      initMap();
+    }
 
     $(".filters-list").html(createFiltersListHTML(data_by_location).join(" "));
 
     const htmlSnippets = toHtmlSnippets(data_by_location, null);
     $(".locations-list").html(htmlSnippets.join(" "));
 
-    const searchParams = new URLSearchParams((new URL(window.location)).search);
+    // show filters unless hide-filters="true"
+    if (!searchParams.get('hide-filters') || searchParams.get('hide-filters') !== 'true') {
+      $(".filters-container").show();
+    }
+
     const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
     const states = stateParams.map(param => param.split(',')).flat();
     states.forEach(state => {
@@ -305,6 +315,8 @@ function onFilterChange(elem) {
      if (element == null) {
          alert('could not find map div');
      }
+
+    $(".map-container").show();
 
      // The map, roughly zoomed to show the entire US.
      var map = new google.maps.Map( element, {zoom: 4, center: middle_of_us});
