@@ -1,5 +1,5 @@
-# getusppe.org backend v1
-This repo hosts the code used to power the v1 backend of getusppe.org, as well as the current website of findthemasks.com
+# getusppe.org backend v1 
+This repo hosts the code used to power the v1 backend of "give ppe" features on getusppe.org, as well as the current website of findthemasks.com
 
 new dev? please look at Issues and comment on something to grab it!
 
