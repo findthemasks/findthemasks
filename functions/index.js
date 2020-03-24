@@ -79,8 +79,17 @@ async function getSpreadsheet(client) {
 async function snapshotData(filename) {
   // Talk to sheets.
   const client = await getAuthorizedClient();
-  // Talk to sheets.
   const data = await getSpreadsheet(client);
+
+  const headers = data.values[0];
+  const approvedIndex = headers.findIndex( e => e === 'Approved' );
+  // The first row is human readable form values.
+  // The second row is reserved for a machine usable field tag.
+  // Save those and filter the rest.
+  const raw_values = data.values;
+  data.values = raw_values.slice(0,2);
+  data.values.push(...raw_values.slice(2).filter((entry) => entry[approvedIndex] === "x"));
+
   const datafileRef = admin.storage().bucket().file(filename);
 
   await datafileRef.save(JSON.stringify(data), {
