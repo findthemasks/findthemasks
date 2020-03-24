@@ -311,54 +311,6 @@ function onFilterChange(elem) {
   $(".locations-list").html(htmlSnippets.join(" "));
 }
 
-
- function initMap(states) {
-     var data_by_location = window.data_by_location;
-     var middle_of_us = { lat: 39.0567939, lng: -94.6065124};
-
-     var element = document.getElementById('map');
-
-     if (element == null) {
-         alert('could not find map div');
-     }
-
-    $(".map-container").show();
-
-     // The map, roughly zoomed to show the entire US.
-     var map = new google.maps.Map( element, {zoom: 4, center: middle_of_us});
-
-     var markers = [];
-     var i = 0;
-     for (const state of Object.keys(data_by_location).sort()) {
-         const cities = data_by_location[state];
-         for (const city of Object.keys(cities).sort()) {
-             for (const entry of cities[city]) {
-                 const name = entry["What is the name of the hospital or clinic?"];
-                 const address = entry["Street address for dropoffs?"];
-                 const latitude = entry["Lat"];
-                 const longitude = entry["Lng"];
-                 const instructions = entry["Drop off instructions, eg curbside procedure or mailing address ATTN: instructions:"];
-                 const accepting = entry["What are they accepting?"];
-                 const open_accepted = entry["Will they accept open boxes/bags?"];
-                 // Convert the lat and lng fields to numbers
-                 if (!isNaN(Number(latitude))) {
-                     var marker = addMarkerToMap(map, Number(latitude), Number(longitude),
-                         address, name, instructions, accepting, open_accepted);
-                     markers.push(marker);
-                 }
-             }
-         }
-     }
-
-     if (states && states.length === 1) {
-       // Center the map to a state if only one is set in query params
-       centerMapToState(map, states[0]);
-     } else {
-       // Center the map on the nearest markers to the user if possible
-       centerMapToNearestMarkers(map, markers);
-     }
-}
-
 const stateLocationMappings = {
   "AK": { "lat": 63.588753, "lng": -154.493062 },
   "AL": { "lat": 32.318231, "lng": -86.902298 },
@@ -414,18 +366,69 @@ const stateLocationMappings = {
   "WY": { "lat": 43.075968, "lng": -107.29028 }
 };
 
+function initMap(states) {
+     var data_by_location = window.data_by_location;
+     var middle_of_us = { lat: 39.0567939, lng: -94.6065124};
+
+     var element = document.getElementById('map');
+
+     if (element == null) {
+         alert('could not find map div');
+     }
+
+    $(".map-container").show();
+
+     const singleStateFilter = states && states.length === 1;
+     const firstState = states[0];
+
+     // The map, roughly zoomed to show the entire US.
+     var map = new google.maps.Map( element, {zoom: 4, center: middle_of_us});
+
+     let markers = [];
+
+     // filter states if there is a state filter
+     const filteredStates = Object.keys(data_by_location).filter((stateCode) => (
+       (
+         singleStateFilter
+         && firstState.toUpperCase() === stateCode.toUpperCase()
+         && stateLocationMappings[stateCode.toUpperCase()]
+         // add markers when no single state filter or if state code is invalid
+       ) || (!singleStateFilter || !stateLocationMappings[firstState.toUpperCase()])
+     ));
+
+     for (const state of filteredStates.sort()) {
+         const cities = data_by_location[state];
+
+         for (const city of Object.keys(cities).sort()) {
+             for (const entry of cities[city]) {
+                 const name = entry["What is the name of the hospital or clinic?"];
+                 const address = entry["Street address for dropoffs?"];
+                 const latitude = entry["Lat"];
+                 const longitude = entry["Lng"];
+                 const instructions = entry["Drop off instructions, eg curbside procedure or mailing address ATTN: instructions:"];
+                 const accepting = entry["What are they accepting?"];
+                 const open_accepted = entry["Will they accept open boxes/bags?"];
+                 // Convert the lat and lng fields to numbers
+                 if (!isNaN(Number(latitude))) {
+                     var marker = addMarkerToMap(map, Number(latitude), Number(longitude),
+                         address, name, instructions, accepting, open_accepted);
+                     markers.push(marker);
+                 }
+             }
+         }
+     }
+
+     if (singleStateFilter) {
+       // Center the map to a state if only one is set in query params
+       centerMapToState(map, firstState);
+     } else {
+       // Center the map on the nearest markers to the user if possible
+       centerMapToNearestMarkers(map, markers);
+     }
+}
+
 function centerMapToState(map, state) {
   const stateLocationMapping = stateLocationMappings[state.toUpperCase()];
-
-  // below code left for future use of geocoder API which would be more accurate in zooming
-
-  // const geocoder = new google.maps.Geocoder();
-  // geocoder.geocode({'address': `State of ${stateMappings[state]}`}, (results, state) => {
-  //   // no-op if state not found
-  //   if (state === 'OK' && results && results[0] && results[0].geometry && results[0].geometry.viewport) {
-  //     map.fitBounds(results[0].geometry.viewport);
-  //   }
-  // });
 
   if (stateLocationMapping) {
     map.setCenter({ lat: stateLocationMapping.lat, lng: stateLocationMapping.lng });
