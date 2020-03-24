@@ -56,7 +56,7 @@ function createFiltersListHTML() {
   }
 
   const filters = [];
-  filters.push(`<h4>States</h4>`);
+  filters.push(`<h4>${$.i18n('ftm-states')}</h4>`);
   for (const state of Object.keys(states)) {
     filters.push(`
       <div>
@@ -77,7 +77,7 @@ function createFiltersListHTML() {
     `);
   }
 
-//  filters.push(`<h3>Accepts Open Boxes/bags</h3>`);
+//  filters.push(`<h3>${$.i18n('ftm-accepts-open-boxes')}</h3>`);
 //  for (const id of Object.keys(acceptOpenFilters)) {
 //    const val = acceptOpenFilters[id];
 //    filters.push(`
@@ -100,19 +100,19 @@ function createFiltersListHTML() {
 //  }
 
   const acceptedItemsFilter = {
-    'n95s': 'N95 masks/respirators',
-    'masks': 'surgical masks',
-    'face shields': 'face shields',
-    'booties': 'medical booties',
-    'goggles': 'safety goggles',
-    'gloves': 'gloves',
-    'kleenex': 'kleenex',
-    'sanitizer': 'hand-sanitizer',
-    'overalls': 'medical overalls',
-    'gowns': 'gowns',
-    'respirators': 'advanced respirators (PAPR/CAPR/etc.)',
+    'n95s': $.i18n('ftm-item-n95s'),
+    'masks': $.i18n('ftm-item-masks'),
+    'face shields': $.i18n('ftm-item-face-shields'),
+    'booties': $.i18n('ftm-item-booties'),
+    'goggles': $.i18n('ftm-item-goggles'),
+    'gloves': $.i18n('ftm-item-gloves'),
+    'kleenex': $.i18n('ftm-item-kleenex'),
+    'sanitizer': $.i18n('ftm-item-sanitizer'),
+    'overalls': $.i18n('ftm-item-overalls'),
+    'gowns': $.i18n('ftm-item-gowns'),
+    'respirators': $.i18n('ftm-item-respirators'),
   };
-  filters.push(`<h4>Accepted Items</h4>`);
+  filters.push(`<h4>${$.i18n('ftm-accepted-items')}</h4>`);
   for (const val of Object.keys(acceptedItemsFilter)) {
     const id = toHTMLID(val);
     const descr = acceptedItemsFilter[val];
@@ -188,19 +188,19 @@ function toHtmlSnippets(data_by_location, filters) {
         entryLines.push(`<div class=location>`)
         entryLines.push(`<h4 class="marginBottomZero">${name}</h4>`);
 
-        entryLines.push(`<label>Address</label>`)
+        entryLines.push(`<label>${$.i18n('ftm-address')}</label>`)
         entryLines.push(`<p class="marginTopZero medEmph">${address.replace(/\n/g,'<br>')}</p>`);
 
         if (instructions !== "") {
-          entryLines.push(`<label>Instructions</label>`)
+          entryLines.push(`<label>${$.i18n('ftm-instructions')}</label>`)
           entryLines.push(`<p>${instructions}</p>`);
         }
         if (accepting !== "") {
-          entryLines.push(`<label>Accepting</label>`)
+          entryLines.push(`<label>${$.i18n('ftm-accepting')}</label>`)
           entryLines.push(`<p>${accepting}</p>`);
         }
         if (will_they_accept !== "") {
-          entryLines.push(`<label>Open packages?</label>`)
+          entryLines.push(`<label>${$.i18n('ftm-open-packages')}</label>`)
           entryLines.push(`<p>${will_they_accept}</p>`);
         }
         entryLines.push('</div>');
