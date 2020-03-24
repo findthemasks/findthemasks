@@ -1,11 +1,13 @@
 # getusppe.org backend v1 / findthemasks.com
 This repo hosts the code used to power the v1 backend of "give ppe" features on getusppe.org, as well as the current website of findthemasks.com
+- Stats: https://findthemasks.com/stats.html
 
-new dev? please look at Issues and comment on something to grab it!
+## New volunteer?
 
-new data moderator? Join the slack and come to #data!
-
-not a dev? The most useful contribution is identifying more drop off locations and plugging them into the form linked on the public website, so if you don't see an issue here that calls to you, please work on that! Advice in #131
+Join the slack! https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp-p8~9oKuXtV_gn7wEBZGGoA
+- new dev? please look at issues and comment on something to grab it!
+- new data moderator? Join the slack and come to #data!
+- not either? The most useful contribution is identifying more drop off locations and plugging them into the form linked on the public website, so if you don't see an issue here that calls to you, please work on that! Advice on making calls in #131
 
 ## Current setup
  - The website reads from a google sheet, generates a json blob, which is used to generate static HTML.
@@ -36,9 +38,6 @@ So, for state-specific pages you can now use something like:
 https://findthemasks.com/give.html?state=CA&hide-map=true&hide-filters=true
 This will return just the filtered list of donations sites in California.
 
-## Volunteer Slack for Backend v1 dev contributions, data merges, data cleaning
- - https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp-p8~9oKuXtV_gn7wEBZGGoA
-
-## Diretory structure.
+## Directory structure.
   * `/public` - The client-side code for the website. Currently has some symlinks to legacy file locations.
   * `/functions` - The cloud function used to generate data.json. Not needed for frontend work.
