@@ -228,7 +228,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 
-function onFilterChange(elem, scrollNeeded) {
+window.onFilterChange = function (elem, scrollNeeded) {
   // This is a hacky approach to programatically highlighting selected items as
   // it uses hard-coded ID references. We use this approach for now for
   // simplicity, speed of implementation and performance, but it should ideally
