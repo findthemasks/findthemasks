@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }
 
       states.forEach(state => {
-        elem = document.getElementById(`state-${state}`);
+        const elem = document.getElementById(`state-${state}`);
         elem.checked = true;
         onFilterChange(elem, false);
       });
@@ -432,7 +432,7 @@ function centerMapToNearestMarkers(map, markers) {
 
 
             // center the map on the user
-            bounds = new google.maps.LatLngBounds();
+            const bounds = new google.maps.LatLngBounds();
             bounds.extend(user_latlng);
 
             // Extend the bounds to contain the three closest markers
@@ -445,10 +445,10 @@ function centerMapToNearestMarkers(map, markers) {
                 // Add to the iterator first just in case something fails later to avoid infinite loop
                 i++;
 
-                marker_lat = marker.position.lat();
-                marker_lng = marker.position.lng();
+                const marker_lat = marker.position.lat();
+                const marker_lng = marker.position.lng();
 
-                loc = new google.maps.LatLng(marker_lat, marker_lng);
+                const loc = new google.maps.LatLng(marker_lat, marker_lng);
                 bounds.extend(loc);
             }
             map.fitBounds(bounds);       // auto-zoom
