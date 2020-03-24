@@ -61,6 +61,7 @@ const locales = {
     },
 }
 
+
 $(window).on('load', function() {
   // these need to be loaded after the rest of jq-i18n
   $.getScript("https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.bidi.min.js");
