@@ -10,8 +10,13 @@
   gtag('config', 'UA-161442455-1');
   </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script defer
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s&libraries=geometry"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.fallbacks.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.language.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.messagestore.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.parser.min.js"></script>
+    <script src="i18n.js"></script>
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s&libraries=geometry"></script>
     <script src="locations-list-map.js"></script>
     <title>#Findthemasks</title>
     <meta charset="UTF-8"/>
@@ -140,9 +145,19 @@
           font-weight: 400
         }
     </style>
-    <meta property="og:title" content="#findthemasks"/>
-    <meta property="og:url" content="https://findthemasks.com/"/>
-    <meta property="og:description" content="America’s frontline healthcare workers are treating COVID-19 patients without adequate protective gear, risking their lives! We need to find the masks. All of these masks can save lives now if you get them into the hands of healthcare workers."/>
+
+    <!-- Make sure to translate these meta tags when creating a new language version -->
+
+    <!-- English -->
+    <meta lang="en" property="og:title" content="#findthemasks"/>
+    <meta lang="en" property="og:url" content="https://findthemasks.com/"/>
+    <meta lang="en" property="og:description" content="America’s frontline healthcare workers are treating COVID-19 patients without adequate protective gear, risking their lives! We need to find the masks. All of these masks can save lives now if you get them into the hands of healthcare workers."/>
+
+    <!-- French -->
+    <meta lang="fr" property="og:title" content="#findthemasks"/>
+    <meta lang="fr" property="og:url" content="https://findthemasks.com/"/>
+    <meta lang="fr" property="og:description" content="Les travailleurs de la santé de première ligne du monde entier traitent les patients atteints de COVID-19 sans équipement de protection adéquat, risquant leur vie! Nous devons trouver les masques. Tous ces masques peuvent maintenant sauver des vies si vous les remettez entre les mains de professionnels de la santé."/>
+
     <meta property="og:image" content="https://findthemasks.com/images/n95.jpg"/>
 </head>
 
@@ -150,26 +165,26 @@
 <main class="content">
     <div class="container" style="padding-bottom: 40px;">
       <div class="map-container" style="display: none;">
-        <h2 style="padding: 30px 0px 20px 0px;">Map of donation sites</h2>
+        <h2 style="padding: 30px 0px 20px 0px;" class='i18n' data-i18n="ftm-map-of-sites">Map of donation sites</h2>
         <div id="map"></div>
       </div>
 
       <div class="locations-container" style="display: none;">
-        <h2 style="padding: 30px 0px 5px 0px; margin: 0px;">List of donation sites</h2>
-        <p style="padding-bottom: 10px">To add a donation site, update information, or request we take down information, please
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>.</p>
+        <h2 style="padding: 30px 0px 5px 0px; margin: 0px;" class='i18n' data-i18n="ftm-list-of-sites">List of donation sites</h2>
+        <p style="padding-bottom: 10px"> <span class='i18n' data-i18n="ftm-request-update">To add a donation site, update information, or request we take down information, please</span>
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform"><span class='i18n' data-i18n="ftm-fill-in-this-form">fill in this form</span></a>.</p>
 
         <div class="filters-container" style="display: none;">
-          <h4 style="padding-top: 0px;">Filters</h4>
+          <h4 style="padding-top: 0px;" class='i18n' data-i18n="ftm-filters">Filters</h4>
           <form name="filters" class="filters-list"></form>
         </div>
 
         <div id="locations-list" class="locations-list"></div>
       </div>
 
-      <p style="padding-top: 30px;">To add a donation site, update information, or request we take down information, please
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>.</p>
-      <p>Made with <3 in Seattle by <a href="whoweare.html" class="end">findthemasks.com</a></p>
+      <p style="padding-top: 30px;"><span class='i18n' data-i18n="ftm-request-update">To add a donation site, update information, or request we take down information, please</span>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform"><span class='i18n' data-i18n="ftm-fill-in-this-form">fill in this form</span></a>.</p>
+      <p><span class='i18n' data-i18n="[html]ftm-made-with-love">Made with &lt;3 in Seattle by </span><a href="whoweare.html" class="end">findthemasks.com</a></p>
     </div>
 </main>
 </body>
