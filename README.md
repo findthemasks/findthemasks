@@ -28,7 +28,10 @@ not a dev? The most useful contribution is identifying more drop off locations a
 ?state={CA/WA/NY/etc}
 ?hide-map={true/false}
 ?hide-filters={true/false}
+?hide-list={true/false} (also hides filters)
 ```
+All boolean parameters default to false.
+
 So, for state-specific pages you can now use something like:
 https://findthemasks.com/give.html?state=CA&hide-map=true&hide-filters=true
 This will return just the filtered list of donations sites in California.
