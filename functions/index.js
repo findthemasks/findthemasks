@@ -81,8 +81,8 @@ async function snapshotData(filename) {
   const client = await getAuthorizedClient();
   const data = await getSpreadsheet(client);
 
-  const headers = data.values[0];
-  const approvedIndex = headers.findIndex( e => e === 'Approved' );
+  const headers = data.values[1];
+  const approvedIndex = headers.findIndex( e => e === 'approved' );
   // The first row is human readable form values.
   // The second row is reserved for a machine usable field tag.
   // Save those and filter the rest.
@@ -105,10 +105,10 @@ async function snapshotData(filename) {
 }
 
 function toDataByLocation(data) {
-  const headers = data.values[0];
-  const approvedIndex = headers.findIndex( e => e === 'Approved' );
-  const stateIndex = headers.findIndex( e => e === 'State?' );
-  const cityIndex = headers.findIndex( e => e === 'City' );
+  const headers = data.values[1];
+  const approvedIndex = headers.findIndex( e => e === 'approved' );
+  const stateIndex = headers.findIndex( e => e === 'state' );
+  const cityIndex = headers.findIndex( e => e === 'city' );
   const data_by_location = {};
 
   const published_entries = data.values.slice(1).filter((entry) => entry[approvedIndex] === "x");
@@ -159,11 +159,11 @@ function toHtmlSnippets(data_by_location) {
       padding += '  ';
 
       for (const entry of cities[city]) {
-        const name = entry["What is the name of the hospital or clinic?"];
-        const address = entry["Street address for dropoffs?"];
-        const instructions = entry["Drop off instructions, eg curbside procedure or mailing address ATTN: instructions:"];
-        const accepting = entry["What are they accepting?"];
-        const will_they_accept = entry["Will they accept open boxes/bags?"];
+        const name = entry['name'];
+        const address = entry['address'];
+        const instructions = entry['instructions'];
+        const accepting = entry['accepting'];
+        const will_they_accept = entry['open_box'];
 
         lines.push(`${padding}<h4 class="marginBottomZero">${name}</h4>`);
         padding += '  ';

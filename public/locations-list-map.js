@@ -1,8 +1,8 @@
 function toDataByLocation(data) {
-  const headers = data.values[0];
-  const approvedIndex = headers.findIndex( e => e === 'Approved' );
-  const stateIndex = headers.findIndex( e => e === 'State?' );
-  const cityIndex = headers.findIndex( e => e === 'City' );
+  const headers = data.values[1];
+  const approvedIndex = headers.findIndex( e => e === 'approved' );
+  const stateIndex = headers.findIndex( e => e === 'state' );
+  const cityIndex = headers.findIndex( e => e === 'city' );
   const data_by_location = {};
 
   const published_entries = data.values.slice(1).filter((entry) => entry[approvedIndex] === "x");
@@ -49,7 +49,7 @@ function createFiltersListHTML() {
     const cities = data_by_location[state];
     for (const city of Object.keys(cities).sort()) {
       for (const entry of cities[city]) {
-        const v = entry["Will they accept open boxes/bags?"];
+        const v = entry["open_box"];
         acceptOpenFilters[toHTMLID(v)] = v;
       }
     }
@@ -167,11 +167,11 @@ function toHtmlSnippets(data_by_location, filters) {
     for (const city of Object.keys(cities).sort()) {
       const entryLines = [];
       for (const entry of cities[city]) {
-        const name = entry["What is the name of the hospital or clinic?"];
-        const address = entry["Street address for dropoffs?"];
-        const instructions = entry["Drop off instructions, eg curbside procedure or mailing address ATTN: instructions:"];
-        const accepting = entry["What are they accepting?"];
-        const will_they_accept = entry["Will they accept open boxes/bags?"];
+        const name = entry["name"];
+        const address = entry["address"];
+        const instructions = entry["instructions"];
+        const accepting = entry["accepting"];
+        const will_they_accept = entry["open_box"];
 
         if (filters) {
 //          if (filters.acceptOpens && !filters.acceptOpens[toHTMLID(will_they_accept)]) {
@@ -405,13 +405,13 @@ function initMap(states) {
 
          for (const city of Object.keys(cities).sort()) {
              for (const entry of cities[city]) {
-                 const name = entry["What is the name of the hospital or clinic?"];
-                 const address = entry["Street address for dropoffs?"];
-                 const latitude = entry["Lat"];
-                 const longitude = entry["Lng"];
-                 const instructions = entry["Drop off instructions, eg curbside procedure or mailing address ATTN: instructions:"];
-                 const accepting = entry["What are they accepting?"];
-                 const open_accepted = entry["Will they accept open boxes/bags?"];
+                 const name = entry["name"];
+                 const address = entry["address"];
+                 const latitude = entry["lat"];
+                 const longitude = entry["lng"];
+                 const instructions = entry["instructions"];
+                 const accepting = entry["accepting"];
+                 const open_accepted = entry["open_box"];
                  // Convert the lat and lng fields to numbers
                  if (!isNaN(Number(latitude))) {
                      var marker = addMarkerToMap(map, Number(latitude), Number(longitude),
