@@ -32,14 +32,6 @@ const locales = {
         "ftm-open-packages": "Heading for whether the hospital accepts open packages",
         "ftm-states": "Heading for US states",
         "ftm-accepts-open-boxes": "Long heading for whether the hospital accepts Open Boxes/bags",
-
-        // These strings are the header titles from data.json.
-        // They must match exactly or the app will break.
-        "ftm-sheet-hospital-name": "Title for the hospital name in data.json",
-        "ftm-sheet-address":"Title for the hospital address in data.json",
-        "ftm-sheet-instructions":"Title for the delivery instructions in data.json",
-        "ftm-sheet-accepting":"Title for what the hospital accepts in data.json",
-        "ftm-sheet-open-boxes":"Title for if the hospital takes open boxes in data.json"
     },
     "en": {
         "ftm-map-of-sites": "Map of donation sites",
@@ -66,14 +58,6 @@ const locales = {
         "ftm-open-packages": "Open packages?",
         "ftm-states": "States",
         "ftm-accepts-open-boxes": "Accepts Open Boxes/bags",
-
-        // These strings are the header titles from data.json.
-        // They must match exactly or the app will break.
-        "ftm-sheet-hospital-name": "What is the name of the hospital or clinic?",
-        "ftm-sheet-address": "Street address for dropoffs?",
-        "ftm-sheet-instructions": "Drop off instructions, eg curbside procedure or mailing address ATTN: instructions:",
-        "ftm-sheet-accepting": "What are they accepting?",
-        "ftm-sheet-open-boxes": "Will they accept open boxes/bags?"
     },
 }
 
