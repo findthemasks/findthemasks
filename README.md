@@ -7,7 +7,7 @@ not a dev? The most useful contribution is identifying more drop off locations a
 
 ## Current setup
  - The website reads from a google sheet, generates a json blob, which is used to generate static HTML.
- - Our data file updates every five minutes and can be read from findthemasks.com/data.json
+ - Our data file updates every five minutes and can be read from findthemasks.com/data.json. If you read the json directly, you need to ignore entries without an 'x' in the first field. Otherwise, you may publish info hospitals asked to have taken down. Don't do it! If this sounds like too much work, then please use our:
 
 ## Embeddable widget of donation sites
 - We have produced an embeddable version of our data and filters, without the call to action that's at the top of findthemasks.com. This was designed for getusppe.org on March 22, but can be reused by anyone.
