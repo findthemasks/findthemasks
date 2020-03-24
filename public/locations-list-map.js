@@ -234,7 +234,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const searchParams = new URLSearchParams((new URL(window.location)).search);
     const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
-    const states = stateParams.map(param => param.split(',')).flat();
+    const states = stateParams.map(param => param.split(',')).reduce((acc, val) => acc.concat(val), []);
 
     // show map unless hide-map="true"
     if (!searchParams.get('hide-map') || searchParams.get('hide-map') !== 'true') {
