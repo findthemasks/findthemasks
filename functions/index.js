@@ -76,7 +76,7 @@ async function getSpreadsheet(client) {
   return response.data;
 }
 
-async function snapshotData(filename) {
+async function snapshotData(filename, html_snippet_filename) {
   // Talk to sheets.
   const client = await getAuthorizedClient();
   const data = await getSpreadsheet(client);
@@ -91,7 +91,6 @@ async function snapshotData(filename) {
   data.values.push(...raw_values.slice(2).filter((entry) => entry[approvedIndex] === "x"));
 
   const datafileRef = admin.storage().bucket().file(filename);
-
   await datafileRef.save(JSON.stringify(data), {
     gzip: true,
     metadata: {
@@ -101,7 +100,20 @@ async function snapshotData(filename) {
     predefinedAcl: "publicRead",
   });
 
-  return data;
+  const data_by_location = toDataByLocation(data);
+  const html_snippets = toHtmlSnippets(data_by_location);
+
+  const htmlSnippetfileRef = admin.storage().bucket().file(html_snippet_filename);
+  await htmlSnippetfileRef.save(html_snippets, {
+    gzip: true,
+    metadata: {
+      cacheControl: "public, max-age=20",
+      contentType: "text/html"
+    },
+    predefinedAcl: "publicRead",
+  });
+
+  return [data, html_snippets];
 }
 
 function toDataByLocation(data) {
@@ -130,7 +142,7 @@ function toDataByLocation(data) {
     const entry_obj = {};
     headers.forEach( (value, index) => {
       if (entry[index] !== undefined) {
-        entry_obj[value] = entry[index]
+        entry_obj[value] = entry[index].trim()
       } else {
         entry_obj[value] = ""
       }
@@ -142,60 +154,76 @@ function toDataByLocation(data) {
 }
 
 function toHtmlSnippets(data_by_location) {
-   let padding = '      ';
-  const lines = [ `${padding}<article>` ];
-  padding += '  ';
+  let padding = 0;
+  const lines = [];
+  let addLine = str => lines.push(' '.repeat(padding) + str);
 
-  lines.push(`${padding}<h1>List of donation sites</h1>`);
-  padding += '  ';
+  addLine('<article>');
+  padding += 2;
 
+  addLine('<h1>List of donation sites</h1>');
+
+  // Output each entry by state.
   for (const state of Object.keys(data_by_location).sort()) {
-    lines.push(`${padding}<h2>${state}</h2>`);
-    padding += '  ';
+    addLine(`<section data-state="${state}">`);
+    padding += 2;
+
+    addLine(`<h2>${state}</h2>`);
 
     const cities = data_by_location[state];
     for (const city of Object.keys(cities).sort()) {
-      lines.push(`${padding}<h3>${city}</h3>`);
-      padding += '  ';
+      addLine(`<section data-city="${city}">`);
+      padding += 2;
+
+      addLine(`<h3 data-state="${city}">${city}</h3>`);
 
       for (const entry of cities[city]) {
         const name = entry['name'];
         const address = entry['address'];
         const instructions = entry['instructions'];
         const accepting = entry['accepting'];
-        const will_they_accept = entry['open_box'];
+        const lat = entry['lat'];
+        const lng = entry['lng'];
+        const open_box = entry['open_box'];
 
-        lines.push(`${padding}<h4 class="marginBottomZero">${name}</h4>`);
-        padding += '  ';
+        addLine(`<article data-entry=${JSON.stringify(name)} data-accepting=${JSON.stringify(accepting)} data-lat=${JSON.stringify(lat)} data-lng=${JSON.stringify(lng)} data-open-box=${JSON.stringify(open_box)}>`);
+        padding += 2;
+        addLine(`<h4 class="marginBottomZero">${name}</h4>`);
 
-        lines.push(`${padding}<p class="marginTopZero medEmph">${address.replace(/\n/g,'<br>')}</p>`);
+        addLine('<label>Address</label>')
+        addLine(`<p class="marginTopZero medEmph">${address.replace(/\n/g,'<br>')}</p>`);
+
         if (instructions !== "") {
-          lines.push(`${padding}<p>${instructions}</p>`);
+          addLine('<label>Instructions</label>')
+          addLine(`<p>${instructions}</p>`);
         }
         if (accepting !== "") {
-          lines.push(`${padding}<p>${accepting}</p>`);
+          addLine('<label>Accepting</label>')
+          addLine(`<p>${accepting}</p>`);
         }
-        if (will_they_accept !== "") {
-          lines.push(`${padding}<p>${will_they_accept}</p>`);
+        if (open_box !== "") {
+          addLine('<label>Open packages?</label>')
+          addLine(`<p>${open_box}</p>`);
         }
 
-        padding = padding.substring(0, padding.length - 2);
+        padding -= 2;
+        addLine(`</article>`);
       }
 
-      padding = padding.substring(0, padding.length - 2);
+      padding -= 2;
+      addLine(`</section>`);
     }
 
-    padding = padding.substring(0, padding.length - 2);
+    padding -= 2;
+    addLine(`</section>`);
   }
-  lines.push('      </article>');
-  return lines;
+  padding -= 2;
+  addLine('</article>');
+  return lines.join("\n");
 }
 
-const DATA_FILE_NAME = 'data.json';
 exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
-  const data = await snapshotData(DATA_FILE_NAME);
-  const data_by_location = toDataByLocation(data);
-  const html_snippets = toHtmlSnippets(data_by_location);
+  const [data, html_snippets] = await snapshotData('data.json', 'data_snippet.html');
 
-  res.status(200).send(html_snippets.join("\n"));
+  res.status(200).send(html_snippets);
 });
