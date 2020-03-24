@@ -65,7 +65,7 @@ function createFiltersListHTML() {
           type="checkbox"
           name="states"
           value="${state}"
-          onchange="onFilterChange(this)"
+          onchange="onFilterChange(this, true)"
           />
         <label
           id="state-${state}-label"
@@ -123,7 +123,7 @@ function createFiltersListHTML() {
           type="checkbox"
           name="accept-item"
           value="${val}"
-          onchange="onFilterChange(this)"
+          onchange="onFilterChange(this, true)"
           />
         <label
           id="accept-item-${id}-label"
@@ -257,13 +257,13 @@ document.addEventListener("DOMContentLoaded", function() {
       states.forEach(state => {
         elem = document.getElementById(`state-${state}`);
         elem.checked = true;
-        onFilterChange(elem);
+        onFilterChange(elem, false);
       });
     }
   });
 });
 
-function onFilterChange(elem) {
+function onFilterChange(elem, scrollNeeded) {
   // This is a hacky approach to programatically highlighting selected items as
   // it uses hard-coded ID references. We use this approach for now for
   // simplicity, speed of implementation and performance, but it should ideally
@@ -308,7 +308,11 @@ function onFilterChange(elem) {
 
   const filters = {states, acceptItems};
   const htmlSnippets = toHtmlSnippets(window.data_by_location, filters);
-  $(".locations-list").html(htmlSnippets.join(" "));
+  const locationsListElement = document.getElementById('locations-list');
+  locationsListElement.innerHTML = htmlSnippets.join(" ");
+  if (scrollNeeded) {
+    locationsListElement.scrollIntoView({'behavior': 'smooth'});
+  }
 }
 
 
