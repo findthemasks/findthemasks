@@ -9,17 +9,15 @@ document.addEventListener("DOMContentLoaded", function() {
     const stateCounts = {};
 
     for (const state of Object.keys(locations).sort()) {
-      const cities = locations[state];
+      const cities = locations[state].cities;
       const citiesKeys = Object.keys(cities);
       const stateCitiesCount = citiesKeys.length;
 
       totalCities += stateCitiesCount;
       stateCounts[state] = stateCitiesCount;
 
-      for (const city of citiesKeys.sort()) {
-        for (const entry of cities[city]) {
-          totalCount += 1
-        }
+      for (const city of citiesKeys) {
+        totalCount += cities[city].entries.length;
       }
     }
 
