@@ -28,6 +28,9 @@ const middle_of_us_zoom = 4;
 let inital_center = middle_of_us,
   initial_zoom = middle_of_us_zoom;
 
+// Keep track of the previous info windows user has clicked so we can close them.
+let openInfoWindows = [];
+
 // TODO: Move stateLocationMappings here.
 
 /*************************
@@ -601,8 +604,6 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
 }
 
 
-
-let openInfoWindows = [];
 
 function addMarkerToMap(latitude, longitude, address, name, instructions, accepting, open_accepted) {
     // Text to go into InfoWindow
