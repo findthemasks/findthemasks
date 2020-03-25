@@ -226,7 +226,7 @@ function toHtmlSnippets(data_by_location, filters) {
   return lines;
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+$(function() {
     $.getJSON("https://findthemasks.com/data.json", function(result){
     // may end up using this for search / filtering...
     window.locations = result;
