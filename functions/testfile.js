@@ -5,46 +5,29 @@ const data = {"range":"moderated!A1:Z1501","majorDimension":"ROWS","values":[["A
 const Client = require("@googlemaps/google-maps-services-js").Client;
 
 
-// Fetch array with lat & lng for the given address.  Returns "N/A", "N/A" if geocoding fails.
+// Fetch array with lat & lng for the given address.
 // Either fetches by making a call to the Google Maps API or retrieving from a cache.
-function getLatLng(address, client) {
-  var location;
-  // BEFORE CHECKING IN, REPLACE THE KEY BELOW WITH A REFERENCE TO
-  // A PRODUCTION KEY (NOT DEV KEY!)
-  var foo = client
-    .geocode({
-      params: {
-        address: address,
-        key: 'AIzaSyD6gBXBlViBs-6OXMftR2PdNW6Q7ycZ47g'
-      },
-      timeout: 1000 // milliseconds
-    })
-    .then(r => {
-      console.log(r.data);
-      if (r.data.results && r.data.results.length > 0) {
-        location = r.data.results[0].geometry.location;
-        console.log("latlng:" + location.lat + ", " + location.lng); 
-      }
-    })
-    .catch(e => {
-      console.log(e);
-    });
-    
-  Promise.all([ foo ])
-    .then(function() {
-        console.log('location: ' + location);
-    });
-  
-  if (location != null) {
-    return [ location.lat, location.lng ];
-    console.log('location: '+ location);
-  } else {
-    return [ "N/A", "N/A"];
-  }          
+// Returns a promise.
+async function getLatLng(address, client) {
+  return client
+  .geocode({
+    params: {
+      address: address,
+      key: 'AIzaSyD6gBXBlViBs-6OXMftR2PdNW6Q7ycZ47g'
+    },
+    timeout: 1000 // milliseconds
+  })
+  .then(r => {
+    console.log(r.data);
+    if (r.data.results && r.data.results.length > 0) {
+      const location =  r.data.results[0].geometry.location;
+      return location;
+    }
+    throw 'bad geocode response';
+  });        
 }
 
 function toDataByLocation(data) {
-
   const client = new Client({});
   
   const headers = data.values[1];
@@ -58,10 +41,7 @@ function toDataByLocation(data) {
 
   const published_entries = data.values.slice(1).filter((entry) => entry[approvedIndex] === "x");
 
-  published_entries.forEach( entry => {
-    const state = entry[stateIndex];
-    const city = entry[cityIndex];
-
+  published_entries.forEach(async (entry) => {
     // Do geocoding and add lat/lng to data iff we don't already have a latLng for
     // the address *and* the address has been moderated.  (In this code block, all
     // data has already been moderated.)
@@ -69,17 +49,22 @@ function toDataByLocation(data) {
 
     // Check if entry's length is too short to possibly have a latitude, we need
     // to geocode.  If the value for lat is "", we also need to geocode.
-    // @Someone who knows JavaScript better than me: what's the right way to do this?
-    if (entry.length < (latIndex + 1) || entry[latIndex] == "") {
-      var lat_lng = getLatLng(address, client);
-      
-     // // Update entry to include the latLng pair returned by geocoding.
-     // entry[latIndex] = lat_lng[0];
-     // entry[lngIndex] = lat_lng[1];
+    if ((entry.length < (latIndex + 1)) || (entry[latIndex] == "")) {
+      try {
+        let lat_lng = await getLatLng(address, client);
+        entry[latIndex] = lat_lng.lat;
+        entry[lngIndex] = lat_lng.lng;
+        console.log(entry);
+      } catch (e) {
+        console.error(e);
+        entry[latIndex] = 'N/A';
+        entry[lngIndex] = 'N/A';
+      }
     }
 
-///////////////////////////////////////////////////////////////////////
     let entry_array;
+    const state = entry[stateIndex];
+    const city = entry[cityIndex];
     if (!(state in data_by_location) || !(city in data_by_location[state])) {
       entry_array = [];
       if (state in data_by_location) {
@@ -93,12 +78,11 @@ function toDataByLocation(data) {
     const entry_obj = {};
     headers.forEach( (value, index) => {
       if (entry[index] !== undefined) {
-        entry_obj[value] = entry[index].trim()
+        entry_obj[value] = (typeof entry[index]) === 'string' ? entry[index].trim() : entry[index];
       } else {
         entry_obj[value] = ""
       }
     });
-
     entry_array.push(entry_obj);
   });
 
@@ -175,9 +159,10 @@ function toHtmlSnippets(data_by_location) {
 }
 
 
-  const data_by_location = toDataByLocation(data);
- // const html_snippets = toHtmlSnippets(data_by_location);
- // console.log(html_snippets);
+const data_by_location = toDataByLocation(data);
+console.log(data_by_location)
+// const html_snippets = toHtmlSnippets(data_by_location);
+// console.log(html_snippets);
 
 
 
