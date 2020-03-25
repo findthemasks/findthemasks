@@ -138,7 +138,14 @@ function createContent(data, showList, showMap) {
           }
         }
 
-        // TODO: Create map marker here
+        if (showMap) {
+          const lat = Number(entry.lat);
+          const lon = Number(entry.lng);
+
+          if (!isNaN(lat)) {
+            entry.marker = addMarkerToMap(null, lat, lon, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box);
+          }
+        }
       }
     }
   }
@@ -196,22 +203,20 @@ $(function () {
     window.locations = result;
     window.data_by_location = toDataByLocation(locations);
 
-    createContent(window.data_by_location);
-
     const searchParams = new URLSearchParams((new URL(window.location)).search);
     const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
     const states = stateParams.map(param => param.split(',')).reduce((acc, val) => acc.concat(val), []);
+    const showList = searchParams.get('hide-list') !== 'true';
+    const showMap = searchParams.get('hide-map') !== 'true';
 
-    // show map unless hide-map="true"
-    if (!searchParams.get('hide-map') || searchParams.get('hide-map') !== 'true') {
+    createContent(window.data_by_location, showList, showMap);
+
+    if (showMap) {
       initMap(states);
     }
 
-    const hideList = searchParams.get('hide-list') && searchParams.get('hide-list') === 'true';
-
-    if (!hideList) {
-      // Generate and populate filter + list HTML. Once completed, swap loading and list container.
-      $('.filters-list').html(createFiltersListHTML(data_by_location).join(" "));
+    if (showList) {
+      $(".filters-list").html(createFiltersListHTML(data_by_location).join(" "));
       $('.locations-loading').hide();
       $('.locations-container').show();
 
@@ -326,73 +331,60 @@ const stateLocationMappings = {
 };
 
 function initMap(states) {
-     var data_by_location = window.data_by_location;
-     var middle_of_us = { lat: 39.0567939, lng: -94.6065124};
+  var data_by_location = window.data_by_location;
+  var middle_of_us = { lat: 39.0567939, lng: -94.6065124 };
 
-     var element = document.getElementById('map');
+  var element = document.getElementById('map');
 
-     if (element == null) {
-         alert('could not find map div');
-     }
+  if (element == null) {
+    alert('could not find map div');
+  }
 
-    $(".map-container").show();
+  $(".map-container").show();
 
-     const singleStateFilter = states && states.length === 1;
-     let firstState = states[0] || '';
-     firstState = firstState.toUpperCase();
+  const singleStateFilter = states && states.length === 1;
+  const firstState = states[0];
 
-     // The map, roughly zoomed to show the entire US.
-     var map = new google.maps.Map( element, {zoom: 4, center: middle_of_us});
+  // The map, roughly zoomed to show the entire US.
+  var map = new google.maps.Map(element, { zoom: 4, center: middle_of_us });
 
-     let markers = [];
+  let markers = [];
 
-     // filter states if there is a state filter
-     const filteredStates = Object.keys(data_by_location).filter((stateCode) => (
-       (
-         singleStateFilter
-         && firstState === stateCode.toUpperCase()
-         && stateLocationMappings[stateCode.toUpperCase()]
-         // add markers when no single state filter or if state code is invalid
-       ) || (!singleStateFilter || !stateLocationMappings[firstState])
-     ));
+  // filter states if there is a state filter
+  const filteredStates = Object.keys(data_by_location).filter((stateCode) => (
+    (
+      singleStateFilter
+      && firstState.toUpperCase() === stateCode.toUpperCase()
+      && stateLocationMappings[stateCode.toUpperCase()]
+      // add markers when no single state filter or if state code is invalid
+    ) || (!singleStateFilter || !stateLocationMappings[firstState.toUpperCase()])
+  ));
 
-     for (const state of filteredStates.sort()) {
-         const cities = data_by_location[state].cities;
+  for (const state of filteredStates.sort()) {
+    const cities = data_by_location[state].cities;
 
-         for (const city of Object.keys(cities).sort()) {
-             for (const entry of cities[city].entries) {
-                 const name = entry["name"];
-                 const address = entry["address"];
-                 const latitude = entry["lat"];
-                 const longitude = entry["lng"];
-                 const instructions = entry["instructions"];
-                 const accepting = entry["accepting"];
-                 const open_accepted = entry["open_box"];
-                 // Convert the lat and lng fields to numbers
-                 if (!isNaN(Number(latitude))) {
-                     var marker = addMarkerToMap(map, Number(latitude), Number(longitude),
-                         address, name, instructions, accepting, open_accepted);
-                     markers.push(marker);
-                 }
-             }
-         }
-     }
+    for (const city of Object.keys(cities).sort()) {
+      for (const entry of cities[city].entries) {
+        if (entry.marker) {
+          entry.marker.setMap(map);
+          markers.push(entry.marker);
+        }
+      }
+    }
+  }
 
-     let $mapStats = $('#map-stats');
-     if (singleStateFilter) {
-       // Center the map to a state if only one is set in query params
-       centerMapToState(map, firstState);
-
-       // Update map stats (w/ selected state)
-       updateStats($mapStats, markers.length, [firstState]);
-
-     } else {
-       // Center the map on the nearest markers to the user if possible
-       centerMapToNearestMarkers(map, markers);
-
-       // Update stats (no states).
-       updateStats($mapStats, markers.length);
-     }
+  let $mapStats = $('#map-stats');
+  if (singleStateFilter) {
+    // Center the map to a state if only one is set in query params
+    centerMapToState(map, firstState);
+    // Update map stats (w/ selected state)
+    updateStats($mapStats, markers.length, [firstState]);
+  } else {
+    // Center the map on the nearest markers to the user if possible
+    centerMapToNearestMarkers(map, markers);
+    // Update stats (no states).
+    updateStats($mapStats, markers.length);
+  }
 }
 
 
