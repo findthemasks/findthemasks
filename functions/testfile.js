@@ -5,8 +5,7 @@ const data = {"range":"moderated!A1:Z1501","majorDimension":"ROWS","values":[["A
 const Client = require("@googlemaps/google-maps-services-js").Client;
 
 
-// Fetch array with lat & lng for the given address.
-// Either fetches by making a call to the Google Maps API or retrieving from a cache.
+// Fetch lat & lng for the given address by making a call to the Google Maps API.
 // Returns a promise.
 async function getLatLng(address, client) {
   return client
