@@ -16,7 +16,7 @@ $ cd ..
 $ http-server
 ```
 
-Then you can open http://localhost:8080/ in your browser.  If everything is working you should be able to see the dynamically populated "List of Donation Sites"
+Then you can open http://localhost:8080/ (or http://local.findthemasks.com:8080) in your browser.  If everything is working you should be able to see the dynamically populated "List of Donation Sites"
 
 ### `data.json`
 
