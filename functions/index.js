@@ -133,13 +133,14 @@ async function getLatLng(address, client) {
     if (r.data.results && r.data.results.length > 0) {
       const location =  r.data.results[0].geometry.location;
       return location;
+    } else {
+      throw 'bad geocode response';
     }
-    throw 'bad geocode response';
   });
 }
 
 function toDataByLocation(data) {
-  const client = new Client({});
+  const maps_client = new Client({});
 
   const headers = data.values[1];
   const approvedIndex = headers.findIndex( e => e === 'approved' );
@@ -162,7 +163,7 @@ function toDataByLocation(data) {
     // to geocode.  If the value for lat is "", we also need to geocode.
     if ((entry.length < (latIndex + 1)) || (entry[latIndex] == "")) {
       try {
-        let lat_lng = await getLatLng(address, client);
+        let lat_lng = await getLatLng(address, maps_client);
         entry[latIndex] = lat_lng.lat;
         entry[lngIndex] = lat_lng.lng;
         console.log(entry);
