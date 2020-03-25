@@ -1,5 +1,7 @@
 import toDataByLocation from './toDataByLocation.js';
 
+// TODO: The indentation in this file is not consistent and should be updated soon. Currently the project standard is
+//  2-space indentation; please see .editorconfig and, if possible, configure your IDE to utilize this file.
 
 
 /******************************************
