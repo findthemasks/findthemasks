@@ -132,7 +132,7 @@ async function getLatLng(address, client) {
   if (response.data.results && response.data.results.length > 0) {
     return response.data.results[0].geometry.location;
   } else {
-    throw 'bad geocode response';
+    throw new Error('bad geocode response');
   }
 }
 
@@ -158,7 +158,7 @@ function toDataByLocation(data) {
 
     // Check if entry's length is too short to possibly have a latitude, we need
     // to geocode.  If the value for lat is "", we also need to geocode.
-    if ((entry.length < (latIndex + 1)) || (entry[latIndex] == "")) {
+    if ((entry.length < (latIndex + 1)) || (entry[latIndex] === "")) {
       try {
         const lat_lng = await getLatLng(address, maps_client);
         entry[latIndex] = lat_lng.lat;
