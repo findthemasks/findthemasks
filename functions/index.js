@@ -33,7 +33,7 @@ const functionsOauthClient = new OAuth2Client(CONFIG_CLIENT_ID, CONFIG_CLIENT_SE
 let oauthTokens = null;
 
 // visit the URL for this Function to request tokens
-exports.authgoogleapi = functions.https.onRequest((req, res) => {
+module.exports.authgoogleapi = functions.https.onRequest((req, res) => {
   res.set('Cache-Control', 'private, max-age=0, s-maxage=0');
   res.redirect(functionsOauthClient.generateAuthUrl({
     access_type: 'offline',
@@ -47,7 +47,7 @@ const DB_TOKEN_PATH = '/api_tokens';
 
 // after you grant access, you will be redirected to the URL for this Function
 // this Function stores the tokens to your Firebase database
-exports.oauthcallback = functions.https.onRequest(async (req, res) => {
+module.exports.oauthcallback = functions.https.onRequest(async (req, res) => {
   res.set('Cache-Control', 'private, max-age=0, s-maxage=0');
   const code = req.query.code;
   try {
@@ -230,7 +230,7 @@ function toHtmlSnippets(data_by_location) {
   return lines.join("\n");
 }
 
-exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
+module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
   const [data, html_snippets] = await snapshotData('data.json', 'data_snippet.html');
 
   res.status(200).send(html_snippets);
