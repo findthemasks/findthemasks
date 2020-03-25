@@ -564,7 +564,7 @@ function number_format(number, decimal_places, dec_seperator, thou_seperator) {
   }
   if (f[1].length < decimal_places) {
     let g = f[1];
-    for (i=f[1].length + 1; i <= decimal_places; i++) {
+    for (let i=f[1].length + 1; i <= decimal_places; i++) {
       g += '0';
     }
     f[1] = g;
