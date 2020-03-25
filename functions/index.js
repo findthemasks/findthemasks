@@ -4,6 +4,7 @@ admin.initializeApp();
 
 const {OAuth2Client} = require('google-auth-library');
 const {google} = require('googleapis');
+const Client = require("@googlemaps/google-maps-services-js").Client;
 
 // TODO: Use firebase functions:config:set to configure your googleapi object:
 // googleapi.client_id = Google API client ID,
@@ -12,6 +13,7 @@ const {google} = require('googleapis');
 const CONFIG_CLIENT_ID = functions.config().googleapi.client_id;
 const CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
 const CONFIG_SHEET_ID = functions.config().googleapi.sheet_id;
+const GOOGLE_MAPS_API_KEY = functions.config().findthemasks.geocode_key;
 
 // The OAuth Callback Redirect.
 const FUNCTIONS_REDIRECT = `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com/oauthcallback`;
@@ -116,19 +118,61 @@ async function snapshotData(filename, html_snippet_filename) {
   return [data, html_snippets];
 }
 
+// Fetch lat & lng for the given address by making a call to the Google Maps API.
+// Returns an object with numeric lat and lng fields.
+async function getLatLng(address, client) {
+  const response = await client.geocode({
+    params: {
+      address: address,
+      key: GOOGLE_MAPS_API_KEY,
+    },
+    timeout: 1000 // milliseconds
+  });
+
+  if (response.data.results && response.data.results.length > 0) {
+    return response.data.results[0].geometry.location;
+  } else {
+    throw 'bad geocode response';
+  }
+}
+
 function toDataByLocation(data) {
+  const maps_client = new Client({});
+
   const headers = data.values[1];
   const approvedIndex = headers.findIndex( e => e === 'approved' );
   const stateIndex = headers.findIndex( e => e === 'state' );
   const cityIndex = headers.findIndex( e => e === 'city' );
+  const addressIndex = headers.findIndex( e => e === 'address' );
+  const latIndex = headers.findIndex( e => e === 'lat' );
+  const lngIndex = headers.findIndex( e => e === 'lng' );
   const data_by_location = {};
 
   const published_entries = data.values.slice(1).filter((entry) => entry[approvedIndex] === "x");
 
-  published_entries.forEach( entry => {
+  published_entries.forEach(async (entry) => {
+    // Do geocoding and add lat/lng to data iff we don't already have a latLng for
+    // the address *and* the address has been moderated.  (In this code block, all
+    // data has already been moderated.)
+    const address = entry[addressIndex];
+
+    // Check if entry's length is too short to possibly have a latitude, we need
+    // to geocode.  If the value for lat is "", we also need to geocode.
+    if ((entry.length < (latIndex + 1)) || (entry[latIndex] == "")) {
+      try {
+        const lat_lng = await getLatLng(address, maps_client);
+        entry[latIndex] = lat_lng.lat;
+        entry[lngIndex] = lat_lng.lng;
+      } catch (e) {
+        console.error(e);
+        entry[latIndex] = 'N/A';
+        entry[lngIndex] = 'N/A';
+      }
+    }
+
+    let entry_array;
     const state = entry[stateIndex];
     const city = entry[cityIndex];
-    let entry_array;
     if (!(state in data_by_location) || !(city in data_by_location[state])) {
       entry_array = [];
       if (state in data_by_location) {
@@ -142,7 +186,7 @@ function toDataByLocation(data) {
     const entry_obj = {};
     headers.forEach( (value, index) => {
       if (entry[index] !== undefined) {
-        entry_obj[value] = entry[index].trim()
+        entry_obj[value] = (typeof entry[index]) === 'string' ? entry[index].trim() : entry[index];
       } else {
         entry_obj[value] = ""
       }
