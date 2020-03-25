@@ -118,8 +118,11 @@ function toHTMLID(name) {
   return s.toLowerCase();
 }
 
+
 function toHtmlSnippets(data_by_location, filters) {
   const lines = [];
+
+  let listCount = 0; // TODO: hacky, see note below.
 
   for (const state of Object.keys(data_by_location).sort()) {
     if (filters && filters.states && !filters.states[state]) {
@@ -150,6 +153,7 @@ function toHtmlSnippets(data_by_location, filters) {
           }
         }
 
+        listCount++;
         entryLines.push(`<div class=location>`)
         entryLines.push(`<h4 class="marginBottomZero">${name}</h4>`);
 
@@ -177,7 +181,6 @@ function toHtmlSnippets(data_by_location, filters) {
         cityLines.push(entryLines.join('\n'));
         cityLines.push('</div>');
       }
-
     }
 
     if (cityLines.length > 0) {
@@ -186,7 +189,13 @@ function toHtmlSnippets(data_by_location, filters) {
       lines.push(cityLines.join('\n'));
       lines.push('</div>');
     }
+
   }
+
+  // TODO: This is hacky since technically this function should ONLY be responsible for generating HTML snippets,
+  //  not updating stats; however this is the quickest method for updating filter stats as well.
+  updateStats($('#list-stats'), listCount);
+
 
   return lines;
 }
@@ -278,7 +287,7 @@ window.onFilterChange = function (elem, scrollNeeded) {
   if (scrollNeeded) {
     locationsListElement.scrollIntoView({'behavior': 'smooth'});
   }
-}
+};
 
 const stateLocationMappings = {
   "AK": { "lat": 63.588753, "lng": -154.493062, zoom: 3.5 },
@@ -348,7 +357,8 @@ function initMap(states) {
     $(".map-container").show();
 
      const singleStateFilter = states && states.length === 1;
-     const firstState = states[0];
+     let firstState = states[0] || '';
+     firstState = firstState.toUpperCase();
 
      // The map, roughly zoomed to show the entire US.
      var map = new google.maps.Map( element, {zoom: 4, center: middle_of_us});
@@ -359,10 +369,10 @@ function initMap(states) {
      const filteredStates = Object.keys(data_by_location).filter((stateCode) => (
        (
          singleStateFilter
-         && firstState.toUpperCase() === stateCode.toUpperCase()
+         && firstState === stateCode.toUpperCase()
          && stateLocationMappings[stateCode.toUpperCase()]
          // add markers when no single state filter or if state code is invalid
-       ) || (!singleStateFilter || !stateLocationMappings[firstState.toUpperCase()])
+       ) || (!singleStateFilter || !stateLocationMappings[firstState])
      ));
 
      for (const state of filteredStates.sort()) {
@@ -387,14 +397,23 @@ function initMap(states) {
          }
      }
 
+     let $mapStats = $('#map-stats');
      if (singleStateFilter) {
        // Center the map to a state if only one is set in query params
        centerMapToState(map, firstState);
+
+       // Update map stats (w/ selected state)
+       updateStats($mapStats, markers.length, [firstState]);
+
      } else {
        // Center the map on the nearest markers to the user if possible
        centerMapToNearestMarkers(map, markers);
+
+       // Update stats (no states).
+       updateStats($mapStats, markers.length);
      }
 }
+
 
 function centerMapToState(map, state) {
   const stateLocationMapping = stateLocationMappings[state.toUpperCase()];
@@ -436,7 +455,7 @@ function centerMapToNearestMarkers(map, markers) {
             bounds.extend(user_latlng);
 
             // Extend the bounds to contain the three closest markers
-            i = 0;
+            let i = 0;
             while (i < 3) {
                 // Get one of the closest markers
                 var distance = distances[i]
@@ -486,5 +505,81 @@ function addMarkerToMap(map, latitude, longitude, address, name, instructions, a
     });
 
     return marker;
+}
+
+
+
+/**
+ * Adjusts stats in header above map to call out number of markers currently being rendered.
+ *
+ * @param   $elem   jQuery selector for the stats element
+ * @param   count   The number for render
+ * @param   states  The states that this applies to (array of abbreviated state strings).
+ */
+function updateStats($elem, count, states) {
+  let statsHtml = '',
+      prettyMarkerCount = number_format(count, 0);
+
+  // Default to no states.
+  statsHtml = `(${prettyMarkerCount})`;
+
+  if (typeof states === 'undefined') states = [];
+  if (states.length > 0) {
+    let statesFormatted = states.join(', ');
+    statsHtml = `in ${statesFormatted} ` + statsHtml;
+  }
+
+  // If we're at zero, just clear it out for now.
+  if (count === 0) statsHtml = '';
+
+  $elem.html(statsHtml);
+}
+
+
+
+/**
+ * Made by Mathias Bynens <http://mathiasbynens.be/>
+ * Modified by Patrick Nelson to set useful param names and sane defaults for US_en locale.
+ *
+ * Example usage:
+ *
+ *    number_format(1000.15, 1, ',', '.');
+ *
+ * Result:  "1.000,2"
+ */
+function number_format(number, decimal_places, dec_seperator, thou_seperator) {
+  // Init defaults.
+  if (typeof decimal_places === 'undefined') decimal_places = 0;
+  if (typeof dec_seperator === 'undefined') dec_seperator = '.';
+  if (typeof thou_seperator === 'undefined') thou_seperator = ',';
+
+  number = Math.round(number * Math.pow(10, decimal_places)) / Math.pow(10, decimal_places);
+  let e = number + '';
+  let f = e.split('.');
+  if (!f[0]) {
+    f[0] = '0';
+  }
+  if (!f[1]) {
+    f[1] = '';
+  }
+  if (f[1].length < decimal_places) {
+    let g = f[1];
+    for (i=f[1].length + 1; i <= decimal_places; i++) {
+      g += '0';
+    }
+    f[1] = g;
+  }
+  if(thou_seperator != '' && f[0].length > 3) {
+    let h = f[0];
+    f[0] = '';
+    for(let j = 3; j < h.length; j+=3) {
+      let i = h.slice(h.length - j, h.length - j + 3);
+      f[0] = thou_seperator + i +  f[0] + '';
+    }
+    let j = h.substr(0, (h.length % 3 == 0) ? 3 : (h.length % 3));
+    f[0] = j + f[0];
+  }
+  dec_seperator = (decimal_places <= 0) ? '' : dec_seperator;
+  return f[0] + dec_seperator + f[1];
 }
 
