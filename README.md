@@ -2,6 +2,8 @@
 
 This repo hosts the code used to power the v1 backend of "give ppe" features on getusppe.org, as well as the current website of findthemasks.com
 
+- Stats: <https://findthemasks.com/stats.html>
+
 ## New volunteer?
 
 Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp-p8~9oKuXtV_gn7wEBZGGoA>
@@ -45,12 +47,14 @@ So, for state-specific pages you can now use something like:
 <https://findthemasks.com/give.html?state=CA&hide-map=true&hide-filters=true>
 This will return just the filtered list of donations sites in California.
 
-## Directory structure.
-  * `/public` - The client-side code for the website. Currently has some symlinks to legacy file locations.
-  * `/functions` - The cloud function used to generate data.json. Not needed for frontend work.
+## Directory structure
+
+- `/public` - The client-side code for the website. Currently has some symlinks to legacy file locations.
+- `/functions` - The cloud function used to generate data.json. Not needed for frontend work.
 
 ## Thanks
- - The "Face With Medical Mask" favicon is used with thanks to
+
+- The "Face With Medical Mask" favicon is used with thanks to
    [favicon.io](https://favicon.io/emoji-favicons/face-with-medical-mask/) which
    provides pre-generated favicon packages using
    [Twemoji](https://twemoji.twitter.com/). Twemoji graphics are licensed
