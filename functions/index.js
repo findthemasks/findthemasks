@@ -6,6 +6,7 @@ admin.initializeApp();
 
 const {OAuth2Client} = require('google-auth-library');
 const {google} = require('googleapis');
+const Client = require("@googlemaps/google-maps-services-js").Client;
 
 // TODO: Use firebase functions:config:set to configure your googleapi object:
 // googleapi.client_id = Google API client ID,
@@ -14,18 +15,28 @@ const {google} = require('googleapis');
 let CONFIG_CLIENT_ID = '';
 let CONFIG_CLIENT_SECRET = '';
 let CONFIG_SHEET_ID = '';
+let GOOGLE_MAPS_API_KEY = '';
 
 if (functions.config()['googleapi'] != null) {
   CONFIG_CLIENT_ID = functions.config().googleapi.client_id
   CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
   CONFIG_SHEET_ID = functions.config().googleapi.sheet_id;
+  GOOGLE_MAPS_API_KEY = functions.config().findthemasks.geocode_key;
 }
+
+const COLUMNS = [
+'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM',
+'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'
+];
+const WRITEBACK_SHEET = "'Form Responses 1'";
 
 // The OAuth Callback Redirect.
 const FUNCTIONS_REDIRECT = `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com/oauthcallback`;
 
 // setup for authGoogleAPI
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const functionsOauthClient = new OAuth2Client(CONFIG_CLIENT_ID, CONFIG_CLIENT_SECRET,
   FUNCTIONS_REDIRECT);
 
@@ -72,15 +83,98 @@ async function getAuthorizedClient() {
   return functionsOauthClient;
 }
 
+function getHeaders(data) { return data.values[1]; }
+
+function splitValues(data) { return [ data.values.slice(0,2), data.values.slice(2) ]; }
+
 async function getSpreadsheet(client) {
   const sheets = google.sheets('v4');
   const request = {
     spreadsheetId: CONFIG_SHEET_ID,
     range: 'moderated'};
   request.auth = client;
-  console.log("Request", request);
 
   const response = await sheets.spreadsheets.values.get(request);
+  const data = response.data;
+
+  const headers = getHeaders(data);
+
+  // Annotate Geocodes for missing items. Track the updated rows. Write back.
+  const maps_client = new Client({});
+  const [header_values, real_values] = splitValues(data);
+
+  const approvedIndex = headers.findIndex( e => e === 'approved' );
+  const addressIndex = headers.findIndex( e => e === 'address' );
+  const latIndex = headers.findIndex( e => e === 'lat' );
+  const lngIndex = headers.findIndex( e => e === 'lng' );
+  const latColumn = COLUMNS[latIndex];
+  const lngColumn = COLUMNS[lngIndex];
+
+  const to_write_back = [];
+  const promises = [];
+  let num_lookups = 0;
+  real_values.forEach( (entry, index) => {
+    if (entry[approvedIndex] === "x") {
+      // Row numbers start at 1.
+      const row_num = index + 1 + header_values.length;
+
+      // Check if entry's length is too short to possibly have a latitude, we need
+      // to geocode.  If the value for lat is "", we also need to geocode.
+      if (num_lookups < 50 && ((entry.length < (latIndex + 1)) || (entry[latIndex] === ""))) {
+        // Geolocation only allows 50qps. Overkilling it causes rejects. Artifically cap here.
+        // TODO(awong): do some smarter throttle system.
+        num_lookups = num_lookups + 1;
+        
+        // Do geocoding and add lat/lng to data iff we don't already have a latLng for
+        // the address *and* the address has been moderated.  (In this code block, all
+        // data has already been moderated.)
+        const address = entry[addressIndex];
+
+        promises.push(getLatLng(address, maps_client).then(lat_lng => {
+          entry[latIndex] = lat_lng.lat;
+          entry[lngIndex] = lat_lng.lng;
+          to_write_back.push({row_num, lat_lng});
+          return lat_lng;
+        }).catch( e => {
+          console.error("wut");
+          console.error(e);
+          entry[latIndex] = 'N/A';
+          entry[lngIndex] = 'N/A';
+        }));
+      }
+    }
+  });
+
+  await Promise.all(promises);
+  // Attempt to write back now.
+  if (to_write_back.length > 0) {
+    const data = [];
+    const write_request = {
+      spreadsheetId: CONFIG_SHEET_ID,
+      resource: {
+        valueInputOption: 'USER_ENTERED',
+        data: data,
+      }
+    };
+    write_request.auth = client;
+
+    to_write_back.forEach( e => {
+      console.log('writing lat-long ' + JSON.stringify(e));
+      // TODO(awong): Don't hardcode the columns. Make it more robust somehow.
+      data.push({
+        range: `${WRITEBACK_SHEET}!K${e.row_num}`,
+        values: [ [e.lat_lng.lat] ]
+      });
+
+      data.push({
+        range: `${WRITEBACK_SHEET}!L${e.row_num}`,
+        values: [ [e.lat_lng.lng] ]
+      });
+    });
+
+    const write_response = await sheets.spreadsheets.values.batchUpdate(write_request);
+  }
+
   return response.data;
 }
 
@@ -89,14 +183,14 @@ async function snapshotData(filename, html_snippet_filename) {
   const client = await getAuthorizedClient();
   const data = await getSpreadsheet(client);
 
-  const headers = data.values[1];
+  const headers = getHeaders(data);
   const approvedIndex = headers.findIndex( e => e === 'approved' );
   // The first row is human readable form values.
   // The second row is reserved for a machine usable field tag.
   // Save those and filter the rest.
-  const raw_values = data.values;
-  data.values = raw_values.slice(0,2);
-  data.values.push(...raw_values.slice(2).filter((entry) => entry[approvedIndex] === "x"));
+  const [header_values, real_values] = splitValues(data);
+  data.values = header_values;
+  data.values.push(...real_values.filter((entry) => entry[approvedIndex] === "x"));
 
   const datafileRef = admin.storage().bucket().file(filename);
   await datafileRef.save(JSON.stringify(data), {
@@ -124,6 +218,25 @@ async function snapshotData(filename, html_snippet_filename) {
   return [data, html_snippets];
 }
 
+// Fetch lat & lng for the given address by making a call to the Google Maps API.
+// Returns an object with numeric lat and lng fields.
+async function getLatLng(address, client) {
+  const response = await client.geocode({
+    params: {
+      address: address,
+      key: GOOGLE_MAPS_API_KEY,
+    },
+    timeout: 5000 // milliseconds
+  });
+
+  if (response.data.results && response.data.results.length > 0) {
+    return response.data.results[0].geometry.location;
+  } else {
+    console.error(response);
+    throw new Error(response);
+  }
+}
+
 function toDataByLocation(data) {
   const headers = data.values[1];
   const approvedIndex = headers.findIndex( e => e === 'approved' );
@@ -133,10 +246,10 @@ function toDataByLocation(data) {
 
   const published_entries = data.values.slice(1).filter((entry) => entry[approvedIndex] === "x");
 
-  published_entries.forEach( entry => {
+  published_entries.forEach(async (entry) => {
+    let entry_array;
     const state = entry[stateIndex];
     const city = entry[cityIndex];
-    let entry_array;
     if (!(state in data_by_location) || !(city in data_by_location[state])) {
       entry_array = [];
       if (state in data_by_location) {
@@ -150,7 +263,7 @@ function toDataByLocation(data) {
     const entry_obj = {};
     headers.forEach( (value, index) => {
       if (entry[index] !== undefined) {
-        entry_obj[value] = entry[index].trim()
+        entry_obj[value] = (typeof entry[index]) === 'string' ? entry[index].trim() : entry[index];
       } else {
         entry_obj[value] = ""
       }

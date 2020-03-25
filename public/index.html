@@ -10,6 +10,15 @@
         gtag('config', 'UA-161442455-1');
     </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.fallbacks.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.language.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.messagestore.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.parser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.bidi.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.min.js"></script>
+    <script src="i18n.js"></script>
+
     <!-- API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info. -->
     <script defer
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s&libraries=geometry">
@@ -21,6 +30,10 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
     <meta name="description" content="Help #findthemasks for covid-19" />
     <meta name="keywords" content="#findthemasks, masks, n95, coronavirus, covid-19" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <style>
       /* Styling for the JS generated locations list */
@@ -150,7 +163,8 @@
 
     <div class="container" style="padding-bottom: 40px;">
         <h1 style="padding: 20px 0px 10px 0px;">#findthemasks</h1>
-        <p>Jump to: <a href="#sites">donate/add a site</a></p>
+        <p>Jump to: <a href="#sites">donate/add a site</a><br>
+        This site is part of the <a href="https://getusppe.org/">getusppe.org</a> coalition.</p>
         <h5 style="padding-bottom: 20px;">America&rsquo;s frontline healthcare workers are treating COVID19 patients without adequate protective gear, risking their lives! They have taken to Twitter on <a href="https://twitter.com/search?q=%23GetMePPE&src=typeahead_click">#GetMePPE</a> to ask for help:</h5>
 
 
@@ -204,7 +218,7 @@
         <h4>To add a donation site, update information, or request we take down information, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>.</h4>
 
         <div class="map-container" style="display: none;">
-          <h2 style="padding: 20px 0px;">Map of donation sites</h2>
+          <h2 style="padding: 20px 0px;" class='i18n' data-i18n="ftm-map-of-sites">Map of sites</h2>
           <div id="map"></div>
         </div>
 
