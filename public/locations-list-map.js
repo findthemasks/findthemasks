@@ -1,5 +1,37 @@
 import toDataByLocation from './toDataByLocation.js';
 
+
+
+/******************************************
+ * MODULE VARS AVAILABLE TO ALL FUNCTIONS *
+ ******************************************/
+
+// Initialized on page load, populated from query string. Defaults to all states if no valid states defined (or empty).
+let showStates = [];
+
+// Should autocomplete search field display on map load?
+let hideSearch = false;
+
+// Map, markers and map associated UI components are initialized in initMap().
+let autocomplete;
+let map = null;
+let markers = [];
+
+// The map, roughly zoomed to show the entire US.
+const middle_of_us = { lat: 39.0567939, lng: -94.6065124};
+const middle_of_us_zoom = 4;
+
+// Centralized, as this the initialization state is now needed in multiple places. In the future, we may not always be
+// centering just on the US (if no browser location is provided via navigator.geolocation).
+let inital_center = middle_of_us,
+  initial_zoom = middle_of_us_zoom;
+
+/*************************
+ * END MODULE LEVEL VARS *
+ *************************/
+
+
+
 function createFiltersListHTML() {
   $('.locations-container').show();
 
@@ -208,14 +240,31 @@ $(function() {
 
     const searchParams = new URLSearchParams((new URL(window.location)).search);
     const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
-    const states = stateParams.map(param => param.split(',')).reduce((acc, val) => acc.concat(val), []);
+    showStates = stateParams.map(param => param.split(',')).reduce((acc, val) => acc.concat(val), []);
+
+    // Toggle parameters (consolidated in one place).
+    const hideList = searchParams.get('hide-list') && searchParams.get('hide-list') === 'true';
+    const hideMap = searchParams.get('hide-map') && searchParams.get('hide-map') === 'true';
+    hideSearch = searchParams.get('hide-search') && searchParams.get('hide-search') === 'true';
+
 
     // show map unless hide-map="true"
-    if (!searchParams.get('hide-map') || searchParams.get('hide-map') !== 'true') {
-      initMap(states);
+    if (!hideMap) {
+      // Since we know map is going to render, immediately hide the search area now in case that's indicated.
+      if (hideSearch) {
+        $('.map-search-wrap').hide();
+      }
+
+      // Dynamically load maps KEY based on query param (for local development). Otherwise, use default.
+      let mapsKey = searchParams.get('mapsKey') || 'AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s'; // Production
+
+      // Dynamically append tag including the maps key. This way, using the callback we eliminate any possibility of
+      // encountering a race condition where 'google' object is not defined.
+      let s = document.createElement( 'script' );
+      s.setAttribute( 'src', 'https://maps.googleapis.com/maps/api/js?key=' + mapsKey + '&libraries=geometry,places&callback=initMap');
+      document.body.appendChild(s);
     }
 
-    const hideList = searchParams.get('hide-list') && searchParams.get('hide-list') === 'true';
 
     if (!hideList) {
       $(".filters-list").html(createFiltersListHTML(data_by_location).join(" "));
@@ -228,7 +277,7 @@ $(function() {
         $(".filters-container").show();
       }
 
-      states.forEach(state => {
+      showStates.forEach(state => {
         const elem = document.getElementById(`state-${state}`);
         elem.checked = true;
         onFilterChange(elem, false);
@@ -236,6 +285,8 @@ $(function() {
     }
   });
 });
+
+
 
 window.onFilterChange = function (elem, scrollNeeded) {
   // This is a hacky approach to programatically highlighting selected items as
@@ -344,26 +395,31 @@ const stateLocationMappings = {
   "WY": { "lat": 43.075968, "lng": -107.2902, zoom: 6.25 }
 };
 
-function initMap(states) {
+
+
+/**
+ * Called once Google Maps API is fully loaded ready to run.
+ *
+ * IMPORTANT: This is exposed via window.initMap so the script can execute it.
+ */
+function initMap() {
      var data_by_location = window.data_by_location;
-     var middle_of_us = { lat: 39.0567939, lng: -94.6065124};
 
      var element = document.getElementById('map');
 
      if (element == null) {
-         alert('could not find map div');
+       console.error('could not find map div');
+       return; // if we can't find a map, we're in for a cascade of more bugs.
      }
 
     $(".map-container").show();
 
-     const singleStateFilter = states && states.length === 1;
-     let firstState = states[0] || '';
+     const singleStateFilter = showStates && showStates.length === 1;
+     let firstState = showStates[0] || '';
      firstState = firstState.toUpperCase();
 
      // The map, roughly zoomed to show the entire US.
-     var map = new google.maps.Map( element, {zoom: 4, center: middle_of_us});
-
-     let markers = [];
+     map = new google.maps.Map(element, {zoom: initial_zoom, center: inital_center});
 
      // filter states if there is a state filter
      const filteredStates = Object.keys(data_by_location).filter((stateCode) => (
@@ -389,7 +445,7 @@ function initMap(states) {
                  const open_accepted = entry["open_box"];
                  // Convert the lat and lng fields to numbers
                  if (!isNaN(Number(latitude))) {
-                     var marker = addMarkerToMap(map, Number(latitude), Number(longitude),
+                     var marker = addMarkerToMap(Number(latitude), Number(longitude),
                          address, name, instructions, accepting, open_accepted);
                      markers.push(marker);
                  }
@@ -399,86 +455,149 @@ function initMap(states) {
 
      let $mapStats = $('#map-stats');
      if (singleStateFilter) {
-       // Center the map to a state if only one is set in query params
-       centerMapToState(map, firstState);
+          // Center the map to a state if only one is set in query params.
+          // Also, allow function to reset the initial coords/zoom globals.
+          centerMapToState(firstState, true);
 
-       // Update map stats (w/ selected state)
-       updateStats($mapStats, markers.length, [firstState]);
+          // Update map stats (w/ selected state)
+          updateStats($mapStats, markers.length, [firstState]);
 
      } else {
-       // Center the map on the nearest markers to the user if possible
-       centerMapToNearestMarkers(map, markers);
+          // Center the map on the nearest markers to the user if possible
+          centerMapToMarkersNearUser();
 
-       // Update stats (no states).
-       updateStats($mapStats, markers.length);
+          // Update stats (no states).
+          updateStats($mapStats, markers.length);
      }
+
+
+     // Initialize the map search autocompleter.
+     autocomplete = new google.maps.places.Autocomplete(
+       document.getElementById('map-search'), {types: ['geocode']}
+     );
+
+     // Avoid paying for data that you don't need by restricting the set of
+     // place fields that are returned to just the address components.
+     autocomplete.setFields(['geometry']);
+
+     // When the user selects an address from the drop-down, populate the
+     // address fields in the form.
+     autocomplete.addListener('place_changed', loadSearchInMap);
+
+     // Setup event listeners for map action links.
+     $('#use-location').on('click', function (e) {
+       e.preventDefault();
+       centerMapToMarkersNearUser();
+     });
+
+     $('#reset-map').on('click', function (e) {
+       e.preventDefault();
+       map.setCenter(inital_center);
+       map.setZoom(initial_zoom);
+     });
 }
+window.initMap = initMap;
 
 
-function centerMapToState(map, state) {
+
+function centerMapToState(state, init) {
   const stateLocationMapping = stateLocationMappings[state.toUpperCase()];
 
   if (stateLocationMapping) {
-    map.setCenter({ lat: stateLocationMapping.lat, lng: stateLocationMapping.lng });
+    let stateCoords = { lat: stateLocationMapping.lat, lng: stateLocationMapping.lng },
+        stateZoom = stateLocationMapping.zoom;
+
+    // If this is an initialization (100% of the time at time of writing, trying to future proof) then also update our
+    // initial settings in order to retain this for reset link.
+    if (init) {
+      inital_center = stateCoords;
+      initial_zoom = stateZoom;
+    }
+
+    map.setCenter(stateCoords);
     // roughly zoom to focus on the state, hardcoded zooms to handle special case of Alaska
-    map.setZoom(stateLocationMapping.zoom);
+    map.setZoom(stateZoom);
   }
 }
 
-function centerMapToNearestMarkers(map, markers) {
-    // First check to see if the user will accept getting their location, if not, silently return
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var user_latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-            //Compute the distances of all markers from the user
-            var markerDistances = new Map(); // an associative array containing the marker referenced by the computed distance
-            var distances = []; // all the distances, so we can sort and then call markerDistances
-            for (const marker of markers) {
-                var distance = google.maps.geometry.spherical.computeDistanceBetween(marker.position, user_latlng);
-
-                // HACK: In the unlikely event that the exact same distance is computed, add one meter to the distance to give it a unique distance
-                // This could occur if a marker was added twice to the same location.
-                if (markerDistances.has(distance)) { distance = distance + 1; }
-
-                markerDistances[distance] = marker;
-
-                distances.push(distance);
-            }
-
-            // sort the distances and set bounds to closest three
-            distances.sort((a, b) => a - b);
 
 
-            // center the map on the user
-            const bounds = new google.maps.LatLngBounds();
-            bounds.extend(user_latlng);
+/**
+ * Centers map at automatically detected coordinates using built in navigator.geolocation API.
+ */
+function centerMapToMarkersNearUser() {
+  // First check to see if the user will accept getting their location, if not, silently return
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      // Use navigator provided lat/long coords to center map now.
+      centerMapToMarkersNearCoords(position.coords.latitude, position.coords.longitude);
 
-            // Extend the bounds to contain the three closest markers
-            let i = 0;
-            while (i < 3) {
-                // Get one of the closest markers
-                var distance = distances[i]
-                var marker = markerDistances[distance];
+    }, function (err) {
+      // Hide the "User my location" link since we know that will not work.
+      $('#use-location').hide();
 
-                // Add to the iterator first just in case something fails later to avoid infinite loop
-                i++;
-
-                const marker_lat = marker.position.lat();
-                const marker_lng = marker.position.lng();
-
-                const loc = new google.maps.LatLng(marker_lat, marker_lng);
-                bounds.extend(loc);
-            }
-            map.fitBounds(bounds);       // auto-zoom
-            map.panToBounds(bounds);     // auto-center
-        })
-    }
+    }, {
+      maximumAge: Infinity,
+      timeout: 10000
+    });
+  }
 }
+
+
+
+/**
+ * Centers map around markers nearest to an arbitrary set of latitude/longitude coordinates.
+ */
+function centerMapToMarkersNearCoords(latitude, longitude) {
+  var latlng = new google.maps.LatLng(latitude, longitude);
+
+  //Compute the distances of all markers from the user
+  var markerDistances = new Map(); // an associative array containing the marker referenced by the computed distance
+  var distances = []; // all the distances, so we can sort and then call markerDistances
+  for (const marker of markers) {
+    let distance = google.maps.geometry.spherical.computeDistanceBetween(marker.position, latlng);
+
+    // HACK: In the unlikely event that the exact same distance is computed, add one meter to the distance to give it a unique distance
+    // This could occur if a marker was added twice to the same location.
+    if (markerDistances.has(distance)) { distance = distance + 1; }
+
+    markerDistances[distance] = marker;
+
+    distances.push(distance);
+  }
+
+  // sort the distances and set bounds to closest three
+  distances.sort((a, b) => a - b);
+
+  // center the map on the user
+  const bounds = new google.maps.LatLngBounds();
+  bounds.extend(latlng);
+
+  // Extend the bounds to contain the three closest markers
+  let i = 0;
+  while (i < 3) {
+    // Get one of the closest markers
+    let distance = distances[i];
+    let marker = markerDistances[distance];
+
+    // Add to the iterator first just in case something fails later to avoid infinite loop
+    i++;
+
+    const marker_lat = marker.position.lat();
+    const marker_lng = marker.position.lng();
+
+    const loc = new google.maps.LatLng(marker_lat, marker_lng);
+    bounds.extend(loc);
+  }
+  map.fitBounds(bounds);       // auto-zoom
+  map.panToBounds(bounds);     // auto-center
+}
+
+
 
 let openInfoWindows = [];
 
-function addMarkerToMap(map, latitude, longitude, address, name, instructions, accepting, open_accepted) {
+function addMarkerToMap(latitude, longitude, address, name, instructions, accepting, open_accepted) {
     // Text to go into InfoWindow
     var contentString =
         '<h5>' + name + '</h5>' +
@@ -583,3 +702,28 @@ function number_format(number, decimal_places, dec_seperator, thou_seperator) {
   return f[0] + dec_seperator + f[1];
 }
 
+
+
+/**
+ * Takes the form input and attempts to pull geocoded information from it. Once done, centers map on closest markers nearby.
+ */
+function loadSearchInMap() {
+  if (!autocomplete) {
+    console.error('autocomplete is not yet defined.');
+    return;
+  }
+
+  let place = autocomplete.getPlace();
+  if (place.geometry) {
+    // Get the location object that we can map.setCenter() on.
+    let location = place.geometry.location;
+    if (location) {
+      centerMapToMarkersNearCoords(location.lat(), location.lng())
+
+    } else {
+      console.warn('Location data not found in place geometry (place.geometry.location).')
+    }
+  } else {
+    console.warn('No geometry found, skipping place');
+  }
+}

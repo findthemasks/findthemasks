@@ -47,10 +47,18 @@ So, for state-specific pages you can now use something like:
 <https://findthemasks.com/give.html?state=CA&hide-map=true&hide-filters=true>
 This will return just the filtered list of donations sites in California.
 
-## Directory structure
+## Development
+
+**Directory structure**
 
 - `/public` - The client-side code for the website. Currently has some symlinks to legacy file locations.
 - `/functions` - The cloud function used to generate data.json. Not needed for frontend work.
+
+**Local development (with Google Maps)**
+
+- To facilitate local development, the domain [`local.findthemasks.com`](http://local.findthemasks.com/) referencing `localhost` (`127.0.0.1`) has been setup and is compatible with the production Google Maps API key.
+- You can override the production Google Maps API key by passing the `mapsKey` query string parameter, e.g. `http://local.findthemasks.com/?mapsKey=YOUR_KEY_HERE `
+- You can easily enable the ability to use `navigator.geolocation` locally without SSL. Ensure you start chrome with the following flag: `--unsafely-treat-insecure-origin-as-secure="http://local.findthemasks.com/"`
 
 ## Thanks
 
@@ -59,3 +67,4 @@ This will return just the filtered list of donations sites in California.
    provides pre-generated favicon packages using
    [Twemoji](https://twemoji.twitter.com/). Twemoji graphics are licensed
    [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- [Feather icon collection](https://github.com/feathericons/feather), licensed under [MIT License](https://github.com/feathericons/feather/blob/master/LICENSE).
