@@ -1,5 +1,7 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const {request} = require('gaxios');
+
 admin.initializeApp();
 
 const {OAuth2Client} = require('google-auth-library');
@@ -227,3 +229,15 @@ exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
 
   res.status(200).send(html_snippets);
 });
+
+
+// Local Dev Tooling to get a copy of data to play with
+
+data_static = null;
+
+async function get_live_data() {
+  const url = 'https://findthemasks.com/data.json';
+  let resp = await request({url});
+  console.log('Setting global variable `data_static` to the contents of ' + url);
+  data_static = resp.data;
+};

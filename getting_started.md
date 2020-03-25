@@ -20,10 +20,18 @@ Then you can open http://localhost:8080/ in your browser.  If everything is work
 
 ### `data.json`
 
-curl hax
-setup your own google sheet to read from? custom dev sheets?
+We are still working on a simple way for devs to swap in their own test spreadsheet for testing purposes ([Issue #185](https://github.com/r-pop/findthemasks/issues/185))
 
+For now you can hack things into place.  After starting a NodeJS REPL, you can seed the current data and then use it in the REPL:
 
+```
+$ node
+> .load index.js
+> get_live_data()
+> dbl = toDataByLocation(static_data)
+```
+
+* (TODO) Running firebase locally
 
 ## Architecture Overview
 
@@ -35,13 +43,11 @@ setup your own google sheet to read from? custom dev sheets?
 
 ### Updating `data.json`
 
-* Firebase function `/reloadsheetdata` is called 
-* `snapshotData` is triggered, which 
+* Firebase function `/reloadsheetdata` is called
+* `snapshotData` is triggered, which
     * grabs the contents of the spreadsheet at `CONFIG_SHEET_ID` and saves it as JSON to a Firebase bucket as `data.json`
-    * formats the same data as HTML and saves it to a different Firebase bucket file 
+    * formats the same data as HTML and saves it to a different Firebase bucket file `data_snippet.html`
 
 ### Submission Workflow
 
 TODO
-
-
