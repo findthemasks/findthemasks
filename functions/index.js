@@ -119,25 +119,21 @@ async function snapshotData(filename, html_snippet_filename) {
 }
 
 // Fetch lat & lng for the given address by making a call to the Google Maps API.
-// Returns a promise.
+// Returns an object with numeric lat and lng fields.
 async function getLatLng(address, client) {
-  return client
-  .geocode({
+  const response = await client.geocode({
     params: {
       address: address,
       key: GOOGLE_MAPS_API_KEY,
     },
     timeout: 1000 // milliseconds
-  })
-  .then(r => {
-    console.log(r.data);
-    if (r.data.results && r.data.results.length > 0) {
-      const location =  r.data.results[0].geometry.location;
-      return location;
-    } else {
-      throw 'bad geocode response';
-    }
   });
+
+  if (response.data.results && response.data.results.length > 0) {
+    return response.data.results[0].geometry.location;
+  } else {
+    throw 'bad geocode response';
+  }
 }
 
 function toDataByLocation(data) {
@@ -164,10 +160,9 @@ function toDataByLocation(data) {
     // to geocode.  If the value for lat is "", we also need to geocode.
     if ((entry.length < (latIndex + 1)) || (entry[latIndex] == "")) {
       try {
-        let lat_lng = await getLatLng(address, maps_client);
+        const lat_lng = await getLatLng(address, maps_client);
         entry[latIndex] = lat_lng.lat;
         entry[lngIndex] = lat_lng.lng;
-        console.log(entry);
       } catch (e) {
         console.error(e);
         entry[latIndex] = 'N/A';
