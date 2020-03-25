@@ -13,6 +13,7 @@ const Client = require("@googlemaps/google-maps-services-js").Client;
 const CONFIG_CLIENT_ID = functions.config().googleapi.client_id;
 const CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
 const CONFIG_SHEET_ID = functions.config().googleapi.sheet_id;
+const GOOGLE_MAPS_API_KEY = functions.config().geocode_key;
 
 // The OAuth Callback Redirect.
 const FUNCTIONS_REDIRECT = `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com/oauthcallback`;
@@ -124,7 +125,7 @@ async function getLatLng(address, client) {
   .geocode({
     params: {
       address: address,
-      key: 'AIzaSyD6gBXBlViBs-6OXMftR2PdNW6Q7ycZ47g'
+      key: GOOGLE_MAPS_API_KEY,
     },
     timeout: 1000 // milliseconds
   })
