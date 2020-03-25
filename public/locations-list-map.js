@@ -26,6 +26,8 @@ const middle_of_us_zoom = 4;
 let inital_center = middle_of_us,
   initial_zoom = middle_of_us_zoom;
 
+// TODO: Move stateLocationMappings here.
+
 /*************************
  * END MODULE LEVEL VARS *
  *************************/
@@ -340,6 +342,9 @@ window.onFilterChange = function (elem, scrollNeeded) {
   }
 };
 
+
+// TODO: Please move to module level variables section (above) later once merged into master. Doing so right now creates
+//  a diff too large to read easily during review. Maybe turn this into an imported module like toDataByLocation?
 const stateLocationMappings = {
   "AK": { "lat": 63.588753, "lng": -154.493062, zoom: 3.5 },
   "AL": { "lat": 32.318231, "lng": -86.902298, zoom: 6 },
