@@ -11,9 +11,15 @@ const {google} = require('googleapis');
 // googleapi.client_id = Google API client ID,
 // googleapi.client_secret = client secret, and
 // googleapi.sheet_id = Google Sheet id (long string in middle of sheet URL)
-const CONFIG_CLIENT_ID = functions.config().googleapi.client_id;
-const CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
-const CONFIG_SHEET_ID = functions.config().googleapi.sheet_id;
+let CONFIG_CLIENT_ID = '';
+let CONFIG_CLIENT_SECRET = '';
+let CONFIG_SHEET_ID = '';
+
+if (functions.config()['googleapi'] != null) {
+  CONFIG_CLIENT_ID = functions.config().googleapi.client_id
+  CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
+  CONFIG_SHEET_ID = functions.config().googleapi.sheet_id;
+}
 
 // The OAuth Callback Redirect.
 const FUNCTIONS_REDIRECT = `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com/oauthcallback`;
