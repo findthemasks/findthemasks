@@ -96,6 +96,7 @@ async function getSpreadsheet(client) {
 
   const approvedIndex = headers.findIndex( e => e === 'approved' );
   const addressIndex = headers.findIndex( e => e === 'address' );
+  const emailIndex = headers.findIndex( e => e === 'email' );
   const latIndex = headers.findIndex( e => e === 'lat' );
   const lngIndex = headers.findIndex( e => e === 'lng' );
   const latColumn = COLUMNS[latIndex];
@@ -105,6 +106,7 @@ async function getSpreadsheet(client) {
   const promises = [];
   let num_lookups = 0;
   real_values.forEach( (entry, index) => {
+    entry[emailIndex] = "";
     if (entry[approvedIndex] === "x") {
       // Row numbers start at 1.
       const row_num = index + 1 + header_values.length;
@@ -153,12 +155,12 @@ async function getSpreadsheet(client) {
       console.log('writing lat-long ' + JSON.stringify(e));
       // TODO(awong): Don't hardcode the columns. Make it more robust somehow.
       data.push({
-        range: `${WRITEBACK_SHEET}!K${e.row_num}`,
+        range: `${WRITEBACK_SHEET}!L${e.row_num}`,
         values: [ [e.lat_lng.lat] ]
       });
 
       data.push({
-        range: `${WRITEBACK_SHEET}!L${e.row_num}`,
+        range: `${WRITEBACK_SHEET}!M${e.row_num}`,
         values: [ [e.lat_lng.lng] ]
       });
     });
