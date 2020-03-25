@@ -153,12 +153,12 @@ async function getSpreadsheet(client) {
       console.log('writing lat-long ' + JSON.stringify(e));
       // TODO(awong): Don't hardcode the columns. Make it more robust somehow.
       data.push({
-        range: `${WRITEBACK_SHEET}!K${e.row_num}`,
+        range: `${WRITEBACK_SHEET}!L${e.row_num}`,
         values: [ [e.lat_lng.lat] ]
       });
 
       data.push({
-        range: `${WRITEBACK_SHEET}!L${e.row_num}`,
+        range: `${WRITEBACK_SHEET}!M${e.row_num}`,
         values: [ [e.lat_lng.lng] ]
       });
     });
