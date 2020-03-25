@@ -9,6 +9,7 @@ This repo hosts the code used to power the v1 backend of "give ppe" features on 
 Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp-p8~9oKuXtV_gn7wEBZGGoA>
 
 - new dev? please look at issues and comment on something to grab it!
+    - Check out the [Getting Started](getting_started.md) doc
 - new data moderator? Join the slack and come to #data!
 - not either? The most useful contribution is identifying more drop off locations and plugging them into the form linked on the public website, so if you don't see an issue here that calls to you, please work on that! Advice on making calls is in [#131](https://github.com/r-pop/findthemasks/issues/131#issuecomment-602746963)
 

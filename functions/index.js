@@ -1,5 +1,7 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const {request} = require('gaxios');
+
 admin.initializeApp();
 
 const {OAuth2Client} = require('google-auth-library');
@@ -10,10 +12,17 @@ const Client = require("@googlemaps/google-maps-services-js").Client;
 // googleapi.client_id = Google API client ID,
 // googleapi.client_secret = client secret, and
 // googleapi.sheet_id = Google Sheet id (long string in middle of sheet URL)
-const CONFIG_CLIENT_ID = functions.config().googleapi.client_id;
-const CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
-const CONFIG_SHEET_ID = functions.config().googleapi.sheet_id;
-const GOOGLE_MAPS_API_KEY = functions.config().findthemasks.geocode_key;
+let CONFIG_CLIENT_ID = '';
+let CONFIG_CLIENT_SECRET = '';
+let CONFIG_SHEET_ID = '';
+let GOOGLE_MAPS_API_KEY = '';
+
+if (functions.config()['googleapi'] != null) {
+  CONFIG_CLIENT_ID = functions.config().googleapi.client_id
+  CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
+  CONFIG_SHEET_ID = functions.config().googleapi.sheet_id;
+  GOOGLE_MAPS_API_KEY = functions.config().findthemasks.geocode_key;
+}
 
 const COLUMNS = [
 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -35,7 +44,7 @@ const functionsOauthClient = new OAuth2Client(CONFIG_CLIENT_ID, CONFIG_CLIENT_SE
 let oauthTokens = null;
 
 // visit the URL for this Function to request tokens
-exports.authgoogleapi = functions.https.onRequest((req, res) => {
+module.exports.authgoogleapi = functions.https.onRequest((req, res) => {
   res.set('Cache-Control', 'private, max-age=0, s-maxage=0');
   res.redirect(functionsOauthClient.generateAuthUrl({
     access_type: 'offline',
@@ -49,7 +58,7 @@ const DB_TOKEN_PATH = '/api_tokens';
 
 // after you grant access, you will be redirected to the URL for this Function
 // this Function stores the tokens to your Firebase database
-exports.oauthcallback = functions.https.onRequest(async (req, res) => {
+module.exports.oauthcallback = functions.https.onRequest(async (req, res) => {
   res.set('Cache-Control', 'private, max-age=0, s-maxage=0');
   const code = req.query.code;
   try {
@@ -336,8 +345,20 @@ function toHtmlSnippets(data_by_location) {
   return lines.join("\n");
 }
 
-exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
+module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
   const [data, html_snippets] = await snapshotData('data.json', 'data_snippet.html');
 
   res.status(200).send(html_snippets);
 });
+
+
+// Local Dev Tooling to get a copy of data to play with
+
+data_static = null;
+
+async function get_live_data() {
+  const url = 'https://findthemasks.com/data.json';
+  let resp = await request({url});
+  console.log('Setting global variable `data_static` to the contents of ' + url);
+  data_static = resp.data;
+};
