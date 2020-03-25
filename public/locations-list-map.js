@@ -1,39 +1,4 @@
-function toDataByLocation(data) {
-  const headers = data.values[1];
-  const approvedIndex = headers.findIndex( e => e === 'approved' );
-  const stateIndex = headers.findIndex( e => e === 'state' );
-  const cityIndex = headers.findIndex( e => e === 'city' );
-  const data_by_location = {};
-
-  const published_entries = data.values.slice(1).filter((entry) => entry[approvedIndex] === "x");
-
-  published_entries.forEach( entry => {
-    const state = entry[stateIndex].trim();
-    const city = entry[cityIndex].trim();
-    let entry_array;
-    if (!(state in data_by_location) || !(city in data_by_location[state])) {
-      entry_array = [];
-      if (state in data_by_location) {
-        data_by_location[state][city] = entry_array;
-      } else {
-        data_by_location[state] = { [city]: entry_array };
-      }
-    } else {
-      entry_array = data_by_location[state][city];
-    }
-    const entry_obj = {};
-    headers.forEach( (value, index) => {
-      if (entry[index] !== undefined) {
-        entry_obj[value] = entry[index];
-      } else {
-        entry_obj[value] = "";
-      }
-    });
-    entry_array.push(entry_obj);
-  });
-
-  return data_by_location;
-}
+import toDataByLocation from './toDataByLocation.js';
 
 function createFiltersListHTML() {
   $('.locations-container').show();
@@ -255,7 +220,7 @@ $(function() {
       }
 
       states.forEach(state => {
-        elem = document.getElementById(`state-${state}`);
+        const elem = document.getElementById(`state-${state}`);
         elem.checked = true;
         onFilterChange(elem, false);
       });
@@ -263,7 +228,7 @@ $(function() {
   });
 });
 
-function onFilterChange(elem, scrollNeeded) {
+window.onFilterChange = function (elem, scrollNeeded) {
   // This is a hacky approach to programatically highlighting selected items as
   // it uses hard-coded ID references. We use this approach for now for
   // simplicity, speed of implementation and performance, but it should ideally
@@ -467,7 +432,7 @@ function centerMapToNearestMarkers(map, markers) {
 
 
             // center the map on the user
-            bounds = new google.maps.LatLngBounds();
+            const bounds = new google.maps.LatLngBounds();
             bounds.extend(user_latlng);
 
             // Extend the bounds to contain the three closest markers
@@ -480,10 +445,10 @@ function centerMapToNearestMarkers(map, markers) {
                 // Add to the iterator first just in case something fails later to avoid infinite loop
                 i++;
 
-                marker_lat = marker.position.lat();
-                marker_lng = marker.position.lng();
+                const marker_lat = marker.position.lat();
+                const marker_lng = marker.position.lng();
 
-                loc = new google.maps.LatLng(marker_lat, marker_lng);
+                const loc = new google.maps.LatLng(marker_lat, marker_lng);
                 bounds.extend(loc);
             }
             map.fitBounds(bounds);       // auto-zoom
