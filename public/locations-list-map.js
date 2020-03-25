@@ -140,10 +140,10 @@ function createContent(data, showList, showMap) {
 
         if (showMap) {
           const lat = Number(entry.lat);
-          const lon = Number(entry.lng);
+          const lng = Number(entry.lng);
 
           if (!isNaN(lat)) {
-            entry.marker = addMarkerToMap(null, lat, lon, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box);
+            entry.marker = addMarkerToMap(null, lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box);
           }
         }
       }
@@ -211,8 +211,15 @@ $(function () {
 
     createContent(window.data_by_location, showList, showMap);
 
+    const stateFilter = {};
+    states.forEach(stateName => {
+      if (data_by_location[stateName]) {
+        stateFilter[stateName] = true;
+      }
+    });
+
     if (showMap) {
-      initMap(states);
+      initMap(stateFilter);
     }
 
     if (showList) {
@@ -227,7 +234,7 @@ $(function () {
         $(".filters-container").show();
       }
 
-      states.forEach(state => {
+      Object.keys(stateFilter).forEach(state => {
         const elem = document.getElementById(`state-${ state }`);
         elem.checked = true;
         onFilterChange(elem, false);
@@ -269,70 +276,17 @@ window.onFilterChange = function (elem, scrollNeeded) {
   const locationsList = $(".locations-list");
 
   locationsList.empty().append(getFilteredContent(data_by_location, filters));
+  showMarkers(data_by_location, filters, false);
 
   if (scrollNeeded) {
-    locationsList[0].scrollIntoView({'behavior': 'smooth'});
+//    locationsList[0].scrollIntoView({'behavior': 'smooth'});
   }
 };
 
-const stateLocationMappings = {
-  "AK": { "lat": 63.588753, "lng": -154.493062, zoom: 3.5 },
-  "AL": { "lat": 32.318231, "lng": -86.902298, zoom: 6 },
-  "AR": { "lat": 35.20105, "lng": -91.831833, zoom: 6.5 },
-  "AZ": { "lat": 34.048928, "lng": -111.093731, zoom: 6 },
-  "CA": { "lat": 36.778261, "lng": -119.417932, zoom: 5.25 },
-  "CO": { "lat": 39.550051, "lng": -105.782067, zoom: 6 },
-  "CT": { "lat": 41.603221, "lng": -73.087749, zoom: 7.25 },
-  "DC": { "lat": 38.905985, "lng": -77.033418, zoom: 11 },
-  "DE": { "lat": 38.910832, "lng": -75.52767, zoom: 7.5 },
-  "FL": { "lat": 27.664827, "lng": -81.515754, zoom: 6 },
-  "GA": { "lat": 32.157435, "lng": -82.907123, zoom: 6 },
-  "HI": { "lat": 19.898682, "lng": -155.665857, zoom: 6.5 },
-  "IA": { "lat": 41.878003, "lng": -93.097702, zoom: 6 },
-  "ID": { "lat": 44.068202, "lng": -114.742041, zoom: 5.25 },
-  "IL": { "lat": 40.633125, "lng": -89.398528, zoom: 6 },
-  "IN": { "lat": 40.551217, "lng": -85.602364, zoom: 6 },
-  "KS": { "lat": 39.011902, "lng": -98.484246, zoom: 6.25 },
-  "KY": { "lat": 37.839333, "lng": -84.270018, zoom: 6.5 },
-  "LA": { "lat": 31.244823, "lng": -92.145024, zoom: 6.5 },
-  "MA": { "lat": 42.407211, "lng": -71.382437, zoom: 7.75 },
-  "MD": { "lat": 39.045755, "lng": -76.641271, zoom: 8 },
-  "ME": { "lat": 45.253783, "lng": -69.445469, zoom: 6.4 },
-  "MI": { "lat": 44.314844, "lng": -85.602364, zoom: 6.2 },
-  "MN": { "lat": 46.729553, "lng": -94.6859, zoom: 5.75 },
-  "MO": { "lat": 37.964253, "lng": -91.831833, zoom: 6.25 },
-  "MS": { "lat": 32.354668, "lng": -89.398528, zoom: 6.4 },
-  "MT": { "lat": 46.879682, "lng": -110.362566, zoom: 6 },
-  "NC": { "lat": 35.759573, "lng": -79.0193, zoom: 6.5 },
-  "ND": { "lat": 47.551493, "lng": -101.002012, zoom: 6.25 },
-  "NE": { "lat": 41.492537, "lng": -99.901813, zoom: 6.5 },
-  "NH": { "lat": 43.793852, "lng": -71.572395, zoom: 7 },
-  "NJ": { "lat": 40.058324, "lng": -74.405661, zoom: 7.2 },
-  "NM": { "lat": 34.99973, "lng": -105.032363, zoom: 6 },
-  "NV": { "lat": 38.80261, "lng": -116.419389, zoom: 5.9 },
-  "NY": { "lat": 43.199428, "lng": -74.217933, zoom: 6.2 },
-  "OH": { "lat": 40.417287, "lng": -82.907123, zoom: 6.4 },
-  "OK": { "lat": 35.007752, "lng": -97.092877, zoom: 6.5 },
-  "OR": { "lat": 43.804133, "lng": -120.554201, zoom: 6.25 },
-  "PA": { "lat": 41.203322, "lng": -77.194525, zoom: 6.5 },
-  "PR": { "lat": 18.220833, "lng": -66.590149, zoom: 9 },
-  "RI": { "lat": 41.680095, "lng": -71.477429, zoom: 9 },
-  "SC": { "lat": 33.836081, "lng": -81.163725, zoom: 6.75 },
-  "SD": { "lat": 43.969515, "lng": -99.901813, zoom: 6.25 },
-  "TN": { "lat": 35.517491, "lng": -86.580447, zoom: 6.75 },
-  "TX": { "lat": 31.968599, "lng": -99.901813, zoom: 5.3 },
-  "UT": { "lat": 39.32098, "lng": -111.093731, zoom: 6.25 },
-  "VA": { "lat": 37.931573, "lng": -78.656894, zoom: 6.5 },
-  "VT": { "lat": 44.258803, "lng": -72.577841, zoom: 6.9 },
-  "WA": { "lat": 47.751074, "lng": -120.740139, zoom: 6.4 },
-  "WI": { "lat": 44.78444, "lng": -88.787868, zoom: 6.2 },
-  "WV": { "lat": 38.897626, "lng": -80.454903, zoom: 6.75 },
-  "WY": { "lat": 43.075968, "lng": -107.2902, zoom: 6.25 }
-};
+let map;
 
-function initMap(states) {
+function initMap(stateFilter) {
   var data_by_location = window.data_by_location;
-  var middle_of_us = { lat: 39.0567939, lng: -94.6065124 };
 
   var element = document.getElementById('map');
 
@@ -342,111 +296,138 @@ function initMap(states) {
 
   $(".map-container").show();
 
-  const singleStateFilter = states && states.length === 1;
-  const firstState = states[0];
+  const states = Object.keys(stateFilter);
+  if (!states.length) {
+    stateFilter = null;
+  }
 
-  // The map, roughly zoomed to show the entire US.
-  var map = new google.maps.Map(element, { zoom: 4, center: middle_of_us });
+  map = new google.maps.Map(element);
 
+  showMarkers(data_by_location, { states: stateFilter }, !stateFilter);
+}
+
+function showMarkers(data, filters, showNearest) {
   let markers = [];
 
-  // filter states if there is a state filter
-  const filteredStates = Object.keys(data_by_location).filter((stateCode) => (
-    (
-      singleStateFilter
-      && firstState.toUpperCase() === stateCode.toUpperCase()
-      && stateLocationMappings[stateCode.toUpperCase()]
-      // add markers when no single state filter or if state code is invalid
-    ) || (!singleStateFilter || !stateLocationMappings[firstState.toUpperCase()])
-  ));
+  if (!map) {
+    return;
+  }
 
-  for (const state of filteredStates.sort()) {
-    const cities = data_by_location[state].cities;
+  filters = filters || {};
 
-    for (const city of Object.keys(cities).sort()) {
-      for (const entry of cities[city].entries) {
-        if (entry.marker) {
-          entry.marker.setMap(map);
-          markers.push(entry.marker);
+  const bounds = new google.maps.LatLngBounds();
+  const filterAcceptKeys = filters.acceptItems && Object.keys(filters.acceptItems);
+  const hasFilters = filters.states || filters.acceptItems;
+
+  for (const stateName of Object.keys(data)) {
+    let inStateFilter = true;
+
+    if (filters.states && !filters.states[stateName]) {
+      inStateFilter = false;
+    }
+
+    const state = data[stateName];
+    const cities = state.cities;
+
+    for (const cityName of Object.keys(cities)) {
+      const city = cities[cityName];
+
+      for (const entry of city.entries) {
+        let inAcceptFilter = true;
+        if (inStateFilter && filterAcceptKeys) {
+          const acc = (entry.accepting || "").toLowerCase();
+          if (!filterAcceptKeys.some(s => acc.includes(s))) {
+            inAcceptFilter = false;
+          }
+        }
+
+        const marker = entry.marker;
+
+        if (marker) {
+          if (inStateFilter && inAcceptFilter) {
+            markers.push(marker);
+            marker.setMap(map);
+            hasFilters && bounds.extend(marker.position);
+          } else {
+            marker.setMap(null);
+          }
         }
       }
     }
   }
 
-  let $mapStats = $('#map-stats');
-  if (singleStateFilter) {
-    // Center the map to a state if only one is set in query params
-    centerMapToState(map, firstState);
-    // Update map stats (w/ selected state)
-    updateStats($mapStats, markers.length, [firstState]);
+  if (showNearest) {
+    centerMapToNearestMarkers(map, markers, bounds);
   } else {
-    // Center the map on the nearest markers to the user if possible
-    centerMapToNearestMarkers(map, markers);
-    // Update stats (no states).
-    updateStats($mapStats, markers.length);
+    centerMapToBounds(map, bounds, 9)
   }
 }
 
-
-function centerMapToState(map, state) {
-  const stateLocationMapping = stateLocationMappings[state.toUpperCase()];
-
-  if (stateLocationMapping) {
-    map.setCenter({ lat: stateLocationMapping.lat, lng: stateLocationMapping.lng });
-    // roughly zoom to focus on the state, hardcoded zooms to handle special case of Alaska
-    map.setZoom(stateLocationMapping.zoom);
-  }
-}
-
-function centerMapToNearestMarkers(map, markers) {
-    // First check to see if the user will accept getting their location, if not, silently return
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var user_latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-            //Compute the distances of all markers from the user
-            var markerDistances = new Map(); // an associative array containing the marker referenced by the computed distance
-            var distances = []; // all the distances, so we can sort and then call markerDistances
-            for (const marker of markers) {
-                var distance = google.maps.geometry.spherical.computeDistanceBetween(marker.position, user_latlng);
-
-                // HACK: In the unlikely event that the exact same distance is computed, add one meter to the distance to give it a unique distance
-                // This could occur if a marker was added twice to the same location.
-                if (markerDistances.has(distance)) { distance = distance + 1; }
-
-                markerDistances[distance] = marker;
-
-                distances.push(distance);
-            }
-
-            // sort the distances and set bounds to closest three
-            distances.sort((a, b) => a - b);
-
-
-            // center the map on the user
-            const bounds = new google.maps.LatLngBounds();
-            bounds.extend(user_latlng);
-
-            // Extend the bounds to contain the three closest markers
-            let i = 0;
-            while (i < 3) {
-                // Get one of the closest markers
-                var distance = distances[i]
-                var marker = markerDistances[distance];
-
-                // Add to the iterator first just in case something fails later to avoid infinite loop
-                i++;
-
-                const marker_lat = marker.position.lat();
-                const marker_lng = marker.position.lng();
-
-                const loc = new google.maps.LatLng(marker_lat, marker_lng);
-                bounds.extend(loc);
-            }
-            map.fitBounds(bounds);       // auto-zoom
-            map.panToBounds(bounds);     // auto-center
-        })
+function centerMapToBounds(map, bounds, maxZoom) {
+  if (bounds.isEmpty()) {
+    // Default view if no specific bounds
+    const middle_of_us = { lat: 39.0567939, lng: -94.6065124 };
+    map.setCenter(middle_of_us);
+    map.setZoom(4);
+  } else {
+    map.fitBounds(bounds);
+    // Prevent zooming in too far if only one or two locations determine the bounds
+    if (maxZoom && map.getZoom() > maxZoom) {
+      map.setZoom(maxZoom);
     }
+  }
+}
+
+function centerMapToNearestMarkers(map, markers, fallbackBounds) {
+  // First check to see if the user will accept getting their location, if not, silently return
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        var user_latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+        //Compute the distances of all markers from the user
+        var markerDistances = new Map(); // an associative array containing the marker referenced by the computed distance
+        var distances = []; // all the distances, so we can sort and then call markerDistances
+        for (const marker of markers) {
+          var distance = google.maps.geometry.spherical.computeDistanceBetween(marker.position, user_latlng);
+
+          // HACK: In the unlikely event that the exact same distance is computed, add one meter to the distance to give it a unique distance
+          // This could occur if a marker was added twice to the same location.
+          if (markerDistances.has(distance)) { distance = distance + 1; }
+
+          markerDistances[distance] = marker;
+
+          distances.push(distance);
+        }
+
+        // sort the distances and set bounds to closest three
+        distances.sort((a, b) => a - b);
+
+        // center the map on the user
+        const bounds = new google.maps.LatLngBounds();
+        bounds.extend(user_latlng);
+
+        // Extend the bounds to contain the three closest markers
+        i = 0;
+        while (i < 3) {
+          // Get one of the closest markers
+          var distance = distances[i]
+          var marker = markerDistances[distance];
+
+          // Add to the iterator first just in case something fails later to avoid infinite loop
+          i++;
+
+          bounds.extend(marker.position);
+        }
+        centerMapToBounds(map, bounds);
+      },
+      function () {
+        centerMapToBounds(map, fallbackBounds);
+      }
+    );
+  } else {
+    centerMapToBounds(map, fallbackBounds);
+  }
 }
 
 let openInfoWindows = [];
