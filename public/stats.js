@@ -23,9 +23,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     const statsHtml = [];
 
-    statsHtml.push(`<p><strong>Total Donation Sites</strong>: ${totalCount}</p>`);
-    statsHtml.push(`<p><strong>Total Cities with Donation Sites</strong>: ${totalCities}</p>`);
-    statsHtml.push('<p><strong>Donation Sites by State</strong>:</p>');
+    statsHtml.push(`<p><strong>${$.i18n('ftm-total-donation-sites-count')}</strong> ${totalCount}</p>`);
+    statsHtml.push(`<p><strong>${$.i18n('ftm-total-donation-sites-cities-count')}</strong> ${totalCities}</p>`);
+    statsHtml.push(`<p><strong>${$.i18n('ftm-state-donation-sites')}</strong></p>`);
     for (const state of Object.keys(stateCounts)) {
       statsHtml.push(`<div>${state}: ${stateCounts[state]}</div>`);
     }
