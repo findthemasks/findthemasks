@@ -108,8 +108,13 @@ async function getSpreadsheet(client) {
   const emailIndex = headers.findIndex( e => e === 'email' );
   const latIndex = headers.findIndex( e => e === 'lat' );
   const lngIndex = headers.findIndex( e => e === 'lng' );
-  const latColumn = COLUMNS[latIndex];
-  const lngColumn = COLUMNS[lngIndex];
+  const timestampIdx = headers.findIndex( e => e === 'timestamp' );
+
+  // The timestamp column is the first of the form response columns.
+  // Subtracting it off gives us the right column ordinal for the
+  // form response sheet.
+  const latColumn = COLUMNS[latIndex - timestampIdx];
+  const lngColumn = COLUMNS[lngIndex - timestampIdx];
 
   const to_write_back = [];
   const promises = [];
@@ -161,15 +166,15 @@ async function getSpreadsheet(client) {
     write_request.auth = client;
 
     to_write_back.forEach( e => {
-      console.log('writing lat-long ' + JSON.stringify(e));
+      console.log(`writing lat-long cols ${latColumn},${lngColumn} : ${JSON.stringify(e)}`);
       // TODO(awong): Don't hardcode the columns. Make it more robust somehow.
       data.push({
-        range: `${WRITEBACK_SHEET}!L${e.row_num}`,
+        range: `${WRITEBACK_SHEET}!${latColumn}${e.row_num}`,
         values: [ [e.lat_lng.lat] ]
       });
 
       data.push({
-        range: `${WRITEBACK_SHEET}!M${e.row_num}`,
+        range: `${WRITEBACK_SHEET}!${lngColumn}${e.row_num}`,
         values: [ [e.lat_lng.lng] ]
       });
     });
