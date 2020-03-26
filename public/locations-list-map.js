@@ -117,7 +117,7 @@ function createContent(data, showList, showMap) {
           if (entry.instructions) {
             entry.domElem.append([
               ce('label', null, ctn($.i18n('ftm-instructions'))),
-              ce('p', null, ctn(entry.instructions))
+              linkifyElement(ce('p', null, ctn(entry.instructions)))
             ]);
           }
 
@@ -451,7 +451,7 @@ function addMarkerToMap(map, latitude, longitude, address, name, instructions, a
     var contentString =
         '<h5>' + name + '</h5>' +
         `<div class="label">${$.i18n('ftm-maps-marker-address-label')}</div><div class=value>` + address + '</div>' +
-        `<div class="label">${$.i18n('ftm-maps-marker-instructions-label')}</div><div class=value>` + instructions + '</div>' +
+        `<div class="label">${$.i18n('ftm-maps-marker-instructions-label')}</div><div class=value>` + linkifyHtml(instructions) + '</div>' +
         `<div class="label">${$.i18n('ftm-maps-marker-accepting-label')}</div><div class=value>` + accepting + '</div>' +
         `<div class="label">${$.i18n('ftm-maps-marker-open-packages-label')}</div><div class=value>` + open_accepted + '</div>';
 
