@@ -1,9 +1,6 @@
 import toDataByLocation from './toDataByLocation.js';
 
 function createFiltersListHTML() {
-  $('.locations-loading').hide();
-  $('.locations-container').show();
-
   // We use objects here as a quick approach to removing duplicates.
 
   const states = {};
@@ -219,7 +216,10 @@ $(function() {
     const hideList = searchParams.get('hide-list') && searchParams.get('hide-list') === 'true';
 
     if (!hideList) {
-      $(".filters-list").html(createFiltersListHTML(data_by_location).join(" "));
+      // Generate and populate filter + list HTML. Once completed, swap loading and list container.
+      $('.filters-list').html(createFiltersListHTML(data_by_location).join(" "));
+      $('.locations-loading').hide();
+      $('.locations-container').show();
 
       const htmlSnippets = toHtmlSnippets(data_by_location, null);
       $(".locations-list").html(htmlSnippets.join(" "));
