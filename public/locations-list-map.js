@@ -283,7 +283,7 @@ window.onFilterChange = function (elem, scrollNeeded) {
   showMarkers(data_by_location, filters, false);
 
   if (scrollNeeded) {
-//    locationsList[0].scrollIntoView({'behavior': 'smooth'});
+    locationsList[0].scrollIntoView({'behavior': 'smooth'});
   }
 };
 
