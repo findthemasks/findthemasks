@@ -204,6 +204,7 @@ function getFilteredContent(data, filters) {
 $(function() {
   const url = new URL(window.location);
   const directories = url.pathname.split("/");
+
   let countryDataFilename;
 
   // TODO: super brittle
