@@ -17,7 +17,7 @@ let CONFIG_CLIENT_SECRET = '';
 let CONFIG_SHEET_ID = '';
 let GOOGLE_MAPS_API_KEY = '';
 
-if (functions.config()['googleapi'] != null) {
+if (functions.config()['googleapi'] !== null) {
   CONFIG_CLIENT_ID = functions.config().googleapi.client_id
   CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
   CONFIG_SHEET_ID = functions.config().googleapi.sheet_id;
@@ -361,4 +361,4 @@ async function get_live_data() {
   let resp = await request({url});
   console.log('Setting global variable `data_static` to the contents of ' + url);
   data_static = resp.data;
-};
+}
