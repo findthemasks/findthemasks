@@ -11,19 +11,14 @@ export default function toDataByLocation(data) {
   published_entries.forEach( entry => {
     const state = entry[stateIndex].trim();
     const city = entry[cityIndex].trim();
-    let entry_array;
-    if (!(state in data_by_location) || !(city in data_by_location[state])) {
-      entry_array = [];
-      if (state in data_by_location) {
-        data_by_location[state][city] = entry_array;
-      } else {
-        data_by_location[state] = { [city]: entry_array };
-      }
-    } else {
-      entry_array = data_by_location[state][city];
-    }
+
+    const state_obj = data_by_location[state] = (data_by_location[state] || { cities: {} });
+    const city_obj = state_obj.cities[city] = (state_obj.cities[city] || { entries: [] });
+    const entry_array = city_obj.entries;
     const entry_obj = {};
+
     entry[instructionsIndex] = linkifyHtml(entry[instructionsIndex]);
+
     headers.forEach( (value, index) => {
       if (entry[index] !== undefined) {
         entry_obj[value] = entry[index];
