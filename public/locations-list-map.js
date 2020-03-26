@@ -1,8 +1,6 @@
 import toDataByLocation from './toDataByLocation.js';
 
 function createFiltersListHTML() {
-  $('.locations-container').show();
-
   const filters = [];
   filters.push(`<h4>${$.i18n('ftm-states')}</h4>`);
   for (const state of Object.keys(data_by_location).sort()) {
@@ -155,6 +153,8 @@ function getFilteredContent(data, filters) {
   const content = [];
   const filterAcceptKeys = filters && filters.acceptItems && Object.keys(filters.acceptItems);
 
+  let listCount = 0; // TODO: hacky, see note below.
+
   for (const stateName of Object.keys(data).sort()) {
     if (filters && filters.states && !filters.states[stateName]) {
       continue;
@@ -178,6 +178,7 @@ function getFilteredContent(data, filters) {
           }
         }
 
+        listCount++;
         city.containerElem.append(entry.domElem);
         hasEntry = true;
       }
@@ -191,8 +192,11 @@ function getFilteredContent(data, filters) {
     if (hasCity) {
       content.push(state.domElem);
     }
-
   }
+
+  // TODO: This is hacky since technically this function should ONLY be responsible for generating HTML snippets,
+  //  not updating stats; however this is the quickest method for updating filter stats as well.
+  updateStats($('#list-stats'), listCount);
 
   return content;
 }
@@ -356,6 +360,9 @@ function showMarkers(data, filters, showNearest) {
     }
   }
 
+  let $mapStats = $('#map-stats');
+  updateStats($mapStats, markers.length);
+
   if (showNearest) {
     centerMapToNearestMarkers(map, markers, bounds);
   } else {
@@ -408,7 +415,7 @@ function centerMapToNearestMarkers(map, markers, fallbackBounds) {
         bounds.extend(user_latlng);
 
         // Extend the bounds to contain the three closest markers
-        i = 0;
+        let i = 0;
         while (i < 3) {
           // Get one of the closest markers
           var distance = distances[i]
