@@ -1,5 +1,50 @@
 import toDataByLocation from './toDataByLocation.js';
 
+
+
+// TODO (patricknelson): The indentation in this file is not consistent and should be updated soon. Currently the project
+//  standard is 2-space indentation; please see .editorconfig and, if possible, configure your IDE to utilize this file.
+
+// TODO (patricknelson): All functions interacting with the map should not require the map as a parameter since this
+//  will not change in the near future and is a module level variable already. Causes too much repeated code.
+
+// TODO (patricknelson: Proposal to change functions resonsible for recentering the map, using either generic lat/lng
+//  coordinates as only dependency instead of taking map, bounds, etc as inputs. See full details below.
+
+
+
+/******************************************
+ * MODULE VARS AVAILABLE TO ALL FUNCTIONS *
+ ******************************************/
+
+// Map, markers and map associated UI components are initialized in initMap().
+let autocomplete;
+let map = null;
+let markers = [];
+
+// Configuration defined in query string. Initialized in jQuery DOM ready function.
+// TODO (patnelson): This should be extended with every other option as well.
+let showMapSearch = true;
+
+// The map, roughly zoomed to show the entire US.
+const middle_of_us = { lat: 39.0567939, lng: -94.6065124};
+const middle_of_us_zoom = 4;
+
+// Centralized, as this the initialization state is now needed in multiple places. In the future, we may not always be
+// centering just on the US (if no browser location is provided via navigator.geolocation).
+let inital_center = middle_of_us,
+  initial_zoom = middle_of_us_zoom,
+  initial_marker_filters = null; // TODO (patnelson): Defined in map initialization function; this SHOULD happen jQuery DOM ready function instead.
+
+// Keep track of the previous info windows user has clicked so we can close them.
+let openInfoWindows = [];
+
+/*************************
+ * END MODULE LEVEL VARS *
+ *************************/
+
+
+
 function createFiltersListHTML() {
   const filters = [];
   filters.push(`<h4>${$.i18n('ftm-states')}</h4>`);
@@ -229,11 +274,14 @@ $(function() {
     window.locations = result;
     window.data_by_location = toDataByLocation(locations);
 
+    // TODO (patnelson): IMHO, every single one of these show/hide settings configured by query string should be elevated
+    //  to the module-level scope for reference.
     const searchParams = new URLSearchParams(url.search);
     const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
     const states = stateParams.map(param => param.split(',')).reduce((acc, val) => acc.concat(val), []);
     const showList = searchParams.get('hide-list') !== 'true';
     const showMap = searchParams.get('hide-map') !== 'true';
+    showMapSearch = searchParams.get('hide-search') !== 'true';
 
     createContent(window.data_by_location, showList, showMap);
 
@@ -316,8 +364,10 @@ if (window.HTMLCollection && !HTMLCollection.prototype.forEach) {
   HTMLCollection.prototype.forEach = Array.prototype.forEach;
 }
 
-let map;
-
+// TODO (patricknelson): The initMap() function should ONLY be responsible for initializing the map. Additional modifications
+//  to map must instead be performed AFTER initialization, either via module-level state that is maintained (e.g. markers,
+//  filters, etc) or via a callback function that can be executed to proceed with further updates once initialization has
+//  been completed. This means that the "stateFilter" should be removed from here and potentially changed to a callback instead.
 function initMap(stateFilter) {
   var data_by_location = window.data_by_location;
 
@@ -337,10 +387,186 @@ function initMap(stateFilter) {
   map = new google.maps.Map(element);
 
   showMarkers(data_by_location, { states: stateFilter }, !stateFilter);
+
+  // TODO (patricknelson): This showMarkers call above has to be duplicated due to crossing of concerns of this function
+  //   (init map vs. initial map state). See resetMap() function. Also, ideally the initialization of filters would happen
+  //  OUTSIDE of this method. Also, to reduce merge conflicts, the initialization of the "initial_marker_filters" is
+  //  defined here for now, but ideally it would instead be defined in jQuery DOM ready function instead.
+  initial_marker_filters = { states: stateFilter };
+
+  // Initialize autosuggest/search field above the map.
+  initMapSearch();
 }
 
+
+
+/**********************************
+ * BEGIN MAP SEARCH FUNCTIONALITY *
+ **********************************/
+
+/**
+ * Responsible for initializing the search field and links below the search field (e.g. use location, reset map, etc).
+ */
+function initMapSearch() {
+  // If disabled, hide the search fields and don't bother attaching any functionality to them.
+  if (!showMapSearch) {
+    $('.map-search-wrap').hide();
+    return;
+  }
+  console.log('init map search');
+
+  // Initialize the map search autocompleter.
+  autocomplete = new google.maps.places.Autocomplete(
+    document.getElementById('map-search'), {types: ['geocode']}
+  );
+
+  // Avoid paying for data that you don't need by restricting the set of
+  // place fields that are returned to just the address components.
+  autocomplete.setFields(['geometry']);
+
+  // When the user selects an address from the drop-down, populate the
+  // address fields in the form.
+  autocomplete.addListener('place_changed', loadSearchInMap);
+
+  // Setup event listeners for map action links.
+  $('#use-location').on('click', (e) => {
+    e.preventDefault();
+    centerMapToMarkersNearUser();
+  });
+
+  $('#reset-map').on('click', (e) => {
+    e.preventDefault();
+    resetMap();
+  });
+}
+
+
+
+/**
+ * Strictly responsible for resetting the map to it's initial state on page load.
+ */
+function resetMap() {
+  // TODO THIS SHOULD HAVE TWO FUNCTION CALLS INSTEAD OF ONE:
+  //  1.) Show initial markers based on initial filters (e.g. which state[s]?)
+  //  2.) Reposition map (e.g. initial state?)
+  //  However, repositioning is ALSO happening deep inside showMarkers() function which has made itself responsible for
+  //  too many tasks.
+  showMarkers(window.data_by_location, initial_marker_filters, !initial_marker_filters);
+}
+
+
+
+/**
+ * Takes the form input and attempts to pull geocoded information from it. Once done, centers map on closest markers nearby.
+ */
+function loadSearchInMap() {
+  if (!autocomplete) {
+    console.error('autocomplete is not yet defined.');
+    return;
+  }
+
+  let place = autocomplete.getPlace();
+  if (place.geometry) {
+    // Get the location object that we can map.setCenter() on.
+    let location = place.geometry.location;
+    if (location) {
+      centerMapToMarkersNearCoords(location.lat(), location.lng())
+
+    } else {
+      console.warn('Location data not found in place geometry (place.geometry.location).')
+    }
+  } else {
+    console.warn('No geometry found, skipping place');
+  }
+}
+
+
+
+/**
+ * Centers map at automatically detected coordinates using built in navigator.geolocation API.
+ */
+function centerMapToMarkersNearUser() {
+  // First check to see if the user will accept getting their location, if not, silently return
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      // Use navigator provided lat/long coords to center map now.
+      centerMapToMarkersNearCoords(position.coords.latitude, position.coords.longitude);
+
+    }, function (err) {
+      // Hide the "User my location" link since we know that will not work.
+      $('#use-location').hide();
+
+    }, {
+      maximumAge: Infinity,
+      timeout: 10000
+    });
+  }
+}
+
+
+
+/**
+ * Centers map around markers nearest to an arbitrary set of latitude/longitude coordinates.
+ */
+function centerMapToMarkersNearCoords(latitude, longitude) {
+  var latlng = new google.maps.LatLng(latitude, longitude);
+
+  //Compute the distances of all markers from the user
+  var markerDistances = new Map(); // an associative array containing the marker referenced by the computed distance
+  var distances = []; // all the distances, so we can sort and then call markerDistances
+  for (const marker of markers) {
+    let distance = google.maps.geometry.spherical.computeDistanceBetween(marker.position, latlng);
+
+    // HACK: In the unlikely event that the exact same distance is computed, add one meter to the distance to give it a unique distance
+    // This could occur if a marker was added twice to the same location.
+    if (markerDistances.has(distance)) { distance = distance + 1; }
+
+    markerDistances[distance] = marker;
+
+    distances.push(distance);
+  }
+
+  // sort the distances and set bounds to closest three
+  distances.sort((a, b) => a - b);
+
+  // center the map on the user
+  const bounds = new google.maps.LatLngBounds();
+  bounds.extend(latlng);
+
+  // Extend the bounds to contain the three closest markers
+  for(let i = 0; i < 3; i++) {
+    // Get one of the closest markers
+    let distance = distances[i];
+    let marker = markerDistances[distance];
+
+    // Add to the iterator first just in case something fails later to avoid infinite loop
+    i++;
+
+    const marker_lat = marker.position.lat();
+    const marker_lng = marker.position.lng();
+
+    const loc = new google.maps.LatLng(marker_lat, marker_lng);
+    bounds.extend(loc);
+  }
+  map.fitBounds(bounds);       // auto-zoom
+  map.panToBounds(bounds);     // auto-center
+}
+
+/********************************
+ * END MAP SEARCH FUNCTIONALITY *
+ ********************************/
+
+
+
+/**
+ * Changes the markers currently rendered on the map based strictly on . This will reset the 'markers' module variable as well.
+ *
+ * TODO (patricknelson): The param "data" is redundant and should be removed! Currently it only refers to the global "data_by_location".
+ *
+ * TODO (patricknelson): The param "showNearest" is used only once and is not relevant to the purpose of this method (showing specific markers only depending on filters).
+ */
 function showMarkers(data, filters, showNearest) {
-  let markers = [];
+  markers = [];
 
   if (!map) {
     return;
@@ -392,19 +618,25 @@ function showMarkers(data, filters, showNearest) {
   let $mapStats = $('#map-stats');
   updateStats($mapStats, markers.length);
 
+  // TODO: See notes above; this function should NOT be responsible for positioning the map.
+
   if (showNearest) {
     centerMapToNearestMarkers(map, markers, bounds);
   } else {
     centerMapToBounds(map, bounds, 9)
   }
 }
+window.showMarkers = showMarkers; // Exposed for debug/testing.
+
+
+
+// TODO (patricknelson): I propose completely scrapping this function in favor of centerMapToMarkersNearCoords() for simplicity.
 
 function centerMapToBounds(map, bounds, maxZoom) {
   if (bounds.isEmpty()) {
     // Default view if no specific bounds
-    const middle_of_us = { lat: 39.0567939, lng: -94.6065124 };
-    map.setCenter(middle_of_us);
-    map.setZoom(4);
+    map.setCenter(inital_center);
+    map.setZoom(initial_zoom);
   } else {
     map.fitBounds(bounds);
     // Prevent zooming in too far if only one or two locations determine the bounds
@@ -413,6 +645,13 @@ function centerMapToBounds(map, bounds, maxZoom) {
     }
   }
 }
+
+// TODO (patricknelson: The code inside the .getCurrentPosition() is now DUPLICATED in centerMapToMarkersNearUser() AND centerMapToMarkersNearCoords()
+//  This is to prevent conflicts. I propose we completely scrap this function because
+//  1.) It is not properly named, since it's purpose is to center map on the USER coordinates (an API that isn't always available due to permissions)
+//  2.) It does too much; it centers map on user AND it automatically calculates bounds on nearby markers. However, that
+//      can be abstracted to normalized plain lat/lng coordinates instead.
+//  Therefore, I propose we completely replace this with a simple function call to centerMapToMarkersNearUser().
 
 function centerMapToNearestMarkers(map, markers, fallbackBounds) {
   // First check to see if the user will accept getting their location, if not, silently return
@@ -466,7 +705,7 @@ function centerMapToNearestMarkers(map, markers, fallbackBounds) {
   }
 }
 
-let openInfoWindows = [];
+
 
 function addMarkerToMap(map, latitude, longitude, address, name, instructions, accepting, open_accepted) {
     // Text to go into InfoWindow
