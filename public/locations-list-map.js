@@ -490,10 +490,10 @@ function addMarkerToMap(map, latitude, longitude, address, name, instructions, a
     // Text to go into InfoWindow
     var contentString =
         '<h5>' + name + '</h5>' +
-        '<div class=label>Address:</div><div class=value>' + address + '</div>' +
-        '<div class=label>Instructions:</div><div class=value>' + instructions + '</div>' +
-        '<div class=label>Accepting:</div><div class=value>' + accepting + '</div>' +
-        '<div class=label>Open Packages?:</div><div class=value>' + open_accepted + '</div>';
+        `<div class="label">${$.i18n('ftm-maps-marker-address-label')}</div><div class=value>` + address + '</div>' +
+        `<div class="label">${$.i18n('ftm-maps-marker-instructions-label')}</div><div class=value>` + instructions + '</div>' +
+        `<div class="label">${$.i18n('ftm-maps-marker-accepting-label')}</div><div class=value>` + accepting + '</div>' +
+        `<div class="label">${$.i18n('ftm-maps-marker-open-packages-label')}</div><div class=value>` + open_accepted + '</div>';
 
     var location = { lat: latitude, lng: longitude };
     var marker = new google.maps.Marker({

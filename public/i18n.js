@@ -32,6 +32,14 @@ const locales = {
         "ftm-open-packages": "Heading for whether the hospital accepts open packages",
         "ftm-states": "Heading for US states",
         "ftm-accepts-open-boxes": "Long heading for whether the hospital accepts Open Boxes/bags",
+        "ftm-stats": "Heading for Stats page",
+        "ftm-total-donation-sites-count": "Label for Total Donation Sites stats count",
+        "ftm-total-donation-sites-cities-count": "Label for total cities with donation sites stats count",
+        "ftm-state-donation-sites": "Label for donation sites by state stats",
+        "ftm-maps-marker-address-label": "Label for address in map marker popup",
+        "ftm-maps-marker-instructions-label": "Label for instructions in map marker popup",
+        "ftm-maps-marker-accepting-label": "Label for whether hospital is accepting donations in map marker popup",
+        "ftm-maps-marker-open-packages-label": "Label for whether hospital accepts open packages in map marker popup"
     },
     "en": {
         "ftm-map-of-sites": "Map of donation sites",
@@ -58,6 +66,14 @@ const locales = {
         "ftm-open-packages": "Open packages?",
         "ftm-states": "States",
         "ftm-accepts-open-boxes": "Accepts Open Boxes/bags",
+        "ftm-stats": "Stats",
+        "ftm-total-donation-sites-count": "Total Donation Sites:",
+        "ftm-total-donation-sites-cities-count": "Total Cities with Donation Sites:",
+        "ftm-state-donation-sites": "Donation Sites by State:",
+        "ftm-maps-marker-address-label": "Address:",
+        "ftm-maps-marker-instructions-label": "Instructions:",
+        "ftm-maps-marker-accepting-label": "Accepting:",
+        "ftm-maps-marker-open-packages-label": "Open Packages?:"
     },
 }
 
