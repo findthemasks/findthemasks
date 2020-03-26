@@ -199,12 +199,23 @@ function toHtmlSnippets(data_by_location, filters) {
 }
 
 $(function() {
-    $.getJSON("https://findthemasks.com/data.json", function(result){
+  const url = new URL(window.location);
+  const directories = url.pathname.split("/");
+  let countryDataFilename;
+
+  // TODO: super brittle
+  if (directories.length > 2 && directories[1] !== 'us') {
+    countryDataFilename = `data-${directories[1]}.json`;
+  } else {
+    countryDataFilename = 'data.json';
+  }
+
+  $.getJSON(`https://findthemasks.com/${countryDataFilename}`, function(result){
     // may end up using this for search / filtering...
     window.locations = result;
     window.data_by_location = toDataByLocation(locations);
 
-    const searchParams = new URLSearchParams((new URL(window.location)).search);
+    const searchParams = new URLSearchParams(url.search);
     const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
     const states = stateParams.map(param => param.split(',')).reduce((acc, val) => acc.concat(val), []);
 

@@ -169,11 +169,13 @@ const locales = {
 
 $(function () {
   const searchParams = new URLSearchParams((new URL(window.location)).search);
-  const country = searchParams.get('country');
+  const locale = searchParams.get('locale');
 
-  const defaultLocale = 'en';
-
-  $.i18n({ locale: (!!locales[country] && country) || defaultLocale }).load(locales);
+  if (locale) {
+    $.i18n({ locale }).load(locales);
+  } else {
+    $.i18n().load(locales);
+  }
 
   // translate static elements
   $('.i18n').i18n();
