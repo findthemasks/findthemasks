@@ -213,12 +213,13 @@ $(function() {
       initMap(states);
     }
 
+    $('.locations-loading').hide();
+
     const hideList = searchParams.get('hide-list') && searchParams.get('hide-list') === 'true';
 
     if (!hideList) {
       // Generate and populate filter + list HTML. Once completed, swap loading and list container.
       $('.filters-list').html(createFiltersListHTML(data_by_location).join(" "));
-      $('.locations-loading').hide();
       $('.locations-container').show();
 
       const htmlSnippets = toHtmlSnippets(data_by_location, null);
