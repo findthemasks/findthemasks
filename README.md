@@ -60,3 +60,4 @@ This will return just the filtered list of donations sites in California.
    provides pre-generated favicon packages using
    [Twemoji](https://twemoji.twitter.com/). Twemoji graphics are licensed
    [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- [Feather icon collection](https://github.com/feathericons/feather), licensed under [MIT License](https://github.com/feathericons/feather/blob/master/LICENSE).

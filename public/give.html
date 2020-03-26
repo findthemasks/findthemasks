@@ -157,6 +157,32 @@
         #map-stats, #list-stats {
           font-weight: 300;
         }
+
+        .load-spinner {
+          width: 21px;
+          height: 21px;
+          animation: 5s load-spinner infinite linear;
+          vertical-align: text-top;
+        }
+        @-webkit-keyframes load-spinner {
+          100% {
+            transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+          }
+        }
+        @-moz-keyframes load-spinner {
+          100% {
+            transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+          }
+        }
+        @-ms-keyframes load-spinner {
+          100% {
+            transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+          }
+        }
+
     </style>
 
     <!-- Make sure to translate these meta tags when creating a new language version -->
@@ -182,16 +208,19 @@
         <div id="map"></div>
       </div>
 
+      <h3 style="padding: 30px 0px 5px 0px; margin: 0px;"><span class="i18n" data-i18n="ftm-list-of-sites">List of donation sites</span> <span id="list-stats"></span></h3>
+      <p style="padding-bottom: 10px"> <span class='i18n' data-i18n="ftm-request-update">To add a donation site, update information, or request we take down information, please</span>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform"><span class='i18n' data-i18n="ftm-fill-in-this-form">fill in this form</span></a>.</p>
+
+      <div class="filters-container" style="display: none;">
+        <h4 style="padding-top: 0px;" class='i18n' data-i18n="ftm-filters">Filters</h4>
+        <form name="filters" class="filters-list"></form>
+      </div>
+
+      <div class="locations-loading">
+        <em><img src="images/icons/loader.svg" alt="" class="load-spinner"> Loading donation sites...</em>
+      </div>
       <div class="locations-container" style="display: none;">
-        <h3 style="padding: 30px 0px 5px 0px; margin: 0px;"><span class="i18n" data-i18n="ftm-list-of-sites">List of donation sites</span> <span id="list-stats"></span></h3>
-        <p style="padding-bottom: 10px"> <span class='i18n' data-i18n="ftm-request-update">To add a donation site, update information, or request we take down information, please</span>
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform"><span class='i18n' data-i18n="ftm-fill-in-this-form">fill in this form</span></a>.</p>
-
-        <div class="filters-container" style="display: none;">
-          <h4 style="padding-top: 0px;" class='i18n' data-i18n="ftm-filters">Filters</h4>
-          <form name="filters" class="filters-list"></form>
-        </div>
-
         <div id="locations-list" class="locations-list"></div>
       </div>
 

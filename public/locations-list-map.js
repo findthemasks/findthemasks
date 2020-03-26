@@ -1,6 +1,7 @@
 import toDataByLocation from './toDataByLocation.js';
 
 function createFiltersListHTML() {
+  $('.locations-loading').hide();
   $('.locations-container').show();
 
   // We use objects here as a quick approach to removing duplicates.
