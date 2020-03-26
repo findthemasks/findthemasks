@@ -36,7 +36,7 @@ const WRITEBACK_SHEET = "'Form Responses 1'";
 const FUNCTIONS_REDIRECT = `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com/oauthcallback`;
 
 // setup for authGoogleAPI
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 const functionsOauthClient = new OAuth2Client(CONFIG_CLIENT_ID, CONFIG_CLIENT_SECRET,
   FUNCTIONS_REDIRECT);
 
@@ -87,19 +87,9 @@ function getHeaders(data) { return data.values[1]; }
 
 function splitValues(data) { return [ data.values.slice(0,2), data.values.slice(2) ]; }
 
-async function getSpreadsheet(client) {
-  const sheets = google.sheets('v4');
-  const request = {
-    spreadsheetId: CONFIG_SHEET_ID,
-    range: 'moderated'};
-  request.auth = client;
-
-  const response = await sheets.spreadsheets.values.get(request);
-  const data = response.data;
-
-  const headers = getHeaders(data);
-
+async function annotateGeocode(data) {
   // Annotate Geocodes for missing items. Track the updated rows. Write back.
+  const headers = getHeaders(data);
   const maps_client = new Client({});
   const [header_values, real_values] = splitValues(data);
 
@@ -113,8 +103,9 @@ async function getSpreadsheet(client) {
   // The timestamp column is the first of the form response columns.
   // Subtracting it off gives us the right column ordinal for the
   // form response sheet.
-  const latColumn = COLUMNS[latIndex - timestampIdx];
-  const lngColumn = COLUMNS[lngIndex - timestampIdx];
+  const latColumn = COLUMNS[latIndex - timestampIdx + 1];
+  const lngColumn = COLUMNS[lngIndex - timestampIdx + 1];
+  console.log(`writing lat-long cols ${latColumn},${lngColumn1}`);
 
   const to_write_back = [];
   const promises = [];
@@ -178,9 +169,23 @@ async function getSpreadsheet(client) {
         values: [ [e.lat_lng.lng] ]
       });
     });
-
     const write_response = await sheets.spreadsheets.values.batchUpdate(write_request);
   }
+}
+
+async function getSpreadsheet(client) {
+  const sheets = google.sheets('v4');
+  const request = {
+    spreadsheetId: CONFIG_SHEET_ID,
+    range: 'moderated'};
+  request.auth = client;
+
+  const response = await sheets.spreadsheets.values.get(request);
+  const data = response.data;
+
+  // Geocode annotation is being done via appscript right now.
+  // When reenabling, ensure the oauth scope is made read/write.
+  // await annotateGeocode(data);
 
   return response.data;
 }
