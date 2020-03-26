@@ -17,8 +17,6 @@ export default function toDataByLocation(data) {
     const entry_array = city_obj.entries;
     const entry_obj = {};
 
-    entry[instructionsIndex] = linkifyHtml(entry[instructionsIndex]);
-
     headers.forEach( (value, index) => {
       if (entry[index] !== undefined) {
         entry_obj[value] = entry[index];
