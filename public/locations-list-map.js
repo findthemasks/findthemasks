@@ -287,6 +287,11 @@ window.onFilterChange = function (elem, scrollNeeded) {
   }
 };
 
+// Polyfill required for Edge for the .forEach methods above, since this method doesn't exist in that browser.
+if (window.HTMLCollection && !HTMLCollection.prototype.forEach) {
+  HTMLCollection.prototype.forEach = Array.prototype.forEach;
+}
+
 let map;
 
 function initMap(stateFilter) {
