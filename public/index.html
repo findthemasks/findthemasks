@@ -196,28 +196,28 @@
 
     <div class="container" style="padding-bottom: 40px;">
         <h1 style="padding: 20px 0px 0px 0px;">#findthemasks</h1>
-        <p style="padding: 0px;">This site is part of the <a href="https://getusppe.org/">getusppe.org</a> coalition.</p>
-        <h4 style="padding-bottom: 20px; font-weight: 400;">America&rsquo;s frontline healthcare workers are treating COVID19 patients, in some cases without adequate protective gear. Some have taken to Twitter on <a href="https://twitter.com/search?q=%23GetMePPE&src=typeahead_click">#GetMePPE</a> to ask for help.</h4>
+        <p style="padding: 0px;" class="i18n" data-i18n="[html]ftm-index-site-coalition">This site is part of the <a href="https://getusppe.org/">getusppe.org</a> coalition.</p>
+        <h4 style="padding-bottom: 20px; font-weight: 400;" class="i18n" data-i18n="[html]ftm-index-getmeppe-twitter-cta">America's frontline healthcare workers are treating COVID19 patients, in some cases without adequate protective gear. Some have taken to Twitter on <a href="https://twitter.com/search?q=%23GetMePPE&src=typeahead_click">#GetMePPE</a> to ask for help.</h4>
 
-        <p style="padding-top: 10px; margin: 0px;">We need to help the helpers, right now.</p>
-        <h3 style="padding-bottom: 20px">We need to find the masks.</h3>
+        <p style="padding-top: 10px; margin: 0px;" class="i18n" data-i18n="ftm-index-need-helpers">We need to help the helpers, right now.</p>
+        <h3 style="padding-bottom: 20px" class="i18n" data-i18n="ftm-index-need-find-masks">We need to find the masks.</h3>
 
-      <p>Look in your basement, your emergency kit, your bug out bag, your workbench for N95 masks.
+      <p class="i18n" data-i18n="ftm-index-where-to-find-ppe">Look in your basement, your emergency kit, your bug out bag, your workbench for N95 masks.
         If you find surgical masks, those are also in short supply, and in many places are being used in place of N95s.
         All of these masks can save lives now if you get them into the hands of health care workers.</p>
 
-      <p>Other types of PPE like disposable <span class=embold>booties</span>, <span class=embold>safety goggles</span>, and <span class=embold>disposable suits</span> are also in short supply. If you have these things or know someone who might (HVAC installers? Construction workers?) please share this site with them. Large donors can register at <a href="https://getusppe.org/">getusppe.org/give</a>.</p>
+      <p class="i18n" data-i18n="[html]ftm-index-types-of-ppe">Other types of PPE like disposable <span class=embold>booties</span>, <span class=embold>safety goggles</span>, and <span class=embold>disposable suits</span> are also in short supply. If you have these things or know someone who might (HVAC installers? Construction workers?) please share this site with them. Large donors can register at <a href="https://getusppe.org/">getusppe.org/give</a>.</p>
 
 
         <a name="sites"></a>
-        <h3 style="padding: 20px 0px 10px 0px;">Here's what you can do:</h3>
+        <h3 style="padding: 20px 0px 10px 0px;" class="i18n" data-i18n="ftm-what-to-do-header">Here's what you can do:</h3>
         <ol>
-            <li> Look at our list of sites below. You can filter by state or supplies needed.
-            <li> If there's a site near you, drop off following their instructions.
-            <li> If you are donating open packages, please put them in a ziploc bag with a note saying whether they have been used, whether anyone in your household has been sick or travelled outside the country, and the expiration date if known.
-            <li> If there's not a site near you, visit <a href="https://getusppe.org/give">getusppe.org</a> to let them know what you have available.
+          <li class="i18n" data-i18n="ftm-what-to-do-1">Look at our list of sites below. You can filter by state or supplies needed.</li>
+          <li class="i18n" data-i18n="ftm-what-to-do-2">If there's a site near you, drop off following their instructions.</li>
+          <li class="i18n" data-i18n="ftm-what-to-do-3">If you are donating open packages, please put them in a ziploc bag with a note saying whether they have been used, whether anyone in your household has been sick or travelled outside the country, and the expiration date if known.</li>
+          <li class="i18n" data-i18n="[html]ftm-what-to-do-4">If there's not a site near you, visit <a href="https://getusppe.org/give">getusppe.org</a> to let them know what you have available.</li>
         </ol>
-        <h5>To add a donation site, update information, or request we take down information, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>.</h5>
+        <h5 class="i18n" data-i18n="[html]ftm-add-donation-site">To add a donation site, update information, or request we take down information, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>.</h5>
 
         <div class="map-container" style="display: none;">
           <h3 style="padding: 30px 0px 20px 0px;"><span class="i18n" data-i18n="ftm-map-of-sites">Map of donation sites</span> <span id="map-stats"></span></h3>
@@ -225,23 +225,22 @@
         </div>
 
         <div class="filters-container" style="display: none;">
-          <h3 style="padding: 30px 0px 20px 0px;">List of donation sites <span id="list-stats"></span></h3>
-          <h4>Filters</h4>
+          <h3 style="padding: 30px 0px 20px 0px;"><span class="i18n" data-i18n="ftm-list-of-sites">List of donation sites</span> <span id="list-stats"></span></h3>
+          <h4 class="i18n" data-i18n="ftm-filters">Filters</h4>
           <form name="filters" class="filters-list"></form>
         </div>
 
 
       <div class="locations-loading">
-        <img src="images/icons/loader.svg" alt="" class="load-spinner"> Loading donation sites...
+        <img src="images/icons/loader.svg" alt="" class="load-spinner"> <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
       </div>
         <div class="locations-container" style="display: none;">
           <div id="locations-list" class="locations-list"></div>
         </div>
 
-        <p style="padding-top: 30px;">To add a donation site, update information, or request we take down information, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>.<br><br>
+        <p style="padding-top: 30px;" class="i18n" data-i18n="[html]ftm-add-donation-site">To add a donation site, update information, or request we take down information, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>.<br><br>
         Got a comment or suggestion not related to data updates? Want to help? contact@findthemasks.com or join us on <a href="https://github.com/r-pop/findthemasks">our Github</a>.</p>
-        <p class="centerText">made with &lt;3 in Seattle</p>
-        <a href="whoweare.html" class="end">who we are</a>
+      <p><span class='i18n' data-i18n="[html]ftm-made-with-love">Made with &lt;3 in Seattle by </span><a href="whoweare.html" class="end">findthemasks.com</a></p>
     </div>
 </main>
 </body>

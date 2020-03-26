@@ -20,21 +20,46 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
   <link rel="manifest" href="site.webmanifest">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.fallbacks.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.language.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.messagestore.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.parser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.bidi.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.min.js"></script>
+  <script src="i18n.js"></script>
+
+
+  <!-- Make sure to translate these meta tags when creating a new language version -->
+
+  <!-- English -->
+  <meta lang="en" property="og:title" content="#findthemasks"/>
+  <meta lang="en" property="og:url" content="https://findthemasks.com/"/>
+  <meta lang="en" property="og:description" content="America’s frontline healthcare workers are treating COVID-19 patients without adequate protective gear, risking their lives! We need to find the masks. All of these masks can save lives now if you get them into the hands of healthcare workers."/>
+
+  <!-- French -->
+  <meta lang="fr" property="og:title" content="#findthemasks"/>
+  <meta lang="fr" property="og:url" content="https://findthemasks.com/"/>
+  <meta lang="fr" property="og:description" content="Les travailleurs de la santé de première ligne du monde entier traitent les patients atteints de COVID-19 sans équipement de protection adéquat, risquant leur vie! Nous devons trouver les masques. Tous ces masques peuvent maintenant sauver des vies si vous les remettez entre les mains de professionnels de la santé."/>
 </head>
 
 <body>
-  <main class="content">
+  <main class="content container">
     <h1>#findthemasks</h1>
 
-    <p class="addTopMargin">This site was launched on <a href="https://twitter.com/arrkay/status/1240704610186092546">March 19th</a> by <a href="https://www.linkedin.com/in/rachelpopkin/">Rachel Popkin</a> and has been improved by many fantastic volunteers. Many of us are tech workers in Seattle. We are advised by a group of doctors and nurses around the country.</p>
+    <p class="addTopMargin i18n" data-i18n="[html]ftm-site-launch-info">This site was launched on <a href="https://twitter.com/arrkay/status/1240704610186092546">March 19th</a> by <a href="https://www.linkedin.com/in/rachelpopkin/">Rachel Popkin</a> and has been improved by many fantastic volunteers. Many of us are tech workers in Seattle. We are advised by a group of doctors and nurses around the country.</p>
 
-<p>Our leads are:<br>
+<p class="i18n" data-i18n="ftm-project-leads">Our leads are:<br>
     <a href="https://www.linkedin.com/in/albertjwongseattle/">Albert J. Wong</a> - backend, devops<br>
         <a href="https://www.linkedin.com/in/grroche/">Graeme Roche</a> - frontend<br>
            Susan Ashlock - mapping<br>
                <a href="http://www.charliehagedorn.com/">Charlie Hagedorn</a> - data quality<br>
                <a href="https://www.linkedin.com/in/catherinelchang">Catherine Chang</a> - data quality</p>
-    <p>Our volunteers include:<br>
+    <p class="i18n" data-i18n="ftm-project-volunteers">Our volunteers include:<br>
 
     <a href="https://www.linkedin.com/in/c-tavis-post-0604609">C. Tavis Post</a><br>
     Jenn Popkin<br>
@@ -55,9 +80,10 @@
     <a href="https://catchyour.com">Patrick Nelson</a><br>
     <a href="https://www.linkedin.com/in/kyle-spitznagel">Kyle Spitznagel</a><br>
     <a href="https://research.google/people/CaitlinSadowski/">Caitlin Sadowski</a><br>
-and others who are anonymous<br>
+    <a href="https://www.linkedin.com/in/nathanaelburt">Nathanael Burt</a><br>
+<span class="i18n" data-i18n="ftm-anonymous-volunteers">and others who are anonymous</span><br>
 <br>
-This site also includes data from <a href="https://tinyurl.com/hospitals-needing-ppe">https://tinyurl.com/hospitals-needing-ppe</a>, a project by:<br>
+<span class="i18n" data-i18n="[html]ftm-ack-data-sources">This site also includes data from <a href="https://tinyurl.com/hospitals-needing-ppe">https://tinyurl.com/hospitals-needing-ppe</a>, a project by:</span><br>
 Ethan Garner<br>
 Maryann Hulsman<br>
 Melody Chang<br>
