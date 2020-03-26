@@ -495,12 +495,12 @@ function initMap() {
      autocomplete.addListener('place_changed', loadSearchInMap);
 
      // Setup event listeners for map action links.
-     $('#use-location').on('click', function (e) {
+     $('#use-location').on('click', (e) => {
        e.preventDefault();
        centerMapToMarkersNearUser();
      });
 
-     $('#reset-map').on('click', function (e) {
+     $('#reset-map').on('click', (e) => {
        e.preventDefault();
        map.setCenter(inital_center);
        map.setZoom(initial_zoom);
@@ -584,8 +584,7 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
   bounds.extend(latlng);
 
   // Extend the bounds to contain the three closest markers
-  let i = 0;
-  while (i < 3) {
+  for(let i = 0; i < 3; i++) {
     // Get one of the closest markers
     let distance = distances[i];
     let marker = markerDistances[distance];
