@@ -290,6 +290,13 @@ window.onFilterChange = function (elem, scrollNeeded) {
   }
 };
 
+
+// Polyfill required for Edge for the .forEach methods above, since this method doesn't exist in that browser.
+if (window.HTMLCollection && !HTMLCollection.prototype.forEach) {
+  HTMLCollection.prototype.forEach = Array.prototype.forEach;
+}
+
+
 const stateLocationMappings = {
   "AK": { "lat": 63.588753, "lng": -154.493062, zoom: 3.5 },
   "AL": { "lat": 32.318231, "lng": -86.902298, zoom: 6 },
