@@ -319,7 +319,7 @@ function toHtmlSnippets(data_by_location) {
         const lng = entry['lng'];
         const open_box = entry['open_box'];
 
-        addLine(`<article data-entry=${JSON.stringify(name)} data-accepting=${JSON.stringify(accepting)} data-lat=${JSON.stringify(lat)} data-lng=${JSON.stringify(lng)} data-open-box=${JSON.stringify(open_box)}>`);
+        addLine(`<article data-location=${JSON.stringify(name)} data-accepting=${JSON.stringify(accepting)} data-lat=${JSON.stringify(lat)} data-lng=${JSON.stringify(lng)} data-open-box=${JSON.stringify(open_box)}>`);
         padding += 2;
         addLine(`<h4 class="marginBottomZero">${name}</h4>`);
 

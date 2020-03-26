@@ -45,3 +45,6 @@ popd > /dev/null
 # Get latest data.
 curl --fail https://storage.googleapis.com/findthemasks.appspot.com/data.json > ~/findthemasks.com/data.json_
 mv ~/findthemasks.com/data.json_ ~/findthemasks.com/data.json
+
+curl --fail https://storage.googleapis.com/findthemasks.appspot.com/data_fragment.html > ~/findthemasks.com/data_fragment.html_
+mv ~/findthemasks.com/data_fragment.html_ ~/findthemasks.com/data_fragment.html
