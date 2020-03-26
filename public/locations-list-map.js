@@ -94,7 +94,8 @@ function createContent(data, showList, showMap) {
         city.domElem.append(city.containerElem);
       }
 
-      for (const entry of city.entries) {
+      // Array.prototype.sort sorts in-place, so only need to do it once per city
+      for (const entry of city.entries.sort((a, b) => a.name.localeCompare(b.name))) {
         if (showList) {
           entry.domElem = $(ce('div', 'location'));
           entry.domElem.append([
