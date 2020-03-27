@@ -58,7 +58,8 @@ To view translated version of a country you can pass in a locale parameter. `/us
 will show the map of the United States in French and `/fr/give.html?locale=en-US` will show the map of France in English.
 
 To add a new country, create a subdirectory under public `/public/country_code` using the alpha-2 country code: https://www.iban.com/country-codes.
-Copy a `.htaccess` file from an existing country directory into the new one. Finally, update the navigation dropdown to include the new country.
+Copy a `.htaccess` file from an existing country directory into the new one. Update the form redirect rule to the correct country code
+and ensure that the translated file has the country code short link so that it redirects properly.
 
 ## Directory structure
 

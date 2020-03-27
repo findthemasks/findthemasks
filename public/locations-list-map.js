@@ -206,13 +206,22 @@ $(function() {
   const url = new URL(window.location);
   const directories = url.pathname.split("/");
 
+  let country = 'us';
   let countryDataFilename;
 
   // TODO: super brittle
   if (directories.length > 2 && directories[1] !== 'us') {
-    countryDataFilename = `data-${directories[1]}.json`;
+    country = directories[1];
+    countryDataFilename = `data-${country}.json`;
   } else {
     countryDataFilename = 'data.json';
+  }
+
+  const donationSiteForms = document.getElementsByClassName("add-donation-site-form");
+
+
+  for (let i = 0; i < donationSiteForms.length; i++) {
+    donationSiteForms[i].setAttribute('href', `/${country}/donation-form`);
   }
 
   $.getJSON(`https://findthemasks.com/${countryDataFilename}`, function(result){
