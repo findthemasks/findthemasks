@@ -602,7 +602,8 @@ function showMarkers(data, filters, showNearest) {
           const lat = Number(entry.lat);
           const lng = Number(entry.lng);
 
-          if (!isNaN(lat)) {
+          // Guard against non-geocoded entries. Assuming no location exactly on the equator or prime meridian
+          if (lat && lng) {
             marker = entry.marker = addMarkerToMap(null, lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box);
           }
         }
