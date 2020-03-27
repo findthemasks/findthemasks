@@ -168,9 +168,9 @@ const locales = {
     "ftm-anonymous-volunteers": "et d'autres qui sont anonymes",
     "ftm-ack-data-sources": "Ce site contient également des données <a href=\"https://tinyurl.com/hospitals-needing-ppe\">https://tinyurl.com/hospitals-needing-ppe</a> un projet de",
     "ftm-project-volunteers": "Nos bénévoles comprennent:",
-    "ftm-maps-search-placeholder": "Entrez le code postal ou l'adresse, par ex. 94070",
-    "ftm-maps-search-use-location": "Utilise ma location",
-    "ftm-maps-search-reset": "Réinitialiser la carte"
+    "ftm-maps-search-placeholder": "Entrer un code postal",
+    "ftm-maps-search-use-location": "Utiliser ma localisation",
+    "ftm-maps-search-reset": "Recharger la carte"
   }
 };
 
