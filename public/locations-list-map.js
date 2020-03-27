@@ -15,15 +15,7 @@ let markerCluster = null;
 // Configuration defined in query string. Initialized in jQuery DOM ready function.
 let showMapSearch = false; // BETA FEATURE: Default to false.
 
-// The map, roughly zoomed to show the entire US.
-const middle_of_us = { lat: 39.0567939, lng: -94.6065124 };
-const middle_of_us_zoom = 4;
-
-// Centralized, as this the initialization state is now needed in multiple places. In the future, we may not always be
-// centering just on the US (if no browser location is provided via navigator.geolocation).
-let inital_center = middle_of_us,
-  initial_zoom = middle_of_us_zoom,
-  initial_marker_filters = null; // NOTE: Defined in map initialization function.
+let initial_marker_filters = null; // NOTE: Defined in map initialization function.
 
 // Keep track of the previous info windows user has clicked so we can close them.
 let openInfoWindows = [];
@@ -32,7 +24,15 @@ let openInfoWindows = [];
  * END MODULE LEVEL VARS *
  *************************/
 
+function GetCountry() {
+  const url = new URL(window.location);
+  const directories = url.pathname.split("/");
+  if (directories.length > 2) {
+    return directories[1];
+  }
 
+  return 'us';
+}
 
 function createFiltersListHTML() {
   const filters = [];
@@ -230,17 +230,12 @@ function getFilteredContent(data, filters) {
 
 $(function () {
   const url = new URL(window.location);
-  const directories = url.pathname.split("/");
+  const country = GetCountry();
 
-  let country = 'us';
-  let countryDataFilename;
-
-  // TODO: super brittle
-  if (directories.length > 2 && directories[1] !== 'us') {
-    country = directories[1];
+  // TODO(ajwong): This should not be required anymore.
+  let countryDataFilename = 'data.json';
+  if (country !== 'us') {
     countryDataFilename = `data-${country}.json`;
-  } else {
-    countryDataFilename = 'data.json';
   }
 
   const donationSiteForms = document.getElementsByClassName("add-donation-site-form");
@@ -643,14 +638,21 @@ function showMarkers(data, filters, showNearest) {
 }
 window.showMarkers = showMarkers; // Exposed for debug/testing.
 
+const MAP_INITIAL_VIEW = {
+  ca: { zoom: 3.1, center:{ lat: 60.7329856, lng: -91.9886577 }},
+  ch: { zoom: 7.4, center:{ lat: 46.794120, lng: 8.1670524 }},
+  de: { zoom: 5.4, center:{ lat: 51.3513723, lng: 10.2716943 }},
+  gb: { zoom: 5, center:{ lat: 54.874689, lng: -4.578273 }},
+  fr: { zoom: 5.4, center:{ lat: 46.9474836, lng: 2.5265393 }},
+  us: { zoom: 4, center:{ lat: 39.0567939, lng: -94.6065124 }},
+};
 
-
-// TODO (patricknelson): Some of this is duplicated in centerMapToMarkersNearCoords(). Need issue/PR to discuss how to de-duplicate.
 function centerMapToBounds(map, bounds, maxZoom) {
   if (bounds.isEmpty()) {
+    const params = MAP_INITIAL_VIEW[GetCountry()];
     // Default view if no specific bounds
-    map.setCenter(inital_center);
-    map.setZoom(initial_zoom);
+    map.setCenter(params.center);
+    map.setZoom(params.zoom);
   } else {
     map.fitBounds(bounds);
     // Prevent zooming in too far if only one or two locations determine the bounds
