@@ -10,6 +10,7 @@ import toDataByLocation from './toDataByLocation.js';
 let autocomplete;
 let map = null;
 let markers = [];
+let markerCluster = null;
 
 // Configuration defined in query string. Initialized in jQuery DOM ready function.
 let showMapSearch = false; // BETA FEATURE: Default to false.
@@ -177,7 +178,7 @@ function createContent(data, showList, showMap) {
           if (isNaN(lat) || isNaN(lng) || !lat || !lng) {
             console.log('skipped mapping entry w/o geocode: ', entry)
           } else {
-            entry.marker = addMarkerToMap(null, lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box);
+            entry.marker = createMarkerAndInfowindow(lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box);
           }
         }
       }
@@ -391,6 +392,10 @@ function initMap(stateFilter) {
   }
 
   map = new google.maps.Map(element);
+  markerCluster = new MarkerClusterer(map, [],
+    { imagePath: 'images/markercluster/m' });
+  
+  console.log("markerCluster made")
 
   showMarkers(data_by_location, { states: stateFilter }, !stateFilter);
 
@@ -575,6 +580,9 @@ function showMarkers(data, filters, showNearest) {
   if (!map) {
     return;
   }
+  if (markerCluster){
+    markerCluster.clearMarkers()
+  }
 
   filters = filters || {};
 
@@ -609,7 +617,6 @@ function showMarkers(data, filters, showNearest) {
         if (marker) {
           if (inStateFilter && inAcceptFilter) {
             markers.push(marker);
-            // marker.setMap(map);
             hasFilters && bounds.extend(marker.position);
           } else {
             marker.setMap(null);
@@ -618,8 +625,8 @@ function showMarkers(data, filters, showNearest) {
       }
     }
   }
-  var markerCluster = new MarkerClusterer(map, markers,
-    { imagePath: 'images/markercluster/m' });
+  
+  markerCluster.addMarkers(markers)
 
   let $mapStats = $('#map-stats');
   updateStats($mapStats, markers.length);
@@ -709,7 +716,7 @@ function centerMapToNearestMarkers(map, markers, fallbackBounds) {
 
 
 
-function addMarkerToMap(map, latitude, longitude, address, name, instructions, accepting, open_accepted) {
+function createMarkerAndInfowindow(latitude, longitude, address, name, instructions, accepting, open_accepted) {
   // Text to go into InfoWindow
   var contentString =
     '<h5>' + name + '</h5>' +
@@ -721,8 +728,7 @@ function addMarkerToMap(map, latitude, longitude, address, name, instructions, a
   var location = { lat: latitude, lng: longitude };
   var marker = new google.maps.Marker({
     position: location,
-    title: name,
-    // map: map
+    title: name
   });
   // InfoWindow will pop up when user clicks on marker
   marker.infowindow = new google.maps.InfoWindow({
@@ -731,7 +737,7 @@ function addMarkerToMap(map, latitude, longitude, address, name, instructions, a
   marker.addListener('click', () => {
     openInfoWindows.forEach(infowindow => infowindow.close());
     openInfoWindows = [];
-    marker.infowindow.open(map, marker);
+    marker.infowindow.open(null, marker);
     openInfoWindows.push(marker.infowindow);
   });
 
