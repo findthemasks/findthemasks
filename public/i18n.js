@@ -103,7 +103,7 @@ const locales = {
     "ftm-what-to-do-2": "If there's a site near you, drop off following their instructions.",
     "ftm-what-to-do-3": "If you are donating open packages, please put them in a ziploc bag with a note saying whether they have been used, whether anyone in your household has been sick or travelled outside the country, and the expiration date if known.",
     "ftm-what-to-do-4": "If there's not a site near you, visit <a href=\"https://getusppe.org/give\">getusppe.org</a> to let them know what you have available.",
-    "ftm-add-donation-site": "To add a donation site, update information, or request we take down information, please <a href=\"https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform\">fill in this form</a>.",
+    "ftm-add-donation-site": "To add a donation site, update information, or request we take down information, please <a href=\"https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform\">fill in this form</a>. Your submission will be approved and updated as soon as possible.",
     "ftm-donations-site-loading": "Loading donation sites...",
     "ftm-filters-header": "Filters",
     "ftm-project-leads": "Our leads are:",
