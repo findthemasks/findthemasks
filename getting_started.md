@@ -8,11 +8,10 @@ The goal of this document is get the site and backend working locally on your de
 
 ### Public Site
 
+From the root directory of this repo:
+
 ```
-$ cd functions/
-$ npm install
 $ npm install -g http-server
-$ cd ..
 $ http-server
 ```
 
@@ -21,6 +20,13 @@ Then you can open http://localhost:8080/ (or http://local.findthemasks.com:8080)
 ### `data.json`
 
 We are still working on a simple way for devs to swap in their own test spreadsheet for testing purposes ([Issue #185](https://github.com/r-pop/findthemasks/issues/185))
+
+First, run the npm install to populate the local `node_modules/` cache
+
+```
+$ cd functions/
+$ npm install
+```
 
 For now you can hack things into place.  After starting a NodeJS REPL, you can seed the current data and then use it in the REPL:
 
