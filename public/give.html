@@ -34,7 +34,7 @@
 
       let scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry&key=${apiKey}`;
 
-      const currentLocale = searchParams.get('locale');
+      const currentLocale = searchParams.get('locale') || 'en-US';
       const [language, region] = currentLocale.split('-');
 
       if (language)
