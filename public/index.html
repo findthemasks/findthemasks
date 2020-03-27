@@ -228,72 +228,110 @@
 
 
       /*********************
-       * MAP SEARCH STYLES *
-       *********************/
+         * MAP SEARCH STYLES *
+         *********************/
 
-      /* What actually varies with breakpoints */
-      .map-search-wrap {
-        width: 100%;
-        position: relative;
-        margin: 20px 0;
-      }
-
-      .map-search-wrap:first-child {
-        margin-top: 0;
-      }
-
-      .search-icon {
-        top: 0; /* ... see height below... */
-        left: 8px;
-        width: 21px;
-        height: 2.3rem; /* synchronized w/ input field for vertical centering, being an SVG it should not warp */
-        position: absolute;
-        pointer-events: none; /* user clicks should fall through to input field instead */
-        opacity: 0.8;
-      }
-
-      #map-search {
-        border: 1px solid #ccc;
-        height: 2.3rem;
-      }
-
-      #map-search {
-        outline-color: #000;
-      }
-
-      #map-search {
-        line-height: 2.3rem;
-        width: 100%;
-        margin-bottom: 5px;
-
-        /* Set to match the filter labels for consistency. */
-        padding: 0.4rem;
-        padding-left: 40px; /* compensate for search button */
-        border-radius: 3px;
-      }
-
-      .map-action-link {
-        display: inline-block;
-        margin-right: 30px;
-      }
-
-      .map-action-link img {
-        padding-right: 5px;
-        width: 21px;
-        height: 21px;
-      }
-
-      /* Mobile first: Desktop breakpoint overrides below */
-
-      @media (min-width: 768px) {
+        /* What actually varies with breakpoints */
         .map-search-wrap {
-          width: 50%;
+          width: 100%;
+          position: relative;
+          margin-top: 20px;
+          display: flex;
         }
-      }
 
-      /*************************
-       * END MAP SEARCH STYLES *
-       *************************/
+        .map-search-wrap:first-child {
+          margin-top: 0;
+        }
+
+        .search-icon {
+          top: 1; /* ... see height below... */
+          left: 10px;
+          width: 17px;
+          height: 2.3rem; /* synchronized w/ input field for vertical centering, being an SVG it should not warp */
+          position: absolute;
+          pointer-events: none; /* user clicks should fall through to input field instead */
+          opacity: 0.7;
+
+        }
+
+        #map-search {
+          border: 1px solid #ccc;
+          height: 2.3rem;
+        }
+
+        #map-search {
+          outline-color: #000;
+        }
+
+        #map-search {
+          line-height: 2.3rem;
+          width: 100%;
+          margin-bottom: 5px;
+          /* Set to match the filter labels for consistency. */
+          padding: 0.4rem 0.8rem;
+          padding-left: 35px; /* compensate for search button */
+          border-radius: 3px;
+          outline: none;
+        }
+
+        .search-input {
+          width: 100%;
+          position: relative;
+          display: flex;
+          width:100%;
+          margin: 0px 15px 0px 20px;
+        }
+
+        .search-controls {
+          display: flex;
+          padding-top: 7px;
+        }
+
+        .search-control-separator {
+          padding: 0px 8px;
+          color: #ccc;
+          font-size: 14px;
+        }
+
+        .map-action-link {
+          white-space: nowrap;
+          font-size: 14px;
+        }
+
+        .map-action-link:hover {
+          text-decoration: none;
+        }
+
+        .map-action-link img {
+          padding-right: 5px;
+          width: 21px;
+          height: 21px;
+        }
+
+        /* Mobile first: Desktop breakpoint overrides below */
+
+        @media (max-width: 1200px) {
+          .search-input {
+            margin: 0px;
+            margin-right: 15px;
+          }
+          .map-search-wrap {
+            padding-top: 4px;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .map-search-wrap {
+            display: block;
+          }
+          .search-controls {
+            padding-top: 5px;
+          }
+        }
+
+        /*************************
+         * END MAP SEARCH STYLES *
+         *************************/
 
     </style>
 </head>
@@ -335,29 +373,37 @@
           <img src="images/icons/loader.svg" alt="" class="load-spinner"> <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
         </div>
 
-        <div class="locations-container" style="display: none;">
-          <h3 style="padding-top: 30px; padding-bottom: 10px;"><span class="i18n" data-i18n="ftm-donation-sites">Donation sites</span> <span id="list-stats"></span></h3>
-
-          <div class="filters-container" style="display: none;">
-            <form name="filters" class="filters-list"></form>
+      <div class="locations-container" style="display: none;">
+        <div class="row" style="margin: 30px 0px 20px 0px;">
+          <div class="col-xl-3" style="padding: 0px">
+            <h3><span class="i18n" data-i18n="ftm-donation-sites">Donation sites</span> <span id="list-stats"></span></h3>
           </div>
-
-          <div class="map-container" style="display: none;">
-
-            <!-- BETA: To enable search field, either change data-enable-search to "true" in #map below, or add hide-search=false/show-search=true to query string. -->
+          <div class="col-xl-9" style="padding: 0px">
             <div class="map-search-wrap">
-              <input type="search" name="map-search" id="map-search" placeholder="Enter ZIP code or address, e.g. 94070" data-i18n="[placeholder]ftm-maps-search-placeholder">
-              <!-- Icon credit to https://feathericons.com/  -->
-              <img class="search-icon" src="images/icons/search.svg">
-              <a href="javascript:;" class="map-action-link" id="use-location"><img src="images/icons/map-pin.svg"><span data-i18n="ftm-maps-search-use-location"></span>Use my location</a>
-              <a href="javascript:;" class="map-action-link" id="reset-map"><img src="images/icons/refresh.svg"><span data-i18n="ftm-maps-search-reset"></span>Reset map</a>
+              <div class="search-input">
+                <input style="" type="search" name="map-search" id="map-search" placeholder="Search by city, zip, or address" data-i18n="[placeholder]ftm-maps-search-placeholder">
+                <!-- Icon credit to https://feathericons.com/  -->
+                <img class="search-icon" src="images/icons/search.svg">
+              </div>
+              <!-- BETA: To enable search field, either change data-enable-search to "true" in #map below, or add hide-search=false/show-search=true to query string. -->
+              <div class="search-controls">
+                <a href="javascript:;" class="map-action-link" id="use-location"><span data-i18n="ftm-maps-search-use-location"></span>
+                  Use my location<span class="search-control-separator">|</span></a>
+
+                <a href="javascript:;" class="map-action-link" id="reset-map"><span data-i18n="ftm-maps-search-reset"></span>Reset map</a></div>
             </div>
-
-            <div id="map" data-enable-search="false"></div>
           </div>
-
-          <div id="locations-list" class="locations-list"></div>
         </div>
+
+        <div id="map" data-enable-search="true"></div>
+
+        <div class="filters-container" style="display: none; padding-top: 30px;">
+          <h4><span class="i18n" data-i18n="ftm-filters">Filters</span></h4>
+          <form name="filters" class="filters-list"></form>
+        </div>
+
+        <div id="locations-list" class="locations-list"></div>
+      </div>
 
         <p style="padding-top: 30px;" class="i18n" data-i18n="[html]ftm-add-donation-site">To add a donation site, update information, or request we take down information, please
           <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>.

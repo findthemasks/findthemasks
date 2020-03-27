@@ -343,13 +343,12 @@ window.onFilterChange = function (elem, scrollNeeded) {
 
   const filters = { states, acceptItems };
   const locationsList = $(".locations-list");
-  const mapContainer = $(".map-container");
 
   locationsList.empty().append(getFilteredContent(data_by_location, filters));
   showMarkers(data_by_location, filters, false);
 
   if (scrollNeeded) {
-    mapContainer[0].scrollIntoView({ 'behavior': 'smooth' });
+    locationsList[0].scrollIntoView({ 'behavior': 'smooth' });
   }
 };
 
