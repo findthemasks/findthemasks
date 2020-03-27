@@ -22,7 +22,7 @@ const middle_of_us_zoom = 4;
 // centering just on the US (if no browser location is provided via navigator.geolocation).
 let inital_center = middle_of_us,
   initial_zoom = middle_of_us_zoom,
-  initial_marker_filters = null; // TODO (patnelson): Defined in map initialization function; this SHOULD happen jQuery DOM ready function instead.
+  initial_marker_filters = null; // NOTE: Defined in map initialization function.
 
 // Keep track of the previous info windows user has clicked so we can close them.
 let openInfoWindows = [];
@@ -368,10 +368,11 @@ if (window.HTMLCollection && !HTMLCollection.prototype.forEach) {
   HTMLCollection.prototype.forEach = Array.prototype.forEach;
 }
 
-// TODO (patricknelson): The initMap() function should ONLY be responsible for initializing the map. Additional modifications
-//  to map must instead be performed AFTER initialization, either via module-level state that is maintained (e.g. markers,
-//  filters, etc) or via a callback function that can be executed to proceed with further updates once initialization has
-//  been completed. This means that the "stateFilter" should be removed from here and potentially changed to a callback instead.
+/**
+ * Sets up map on initial page load.
+ *
+ * TODO (patricknelson): Should the initMap() function only be responsible for initializing the map and then have the caller handle position/zoom/bounds etc?
+ */
 function initMap(stateFilter) {
   var data_by_location = window.data_by_location;
 
@@ -392,10 +393,8 @@ function initMap(stateFilter) {
 
   showMarkers(data_by_location, { states: stateFilter }, !stateFilter);
 
-  // TODO (patricknelson): This showMarkers call above has to be duplicated due to crossing of concerns of this function
-  //   (init map vs. initial map state). See resetMap() function. Also, ideally the initialization of filters would happen
-  //  OUTSIDE of this method. Also, to reduce merge conflicts, the initialization of the "initial_marker_filters" is
-  //  defined here for now, but ideally it would instead be defined in jQuery DOM ready function instead.
+  // Necessary for resetMap() so that showMarkers() can be called again to reset initial state when user clicks link.
+  // TODO (patricknelson):  Is there a simpler way of accomplishing this?
   initial_marker_filters = { states: stateFilter };
 
   // Initialize autosuggest/search field above the map.
@@ -450,13 +449,12 @@ function initMapSearch() {
  * a link to link to go back to that appearance).
  */
 function resetMap() {
-  // TODO THIS SHOULD HAVE TWO FUNCTION CALLS INSTEAD OF ONE:
+  // TODO (patricknelson): Ideally this would have two function calls instead of one:
   //  1.) Show initial markers based on initial filters (e.g. which state[s]?)
   //  2.) Reposition map (e.g. initial state?)
-  //  However, repositioning is ALSO happening deep inside showMarkers() function which has made itself responsible for
-  //  too many tasks.
+  //  However, repositioning is ALSO happening deep inside showMarkers() function which means we have to also pass some filters here.
   let showNearest = false;
-  if (!initial_marker_filters.states) showNearest = !initial_marker_filters.states; // ... just in case "states" property goes missing...
+  if (typeof initial_marker_filters.states !== 'undefined') showNearest = !initial_marker_filters.states; // Quick safety check just in case "states" property goes missing later on.
   showMarkers(window.data_by_location, initial_marker_filters, showNearest);
 }
 
@@ -617,8 +615,6 @@ function showMarkers(data, filters, showNearest) {
   let $mapStats = $('#map-stats');
   updateStats($mapStats, markers.length);
 
-  // TODO: See notes above; this function should NOT be responsible for positioning the map.
-
   if (showNearest) {
     centerMapToNearestMarkers(map, markers, bounds);
   } else {
@@ -629,8 +625,7 @@ window.showMarkers = showMarkers; // Exposed for debug/testing.
 
 
 
-// TODO (patricknelson): I propose completely scrapping this function in favor of centerMapToMarkersNearCoords() for simplicity.
-
+// TODO (patricknelson): Some of this is duplicated in centerMapToMarkersNearCoords(). Need issue/PR to discuss how to de-duplicate.
 function centerMapToBounds(map, bounds, maxZoom) {
   if (bounds.isEmpty()) {
     // Default view if no specific bounds
@@ -645,13 +640,9 @@ function centerMapToBounds(map, bounds, maxZoom) {
   }
 }
 
-// TODO (patricknelson: The code inside the .getCurrentPosition() is now DUPLICATED in centerMapToMarkersNearUser() AND centerMapToMarkersNearCoords()
-//  This is to prevent conflicts. I propose we completely scrap this function because
-//  1.) It is not properly named, since it's purpose is to center map on the USER coordinates (an API that isn't always available due to permissions)
-//  2.) It does too much; it centers map on user AND it automatically calculates bounds on nearby markers. However, that
-//      can be abstracted to normalized plain lat/lng coordinates instead.
-//  Therefore, I propose we completely replace this with a simple function call to centerMapToMarkersNearUser().
 
+// TODO (patricknelson: The code inside the .getCurrentPosition() is now duplicated in centerMapToMarkersNearUser() AND centerMapToMarkersNearCoords()
+//  Adding this way to prevent conflicts for quicker merge. Possibly migrate to centerMapToMarkersNearUser()?
 function centerMapToNearestMarkers(map, markers, fallbackBounds) {
   // First check to see if the user will accept getting their location, if not, silently return
   if (navigator.geolocation) {
