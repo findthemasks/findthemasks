@@ -383,7 +383,7 @@ function initMap(stateFilter) {
   markerCluster = new MarkerClusterer(map, [],
     {
       imagePath: 'images/markercluster/m',
-      minimumClusterSize: 3
+      minimumClusterSize: 5
     });
 
   showMarkers(data_by_location, { states: stateFilter }, !stateFilter);
