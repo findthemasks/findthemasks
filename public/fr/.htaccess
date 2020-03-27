@@ -1,8 +1,8 @@
 <ifModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule (.*) index.html [QSA,L]
+    RewriteEngine on
+    RewriteCond %{REQUEST_FILENAME} -s [OR]
+    RewriteCond %{REQUEST_FILENAME} -l [OR]
+    RewriteRule ^(.*) /$1 [L]
 </ifModule>
 <IfModule mod_expires.c>
   # Turn on the module.
@@ -22,4 +22,3 @@
   ExpiresByType image/x-icon "access plus 300 seconds"
   ExpiresByType text/html "access plus 300 seconds"
 </IfModule>
-
