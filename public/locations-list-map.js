@@ -568,12 +568,10 @@ function showMarkers(data, filters, showNearest) {
 
   markers = [];
 
-  if (!map) {
+  if (!map || !markerCluster) {
     return;
   }
-  if (markerCluster){
-    markerCluster.clearMarkers()
-  }
+  markerCluster.clearMarkers()
 
   filters = filters || {};
 
