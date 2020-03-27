@@ -8,7 +8,7 @@ import toDataByLocation from './toDataByLocation.js';
 // TODO (patricknelson): All functions interacting with the map should not require the map as a parameter since this
 //  will not change in the near future and is a module level variable already. Causes too much repeated code.
 
-// TODO (patricknelson: Proposal to change functions resonsible for recentering the map, using either generic lat/lng
+// TODO (patricknelson: Proposal to change functions responsible for recentering the map, using either generic lat/lng
 //  coordinates as only dependency instead of taking map, bounds, etc as inputs. See full details below.
 
 
@@ -413,7 +413,6 @@ function initMapSearch() {
     $('.map-search-wrap').hide();
     return;
   }
-  console.log('init map search');
 
   // Initialize the map search autocompleter.
   autocomplete = new google.maps.places.Autocomplete(
@@ -443,7 +442,8 @@ function initMapSearch() {
 
 
 /**
- * Strictly responsible for resetting the map to it's initial state on page load.
+ * Strictly responsible for resetting the map to it's initial state on page load WITHOUT user's location (since we have
+ * a link to link to go back to that appearance).
  */
 function resetMap() {
   // TODO THIS SHOULD HAVE TWO FUNCTION CALLS INSTEAD OF ONE:
