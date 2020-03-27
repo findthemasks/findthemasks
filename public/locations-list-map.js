@@ -698,6 +698,9 @@ function centerMapToNearestMarkers(map, markers, fallbackBounds) {
       },
       function () {
         centerMapToBounds(map, fallbackBounds);
+
+        // Hide the "User my location" link since we know that will not work.
+        $('#use-location').hide();
       }
     );
   } else {
