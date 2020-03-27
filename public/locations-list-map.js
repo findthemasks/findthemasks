@@ -24,6 +24,7 @@ let openInfoWindows = [];
  * END MODULE LEVEL VARS *
  *************************/
 
+// TODO(ajwong): This is copied into donation-form-bounce.html. Careful.
 function GetCountry() {
   const url = new URL(window.location);
   const directories = url.pathname.split("/");
