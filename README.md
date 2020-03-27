@@ -75,6 +75,82 @@ and ensure that the translated file has the country code short link so that it r
 - `/public` - The client-side code for the website. Currently has some symlinks to legacy file locations.
 - `/functions` - The cloud function used to generate data.json. Not needed for frontend work.
 
+## Firebase
+
+### Basic architecture
+Firebase is used to pull data from our moderated datastore and then generate a data.json. There is
+a production environment [findthemasks](https://console.firebase.google.com/project/findthemasks/overview)
+and a dev environment [findthemasks-dev](https://console.firebase.google.com/project/findthemasks-dev/overview).
+
+The setup uses cloud functions to provide http endpoints, cloud-storage to keep the generated results,
+and the firebase realtime database (NOT firestore) to cache oauth tokens.
+
+Adding an oauth token requires hitting the `/authgoogleapi?sheetid=longstring` on the
+cloud-function endpoint and granting an OAuth token for a user that has access to the sheet.
+
+### How to deploy
+- Install the [firebase cli](https://firebase.google.com/docs/cli?hl=vi) for your platform.
+- Do once
+  - `firebase login`
+  - `firebase use --add findthemasks-dev`
+  - `firebase use --add findthemasks`
+  - `cd functions; npm install`  # Note you need node v8 or higher. Look a [nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- Switch deployment envrionments `firebase use [findthemasks or findthemasks-dev]`
+- Deploy the cloud function. `cd functions; npm run deploy`
+
+### How to set config variables.
+Secrets and configs not checked into github are specified via cloud function configs.
+
+To set a config:
+```
+firebase functions:config:set findthemasks.geocode_key="some_client_id"
+```
+
+In code, this can be retrieved via:
+```
+functions.config().findthemasks.geocode_key
+```
+
+In get all configs:
+```
+firebase functions:config:get
+```
+
+The namespace can be anything. Add new configs to the `findthemasks` namespace.
+
+### How to locally develop
+Firebase comes with a local emulation environment that lets you live develop
+against localhost. Since we are using firebase configs, first we have to snag
+the configs from the environment. Do that with:
+
+```
+firebase functions:config:get > .runtimeconfig.json
+```
+
+Next generate a new Firebase Admin SDK private key here:
+  https://console.firebase.google.com/project/findthemasks-dev/settings/serviceaccounts/adminsdk
+
+And save it to `service_key.json`
+
+Then start up the emulator. Note this will talk to the production firebase
+database (likely okay as the firebase database is just storing oauth tokens).
+
+```
+export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_key.json
+firebase emulators:start --only functions
+```
+
+This will create localhost versions of everything. Cloud functions should be on
+[http://localhost:5001](http://localhost:5001) and `console.log()` messages will
+stream to the terminal.
+
+There is also a "shell"
+
+```firebase functions:shell```
+
+that can be used, but running the emulator and hitting with a web browser
+is often easier in our simple case.
+
 ## Thanks
 
 - The "Face With Medical Mask" favicon is used with thanks to
