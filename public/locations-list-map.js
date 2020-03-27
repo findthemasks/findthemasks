@@ -286,7 +286,7 @@ $(function () {
     });
 
     if (showMap) {
-      initMap(stateFilter);
+      loadMapScript(searchParams, stateFilter);
     }
 
     $('.locations-loading').hide();
@@ -356,6 +356,32 @@ window.onFilterChange = function (elem, scrollNeeded) {
 // Polyfill required for Edge for the .forEach methods above, since this method doesn't exist in that browser.
 if (window.HTMLCollection && !HTMLCollection.prototype.forEach) {
   HTMLCollection.prototype.forEach = Array.prototype.forEach;
+}
+
+// Lazy-loads the Google maps script once we know we need it. Sets up
+// a global initMap callback on the window object so the gmap script
+// can find it.
+function loadMapScript(searchParams, stateFilter) {
+  // Property created on window must match name passed in &callback= param
+  window.initMap = () => initMap(stateFilter);
+
+  // load map based on current lang
+  const scriptTag = ce('script');
+
+  // API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info.
+  const apiKey = 'AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s';
+  let scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry,places&callback=initMap&key=${ apiKey }`;
+
+  const currentLocale = searchParams.get('locale') || 'en-US';
+  const [language, region] = currentLocale.split('-');
+
+  if (language) {
+    scriptSrc += `&language=${ language }&region=${ region }`;
+  }
+
+  scriptTag.setAttribute('src', scriptSrc);
+  scriptTag.setAttribute('defer', '');
+  document.head.appendChild(scriptTag);
 }
 
 /**
@@ -655,14 +681,16 @@ function centerMapToBounds(map, bounds, maxZoom) {
     map.setCenter(params.center);
     map.setZoom(params.zoom);
   } else {
+    google.maps.event.addListenerOnce(map, 'zoom_changed', () => {
+      // Prevent zooming in too far if only one or two locations determine the bounds
+      if (maxZoom && map.getZoom() > maxZoom) {
+        // Apparently calling setZoom inside a zoom_changed handler freaks out maps?
+        setTimeout(() => map.setZoom(maxZoom), 0);
+      }
+    });
     map.fitBounds(bounds);
-    // Prevent zooming in too far if only one or two locations determine the bounds
-    if (maxZoom && map.getZoom() > maxZoom) {
-      map.setZoom(maxZoom);
-    }
   }
 }
-
 
 // TODO (patricknelson: The code inside the .getCurrentPosition() is now duplicated in centerMapToMarkersNearUser() AND centerMapToMarkersNearCoords()
 //  Adding this way to prevent conflicts for quicker merge. Possibly migrate to centerMapToMarkersNearUser()?
