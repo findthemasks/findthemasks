@@ -21,28 +21,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify-element.min.js"></script>
     <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
     <script src="i18n.js"></script>
-
-    <script type="text/javascript">
-      //load map based on current lang
-      const scriptTag = document.createElement('script');
-
-      <!-- API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info. -->
-      const apiKey = 'AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s';
-      const url = new URL(window.location);
-      const searchParams = new URLSearchParams(url.search);
-
-      let scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry,places&key=${apiKey}`;
-
-      const currentLocale = searchParams.get('locale') || 'en-US';
-      const [language, region] = currentLocale.split('-');
-
-      if (language)
-        scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry,places&key=${apiKey}&language=${language}&region=${region}`;
-
-      scriptTag.setAttribute('src', scriptSrc);
-      scriptTag.setAttribute('defer', '');
-      document.head.appendChild(scriptTag);
-    </script>
     <script type="module" src="locations-list-map.js"></script>
     <title>#Findthemasks</title>
     <meta charset="UTF-8" />
@@ -56,7 +34,7 @@
     <link rel="manifest" href="site.webmanifest">
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    
+
     <link rel="canonical" href="https://findthemasks.com/" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <!-- START Open Graph Tags -->

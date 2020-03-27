@@ -285,7 +285,26 @@ $(function () {
     });
 
     if (showMap) {
-      initMap(stateFilter);
+      // set up a callback function to complete map initialization
+      window.initMap = () => initMap(stateFilter);
+
+      // load map based on current lang
+      const scriptTag = ce('script');
+
+      // API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info.
+      const apiKey = 'AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s';
+      let scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry,places&callback=initMap&key=${ apiKey }`;
+
+      const currentLocale = searchParams.get('locale') || 'en-US';
+      const [language, region] = currentLocale.split('-');
+
+      if (language) {
+        scriptSrc += `&language=${ language }&region=${ region }`;
+      }
+
+      scriptTag.setAttribute('src', scriptSrc);
+      scriptTag.setAttribute('defer', '');
+      document.head.appendChild(scriptTag);
     }
 
     $('.locations-loading').hide();
@@ -654,14 +673,16 @@ function centerMapToBounds(map, bounds, maxZoom) {
     map.setCenter(params.center);
     map.setZoom(params.zoom);
   } else {
+    google.maps.event.addListenerOnce(map, 'zoom_changed', () => {
+      // Prevent zooming in too far if only one or two locations determine the bounds
+      if (maxZoom && map.getZoom() > maxZoom) {
+        // Apparently calling setZoom inside a zoom_changed handler freaks out maps?
+        setTimeout(() => map.setZoom(maxZoom), 0);
+      }
+    });
     map.fitBounds(bounds);
-    // Prevent zooming in too far if only one or two locations determine the bounds
-    if (maxZoom && map.getZoom() > maxZoom) {
-      map.setZoom(maxZoom);
-    }
   }
 }
-
 
 // TODO (patricknelson: The code inside the .getCurrentPosition() is now duplicated in centerMapToMarkersNearUser() AND centerMapToMarkersNearCoords()
 //  Adding this way to prevent conflicts for quicker merge. Possibly migrate to centerMapToMarkersNearUser()?
