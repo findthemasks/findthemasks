@@ -174,7 +174,9 @@ function createContent(data, showList, showMap) {
           const lat = Number(entry.lat);
           const lng = Number(entry.lng);
 
-          if (!isNaN(lat)) {
+          if (isNaN(lat) || isNaN(lng) || !lat || !lng) {
+            console.log('skipped mapping entry w/o geocode: ', entry)
+          } else {
             entry.marker = addMarkerToMap(null, lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box);
           }
         }
