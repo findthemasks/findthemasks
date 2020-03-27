@@ -2,17 +2,6 @@ import toDataByLocation from './toDataByLocation.js';
 
 
 
-// TODO (patricknelson): The indentation in this file is not consistent and should be updated soon. Currently the project
-//  standard is 2-space indentation; please see .editorconfig and, if possible, configure your IDE to utilize this file.
-
-// TODO (patricknelson): All functions interacting with the map should not require the map as a parameter since this
-//  will not change in the near future and is a module level variable already. Causes too much repeated code.
-
-// TODO (patricknelson: Proposal to change functions responsible for recentering the map, using either generic lat/lng
-//  coordinates as only dependency instead of taking map, bounds, etc as inputs. See full details below.
-
-
-
 /******************************************
  * MODULE VARS AVAILABLE TO ALL FUNCTIONS *
  ******************************************/
@@ -273,8 +262,6 @@ $(function() {
     window.locations = result;
     window.data_by_location = toDataByLocation(locations);
 
-    // TODO (patnelson): IMHO, every single one of these show/hide settings configured by query string should be elevated
-    //  to the module-level scope for reference.
     const searchParams = new URLSearchParams(url.search);
     const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
     const states = stateParams.map(param => param.split(',')).reduce((acc, val) => acc.concat(val), []);
@@ -507,11 +494,11 @@ function loadSearchInMap() {
 function centerMapToMarkersNearUser() {
   // First check to see if the user will accept getting their location, if not, silently return
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function (position) {
+    navigator.geolocation.getCurrentPosition((position) => {
       // Use navigator provided lat/long coords to center map now.
       centerMapToMarkersNearCoords(position.coords.latitude, position.coords.longitude);
 
-    }, function (err) {
+    }, (err) => {
       // Hide the "User my location" link since we know that will not work.
       $('#use-location').hide();
 
@@ -558,9 +545,6 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
     let distance = distances[i];
     let marker = markerDistances[distance];
 
-    // Add to the iterator first just in case something fails later to avoid infinite loop
-    i++;
-
     const marker_lat = marker.position.lat();
     const marker_lng = marker.position.lng();
 
@@ -579,10 +563,6 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
 
 /**
  * Changes the markers currently rendered on the map based strictly on . This will reset the 'markers' module variable as well.
- *
- * TODO (patricknelson): The param "data" is redundant and should be removed! Currently it only refers to the global "data_by_location".
- *
- * TODO (patricknelson): The param "showNearest" is used only once and is not relevant to the purpose of this method (showing specific markers only depending on filters).
  */
 function showMarkers(data, filters, showNearest) {
   markers = [];
@@ -676,7 +656,7 @@ function centerMapToNearestMarkers(map, markers, fallbackBounds) {
   // First check to see if the user will accept getting their location, if not, silently return
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
-      function (position) {
+      (position) => {
         var user_latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
         //Compute the distances of all markers from the user
@@ -715,7 +695,7 @@ function centerMapToNearestMarkers(map, markers, fallbackBounds) {
         }
         centerMapToBounds(map, bounds);
       },
-      function () {
+      () => {
         centerMapToBounds(map, fallbackBounds);
 
         // Hide the "User my location" link since we know that will not work.
@@ -748,7 +728,7 @@ function addMarkerToMap(map, latitude, longitude, address, name, instructions, a
     marker.infowindow = new google.maps.InfoWindow({
       content: contentString
     });
-    marker.addListener('click', function() {
+    marker.addListener('click', () => {
       openInfoWindows.forEach(infowindow => infowindow.close());
       openInfoWindows = [];
       marker.infowindow.open(map, marker);
