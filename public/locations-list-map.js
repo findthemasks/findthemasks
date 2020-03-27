@@ -417,18 +417,49 @@ function initMapSearch() {
     return;
   }
 
+  // Search element (jquery + html element for autocompleter)
+  const $search = $('#map-search'),
+        searchEl = $search[0];
+
   // Initialize the map search autocompleter.
   autocomplete = new google.maps.places.Autocomplete(
-    document.getElementById('map-search'), {types: ['geocode']}
+    searchEl, {types: ['geocode']}
   );
 
-  // Avoid paying for data that you don't need by restricting the set of
-  // place fields that are returned to just the address components.
+  // Avoid paying for data that you don't need by restricting the set of place fields that are returned to just the
+  // address components.
   autocomplete.setFields(['geometry']);
 
-  // When the user selects an address from the drop-down, populate the
-  // address fields in the form.
-  autocomplete.addListener('place_changed', loadSearchInMap);
+  // When the user selects an address from the drop-down, populate the address fields in the form.
+  autocomplete.addListener('place_changed', () => {
+    let place = autocomplete.getPlace();
+    if (place.geometry) {
+      // Get the location object that we can map.setCenter() on.
+      let location = place.geometry.location;
+      if (location) {
+        centerMapToMarkersNearCoords(location.lat(), location.lng())
+
+      } else {
+        console.warn('Location data not found in place geometry (place.geometry.location).')
+      }
+    } else {
+      console.warn('No geometry found, attempting geocode...');
+
+      // Attempt a geocode of the direct user input instead.
+      const geocoder = new google.maps.Geocoder();
+      const searchText = $search.val();
+      geocoder.geocode({ address: searchText }, (results, status) => {
+        // Ensure we got a valid response with an array of at least one result.
+        if (status === 'OK' && Array.isArray(results) && results.length > 0) {
+          let location = results[0].geometry.location;
+          centerMapToMarkersNearCoords(location.lat(), location.lng())
+
+        } else {
+          console.warn('Geocode failed: ' + status);
+        }
+      });
+    }
+  });
 
   // Setup event listeners for map action links.
   $('#use-location').on('click', (e) => {
@@ -456,32 +487,6 @@ function resetMap() {
   let showNearest = false;
   if (typeof initial_marker_filters.states !== 'undefined') showNearest = !initial_marker_filters.states; // Quick safety check just in case "states" property goes missing later on.
   showMarkers(window.data_by_location, initial_marker_filters, showNearest);
-}
-
-
-
-/**
- * Takes the form input and attempts to pull geocoded information from it. Once done, centers map on closest markers nearby.
- */
-function loadSearchInMap() {
-  if (!autocomplete) {
-    console.error('autocomplete is not yet defined.');
-    return;
-  }
-
-  let place = autocomplete.getPlace();
-  if (place.geometry) {
-    // Get the location object that we can map.setCenter() on.
-    let location = place.geometry.location;
-    if (location) {
-      centerMapToMarkersNearCoords(location.lat(), location.lng())
-
-    } else {
-      console.warn('Location data not found in place geometry (place.geometry.location).')
-    }
-  } else {
-    console.warn('No geometry found, skipping place');
-  }
 }
 
 
