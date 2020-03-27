@@ -285,26 +285,7 @@ $(function () {
     });
 
     if (showMap) {
-      // set up a callback function to complete map initialization
-      window.initMap = () => initMap(stateFilter);
-
-      // load map based on current lang
-      const scriptTag = ce('script');
-
-      // API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info.
-      const apiKey = 'AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s';
-      let scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry,places&callback=initMap&key=${ apiKey }`;
-
-      const currentLocale = searchParams.get('locale') || 'en-US';
-      const [language, region] = currentLocale.split('-');
-
-      if (language) {
-        scriptSrc += `&language=${ language }&region=${ region }`;
-      }
-
-      scriptTag.setAttribute('src', scriptSrc);
-      scriptTag.setAttribute('defer', '');
-      document.head.appendChild(scriptTag);
+      loadMapScript(searchParams, stateFilter);
     }
 
     $('.locations-loading').hide();
@@ -375,6 +356,32 @@ window.onFilterChange = function (elem, scrollNeeded) {
 // Polyfill required for Edge for the .forEach methods above, since this method doesn't exist in that browser.
 if (window.HTMLCollection && !HTMLCollection.prototype.forEach) {
   HTMLCollection.prototype.forEach = Array.prototype.forEach;
+}
+
+// Lazy-loads the Google maps script once we know we need it. Sets up
+// a global initMap callback on the window object so the gmap script
+// can find it.
+function loadMapScript(searchParams, stateFilter) {
+  // Property created on window must match name passed in &callback= param
+  window.initMap = () => initMap(stateFilter);
+
+  // load map based on current lang
+  const scriptTag = ce('script');
+
+  // API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info.
+  const apiKey = 'AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s';
+  let scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry,places&callback=initMap&key=${ apiKey }`;
+
+  const currentLocale = searchParams.get('locale') || 'en-US';
+  const [language, region] = currentLocale.split('-');
+
+  if (language) {
+    scriptSrc += `&language=${ language }&region=${ region }`;
+  }
+
+  scriptTag.setAttribute('src', scriptSrc);
+  scriptTag.setAttribute('defer', '');
+  document.head.appendChild(scriptTag);
 }
 
 /**
