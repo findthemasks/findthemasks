@@ -40,13 +40,22 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 ?hide-map={true/false}
 ?hide-filters={true/false}
 ?hide-list={true/false} (also hides filters)
+?hide-search={true/false} (beta)
 ```
 
-All boolean parameters default to false.
+All boolean parameters default to false (unless they're in beta).
 
 So, for state-specific pages you can now use something like:
 <https://findthemasks.com/give.html?state=CA&hide-map=true&hide-filters=true>
 This will return just the filtered list of donations sites in California.
+
+**Beta features:**
+
+Since beta features are disabled by default, you can enable them via:
+
+```
+?show-search=true
+```
 
 ## Changing Location and Locales
 
@@ -58,7 +67,8 @@ To view translated version of a country you can pass in a locale parameter. `/us
 will show the map of the United States in French and `/fr/give.html?locale=en-US` will show the map of France in English.
 
 To add a new country, create a subdirectory under public `/public/country_code` using the alpha-2 country code: https://www.iban.com/country-codes.
-Copy a `.htaccess` file from an existing country directory into the new one. Finally, update the navigation dropdown to include the new country.
+Copy a `.htaccess` file from an existing country directory into the new one. Update the form redirect rule to the correct country code
+and ensure that the translated file has the country code short link so that it redirects properly.
 
 ## Directory structure
 
