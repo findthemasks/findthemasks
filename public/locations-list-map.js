@@ -395,8 +395,6 @@ function initMap(stateFilter) {
   markerCluster = new MarkerClusterer(map, [],
     { imagePath: 'images/markercluster/m' });
   
-  console.log("markerCluster made")
-
   showMarkers(data_by_location, { states: stateFilter }, !stateFilter);
 
   // Necessary for resetMap() so that showMarkers() can be called again to reset initial state when user clicks link.
