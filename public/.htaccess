@@ -5,6 +5,24 @@ RewriteRule ^(.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   <Files "data.json">
     Header set Access-Control-Allow-Origin "*"
   </Files>
+  <Files "data-ca.json">
+    Header set Access-Control-Allow-Origin "*"
+  </Files>
+  <Files "data-ch.json">
+    Header set Access-Control-Allow-Origin "*"
+  </Files>
+  <Files "data-de.json">
+    Header set Access-Control-Allow-Origin "*"
+  </Files>
+  <Files "data-gb.json">
+    Header set Access-Control-Allow-Origin "*"
+  </Files>
+  <Files "data-fr.json">
+    Header set Access-Control-Allow-Origin "*"
+  </Files>
+  <Files "data-us.json">
+    Header set Access-Control-Allow-Origin "*"
+  </Files>
 </IfModule>
 
 <IfModule mod_expires.c>
