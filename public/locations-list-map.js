@@ -97,40 +97,75 @@ function createFiltersListHTML() {
   return filters;
 }
 
-function createContent(data, showList, showMap) {
-  function ce(elementName, className, child) {
-    const el = document.createElement(elementName);
-    className && (el.className = className);
-    child && el.appendChild(child);
-    return el;
-  }
+// Wrapper for document.createElement - creates an element of type elementName
+// if className is passed, assigns class attribute
+// if child is passed, appends to created element
+function ce(elementName, className, child) {
+  const el = document.createElement(elementName);
+  className && (el.className = className);
+  child && el.appendChild(child);
+  return el;
+}
 
-  function ctn(text) {
-    return document.createTextNode(text);
-  }
+// Wrapper for document.createTextNode
+function ctn(text) {
+  return document.createTextNode(text);
+}
 
+function createContent(data) {
   for (const stateName of Object.keys(data)) {
     const state = data[stateName];
 
-    if (showList) {
-      state.domElem = $(ce('div', 'state', ce('h2', null, ctn(stateName))));
-      state.containerElem = $(ce('div'));
-      state.domElem.append(state.containerElem);
-    }
+    state.domElem = $(ce('div', 'state', ce('h2', null, ctn(stateName))));
+    state.containerElem = $(ce('div'));
+    state.domElem.append(state.containerElem);
 
     const cities = state.cities;
     for (const cityName of Object.keys(cities)) {
       const city = cities[cityName];
 
-      if (showList) {
-        city.domElem = $(ce('div', 'city', ce('h3', null, ctn(cityName))));
-        city.containerElem = $(ce('div'));
-        city.domElem.append(city.containerElem);
-      }
+      city.domElem = $(ce('div', 'city', ce('h3', null, ctn(cityName))));
+      city.containerElem = $(ce('div'));
+      city.domElem.append(city.containerElem);
 
       // Array.prototype.sort sorts in-place, so only need to do it once per city
-      for (const entry of city.entries.sort((a, b) => a.name.localeCompare(b.name))) {
-        if (showList) {
+      city.entries.sort((a, b) => a.name.localeCompare(b.name));
+    }
+  }
+}
+
+function getFilteredContent(data, filters) {
+  const content = [];
+  const filterAcceptKeys = filters && filters.acceptItems && Object.keys(filters.acceptItems);
+
+  let listCount = 0; // TODO: hacky, see note below.
+
+  for (const stateName of Object.keys(data).sort()) {
+    if (filters && filters.states && !filters.states[stateName]) {
+      continue;
+    }
+
+    const state = data[stateName];
+    let hasCity = false;
+    state.containerElem.empty();
+
+    const cities = state.cities;
+    for (const cityName of Object.keys(cities).sort()) {
+      const city = cities[cityName];
+      let hasEntry = false;
+      city.containerElem.empty();
+
+      for (const entry of city.entries) {
+        if (filterAcceptKeys) {
+          const acc = (entry.accepting || "").toLowerCase();
+          if (!filterAcceptKeys.some(s => acc.includes(s))) {
+            continue;
+          }
+        }
+
+        listCount++;
+
+        if (!entry.domElem) {
           entry.domElem = $(ce('div', 'location'));
           entry.domElem.append([
             ce('h4', 'marginBotomZero', ctn(entry.name)),
@@ -171,51 +206,6 @@ function createContent(data, showList, showMap) {
           }
         }
 
-        if (showMap) {
-          const lat = Number(entry.lat);
-          const lng = Number(entry.lng);
-
-          if (isNaN(lat) || isNaN(lng) || !lat || !lng) {
-            console.log('skipped mapping entry w/o geocode: ', entry)
-          } else {
-            entry.marker = createMarkerAndInfowindow(lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box);
-          }
-        }
-      }
-    }
-  }
-}
-
-function getFilteredContent(data, filters) {
-  const content = [];
-  const filterAcceptKeys = filters && filters.acceptItems && Object.keys(filters.acceptItems);
-
-  let listCount = 0; // TODO: hacky, see note below.
-
-  for (const stateName of Object.keys(data).sort()) {
-    if (filters && filters.states && !filters.states[stateName]) {
-      continue;
-    }
-
-    const state = data[stateName];
-    let hasCity = false;
-    state.containerElem.empty();
-
-    const cities = state.cities;
-    for (const cityName of Object.keys(cities).sort()) {
-      const city = cities[cityName];
-      let hasEntry = false;
-      city.containerElem.empty();
-
-      for (const entry of city.entries) {
-        if (filterAcceptKeys) {
-          const acc = (entry.accepting || "").toLowerCase();
-          if (!filterAcceptKeys.some(s => acc.includes(s))) {
-            continue;
-          }
-        }
-
-        listCount++;
         city.containerElem.append(entry.domElem);
         hasEntry = true;
       }
@@ -271,7 +261,6 @@ $(function () {
     const showList = searchParams.get('hide-list') !== 'true';
     const showMap = searchParams.get('hide-map') !== 'true';
 
-
     // BETA: Default initialized at module level scope (see above). Initialize search field, first check #map for default
     // config. Override with query string. Currently disabled by default because it's still in beta.
     // First pull map config (if "data-enable-search" attrib defined).
@@ -289,12 +278,14 @@ $(function () {
     }
     // END BETA ONLY
 
-    createContent(window.data_by_location, showList, showMap);
+    showList && createContent(window.data_by_location);
 
     const stateFilter = {};
+    let hasStateFilter = false;
     states.forEach(stateName => {
       if (data_by_location[stateName]) {
         stateFilter[stateName] = true;
+        hasStateFilter = true;
       }
     });
 
@@ -308,18 +299,20 @@ $(function () {
       $(".filters-list").html(createFiltersListHTML(data_by_location).join(" "));
       $('.locations-container').show();
 
-      $(".locations-list").empty().append(getFilteredContent(data_by_location));
-
       // show filters unless hide-filters="true"
       if (!searchParams.get('hide-filters') || searchParams.get('hide-filters') !== 'true') {
         $(".filters-container").show();
       }
 
-      Object.keys(stateFilter).forEach(state => {
-        const elem = document.getElementById(`state-${state}`);
-        elem.checked = true;
-        onFilterChange(elem, false);
-      });
+      if (hasStateFilter) {
+        Object.keys(stateFilter).forEach(state => {
+          const elem = document.getElementById(`state-${ state }`);
+          elem.checked = true;
+          onFilterChange(elem, false);
+        });
+      } else {
+        $(".locations-list").empty().append(getFilteredContent(data_by_location));
+      }
     }
   });
 });
@@ -610,15 +603,27 @@ function showMarkers(data, filters, showNearest) {
           }
         }
 
-        const marker = entry.marker;
+        let marker = entry.marker;
 
         if (marker) {
-          if (inStateFilter && inAcceptFilter) {
-            markers.push(marker);
-            hasFilters && bounds.extend(marker.position);
-          } else {
+          if (!inStateFilter || !inAcceptFilter) {
             marker.setMap(null);
+            marker = null;
           }
+        } else if (inStateFilter && inAcceptFilter) {
+          const lat = Number(entry.lat);
+          const lng = Number(entry.lng);
+
+          // Guard against non-geocoded entries. Assuming no location exactly on the equator or prime meridian
+          if (lat && lng) {
+            marker = entry.marker = addMarkerToMap(null, lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box);
+          }
+        }
+
+        if (marker) {
+          markers.push(marker);
+          marker.setMap(map);
+          hasFilters && bounds.extend(marker.position);
         }
       }
     }
@@ -712,30 +717,37 @@ function centerMapToNearestMarkers(map, markers, fallbackBounds) {
   }
 }
 
-
-
-function createMarkerAndInfowindow(latitude, longitude, address, name, instructions, accepting, open_accepted) {
-  // Text to go into InfoWindow
-  var contentString =
-    '<h5>' + name + '</h5>' +
-    `<div class="label">${$.i18n('ftm-maps-marker-address-label')}</div><div class=value>` + address + '</div>' +
-    `<div class="label">${$.i18n('ftm-maps-marker-instructions-label')}</div><div class=value>` + linkifyHtml(instructions) + '</div>' +
-    `<div class="label">${$.i18n('ftm-maps-marker-accepting-label')}</div><div class=value>` + accepting + '</div>' +
-    `<div class="label">${$.i18n('ftm-maps-marker-open-packages-label')}</div><div class=value>` + open_accepted + '</div>';
-
-  var location = { lat: latitude, lng: longitude };
-  var marker = new google.maps.Marker({
+function addMarkerToMap(map, latitude, longitude, address, name, instructions, accepting, open_accepted) {
+  const location = { lat: latitude, lng: longitude };
+  const marker = new google.maps.Marker({
     position: location,
-    title: name
+    title: name,
+    map: map
   });
-  // InfoWindow will pop up when user clicks on marker
-  marker.infowindow = new google.maps.InfoWindow({
-    content: contentString
-  });
+
   marker.addListener('click', () => {
     openInfoWindows.forEach(infowindow => infowindow.close());
     openInfoWindows = [];
-    marker.infowindow.open(null, marker);
+
+    if (!marker.infowindow) {
+      // Text to go into InfoWindow
+      const content = $(ce('div')).append([
+        ce('h5', null, ctn(name)),
+        ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
+        ce('div', 'value', ctn(address)),
+        ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
+        linkifyElement(ce('div', 'value', ctn(instructions))),
+        ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
+        ce('div', 'value', ctn(accepting)),
+        ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
+        ce('div', 'value', ctn(open_accepted)),
+      ])[0];
+
+      marker.infowindow = new google.maps.InfoWindow({
+        content: content
+      });
+    }
+    marker.infowindow.open(map, marker);
     openInfoWindows.push(marker.infowindow);
   });
 
