@@ -48,6 +48,18 @@ So, for state-specific pages you can now use something like:
 <https://findthemasks.com/give.html?state=CA&hide-map=true&hide-filters=true>
 This will return just the filtered list of donations sites in California.
 
+## Changing Location and Locales
+
+We use a directory structure to view country-specific datasets.
+
+For example, `/us/give.html` will filter the map to the United States and `/fr/give.html` will filter to France.
+
+To view translated version of a country you can pass in a locale parameter. `/us/give.html?locale=fr-FR`
+will show the map of the United States in French and `/fr/give.html?locale=en-US` will show the map of France in English.
+
+To add a new country, create a subdirectory under public `/public/country_code` using the alpha-2 country code: https://www.iban.com/country-codes.
+Copy a `.htaccess` file from an existing country directory into the new one. Finally, update the navigation dropdown to include the new country.
+
 ## Directory structure
 
 - `/public` - The client-side code for the website. Currently has some symlinks to legacy file locations.
