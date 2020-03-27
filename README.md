@@ -40,6 +40,7 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 ?hide-map={true/false}
 ?hide-filters={true/false}
 ?hide-list={true/false} (also hides filters)
+?mapsKey={custom Google Maps API key}
 ```
 
 All boolean parameters default to false.

@@ -202,9 +202,20 @@ function getFilteredContent(data, filters) {
   return content;
 }
 
+
+
+const pageUrl = new URL(window.location);
+const directories = pageUrl.pathname.split("/");
+const searchParams = new URLSearchParams(pageUrl.search);
+
+// Dynamically load maps KEY based on query param (for local development). Otherwise, use default.
+// TODO (patricknelson): Apparently a lot of things now depend on maps API even if the maps aren't loaded... might
+//  want to clean that up eventually! Once done, we can nest loadMapsApi() under the "showMap" conditional below.
+let mapsKey = searchParams.get('mapsKey') || 'AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s'; // Production
+loadMapsApi(mapsKey);
+
+
 $(function() {
-  const url = new URL(window.location);
-  const directories = url.pathname.split("/");
 
   let countryDataFilename;
 
@@ -216,17 +227,21 @@ $(function() {
   }
 
   $.getJSON(`https://findthemasks.com/${countryDataFilename}`, function(result){
+    // Kick off loading of maps API as soon as possible.
+
     // may end up using this for search / filtering...
     window.locations = result;
     window.data_by_location = toDataByLocation(locations);
 
-    const searchParams = new URLSearchParams(url.search);
     const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
     const states = stateParams.map(param => param.split(',')).reduce((acc, val) => acc.concat(val), []);
     const showList = searchParams.get('hide-list') !== 'true';
     const showMap = searchParams.get('hide-map') !== 'true';
 
-    createContent(window.data_by_location, showList, showMap);
+    // TODO: Nested here because createContent() depends on addMarkerToMap(), hence the showMap variable.
+    onMapsApiLoaded(() => {
+      createContent(window.data_by_location, showList, showMap);
+    });
 
     const stateFilter = {};
     states.forEach(stateName => {
@@ -236,16 +251,23 @@ $(function() {
     });
 
     if (showMap) {
-      initMap(stateFilter);
+      onMapsApiLoaded(() => {
+        initMap(stateFilter);
+      });
     }
-
-    $('.locations-loading').hide();
 
     if (showList) {
       $(".filters-list").html(createFiltersListHTML(data_by_location).join(" "));
       $('.locations-container').show();
 
-      $(".locations-list").empty().append(getFilteredContent(data_by_location));
+      // TODO: The location lists depends on maps because getFilteredContent() which depends on content created by
+      //  createContent() which itself also depends on addMarkerToMap(), thus it all has to wait.
+      onMapsApiLoaded(() => {
+        $(".locations-list").empty().append(getFilteredContent(data_by_location));
+
+        // Disable locations loading message now that locations listing has rendered.
+        $('.locations-loading').hide();
+      });
 
       // show filters unless hide-filters="true"
       if (!searchParams.get('hide-filters') || searchParams.get('hide-filters') !== 'true') {
@@ -260,6 +282,55 @@ $(function() {
     }
   });
 });
+
+
+
+/**************************
+ * BEGIN DYNAMIC MAPS KEY *
+ **************************/
+
+/**
+ * Dynamically load google maps API based on provided API key or default to production key.
+ */
+function loadMapsApi(mapsKey) {
+  // Dynamically append tag including the maps key. This way, using the callback we eliminate any possibility of
+  // encountering a race condition where 'google' object is not defined.
+  let s = document.createElement('script');
+  s.setAttribute('src', 'https://maps.googleapis.com/maps/api/js?key=' + mapsKey + '&libraries=geometry,places&callback=mapsApiLoaded');
+  s.setAttribute('async', true);
+  document.body.appendChild(s);
+}
+
+// Callbacks to execute once the API has fully loaded.
+let mapsApiLoadedQueue = [];
+
+
+/**
+ * Queue all early calls that depend on maps API.
+ */
+function onMapsApiLoaded(callback) {
+  if (typeof google !== 'undefined') {
+    // Run now
+    callback();
+  } else {
+    // Queue for later (see maps API callback mapsApiLoaded() below).
+    mapsApiLoadedQueue.push(callback);
+  }
+}
+
+// Called by Google Maps once the JavaScript has loaded.
+function mapsApiLoaded() {
+  mapsApiLoadedQueue.forEach(callback => {
+    callback();
+  });
+}
+window.mapsApiLoaded = mapsApiLoaded;
+
+/************************
+ * END DYNAMIC MAPS KEY *
+ ************************/
+
+
 
 window.onFilterChange = function (elem, scrollNeeded) {
   // This is a hacky approach to programatically highlighting selected items as
