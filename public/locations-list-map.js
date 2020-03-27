@@ -23,8 +23,7 @@ let map = null;
 let markers = [];
 
 // Configuration defined in query string. Initialized in jQuery DOM ready function.
-// TODO (patnelson): This should be extended with every other option as well.
-let showMapSearch = true;
+let showMapSearch = false; // BETA FEATURE: Default to false.
 
 // The map, roughly zoomed to show the entire US.
 const middle_of_us = { lat: 39.0567939, lng: -94.6065124};
@@ -281,7 +280,25 @@ $(function() {
     const states = stateParams.map(param => param.split(',')).reduce((acc, val) => acc.concat(val), []);
     const showList = searchParams.get('hide-list') !== 'true';
     const showMap = searchParams.get('hide-map') !== 'true';
-    showMapSearch = searchParams.get('hide-search') !== 'true';
+
+
+    // BETA: Default initialized at module level scope (see above). Initialize search field, first check #map for default
+    // config. Override with query string. Currently disabled by default because it's still in beta.
+    // First pull map config (if "data-enable-search" attrib defined).
+    const $map = $('#map');
+    if ($map.data('enable-search') !== undefined) {
+      showMapSearch = $map.data('enable-search');
+    }
+    // Second, allow an override from ?hide-search=[bool].
+    if (searchParams.get('hide-search') !== null) {
+      showMapSearch = searchParams.get('hide-search') !== 'true';
+    }
+    // BETA ONLY: Temporarily allow a "show-search" parameter. Delete this once we're enabling by default to confirm with convention established above.
+    if (searchParams.get('show-search') !== null) {
+      showMapSearch = searchParams.get('show-search') === 'true';
+    }
+    // END BETA ONLY
+
 
     createContent(window.data_by_location, showList, showMap);
 
@@ -451,7 +468,9 @@ function resetMap() {
   //  2.) Reposition map (e.g. initial state?)
   //  However, repositioning is ALSO happening deep inside showMarkers() function which has made itself responsible for
   //  too many tasks.
-  showMarkers(window.data_by_location, initial_marker_filters, !initial_marker_filters);
+  let showNearest = false;
+  if (!initial_marker_filters.states) showNearest = !initial_marker_filters.states; // ... just in case "states" property goes missing...
+  showMarkers(window.data_by_location, initial_marker_filters, showNearest);
 }
 
 

@@ -342,6 +342,8 @@
           </div>
 
           <div class="map-container" style="display: none;">
+
+            <!-- BETA: To enable search field, either change data-enable-search to "true" in #map below, or add hide-search=false/show-search=true to query string. -->
             <div class="map-search-wrap">
               <input type="search" name="map-search" id="map-search" placeholder="Enter ZIP code or address, e.g. 94070" data-i18n="[placeholder]ftm-maps-search-placeholder">
               <!-- Icon credit to https://feathericons.com/  -->
@@ -350,7 +352,7 @@
               <a href="javascript:;" class="map-action-link" id="reset-map"><img src="images/icons/refresh.svg"><span data-i18n="ftm-maps-search-reset"></span>Reset map</a>
             </div>
 
-            <div id="map"></div>
+            <div id="map" data-enable-search="false"></div>
           </div>
 
           <div id="locations-list" class="locations-list"></div>
