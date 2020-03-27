@@ -622,11 +622,11 @@ function showMarkers(data, filters, showNearest) {
   let $mapStats = $('#map-stats');
   updateStats($mapStats, markers.length);
 
-  if (showNearest) {
-    centerMapToNearestMarkers(map, markers, bounds);
-  } else {
+  // if (showNearest) {
+  //   centerMapToNearestMarkers(map, markers, bounds);
+  // } else {
     centerMapToBounds(map, bounds, 9)
-  }
+  // }
 }
 window.showMarkers = showMarkers; // Exposed for debug/testing.
 
