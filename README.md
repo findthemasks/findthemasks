@@ -151,6 +151,30 @@ There is also a "shell"
 that can be used, but running the emulator and hitting with a web browser
 is often easier in our simple case.
 
+## Scripts that edit the spreadsheet (Apps Script)
+There are currently 2 scripts that automatically update the spreadsheet, and one
+that backs it up:
+
+* fillInGeocodes: fills in the lat/lng column based on the address in the "address" column.
+  (Note that the "address" column is defined as the column that has "address" in row 2.) 
+  Uses Google Maps geocoding API.  Currently runs once/minute.
+* createStandardAddress: fills in the "address" column based on the data in the "orig_address",
+  "city", and "state" columns.  Uses Google Maps geocoding API. Currently runs once/minute.
+* backupSheet: makes a timestamped copy of the sheet.  Currently runs once every 2 hours.
+
+There are a few important things to know about these scripts:
+
+* They are visible by navigating to tools > script editor from the Google Sheet.
+* They can be run by anyone who has edit permission to the Google Sheet.
+* Triggers (automation) can be set up by navigating to Edit > Edit current project's triggers.
+* The dev-owner of each sheet should set up a trigger for each of the 3 scripts.  (US spreadsheet
+  dev owner is @susanashlock's gmail).  
+* The scripts are run using quota of the user the user that runs them.
+* Each Gmail user has a fixed amount of geocoding quota per day.  This quota is somewhere
+  around 100-500 calls per day.  @susanashlock's account has 'special' quota.  We're not
+  sure exactly what it is, but is sufficient to support ~1000 calls per day.
+  
+
 ## Thanks
 
 - The "Face With Medical Mask" favicon is used with thanks to
