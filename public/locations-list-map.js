@@ -391,7 +391,7 @@ function initMap(stateFilter) {
     stateFilter = null;
   }
 
-  map = new google.maps.Map(element);
+  map = new google.maps.Map(element, { center: inital_center, zoom: initial_zoom });
 
   showMarkers(data_by_location, { states: stateFilter }, !stateFilter);
 
