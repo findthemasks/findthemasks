@@ -1,269 +1,432 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-161442455-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'UA-161442455-1');
-    </script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.fallbacks.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.language.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.messagestore.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.parser.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.bidi.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify-element.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify-html.min.js"></script>
-    <script src="i18n.js"></script>
+  <head>
+      <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-161442455-1"></script>
+      <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() { dataLayer.push(arguments); }
+          gtag('js', new Date());
+          gtag('config', 'UA-161442455-1');
+      </script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.fallbacks.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.language.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.messagestore.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.parser.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.bidi.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify-element.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify-html.min.js"></script>
+      <script src="i18n.js"></script>
 
-    <!-- API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info. -->
-    <script defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s&libraries=geometry">
-    </script>
-    <script type="module" src="locations-list-map.js"></script>
-    <title>#Findthemasks</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
-    <meta name="description" content="Help #findthemasks for covid-19" />
-    <meta name="keywords" content="#findthemasks, masks, n95, coronavirus, covid-19" />
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="manifest" href="site.webmanifest">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <style>
-      /* Styling for the JS generated locations list */
+      <!-- API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info. -->
+      <script defer
+              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s&libraries=geometry">
+      </script>
 
-      @media (min-width: 768px) {
-        .twitter-container {
-          height: 35rem;
+      <title>#Findthemasks</title>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+      <meta name="description" content="Help #findthemasks for covid-19" />
+      <meta name="keywords" content="#findthemasks, masks, n95, coronavirus, covid-19" />
+      <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+      <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+      <link rel="manifest" href="site.webmanifest">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+      <style>
+        /* Styling for the JS generated locations list */
+
+        html {
+          height: 100%;
+          width: 100%;
         }
-      }
+        
+        body {
+          box-sizing: border-box;
+          height: 100%;
+          margin: 0;
+          padding: 0;
+          line-height: 1.65;
+          background-color: #ffffff;
+          color: #222;
+          font-family: 'Roboto', 'Helvetica', sans-serif;
+          font-weight: normal;
+          font-style: normal;
+          font-variant: normal;
+          text-rendering: optimizeLegibility;
+        }
 
-      .locations-list {
-          padding-bottom: 10px;
-          border-bottom: 1px solid #efefef;
-      }
-
-      .state:first-child {
-          padding-top: 25px;
-      }
-
-      .state h2 {
-          font-size: 28px;
-          padding-top: 20px;
-          padding-bottom: 20px;
-          margin: 0px;
-          font-weight: 400;
-          border-top: 1px solid #efefef;
-      }
-
-      .city h3 {
-          font-size: 20px;
-          padding-bottom: 20px;
-          margin: 0px;
-          text-transform: uppercase;
-      }
-
-      .city {
-          line-height: 1.2;
-          padding-bottom: 10px;
-      }
-
-      .city h4 {
-          font-size: 18px;
-          font-weight: 600;
-          padding-bottom: 5px;
-          margin: 0px;
-      }
-
-      .city p {
-          margin: 0px;
-          font-size: 18px;
-      }
-
-      .location {
-          padding-bottom: 20px;
-          overflow-wrap: break-word;
-      }
-
-      .location label {
-          color: #999;
-          font-size: 11px;
-          font-weight: 600;
-          text-transform: uppercase;
-          margin-top: 12px;
-          margin-bottom: 3px;
-      }
-
-      .donation-sites h1 {
-          margin-bottom: -10px;
-      }
-
-      .filters-list div {
-          display: inline-block;
-      }
-
-      .filters-list h4 {
-          font-size: 16px;
-          font-weight: 600;
-          text-transform: uppercase;
+        .content-container {
           margin-top: 15px;
-          margin-bottom: 10px;
-      }
+          margin-left: auto;
+          margin-right: auto;
+          margin-bottom: 90px;
+          width: 60%;
+        }
+        
 
-      .filters-list input {
-          display: none;
-      }
-
-      .filters-list label {
-          border: 1px #aadaff solid;
-          background: #aadaff30;
-          font-size: 18px;
-          padding: 0.2rem 0.4rem;
-          cursor: pointer;
-          border-radius: 3px;
-      }
-
-      .filters-list label:hover {
-          background-color: #aadaff59;
-      }
-
-      .filters-list label.selected {
-          background-color: #aadaff;
-      }
-
-      .map-container {
+        .heading-container {
           padding-top: 30px;
-          padding-bottom: 5px;
-      }
+          padding-bottom: 20px;
+          text-align: center;
+          background-color: royalblue;
+          color: white;
+        }
 
-      #map {
-          height: 400px; /* The height is 400 pixels */
-          width: 100%; /* The width is the width of the web page */
-      }
+        .heading-container a {
+          color: white;
+        }
+        
+        .logo {
+          height: 120px;
+          margin-bottom: 15px;
+        }
+        
+        h1 {
+          font-weight: 800;
+        }
 
-      #map .label {
-          width: 105px;
-          padding-top: 6px;
-          padding-bottom: 2px;
+        h2 {
+          font-family: Georgia, serif;
+          margin-top: 30px;
+          text-align: center;
+          font-size: 1.8rem;
+          margin-bottom: 20px;
+          letter-spacing: 0.8px;
+        }
+        
+        .member-of {
+          font-style: italic;
+          font-size: 13px;
+          margin-bottom: 10px;
+          
+        }
+        
+        .subhead {
+          margin-left: auto;
+          margin-right: auto;
+          margin-top: 20px;
+          margin-bottom: 40px;
+          display: flex;
+          align-items: center;
+          text-align: center;
+          width: 55%;
+          padding: 10px 20px;
+          border-radius: 2px;
+        }
+        .subhead-left {
+          width: calc(40% + 40px);
+          font-weight: light;
+          letter-spacing: 3px;
+          text-align: right;
           text-transform: uppercase;
-          color: #999;
-          font-size: 11px;
-          font-weight: 400;
-      }
-
-      #map .value {
-          font-weight: 400
-      }
-
-      #map-stats, #list-stats {
-          font-weight: 300;
-      }
-
-      .locations-loading {
-        padding-top: 20px;
-      }
-      .load-spinner {
-        width: 21px;
-        height: 21px;
-        animation: 5s load-spinner infinite linear;
-        vertical-align: text-top;
-      }
-      @-webkit-keyframes load-spinner {
-        100% {
-          transform: rotate(360deg);
-          -webkit-transform: rotate(360deg);
+          font-size: 0.9rem;
+          line-height: 1.8rem;
+          margin-right: 20px;
+          padding-right: 20px;
+          border-right: 2px solid royalblue;
+          padding-top: 40px;
+          padding-bottom: 40px;
         }
-      }
-      @-moz-keyframes load-spinner {
-        100% {
-          transform: rotate(360deg);
-          -moz-transform: rotate(360deg);
+        .subhead-right{
+          width: calc(60% + 40px);
+          text-align: left;
+          font-size: 1rem;
         }
-      }
-      @-ms-keyframes load-spinner {
-        100% {
-          transform: rotate(360deg);
-          -ms-transform: rotate(360deg);
+
+        .question {
+          margin-bottom: 5px;
+          font-weight: bold;
         }
-      }
 
-    </style>
-</head>
+        .locations-list {
+            padding-bottom: 10px;
+            border-bottom: 1px solid #efefef;
+        }
 
-<body>
+        .state:first-child {
+            padding-top: 25px;
+        }
 
-<main class="content">
+        .state h2 {
+            font-size: 28px;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            margin: 0px;
+            font-weight: 400;
+            border-top: 1px solid #efefef;
+        }
 
-    <div class="container" style="padding-bottom: 40px;">
-        <h1 style="padding: 20px 0px 0px 0px;">#findthemasks</h1>
-        <p style="padding: 0px;">This site is part of the <a href="https://getusppe.org/">getusppe.org</a> coalition.</p>
-        <h4 style="padding-bottom: 20px; font-weight: 400;">America&rsquo;s frontline healthcare workers are treating COVID-19 patients, in some cases without adequate protective gear.
-          Some have taken to Twitter on <a href="https://twitter.com/search?q=%23GetMePPE&src=typeahead_click">#GetMePPE</a> to ask for help.</h4>
+        .city h3 {
+            font-size: 20px;
+            padding-bottom: 20px;
+            margin: 0px;
+            text-transform: uppercase;
+        }
 
-        <p style="padding-top: 10px; margin: 0px;">We need to help the helpers, right now.</p>
-        <h3 style="padding-bottom: 20px">We need to find the masks.</h3>
+        .city {
+            line-height: 1.2;
+            padding-bottom: 10px;
+        }
 
-      <p>Look in your basement, your emergency kit, your bug out bag, your workbench for N95 masks.
-        If you find surgical masks, those are also in short supply, and in many places are being used in place of N95s.
-        All of these masks can save lives now if you get them into the hands of health care workers.</p>
+        .city h4 {
+            font-size: 18px;
+            font-weight: 600;
+            padding-bottom: 5px;
+            margin: 0px;
+        }
 
-      <p>Other types of PPE like disposable <span class=embold>booties</span>, <span class=embold>safety goggles</span>, and
-        <span class=embold>disposable suits</span> are also in short supply. If you have these things or know someone who might
-        (HVAC installers? Construction workers?) please share this site with them. Large donors can register at
-        <a href="https://getusppe.org/">getusppe.org/give</a>.</p>
+        .city p {
+            margin: 0px;
+            font-size: 18px;
+        }
 
+        .location {
+            padding-bottom: 20px;
+            overflow-wrap: break-word;
+        }
 
-        <a name="sites"></a>
-        <h3 style="padding: 20px 0px 10px 0px;">Here's what you can do:</h3>
-        <ol>
-            <li> Look at our list of sites below. You can filter by state or supplies needed.
-            <li> If there's a site near you, drop off following their instructions.
-            <li> If you are donating open packages, please put them in a ziploc bag with a note saying whether they have been
-          used, whether anyone in your household has been sick or travelled outside the country, and the expiration date if known.
-            <li> If there's not a site near you, visit <a href="https://getusppe.org/give">getusppe.org</a> to let them know what you have available.
-        </ol>
+        .location label {
+            color: #999;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 12px;
+            margin-bottom: 3px;
+        }
 
-        <h5>To add a donation site, update information, or request we take down information, please 
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>. 
-          Your submission will be approved and updated as soon as possible.</h5>
+        .donation-sites h1 {
+            margin-bottom: -10px;
+        }
 
-        <div class="locations-loading">
-          <img src="images/icons/loader.svg" alt="" class="load-spinner"> Loading donation sites...
+        .filters-list div {
+            display: inline-block;
+        }
+
+        .filters-list h4 {
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .filters-list input {
+            display: none;
+        }
+
+        .filters-list label {
+            border: 1px #aadaff solid;
+            background: #aadaff30;
+            font-size: 18px;
+            padding: 0.2rem 0.4rem;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .filters-list label:hover {
+            background-color: #aadaff59;
+        }
+
+        .filters-list label.selected {
+            background-color: #aadaff;
+        }
+
+        .map-container {
+            padding-top: 30px;
+            padding-bottom: 5px;
+        }
+
+        #map {
+            height: 400px; /* The height is 400 pixels */
+            width: 100%; /* The width is the width of the web page */
+        }
+
+        #map .label {
+            width: 105px;
+            padding-top: 6px;
+            padding-bottom: 2px;
+            text-transform: uppercase;
+            color: #999;
+            font-size: 11px;
+            font-weight: 400;
+        }
+
+        #map .value {
+            font-weight: 400
+        }
+
+        #map-stats, #list-stats {
+            font-weight: 300;
+        }
+
+        .locations-loading {
+          padding-top: 20px;
+        }
+        .load-spinner {
+          width: 21px;
+          height: 21px;
+          animation: 5s load-spinner infinite linear;
+          vertical-align: text-top;
+        }
+        @-webkit-keyframes load-spinner {
+          100% {
+            transform: rotate(360deg);
+            -webkit-transform: rotate(360deg);
+          }
+        }
+        @-moz-keyframes load-spinner {
+          100% {
+            transform: rotate(360deg);
+            -moz-transform: rotate(360deg);
+          }
+        }
+        @-ms-keyframes load-spinner {
+          100% {
+            transform: rotate(360deg);
+            -ms-transform: rotate(360deg);
+          }
+        }
+
+        @media screen and (max-width: 1023px) {
+          h2 {
+            text-align: left;
+          }
+
+          .content-container {
+            margin-left: 40px;
+            margin-right: 40px;
+            width: auto;
+          }
+          .logo {
+            height: 110px;
+          }
+          .subhead {
+            width: 100%;
+            padding: 0;
+            flex-direction: column;
+          }
+          .subhead-left {
+            line-height: 1.5;
+            border: 0;
+            width: 100%;
+            padding: 0;
+            text-align: center;
+          }
+          .subhead-right {
+            font-size: 0.9rem;
+            width: 80%;
+            text-align: center;
+          }
+        }
+
+        @media screen and (max-width: 768px) {
+          .content-container {
+            margin: 15px;
+          }
+
+          .logo {
+            height: 100px;
+          }
+
+          .subhead {
+            width: 100%;
+            padding: 0;
+            flex-direction: column;
+          }
+          .subhead-left {
+            border: 0;
+            width: 100%;
+            padding: 0;
+            margin-bottom: 10px;
+            text-align: center;
+          }
+          .subhead-right {
+            font-size: 0.9rem;
+            width: 80%;
+            text-align: center;
+          }
+
+          .twitter-container {
+            height: 35rem;
+          }
+        }
+
+      </style>
+  </head>
+
+  <body>
+      <div class="heading-container">
+        <img class="logo" src="images/logo-color.svg" alt="Find The Masks logo" />
+        <!-- <h1>#findthemasks</h1> -->
+        <div class="member-of">A member of the <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/">getusppe.org</a> coalition</div>
+        
+      </div>
+      <div class="subhead">
+        <div class="subhead-left">Let's Help The Helpers</div>
+        <div class="subhead-right"> 
+          Healthcare workers are in dire need of personal protective equipment (PPE) as they treat COVID-19 patients during this epidemic.
+        </div>
+      </div>
+      
+      <div class="content-container">
+      <h2>Do you have PPE?</h2>
+
+      <p>
+        Maybe you bought it a few weeks ago. Maybe you have an old stash in your basement. Whatever the case, it's most useful right now on the people who need it the most: healthcare workers. Almost all types of PPE is in short supply as COVID overwhelms hospital rooms. By preventing its spread, PPE protects <em>everybody</em>: doctors, nurses, hospital staff, patients, and the general public.<br/><br/>Some healthcare workers have resorted to <a href="">trash bags</a>. Many have been reusing masks <a href="">for days</a>. You can help.<br/><br/>By donating your PPE, you can save lives.
+      </p>
+
+      <hr/>
+      <h2>Here's how to donate PPE</h2>
+      <p>Our network of volunteers has called hospitals and clinics throughout the world to find out what they need and how you can donate. We now have 1700+ sites where you can donate your masks, gowns, booties, and other PPE. </p>
+      <ol>
+        <li><b>Use our map below to find a hospital</b> or health center near you accepting donations.</li>
+        <li><b>Follow their instructions</b> for what they accept and how to drop it off.</li>
+        <li><b>If you are donating opened packages</b>, please put them in a ziploc bag with a note saying whether they have been used, whether anyone in your household has been sick or travelled outside the country, and the expiration date if known.</li>
+      </ol>
+      
+      <div class="question">Can't find a donation site near you?</div>
+      <p>Visit <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/give">getusppe.org</a> to let them know what you have available.</p>
+
+      <div class="question">Want to add a donation site? update or remove information?</div>
+      <p>Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill out this form</a>. We will review it as soon as possible.</p>
+
+      <hr/>
+      <h2>Donation Sites</h2>
+
+      <div class="locations-loading">
+        <img src="images/icons/loader.svg" alt="loading" class="load-spinner"> Loading donation sites...
+      </div>
+
+      <div class="locations-container" style="display: none;">
+        <h3 style="padding-top: 30px; padding-bottom: 10px;">Donation sites <span id="list-stats"></span></h3>
+
+        <div class="filters-container" style="display: none;">
+          <form name="filters" class="filters-list"></form>
         </div>
 
-        <div class="locations-container" style="display: none;">
-          <h3 style="padding-top: 30px; padding-bottom: 10px;">Donation sites <span id="list-stats"></span></h3>
-
-          <div class="filters-container" style="display: none;">
-            <form name="filters" class="filters-list"></form>
-          </div>
-
-          <div class="map-container" style="display: none;">
-            <div id="map"></div>
-          </div>
-
-          <div id="locations-list" class="locations-list"></div>
+        <div class="map-container" style="display: none;">
+          <div id="map"></div>
         </div>
+        <div id="locations-list" class="locations-list"></div>
+      </div>
 
-        <p style="padding-top: 30px;">To add a donation site, update information, or request we take down information, please 
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>. 
-          <b>Your submission will be approved and updated as soon as possible.</b><br><br>
-          Got a comment or suggestion not related to data updates? Want to help? contact@findthemasks.com or join us on 
-          <a href="https://github.com/r-pop/findthemasks">our Github</a>.
-        </p>
+      <div style="height:50px"></div>
+      <hr/>
+      <div class="question">Want to add a donation site, or update or remove information?</div>
+      <p>Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill out this form</a>. We will review it as soon as possible.</p>
+      <div class="question">Got a comment or suggestion not related to data updates? Want to help? </div>
+      <p>
+        Email us at contact@findthemasks.com or join us on <a target="_blank" rel="noreferrer noopener" href="https://github.com/r-pop/findthemasks">our Github</a>.
+      </p>
 
-        <p class="centerText">made with &lt;3 in Seattle</p>
-        <a href="whoweare.html" class="end">who we are</a>
+      <p>made with ❤️ in Seattle</p>
+      <a href="whoweare.html" class="end">who we are</a>
     </div>
-</main>
-</body>
+  </body>
 </html>
