@@ -1,3 +1,5 @@
+// NOTE: Trailing commas in this object are fine, per ECMAScript 5 (circa 2009).
+
 const locales = {
   "@metadata": {
     "authors": [
@@ -56,7 +58,10 @@ const locales = {
     "ftm-site-launch-info": "Info about site launch",
     "ftm-anonymous-volunteers": "Volunteers who are anonymous description",
     "ftm-ack-data-sources": "Thanks for data included from other sources",
-    "ftm-project-volunteers": "Header for project volunteers"
+    "ftm-project-volunteers": "Header for project volunteers",
+    "ftm-maps-search-placeholder": "Placeholder inside the map search field above the map",
+    "ftm-maps-search-use-location": "Link to allow user to center map on their current location",
+    "ftm-maps-search-reset": "Link that resets the map appearance",
   },
   "en": {
     "ftm-map-of-sites": "Map of donation sites",
@@ -107,7 +112,10 @@ const locales = {
     "ftm-site-launch-info": "This site was launched on <a href=\"https://twitter.com/arrkay/status/1240704610186092546\">March 19th</a> by <a href=\"https://www.linkedin.com/in/rachelpopkin/\">Rachel Popkin</a> and has been improved by many fantastic volunteers. Many of us are tech workers in Seattle. We are advised by a group of doctors and nurses around the country.",
     "ftm-anonymous-volunteers": "and others who are anonymous",
     "ftm-ack-data-sources": "This site also includes data from <a href=\"https://tinyurl.com/hospitals-needing-ppe\">https://tinyurl.com/hospitals-needing-ppe</a>, a project by:",
-    "ftm-project-volunteers": "Our volunteers include:"
+    "ftm-project-volunteers": "Our volunteers include:",
+    "ftm-maps-search-placeholder": "Enter ZIP code or address, e.g. 94070",
+    "ftm-maps-search-use-location": "Use my location",
+    "ftm-maps-search-reset": "Reset map",
   },
   "fr-FR": {
     "ftm-map-of-sites": "Carte des sites de don",

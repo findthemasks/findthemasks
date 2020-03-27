@@ -40,13 +40,22 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 ?hide-map={true/false}
 ?hide-filters={true/false}
 ?hide-list={true/false} (also hides filters)
+?hide-search={true/false} (beta)
 ```
 
-All boolean parameters default to false.
+All boolean parameters default to false (unless they're in beta).
 
 So, for state-specific pages you can now use something like:
 <https://findthemasks.com/give.html?state=CA&hide-map=true&hide-filters=true>
 This will return just the filtered list of donations sites in California.
+
+**Beta features:**
+
+Since beta features are disabled by default, you can enable them via:
+
+```
+?show-search=true
+```
 
 ## Changing Location and Locales
 
