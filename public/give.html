@@ -273,7 +273,7 @@
           position: relative;
           display: flex;
           width:100%;
-          margin: 0px 15px 0px 10px;
+          margin: 0px 15px 0px 20px;
         }
 
         .search-controls {
@@ -338,10 +338,10 @@
       <div class="map-container" style="display: none;">
 
         <div class="row" style="margin: 30px 0px 20px 0px;">
-          <div class="col-xl-4" style="padding: 0px">
-            <h3><span class="i18n" data-i18n="ftm-map-of-sites">Map of donation sites</span> <span id="map-stats"></span></h3>
+          <div class="col-xl-3" style="padding: 0px">
+            <h3><span class="i18n" data-i18n="ftm-map-of-sites">Donation sites</span> <span id="map-stats"></span></h3>
           </div>
-          <div class="col-xl-8" style="padding: 0px">
+          <div class="col-xl-9" style="padding: 0px">
             <div class="map-search-wrap">
               <div class="search-input">
                 <input style="" type="search" name="map-search" id="map-search" placeholder="Search by city, zip, or address" data-i18n="[placeholder]ftm-maps-search-placeholder">
@@ -358,7 +358,7 @@
           </div>
         </div>
 
-        <div id="map" data-search="false"></div>
+        <div id="map" data-enable-search="true"></div>
       </div>
 
       <div class="locations-loading">

@@ -64,7 +64,7 @@ const locales = {
     "ftm-maps-search-reset": "Link that resets the map appearance",
   },
   "en": {
-    "ftm-map-of-sites": "Map of donation sites",
+    "ftm-map-of-sites": "Donation sites",
     "ftm-list-of-sites": "List of donation sites",
     "ftm-donation-sites": "Donation sites",
     "ftm-filters": "Filters",
