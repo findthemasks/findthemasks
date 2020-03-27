@@ -386,8 +386,11 @@ function initMap(stateFilter) {
 
   map = new google.maps.Map(element);
   markerCluster = new MarkerClusterer(map, [],
-    { imagePath: 'images/markercluster/m' });
-  
+    {
+      imagePath: 'images/markercluster/m',
+      minimumClusterSize: 5
+    });
+
   showMarkers(data_by_location, { states: stateFilter }, !stateFilter);
 
   // Necessary for resetMap() so that showMarkers() can be called again to reset initial state when user clicks link.
@@ -626,7 +629,7 @@ function showMarkers(data, filters, showNearest) {
       }
     }
   }
-  
+
   markerCluster.addMarkers(markers)
 
   let $mapStats = $('#map-stats');
