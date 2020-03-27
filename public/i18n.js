@@ -113,7 +113,7 @@ const locales = {
     "ftm-anonymous-volunteers": "and others who are anonymous",
     "ftm-ack-data-sources": "This site also includes data from <a href=\"https://tinyurl.com/hospitals-needing-ppe\">https://tinyurl.com/hospitals-needing-ppe</a>, a project by:",
     "ftm-project-volunteers": "Our volunteers include:",
-    "ftm-maps-search-placeholder": "Enter ZIP code or address, e.g. 94070",
+    "ftm-maps-search-placeholder": "Search by city, zip, or address",
     "ftm-maps-search-use-location": "Use my location",
     "ftm-maps-search-reset": "Reset map",
   },
