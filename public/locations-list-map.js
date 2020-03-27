@@ -10,12 +10,13 @@ import toDataByLocation from './toDataByLocation.js';
 let autocomplete;
 let map = null;
 let markers = [];
+let markerCluster = null;
 
 // Configuration defined in query string. Initialized in jQuery DOM ready function.
 let showMapSearch = false; // BETA FEATURE: Default to false.
 
 // The map, roughly zoomed to show the entire US.
-const middle_of_us = { lat: 39.0567939, lng: -94.6065124};
+const middle_of_us = { lat: 39.0567939, lng: -94.6065124 };
 const middle_of_us_zoom = 4;
 
 // Centralized, as this the initialization state is now needed in multiple places. In the future, we may not always be
@@ -227,7 +228,7 @@ function getFilteredContent(data, filters) {
   return content;
 }
 
-$(function() {
+$(function () {
   const url = new URL(window.location);
   const directories = url.pathname.split("/");
 
@@ -249,7 +250,7 @@ $(function() {
     donationSiteForms[i].setAttribute('href', `/${country}/donation-form`);
   }
 
-  $.getJSON(`https://findthemasks.com/${countryDataFilename}`, function(result){
+  $.getJSON(`https://findthemasks.com/${countryDataFilename}`, function (result) {
     // may end up using this for search / filtering...
     window.locations = result;
     window.data_by_location = toDataByLocation(locations);
@@ -353,7 +354,7 @@ window.onFilterChange = function (elem, scrollNeeded) {
   showMarkers(data_by_location, filters, false);
 
   if (scrollNeeded) {
-    mapContainer[0].scrollIntoView({'behavior': 'smooth'});
+    mapContainer[0].scrollIntoView({ 'behavior': 'smooth' });
   }
 };
 
@@ -384,7 +385,9 @@ function initMap(stateFilter) {
   }
 
   map = new google.maps.Map(element);
-
+  markerCluster = new MarkerClusterer(map, [],
+    { imagePath: 'images/markercluster/m' });
+  
   showMarkers(data_by_location, { states: stateFilter }, !stateFilter);
 
   // Necessary for resetMap() so that showMarkers() can be called again to reset initial state when user clicks link.
@@ -413,11 +416,11 @@ function initMapSearch() {
 
   // Search element (jquery + html element for autocompleter)
   const $search = $('#map-search'),
-        searchEl = $search[0];
+    searchEl = $search[0];
 
   // Initialize the map search autocompleter.
   autocomplete = new google.maps.places.Autocomplete(
-    searchEl, {types: ['geocode']}
+    searchEl, { types: ['geocode'] }
   );
 
   // Avoid paying for data that you don't need by restricting the set of place fields that are returned to just the
@@ -537,7 +540,7 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
   bounds.extend(latlng);
 
   // Extend the bounds to contain the three closest markers
-  for(let i = 0; i < 3; i++) {
+  for (let i = 0; i < 3; i++) {
     // Get one of the closest markers
     let distance = distances[i];
     let marker = markerDistances[distance];
@@ -562,11 +565,13 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
  * Changes the markers currently rendered on the map based strictly on . This will reset the 'markers' module variable as well.
  */
 function showMarkers(data, filters, showNearest) {
+
   markers = [];
 
-  if (!map) {
+  if (!map || !markerCluster) {
     return;
   }
+  markerCluster.clearMarkers()
 
   filters = filters || {};
 
@@ -621,6 +626,8 @@ function showMarkers(data, filters, showNearest) {
       }
     }
   }
+  
+  markerCluster.addMarkers(markers)
 
   let $mapStats = $('#map-stats');
   updateStats($mapStats, markers.length);
@@ -628,7 +635,7 @@ function showMarkers(data, filters, showNearest) {
   // if (showNearest) {
   //   centerMapToNearestMarkers(map, markers, bounds);
   // } else {
-    centerMapToBounds(map, bounds, 9)
+  centerMapToBounds(map, bounds, 9)
   // }
 }
 window.showMarkers = showMarkers; // Exposed for debug/testing.
@@ -708,8 +715,6 @@ function centerMapToNearestMarkers(map, markers, fallbackBounds) {
   }
 }
 
-
-
 function addMarkerToMap(map, latitude, longitude, address, name, instructions, accepting, open_accepted) {
   const location = { lat: latitude, lng: longitude };
   const marker = new google.maps.Marker({
@@ -758,7 +763,7 @@ function addMarkerToMap(map, latitude, longitude, address, name, instructions, a
  */
 function updateStats($elem, count, states) {
   let statsHtml = '',
-      prettyMarkerCount = number_format(count, 0);
+    prettyMarkerCount = number_format(count, 0);
 
   // Default to no states.
   statsHtml = `(${prettyMarkerCount})`;
@@ -804,17 +809,17 @@ function number_format(number, decimal_places, dec_seperator, thou_seperator) {
   }
   if (f[1].length < decimal_places) {
     let g = f[1];
-    for (let i=f[1].length + 1; i <= decimal_places; i++) {
+    for (let i = f[1].length + 1; i <= decimal_places; i++) {
       g += '0';
     }
     f[1] = g;
   }
-  if(thou_seperator != '' && f[0].length > 3) {
+  if (thou_seperator != '' && f[0].length > 3) {
     let h = f[0];
     f[0] = '';
-    for(let j = 3; j < h.length; j+=3) {
+    for (let j = 3; j < h.length; j += 3) {
       let i = h.slice(h.length - j, h.length - j + 3);
-      f[0] = thou_seperator + i +  f[0] + '';
+      f[0] = thou_seperator + i + f[0] + '';
     }
     let j = h.substr(0, (h.length % 3 == 0) ? 3 : (h.length % 3));
     f[0] = j + f[0];
