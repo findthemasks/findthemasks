@@ -15,8 +15,6 @@ let markerCluster = null;
 // Configuration defined in query string. Initialized in jQuery DOM ready function.
 let showMapSearch = false; // BETA FEATURE: Default to false.
 
-let initial_marker_filters = null; // NOTE: Defined in map initialization function.
-
 // Keep track of the previous info windows user has clicked so we can close them.
 let openInfoWindows = [];
 
@@ -35,67 +33,98 @@ function GetCountry() {
   return 'us';
 }
 
-function createFiltersListHTML() {
-  const filters = [];
-  filters.push(`<h4>${$.i18n('ftm-states')}</h4>`);
-  for (const state of Object.keys(data_by_location).sort()) {
-    filters.push(`
-      <div>
-        <input
-          id="state-${state}"
-          type="checkbox"
-          name="states"
-          value="${state}"
-          onchange="onFilterChange(this, true)"
-          />
-        <label
-          id="state-${state}-label"
-          for="state-${state}"
-          >
-          ${state}
-        </label>
-      </div>
-    `);
-  }
-
-  const acceptedItemsFilter = {
-    'n95s': $.i18n('ftm-item-n95s'),
-    'masks': $.i18n('ftm-item-masks'),
-    'shields': $.i18n('ftm-item-face-shields'),
-    'booties': $.i18n('ftm-item-booties'),
-    'goggles': $.i18n('ftm-item-goggles'),
-    'gloves': $.i18n('ftm-item-gloves'),
-    'kleenex': $.i18n('ftm-item-kleenex'),
-    'sanitizer': $.i18n('ftm-item-sanitizer'),
-    'overalls': $.i18n('ftm-item-overalls'),
-    'gowns': $.i18n('ftm-item-gowns'),
-    'respirators': $.i18n('ftm-item-respirators'),
+// Builds the data structure for tracking which filters are set
+// If all values in a category are false, it's treated as no filter - all items are included
+// If one or more values in a category is true, the filter is set - only items matching the filter are included
+// If two or more values in a category are true, the filter is the union of those values
+// If multiple categories have set values, the result is the intersection of those categories
+function createFilters() {
+  const filters = {
+    states: {}
   };
 
-  filters.push(`<h4>${$.i18n('ftm-accepted-items')}</h4>`);
-  for (const val of Object.keys(acceptedItemsFilter)) {
-    const id = val;
-    const descr = acceptedItemsFilter[val];
-    filters.push(`
-      <div>
-        <input
-          id="accept-item-${id}"
-          type="checkbox"
-          name="accept-item"
-          value="${val}"
-          onchange="onFilterChange(this, true)"
-          />
-        <label
-          id="accept-item-${id}-label"
-          for="accept-item-${id}"
-          >
-          ${descr}
-        </label>
-      </div>
-    `);
+  for (const state of Object.keys(data_by_location)) {
+    filters.states[state] = { name: state, isSet: false };
   }
 
+  filters.acceptItems = {
+    'n95s': { name: $.i18n('ftm-item-n95s'), isSet: false },
+    'masks': { name: $.i18n('ftm-item-masks'), isSet: false },
+    'shields': { name: $.i18n('ftm-item-face-shields'), isSet: false },
+    'booties': { name: $.i18n('ftm-item-booties'), isSet: false },
+    'goggles': { name: $.i18n('ftm-item-goggles'), isSet: false },
+    'gloves': { name: $.i18n('ftm-item-gloves'), isSet: false },
+    'kleenex': { name: $.i18n('ftm-item-kleenex'), isSet: false },
+    'sanitizer': { name: $.i18n('ftm-item-sanitizer'), isSet: false },
+    'overalls': { name: $.i18n('ftm-item-overalls'), isSet: false },
+    'gowns': { name: $.i18n('ftm-item-gowns'), isSet: false },
+    'respirators': { name: $.i18n('ftm-item-respirators'), isSet: false },
+  };
+
   return filters;
+}
+
+// Creates an 'applied' property in filters with the subset of the 'states' and 'acceptItems' filters
+// that are actually set. getFilteredContent/showMarkers can scan this 'applied' object instead of
+// walking the full set.
+function updateFilters(filters) {
+  const applied = filters.applied = {};
+
+  for (const state of Object.keys(filters.states)) {
+    if (filters.states[state].isSet) {
+      applied.states = applied.states || {};
+      applied.states[state] = true;
+    }
+  }
+
+  for (const item of Object.keys(filters.acceptItems)) {
+    if (filters.acceptItems[item].isSet) {
+      applied.acceptItems = applied.acceptItems || {};
+      applied.acceptItems[item] = true;
+    }
+  }
+}
+
+function createFilterElements(filters) {
+  const container = ce('div');
+
+  function createFilter(filter, key, value, prefix) {
+    const filterContainer = ce('div');
+    const input = ce('input');
+    input.type = 'checkbox';
+    input.id = `${ prefix }-${ key }`;
+    input.value = key;
+    input.addEventListener('change', () => onFilterChange(prefix, key, filters));
+    filterContainer.appendChild(input);
+    const label = ce('label', null, ctn(value));
+    label.id = `${ prefix }-${ key }-label`;
+    label.htmlFor = input.id;
+    filterContainer.appendChild(label);
+
+    if (filter.isSet) {
+      input.checked = true;
+      label.classList.add('selected');
+    }
+
+    filter.input = input;
+    filter.label = label;
+
+    return filterContainer;
+  }
+
+  container.appendChild(ce('h4', null, ctn($.i18n('ftm-states'))));
+  for (const state of Object.keys(filters.states).sort()) {
+    const stateFilter = filters.states[state];
+    container.appendChild(createFilter(stateFilter, state, stateFilter.name, 'states'));
+  }
+
+  container.appendChild(ce('h4', null, ctn($.i18n('ftm-accepted-items'))));
+  for (const item of Object.keys(filters.acceptItems)) {
+    const itemFilter = filters.acceptItems[item];
+    container.appendChild(createFilter(itemFilter, item, itemFilter.name, 'acceptItems'));
+  }
+
+  return container;
 }
 
 // Wrapper for document.createElement - creates an element of type elementName
@@ -137,12 +166,13 @@ function createContent(data) {
 
 function getFilteredContent(data, filters) {
   const content = [];
-  const filterAcceptKeys = filters && filters.acceptItems && Object.keys(filters.acceptItems);
+  const applied = filters.applied;
+  const filterAcceptKeys = applied && applied.acceptItems && Object.keys(applied.acceptItems);
 
   let listCount = 0; // TODO: hacky, see note below.
 
   for (const stateName of Object.keys(data).sort()) {
-    if (filters && filters.states && !filters.states[stateName]) {
+    if (applied && applied.states && !applied.states[stateName]) {
       continue;
     }
 
@@ -241,7 +271,6 @@ $(function () {
 
   const donationSiteForms = document.getElementsByClassName("add-donation-site-form");
 
-
   for (let i = 0; i < donationSiteForms.length; i++) {
     donationSiteForms[i].setAttribute('href', `/${country}/donation-form`);
   }
@@ -252,9 +281,8 @@ $(function () {
     window.data_by_location = toDataByLocation(locations);
 
     const searchParams = new URLSearchParams(url.search);
-    const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
-    const states = stateParams.map(param => param.split(',')).reduce((acc, val) => acc.concat(val), []);
     const showList = searchParams.get('hide-list') !== 'true';
+    const showFilters = showList && searchParams.get('hide-filters') !== 'true';
     const showMap = searchParams.get('hide-map') !== 'true';
 
     // BETA: Default initialized at module level scope (see above). Initialize search field, first check #map for default
@@ -276,94 +304,69 @@ $(function () {
 
     showList && createContent(window.data_by_location);
 
-    const stateFilter = {};
-    let hasStateFilter = false;
+    const filters = createFilters();
+
+    // Update filters to match any ?state= params
+    const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
+    const states = stateParams.map(param => param.split(',')).reduce((acc, val) => acc.concat(val), []);
     states.forEach(stateName => {
-      if (data_by_location[stateName]) {
-        stateFilter[stateName] = true;
-        hasStateFilter = true;
+      const stateFilter = filters.states[stateName];
+      if (stateFilter) {
+        stateFilter.isSet = true;
       }
     });
 
+    updateFilters(filters);
+
     if (showMap) {
-      loadMapScript(searchParams, stateFilter);
+      loadMapScript(searchParams, filters);
     }
 
     $('.locations-loading').hide();
 
     if (showList) {
-      $(".filters-list").html(createFiltersListHTML(data_by_location).join(" "));
       $('.locations-container').show();
 
-      // show filters unless hide-filters="true"
-      if (!searchParams.get('hide-filters') || searchParams.get('hide-filters') !== 'true') {
+      if (showFilters) {
+        $(".filters-list").append(createFilterElements(filters));
         $(".filters-container").show();
       }
 
-      if (hasStateFilter) {
-        Object.keys(stateFilter).forEach(state => {
-          const elem = document.getElementById(`state-${ state }`);
-          elem.checked = true;
-          onFilterChange(elem, false);
-        });
-      } else {
-        $(".locations-list").empty().append(getFilteredContent(data_by_location));
-      }
+      $(".locations-list").empty().append(getFilteredContent(data_by_location, filters));
     }
   });
 });
 
-window.onFilterChange = function (elem, scrollNeeded) {
-  // This is a hacky approach to programatically highlighting selected items as
-  // it uses hard-coded ID references. We use this approach for now for
-  // simplicity, speed of implementation and performance, but it should ideally
-  // be replaced with a more robust solution if time allows and performance
-  // isn't affected.
-  let label = $("#" + elem.id + "-label");
-  if (elem.checked) {
-    label.addClass("selected");
+function onFilterChange(prefix, key, filters) {
+  const filter = filters[prefix] && filters[prefix][key];
+
+  if (!filter) {
+    return;
+  }
+
+  if (filter.input.checked) {
+    filter.label.classList.add('selected');
+    filter.isSet = true;
   } else {
-    label.removeClass("selected");
+    filter.label.classList.remove('selected');
+    filter.isSet = false;
   }
 
-  let states = null;
-  document.filters['states'].forEach((state) => {
-    if (state.checked) {
-      states = states || {};
-      states[state.value] = true;
-    }
-  });
+  updateFilters(filters);
 
-  let acceptItems = null;
-  document.filters['accept-item'].forEach((acceptItem) => {
-    if (acceptItem.checked) {
-      acceptItems = acceptItems || {};
-      acceptItems[acceptItem.value] = true;
-    }
-  });
-
-  const filters = { states, acceptItems };
   const locationsList = $(".locations-list");
-
   locationsList.empty().append(getFilteredContent(data_by_location, filters));
-  showMarkers(data_by_location, filters, false);
+  showMarkers(data_by_location, filters);
 
-  if (scrollNeeded) {
-    locationsList[0].scrollIntoView({ 'behavior': 'smooth' });
-  }
+  locationsList[0].scrollIntoView({ 'behavior': 'smooth' });
 };
-
-// Polyfill required for Edge for the .forEach methods above, since this method doesn't exist in that browser.
-if (window.HTMLCollection && !HTMLCollection.prototype.forEach) {
-  HTMLCollection.prototype.forEach = Array.prototype.forEach;
-}
 
 // Lazy-loads the Google maps script once we know we need it. Sets up
 // a global initMap callback on the window object so the gmap script
 // can find it.
-function loadMapScript(searchParams, stateFilter) {
+function loadMapScript(searchParams, filters) {
   // Property created on window must match name passed in &callback= param
-  window.initMap = () => initMap(stateFilter);
+  window.initMap = () => initMap(filters);
 
   // load map based on current lang
   const scriptTag = ce('script');
@@ -389,21 +392,14 @@ function loadMapScript(searchParams, stateFilter) {
  *
  * TODO (patricknelson): Should the initMap() function only be responsible for initializing the map and then have the caller handle position/zoom/bounds etc?
  */
-function initMap(stateFilter) {
-  var data_by_location = window.data_by_location;
+function initMap(filters) {
+  const element = document.getElementById('map');
 
-  var element = document.getElementById('map');
-
-  if (element == null) {
-    alert('could not find map div');
+  if (!element ) {
+    return
   }
 
   $(".map-container").show();
-
-  const states = Object.keys(stateFilter);
-  if (!states.length) {
-    stateFilter = null;
-  }
 
   map = new google.maps.Map(element);
   markerCluster = new MarkerClusterer(map, [],
@@ -412,17 +408,11 @@ function initMap(stateFilter) {
       minimumClusterSize: 5
     });
 
-  showMarkers(data_by_location, { states: stateFilter }, !stateFilter);
-
-  // Necessary for resetMap() so that showMarkers() can be called again to reset initial state when user clicks link.
-  // TODO (patricknelson):  Is there a simpler way of accomplishing this?
-  initial_marker_filters = { states: stateFilter };
+  showMarkers(data_by_location, filters);
 
   // Initialize autosuggest/search field above the map.
-  initMapSearch();
+  initMapSearch(filters);
 }
-
-
 
 /**********************************
  * BEGIN MAP SEARCH FUNCTIONALITY *
@@ -431,7 +421,7 @@ function initMap(stateFilter) {
 /**
  * Responsible for initializing the search field and links below the search field (e.g. use location, reset map, etc).
  */
-function initMapSearch() {
+function initMapSearch(filters) {
   // If disabled, hide the search fields and don't bother attaching any functionality to them.
   if (!showMapSearch) {
     $('.map-search-wrap').hide();
@@ -490,27 +480,17 @@ function initMapSearch() {
 
   $('#reset-map').on('click', (e) => {
     e.preventDefault();
-    resetMap();
+    resetMap(filters);
   });
 }
-
-
 
 /**
  * Strictly responsible for resetting the map to it's initial state on page load WITHOUT user's location (since we have
  * a link to link to go back to that appearance).
  */
-function resetMap() {
-  // TODO (patricknelson): Ideally this would have two function calls instead of one:
-  //  1.) Show initial markers based on initial filters (e.g. which state[s]?)
-  //  2.) Reposition map (e.g. initial state?)
-  //  However, repositioning is ALSO happening deep inside showMarkers() function which means we have to also pass some filters here.
-  let showNearest = false;
-  if (typeof initial_marker_filters.states !== 'undefined') showNearest = !initial_marker_filters.states; // Quick safety check just in case "states" property goes missing later on.
-  showMarkers(window.data_by_location, initial_marker_filters, showNearest);
+function resetMap(filters) {
+  showMarkers(window.data_by_location, filters);
 }
-
-
 
 /**
  * Centers map at automatically detected coordinates using built in navigator.geolocation API.
@@ -532,8 +512,6 @@ function centerMapToMarkersNearUser() {
     });
   }
 }
-
-
 
 /**
  * Centers map around markers nearest to an arbitrary set of latitude/longitude coordinates.
@@ -583,30 +561,27 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
  * END MAP SEARCH FUNCTIONALITY *
  ********************************/
 
-
-
 /**
  * Changes the markers currently rendered on the map based strictly on . This will reset the 'markers' module variable as well.
  */
-function showMarkers(data, filters, showNearest) {
-
+function showMarkers(data, filters) {
   markers = [];
 
   if (!map || !markerCluster) {
     return;
   }
+
   markerCluster.clearMarkers()
 
-  filters = filters || {};
-
+  const applied = filters.applied;
   const bounds = new google.maps.LatLngBounds();
-  const filterAcceptKeys = filters.acceptItems && Object.keys(filters.acceptItems);
-  const hasFilters = filters.states || filters.acceptItems;
+  const filterAcceptKeys = applied.acceptItems && Object.keys(applied.acceptItems);
+  const hasFilters = applied.states || applied.acceptItems;
 
   for (const stateName of Object.keys(data)) {
     let inStateFilter = true;
 
-    if (filters.states && !filters.states[stateName]) {
+    if (applied.states && !applied.states[stateName]) {
       inStateFilter = false;
     }
 
@@ -655,12 +630,7 @@ function showMarkers(data, filters, showNearest) {
 
   let $mapStats = $('#map-stats');
   updateStats($mapStats, markers.length);
-
-  // if (showNearest) {
-  //   centerMapToNearestMarkers(map, markers, bounds);
-  // } else {
   centerMapToBounds(map, bounds, 9)
-  // }
 }
 window.showMarkers = showMarkers; // Exposed for debug/testing.
 
@@ -689,63 +659,6 @@ function centerMapToBounds(map, bounds, maxZoom) {
       }
     });
     map.fitBounds(bounds);
-  }
-}
-
-// TODO (patricknelson: The code inside the .getCurrentPosition() is now duplicated in centerMapToMarkersNearUser() AND centerMapToMarkersNearCoords()
-//  Adding this way to prevent conflicts for quicker merge. Possibly migrate to centerMapToMarkersNearUser()?
-function centerMapToNearestMarkers(map, markers, fallbackBounds) {
-  // First check to see if the user will accept getting their location, if not, silently return
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        var user_latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-
-        //Compute the distances of all markers from the user
-        var markerDistances = new Map(); // an associative array containing the marker referenced by the computed distance
-        var distances = []; // all the distances, so we can sort and then call markerDistances
-        for (const marker of markers) {
-          var distance = google.maps.geometry.spherical.computeDistanceBetween(marker.position, user_latlng);
-
-          // HACK: In the unlikely event that the exact same distance is computed, add one meter to the distance to give it a unique distance
-          // This could occur if a marker was added twice to the same location.
-          if (markerDistances.has(distance)) { distance = distance + 1; }
-
-          markerDistances[distance] = marker;
-
-          distances.push(distance);
-        }
-
-        // sort the distances and set bounds to closest three
-        distances.sort((a, b) => a - b);
-
-        // center the map on the user
-        const bounds = new google.maps.LatLngBounds();
-        bounds.extend(user_latlng);
-
-        // Extend the bounds to contain the three closest markers
-        let i = 0;
-        while (i < 3) {
-          // Get one of the closest markers
-          var distance = distances[i]
-          var marker = markerDistances[distance];
-
-          // Add to the iterator first just in case something fails later to avoid infinite loop
-          i++;
-
-          bounds.extend(marker.position);
-        }
-        centerMapToBounds(map, bounds);
-      },
-      () => {
-        centerMapToBounds(map, fallbackBounds);
-
-        // Hide the "User my location" link since we know that will not work.
-        $('#use-location').hide();
-      }
-    );
-  } else {
-    centerMapToBounds(map, fallbackBounds);
   }
 }
 
@@ -786,8 +699,6 @@ function addMarkerToMap(map, latitude, longitude, address, name, instructions, a
   return marker;
 }
 
-
-
 /**
  * Adjusts stats in header above map to call out number of markers currently being rendered.
  *
@@ -813,8 +724,6 @@ function updateStats($elem, count, states) {
 
   $elem.html(statsHtml);
 }
-
-
 
 /**
  * Made by Mathias Bynens <http://mathiasbynens.be/>
