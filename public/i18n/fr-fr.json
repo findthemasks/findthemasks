@@ -74,5 +74,6 @@
   "ftm-comments-questions" : "Vous avez un commentaire ou une suggestion sans rapport avec les mises à jour des données? Vouloir aider?",
   "ftm-contact-info" : "Écrivez-nous à contact@findthemasks.com ou rejoignez-nous sur <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://github.com/r-pop/findthemasks\">notre Github</a>.",
   "ftm-who-we-are" : "qui nous sommes",
-  "ftm-and" : "et"
+  "ftm-and" : "et",
+  "test-string" : "c'est une chaîne de test"
 }
