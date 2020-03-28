@@ -17,6 +17,8 @@
     "ftm-address": "Adresse",
     "ftm-anonymous-volunteers": "et d'autres qui sont anonymes",
     "ftm-canada": "Canada",
+    "ftm-cant-find-donation-site-answer": "Visitez <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> pour leur faire savoir ce dont vous disposez.",
+    "ftm-cant-find-donation-site-question": "Vous ne trouvez pas de site de don près de chez vous?",
     "ftm-country-switcher": "Pays",
     "ftm-donation-sites": "Sites de don",
     "ftm-donations-site-loading": "Chargement des sites de dons ...",

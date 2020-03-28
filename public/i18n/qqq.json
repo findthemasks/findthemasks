@@ -18,6 +18,8 @@
     "ftm-address": "Heading for the hospital address",
     "ftm-anonymous-volunteers": "Volunteers who are anonymous description",
     "ftm-canada": "country of Canada",
+    "ftm-cant-find-donation-site-answer": "Link and link text direct users who can't find a local PPE donation site to getusppe.org",
+    "ftm-cant-find-donation-site-question": "Question prompt for if the user can find a local PPE donation site",
     "ftm-country-switcher": "Navigation to change countries",
     "ftm-donation-sites": "Title text for donation sites",
     "ftm-donations-site-loading": "Loading message for donation sites map",
