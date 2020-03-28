@@ -160,7 +160,7 @@ function createFilterElements(filters) {
     const label = ce('label', null, ctn(value));
     label.id = `${ prefix }-${ key }-label`;
     label.htmlFor = input.id;
-    label.addEventListener("click", () =>  sendEvent("Map", `filter-${ prefix }`, key));
+    label.addEventListener("click", () =>  sendEvent("map", `filter-${ prefix }`, key));
     filterContainer.appendChild(label);
 
     if (filter.isSet) {
