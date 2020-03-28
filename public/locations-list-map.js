@@ -395,8 +395,8 @@ function loadMapScript(searchParams, filters) {
 function initMap(filters) {
   const element = document.getElementById('map');
 
-  if (!element ) {
-    return
+  if (!element) {
+    return;
   }
 
   $(".map-container").show();
