@@ -746,7 +746,7 @@ function updateStats($elem, count, states) {
     prettyMarkerCount = number_format(count, 0);
 
   // Default to no states.
-  statsHtml = `(${prettyMarkerCount})`;
+  statsHtml = `(${prettyMarkerCount} so far!)`;
 
   if (typeof states === 'undefined') states = [];
   if (states.length > 0) {

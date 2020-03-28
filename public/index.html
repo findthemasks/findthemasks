@@ -478,7 +478,14 @@
         font-size: 0.9rem !important;
       }
       .navbar-nav {
-        flex-direction: row !important;
+        flex-direction: row;
+      }
+
+      .navbar-nav .nav-item {
+        margin-left: 20px;
+      }
+      .dropdown-menu {
+        position: absolute !important;
       }
 
       /* Mobile first: Desktop breakpoint overrides below */
@@ -552,8 +559,7 @@
           padding-right: 20px;
         }
 
-        .navbar-nav .nav-item {
-          margin-left: 20px;
+        .nav-link {
           font-size: 0.7rem;
         }
       }
