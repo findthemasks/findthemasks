@@ -1,5 +1,6 @@
 import toDataByLocation from './toDataByLocation.js';
-
+import countries from './countries.js';
+import locales from './locales.js';
 
 
 /******************************************
@@ -32,6 +33,39 @@ function GetCountry() {
 
   return 'us';
 }
+
+const generateBottomNav = () => {
+  const localeDropdown = document.getElementById('locales-dropdown-selector');
+  const countryDropdown = document.getElementById('countries-dropdown-selector');
+
+  if (localeDropdown && countryDropdown) {
+    locales.forEach((locale) => {
+      const element = document.createElement('a');
+      element.className = 'dropdown-item i18n';
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('locale', locale.localeCode);
+      element.setAttribute('href', currentUrl.href);
+      element.textContent = $.i18n(locale.i18nString);
+      localeDropdown.appendChild(element);
+    });
+
+    countries.forEach((country) => {
+      const element = document.createElement('a');
+      element.className = 'dropdown-item i18n';
+      const currentUrl = new URL(window.location.href);
+      const pathname = currentUrl.pathname;
+      const updatedPath = pathname.replace(/(\/[a-z]{2}\/|\/)/, `/${country.countryCode}/`);
+      currentUrl.pathname = updatedPath;
+
+      element.setAttribute(
+        'href',
+        currentUrl.href
+      );
+      element.textContent = $.i18n(country.i18nString);
+      countryDropdown.appendChild(element);
+    });
+  }
+};
 
 // Builds the data structure for tracking which filters are set
 // If all values in a category are false, it's treated as no filter - all items are included
@@ -262,6 +296,7 @@ function getFilteredContent(data, filters) {
 $(function () {
   const url = new URL(window.location);
   const country = GetCountry();
+  generateBottomNav();
 
   // TODO(ajwong): This should not be required anymore.
   let countryDataFilename = 'data.json';
