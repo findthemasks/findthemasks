@@ -57,7 +57,16 @@ Since beta features are disabled by default, you can enable them via:
 ?show-search=true
 ```
 
-## Changing Location and Locales
+## Current Countries
+* United States - us
+* France - fr
+* Canada - ca
+
+## Current Locales
+* English - en
+* French - fr
+
+## Adding Countries and Locales
 
 We use a directory structure to view country-specific datasets.
 
@@ -66,9 +75,15 @@ For example, `/us/give.html` will filter the map to the United States and `/fr/g
 To view translated version of a country you can pass in a locale parameter. `/us/give.html?locale=fr-FR`
 will show the map of the United States in French and `/fr/give.html?locale=en-US` will show the map of France in English.
 
-To add a new country, create a subdirectory under public `/public/country_code` using the alpha-2 country code: https://www.iban.com/country-codes.
-Copy a `.htaccess` file from an existing country directory into the new one. Update the form redirect rule to the correct country code
-and ensure that the translated file has the country code short link so that it redirects properly.
+To add a new country, you need to set a few variables.
+1. Get the country code from https://www.iban.com/country-codes.
+2. Add the country code and a link to the donation form to `donation-form-bounce.html`. The form should
+include translations for all official languages in that country.
+3. Add the translated strings for all official languages in that country in `i18n.js`. As a starting point,
+it is OK to launch a new language using an international variant. e.g. you can launch Canada
+with `en` translations and `fr` translations, they do not need to be localized to `en-CA` and `fr-CA`.
+4. Update the list of languages and countries in `countries.js` and `locales.js` and ensure that
+they propagate correctly to the langauge and country dropdowns.
 
 ## Directory structure
 
@@ -156,7 +171,7 @@ There are currently 2 scripts that automatically update the spreadsheet, and one
 that backs it up:
 
 * fillInGeocodes: fills in the lat/lng column based on the address in the "address" column.
-  (Note that the "address" column is defined as the column that has "address" in row 2.) 
+  (Note that the "address" column is defined as the column that has "address" in row 2.)
   Uses Google Maps geocoding API.  Currently runs once/minute.
 * createStandardAddress: fills in the "address" column based on the data in the "orig_address",
   "city", and "state" columns.  Uses Google Maps geocoding API. Currently runs once/minute.
@@ -168,12 +183,12 @@ There are a few important things to know about these scripts:
 * They can be run by anyone who has edit permission to the Google Sheet.
 * Triggers (automation) can be set up by navigating to Edit > Edit current project's triggers.
 * The dev-owner of each sheet should set up a trigger for each of the 3 scripts.  (US spreadsheet
-  dev owner is @susanashlock's gmail).  
+  dev owner is @susanashlock's gmail).
 * The scripts are run using quota of the user the user that runs them.
 * Each Gmail user has a fixed amount of geocoding quota per day.  This quota is somewhere
   around 100-500 calls per day.  @susanashlock's account has 'special' quota.  We're not
   sure exactly what it is, but is sufficient to support ~1000 calls per day.
-  
+
 
 ## Thanks
 

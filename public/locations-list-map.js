@@ -1,5 +1,6 @@
 import toDataByLocation from './toDataByLocation.js';
-
+import countries from './countries.js';
+import locales from './locales.js';
 
 
 /******************************************
@@ -35,58 +36,37 @@ function GetCountry() {
   return 'us';
 }
 
-const languages = [
-  {
-    i18nString: 'ftm-english',
-    localeCode: 'en'
-  },
-  {
-    i18nString: 'ftm-french',
-    localeCode: 'fr'
-  }
-];
-
-const countries = [
-  {
-    i18nString: 'ftm-canada',
-    countryCode: 'ca'
-  },
-  {
-    i18nString: 'ftm-france',
-    countryCode: 'fr'
-  },
-  {
-    i18nString: 'ftm-united-states',
-    countryCode: 'us'
-  }
-];
-
 const generateBottomNav = () => {
-  const languageDropdown = document.getElementById('locales-dropdown-selector');
+  const localeDropdown = document.getElementById('locales-dropdown-selector');
   const countryDropdown = document.getElementById('countries-dropdown-selector');
 
-  languages.forEach((language) => {
-    const element = document.createElement('a');
-    element.className = 'dropdown-item i18n';
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.set('locale', language.localeCode);
-    element.setAttribute('href', currentUrl.href);
-    element.textContent = $.i18n(language.i18nString);
-    languageDropdown.appendChild(element);
-  });
+  if (localeDropdown && countryDropdown) {
+    locales.forEach((locale) => {
+      const element = document.createElement('a');
+      element.className = 'dropdown-item i18n';
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('locale', locale.localeCode);
+      element.setAttribute('href', currentUrl.href);
+      element.textContent = $.i18n(locale.i18nString);
+      localeDropdown.appendChild(element);
+    });
 
-  countries.forEach((country) => {
-    const element = document.createElement('a');
-    element.className = 'dropdown-item i18n';
-    const currentUrl = new URL(window.location.href);
-    const href = currentUrl.href;
-    element.setAttribute(
-      'href',
-      href.replace(/\/([a-z]{2})\//, `/${country.countryCode}/`)
-    );
-    element.textContent = $.i18n(country.i18nString);
-    countryDropdown.appendChild(element);
-  });
+    countries.forEach((country) => {
+      const element = document.createElement('a');
+      element.className = 'dropdown-item i18n';
+      const currentUrl = new URL(window.location.href);
+      const pathname = currentUrl.pathname;
+      const updatedPath = pathname.replace(/(\/[a-z]{2}\/|\/)/, `/${country.countryCode}/`);
+      currentUrl.pathname = updatedPath;
+
+      element.setAttribute(
+        'href',
+        currentUrl.href
+      );
+      element.textContent = $.i18n(country.i18nString);
+      countryDropdown.appendChild(element);
+    });
+  }
 };
 
 function createFiltersListHTML() {
