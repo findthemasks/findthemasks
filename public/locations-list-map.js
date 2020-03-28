@@ -34,22 +34,41 @@ function GetCountry() {
   return 'us';
 }
 
-const generateBottomNav = () => {
-  const localeDropdown = document.getElementById('locales-dropdown-selector');
-  const countryDropdown = document.getElementById('countries-dropdown-selector');
+const getCurrentLocale = () => {
+  const url = new URL(window.location);
 
-  if (localeDropdown && countryDropdown) {
+  return url.searchParams.get('locale') || 'en';
+};
+
+const generateBottomNav = () => {
+  const currentCountry = GetCountry();
+  const currentLocale = getCurrentLocale();
+
+  const localeDropdownLink = document.getElementById('locales-dropdown');
+  const countryDropdownLink = document.getElementById('countries-dropdown');
+  const localeDropdownItems = document.getElementById('locales-dropdown-selector');
+  const countryDropdownItems = document.getElementById('countries-dropdown-selector');
+
+  if (localeDropdownLink && countryDropdownLink && localeDropdownItems && countryDropdownItems) {
     locales.forEach((locale) => {
+      if (locale.localeCode === currentLocale.toLowerCase()) {
+        localeDropdownLink.textContent = $.i18n(locale.i18nString);
+      }
+
       const element = document.createElement('a');
       element.className = 'dropdown-item i18n';
       const currentUrl = new URL(window.location.href);
       currentUrl.searchParams.set('locale', locale.localeCode);
       element.setAttribute('href', currentUrl.href);
       element.textContent = $.i18n(locale.i18nString);
-      localeDropdown.appendChild(element);
+      localeDropdownItems.appendChild(element);
     });
 
     countries.forEach((country) => {
+      if (country.countryCode === currentCountry.toLowerCase()) {
+        countryDropdownLink.textContent = $.i18n(country.i18nString);
+      }
+
       const element = document.createElement('a');
       element.className = 'dropdown-item i18n';
       const currentUrl = new URL(window.location.href);
@@ -62,7 +81,7 @@ const generateBottomNav = () => {
         currentUrl.href
       );
       element.textContent = $.i18n(country.i18nString);
-      countryDropdown.appendChild(element);
+      countryDropdownItems.appendChild(element);
     });
   }
 };
