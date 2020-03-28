@@ -181,7 +181,7 @@ function createContent(data) {
     const state = data[stateName];
 
     state.domElem = $(ce('div', 'state', ce('h2', null, ctn(stateName))));
-    state.containerElem = $(ce('div'));
+    state.containerElem = $(ce('div', 'all-cities-wrap'));
     state.domElem.append(state.containerElem);
 
     const cities = state.cities;
@@ -805,4 +805,3 @@ function number_format(number, decimal_places, dec_seperator, thou_seperator) {
   dec_seperator = (decimal_places <= 0) ? '' : dec_seperator;
   return f[0] + dec_seperator + f[1];
 }
-

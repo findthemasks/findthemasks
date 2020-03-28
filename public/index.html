@@ -53,10 +53,152 @@
     <!-- END Open Graph Tags -->
     <style>
       /* Styling for the JS generated locations list */
+      html {
+        height: 100%;
+        width: 100%;
+      }
+      
+      body {
+        box-sizing: border-box;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        line-height: 1.65;
+        background-color: #ffffff;
+        color: #222;
+        font-family: 'Roboto', 'Helvetica', sans-serif;
+        font-weight: normal;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: optimizeLegibility;
+      }
 
-      .locations-list {
-          padding-bottom: 10px;
-          border-bottom: 1px solid #efefef;
+
+      .content-container {
+        margin-top: 15px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 60px;
+        width: 60%;
+      }
+      
+
+      .heading-container {
+        padding-top: 30px;
+        padding-bottom: 20px;
+        text-align: center;
+        background-color: royalblue;
+        color: white;
+      }
+
+      .heading-container a {
+        color: white;
+      }
+      
+      .logo {
+        height: 120px;
+        margin-bottom: 15px;
+      }
+      
+      h1 {
+        font-weight: 800;
+      }
+
+      h2 {
+        font-weight: 800;
+        color: #333;
+        margin-top: 30px;
+        text-align: center;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        text-transform: capitalize;
+      }
+
+      hr {margin-top: 1.7rem;}
+
+      .footer {
+        margin-top: 50px;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 45px;
+        padding-right: 45px;
+        padding-bottom: 90px;
+        background-color: #eee;
+      }
+      
+      .member-of {
+        font-style: italic;
+        font-size: 13px;
+        margin-bottom: 10px;
+        
+      }
+      
+      .subhead {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px;
+        margin-bottom: 40px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        width: 55%;
+        padding: 10px 20px;
+        border-radius: 2px;
+      }
+      .subhead-left {
+        width: calc(40% + 40px);
+        font-weight: light;
+        letter-spacing: 3px;
+        text-align: right;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        line-height: 1.8rem;
+        margin-right: 20px;
+        padding-right: 20px;
+        border-right: 2px solid #ccc;
+        padding-top: 25px;
+        padding-bottom: 25px;
+      }
+      .subhead-right{
+        width: calc(60% + 40px);
+        text-align: left;
+        font-size: 1rem;
+      }
+
+      .question {
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      .ppe-container {
+        margin-top: 30px;
+        margin-bottom: 30px;
+      }
+      
+      .ppe-example {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .ppe-example img {
+        height: 200px;
+        width: auto;
+      }
+      .ppe-example-caption {
+        color: #444;
+        font-size: 12px;
+        letter-spacing: 1.1px;
+        font-weight: 300;
+        text-transform: uppercase;
+        margin-top: 0.9rem;
+        margin-bottom: 0.375rem;
+      }
+
+      .state {
+        display: flex;
+        position: relative;
       }
 
       .state:first-child {
@@ -64,88 +206,128 @@
       }
 
       .state h2 {
-          font-size: 28px;
-          padding-top: 20px;
-          padding-bottom: 20px;
-          margin: 0px;
-          font-weight: 400;
-          border-top: 1px solid #efefef;
+        font-size: 28px;
+        display: flex;
+        margin: 0;
+        min-width: 90px;
+        max-width: 90px;
+        font-weight: 800;
+        font-family: 'Roboto';
+        border: 1px solid #eee;
+        height: 90px;
+        justify-content: center;
+        align-items: center;
+        background-color: #333;
+        color: white;
+        letter-spacing: 3px;
+        margin-right: 15px;
+        border-radius: 1px;
       }
 
-      .city h3 {
-          font-size: 20px;
-          padding-bottom: 20px;
-          margin: 0px;
-          text-transform: uppercase;
+      .all-cities-wrap {
+        width: calc(100% - 80px);
       }
 
       .city {
-          line-height: 1.2;
-          padding-bottom: 10px;
+        line-height: 1.2;
+        padding-bottom: 10px;
+        width: 100%;
       }
 
+      .city h3 {
+        font-size: 20px;
+        padding-bottom: 20px;
+        padding-top: 20px;
+        font-weight: 300;
+        margin: 0px;
+        text-transform: uppercase;
+        color: #666;
+        letter-spacing: 3px;
+      }
+
+
       .city h4 {
-          font-size: 18px;
-          font-weight: 600;
-          padding-bottom: 5px;
-          margin: 0px;
+        font-size: 18px;
+        font-weight: 600;
+        padding-bottom: 5px;
+        margin: 0px;
       }
 
       .city p {
-          margin: 0px;
-          font-size: 18px;
+        margin: 0px;
+        font-size: 0.9rem;
+
       }
 
       .location {
-          padding-bottom: 20px;
-          overflow-wrap: break-word;
+        padding-bottom: 20px;
+        overflow-wrap: break-word;
       }
 
       .location label {
-          color: #999;
-          font-size: 11px;
-          font-weight: 600;
-          text-transform: uppercase;
-          margin-top: 12px;
-          margin-bottom: 3px;
+        color: #444;
+        font-size: 12px;
+        letter-spacing: 1.1px;
+        font-weight: 300;
+        text-transform: uppercase;
+        margin-top: 0.9rem;
+        margin-bottom: 0.375rem;
       }
 
       .donation-sites h1 {
-          margin-bottom: -10px;
+        margin-bottom: -10px;
       }
 
       .filters-list div {
-          display: inline-block;
-          margin-right: 0.5ex;
+        display: inline-block;
+        margin-right: 3px;
+        margin-bottom: 3px;
+      }
+      
+      .locations-list {
+        padding-left: 30px;
+        padding-right: 30px;
+        padding-bottom: 10px;
+      }
+
+      .filters-container {
+        margin-left: 30px;
+        margin-right: 30px;
       }
 
       .filters-list h4 {
-          font-size: 16px;
-          font-weight: 600;
-          text-transform: uppercase;
-          margin-top: 15px;
-          margin-bottom: 10px;
+        display: block;
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 25px;
+        margin-bottom: 20px;
       }
 
       .filters-list input {
-          display: none;
+        display: none;
       }
+
 
       .filters-list label {
-          border: 1px #aadaff solid;
-          background: #aadaff30;
-          font-size: 18px;
-          padding: 0.2rem 0.4rem;
-          cursor: pointer;
-          border-radius: 3px;
+        border: 1px #ccc solid;
+        background: white;
+        font-size: 18px;
+        padding: 0.3rem 0.4rem;
+        cursor: pointer;
+        border-radius: 5px;
       }
 
+
       .filters-list label:hover {
-          background-color: #aadaff59;
+          background-color:#7c9bf7;
+          border-color: #7c9bf7;
+          color: white;
       }
 
       .filters-list label.selected {
-          background-color: #aadaff;
+          background-color: royalblue;
+          color: white;
+          border-color: #c2d1ff;
       }
 
       .map-container {
@@ -173,7 +355,9 @@
       }
 
       #map-stats, #list-stats {
-          font-weight: 300;
+        font-weight: 300;
+        font-size: 20px;
+        text-align: center;
       }
 
       .locations-loading {
@@ -207,211 +391,312 @@
 
 
       /*********************
-         * MAP SEARCH STYLES *
-         *********************/
+        * MAP SEARCH STYLES *
+        *********************/
 
-        /* What actually varies with breakpoints */
-        .map-search-wrap {
-          width: 100%;
-          position: relative;
-          margin-top: 20px;
-          display: flex;
-        }
+      /* What actually varies with breakpoints */
+      .map-search-wrap {
+        width: 100%;
+        position: relative;
+        margin-top: 20px;
+        display: flex;
+      }
 
-        .map-search-wrap:first-child {
-          margin-top: 0;
-        }
+      .map-search-wrap:first-child {
+        margin-top: 0;
+      }
 
-        .search-icon {
-          top: 1; /* ... see height below... */
-          left: 10px;
-          width: 17px;
-          height: 2.3rem; /* synchronized w/ input field for vertical centering, being an SVG it should not warp */
-          position: absolute;
-          pointer-events: none; /* user clicks should fall through to input field instead */
-          opacity: 0.7;
+      .search-icon {
+        top: 1; /* ... see height below... */
+        left: 10px;
+        width: 17px;
+        height: 2.3rem; /* synchronized w/ input field for vertical centering, being an SVG it should not warp */
+        position: absolute;
+        pointer-events: none; /* user clicks should fall through to input field instead */
+        opacity: 0.7;
 
-        }
+      }
 
-        #map-search {
-          border: 1px solid #ccc;
-          height: 2.3rem;
-        }
+      #map-search {
+        border: 1px solid #ccc;
+        height: 2.3rem;
+      }
 
-        #map-search {
-          outline-color: #000;
-        }
+      #map-search {
+        outline-color: #000;
+      }
 
-        #map-search {
-          line-height: 2.3rem;
-          width: 100%;
-          margin-bottom: 5px;
-          /* Set to match the filter labels for consistency. */
-          padding: 0.4rem 0.8rem;
-          padding-left: 35px; /* compensate for search button */
-          border-radius: 3px;
-          outline: none;
-        }
+      #map-search {
+        line-height: 2.3rem;
+        width: 100%;
+        margin-bottom: 5px;
+        /* Set to match the filter labels for consistency. */
+        padding: 0.4rem 0.8rem;
+        padding-left: 35px; /* compensate for search button */
+        border-radius: 3px;
+        outline: none;
+      }
 
+
+      .search-input {
+        width: 100%;
+        position: relative;
+        display: flex;
+        width:100%;
+        margin: 0px 15px 0px 20px;
+      }
+
+      .search-controls {
+        display: flex;
+        padding-top: 7px;
+      }
+
+      .search-control-separator {
+        padding: 0px 8px;
+        color: #ccc;
+        font-size: 14px;
+      }
+
+      .map-action-link {
+        white-space: nowrap;
+        font-size: 14px;
+      }
+
+      .map-action-link:hover {
+        text-decoration: none;
+      }
+
+      .map-action-link img {
+        padding-right: 5px;
+        width: 21px;
+        height: 21px;
+      }
+      
+      .nav-drop-shadow {
+        background-color: white;
+        box-shadow: 0 -2px 15px rgba(0,0,0,0.09);
+      }
+      .nav-link {
+        font-size: 0.9rem !important;
+      }
+      .navbar-nav {
+        flex-direction: row;
+      }
+
+      .navbar-nav .nav-item {
+        margin-left: 20px;
+      }
+      .dropdown-menu {
+        position: absolute !important;
+      }
+
+      /* Mobile first: Desktop breakpoint overrides below */
+
+      @media (max-width: 1200px) {
         .search-input {
-          width: 100%;
-          position: relative;
-          display: flex;
-          width:100%;
-          margin: 0px 15px 0px 20px;
+          margin: 0px;
+          margin-right: 15px;
         }
+        .map-search-wrap {
+          padding-top: 4px;
+        }
+      }
 
+      @media (max-width: 576px) {
+        .map-search-wrap {
+          display: block;
+        }
         .search-controls {
-          display: flex;
-          padding-top: 7px;
+          justify-content: center;
+          padding-top: 5px;
+        }
+      }
+
+      /*************************
+        * END MAP SEARCH STYLES *
+        *************************/
+
+      @media screen and (max-width: 768px) {
+        .content-container {
+          margin-left: 15px;
+          margin-right: 15px;
+          width: auto;
         }
 
-        .search-control-separator {
-          padding: 0px 8px;
-          color: #ccc;
-          font-size: 14px;
+        .logo {
+          height: 100px;
         }
 
-        .map-action-link {
-          white-space: nowrap;
-          font-size: 14px;
+        .subhead {
+          width: 100%;
+          padding: 0;
+          flex-direction: column;
+        }
+        .subhead-left {
+          border: 0;
+          width: 100%;
+          padding: 0;
+          margin-bottom: 10px;
+          text-align: center;
+        }
+        .subhead-right {
+          font-size: 0.9rem;
+          width: 80%;
+          text-align: center;
         }
 
-        .map-action-link:hover {
-          text-decoration: none;
+        .locations-list {
+          padding-left: 15px;
+          padding-right: 15px;
+        } 
+        .state h2 {
+          font-size: 24px;
+          letter-spacing: 1px;
+          max-width: 70px;
+          min-width: 70px;
+          height: 70px;
+        }
+        .footer {
+          padding-left: 20px;
+          padding-right: 20px;
         }
 
-        .map-action-link img {
-          padding-right: 5px;
-          width: 21px;
-          height: 21px;
+        .nav-link {
+          font-size: 0.7rem;
         }
+      }
 
-        /* Mobile first: Desktop breakpoint overrides below */
-
-        @media (max-width: 1200px) {
-          .search-input {
-            margin: 0px;
-            margin-right: 15px;
-          }
-          .map-search-wrap {
-            padding-top: 4px;
-          }
-        }
-
-        @media (max-width: 576px) {
-          .map-search-wrap {
-            display: block;
-          }
-          .search-controls {
-            padding-top: 5px;
-          }
-        }
-
-        /*************************
-         * END MAP SEARCH STYLES *
-         *************************/
-
-    </style>
-</head>
-
-<body>
-<nav class="navbar fixed-bottom navbar-expand-lg navbar-light bg-light">
-  <div class="ml-auto">
-    <ul class="navbar-nav">
-      <li class="nav-item dropup">
-        <a class="nav-link dropdown-toggle i18n" href="#" id="locales-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-i18n="ftm-language-switcher">
-          Language
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="locales-dropdown" id="locales-dropdown-selector">
-        </div>
-      </li>
-      <li class="nav-item dropup">
-        <a class="nav-link dropdown-toggle i18n" href="#" id="countries-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-i18n="ftm-country-switcher">
-          Country
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="countries-dropdown" id="countries-dropdown-selector">
-        </div>
-      </li>
-    </ul>
-  </div>
-</nav>
-<main class="content">
-
-    <div class="container" style="padding-bottom: 40px;">
-        <h1 style="padding: 20px 0px 0px 0px;">#findthemasks</h1>
-        <p style="padding: 0px;" class="i18n" data-i18n="[html]ftm-index-site-coalition">This site is part of the <a href="https://getusppe.org/">getusppe.org</a> coalition.</p>
-        <h4 style="padding-bottom: 20px; font-weight: 400;" class="i18n" data-i18n="[html]ftm-index-getmeppe-twitter-cta">America&rsquo;s frontline healthcare workers are treating COVID-19 patients, in some cases without adequate protective gear.
-          Some have taken to Twitter on <a href="https://twitter.com/search?q=%23GetMePPE&src=typeahead_click">#GetMePPE</a> to ask for help.</h4>
-
-        <p style="padding-top: 10px; margin: 0px;" class="i18n" data-i18n="ftm-index-need-helpers">We need to help the helpers, right now.</p>
-        <h3 style="padding-bottom: 20px" class="i18n" data-i18n="ftm-index-need-find-masks">We need to find the masks.</h3>
-
-      <p class="i18n" data-i18n="ftm-index-where-to-find-ppe">Look in your basement, your emergency kit, your bug out bag, your workbench for N95 masks.
-        If you find surgical masks, those are also in short supply, and in many places are being used in place of N95s.
-        All of these masks can save lives now if you get them into the hands of health care workers.</p>
-
-      <p class="i18n" data-i18n="[html]ftm-index-types-of-ppe">Other types of PPE like disposable <span class=embold>booties</span>, <span class=embold>safety goggles</span>, and
-        <span class=embold>disposable suits</span> are also in short supply. If you have these things or know someone who might
-        (HVAC installers? Construction workers?) please share this site with them. Large donors can register at
-        <a href="https://getusppe.org/">getusppe.org/give</a>.</p>
-
-        <a name="sites"></a>
-        <h3 style="padding: 20px 0px 10px 0px;" class="i18n" data-i18n="ftm-what-to-do-header">Here's what you can do:</h3>
-        <ol>
-          <li class="i18n" data-i18n="ftm-what-to-do-1">Look at our list of sites below. You can filter by state or supplies needed.</li>
-          <li class="i18n" data-i18n="ftm-what-to-do-2">If there's a site near you, drop off following their instructions.</li>
-          <li class="i18n" data-i18n="ftm-what-to-do-3">If you are donating open packages, please put them in a ziploc bag with a note saying whether they have been used, whether anyone in your household has been sick or travelled outside the country, and the expiration date if known.</li>
-          <li class="i18n" data-i18n="[html]ftm-what-to-do-4">If there's not a site near you, visit <a href="https://getusppe.org/give">getusppe.org</a> to let them know what you have available.</li>
-        </ol>
-
-        <h5 class="i18n" data-i18n="[html]ftm-add-donation-site">To add a donation site, update information, or request we take down information, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>. Your submission will be approved and updated as soon as possible.</h5>
-
-        <div class="locations-loading">
-          <img src="images/icons/loader.svg" alt="" class="load-spinner"> <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
-        </div>
-
-      <div class="locations-container" style="display: none;">
-        <div class="row" style="margin: 30px 0px 20px 0px;">
-          <div class="col-xl-3" style="padding: 0px">
-            <h3 style="white-space: nowrap"><span class="i18n" data-i18n="ftm-donation-sites">Donation sites</span> <span id="list-stats"></span></h3>
-          </div>
-          <div class="col-xl-9" style="padding: 0px">
-            <div class="map-search-wrap">
-              <div class="search-input">
-                <input style="" type="search" name="map-search" id="map-search" placeholder="Search by city, zip, or address" data-i18n="[placeholder]ftm-maps-search-placeholder">
-                <!-- Icon credit to https://feathericons.com/  -->
-                <img class="search-icon" src="images/icons/search.svg">
-              </div>
-              <!-- BETA: To enable search field, either change data-enable-search to "true" in #map below, or add hide-search=false/show-search=true to query string. -->
-              <div class="search-controls">
-                <a href="javascript:;" class="map-action-link" id="use-location"><span data-i18n="ftm-maps-search-use-location"></span>
-                  Use my location<span class="search-control-separator">|</span></a>
-
-                <a href="javascript:;" class="map-action-link" id="reset-map"><span data-i18n="ftm-maps-search-reset"></span>Reset map</a></div>
+      </style>
+    
+  <body>
+    <nav class="navbar fixed-bottom navbar-expand-lg navbar-light bg-light nav-drop-shadow">
+      <div class="ml-auto">
+        <ul class="navbar-nav">
+          <li class="nav-item dropup">
+            <a class="nav-link dropdown-toggle i18n" href="#" id="locales-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-i18n="ftm-language-switcher">
+              Language
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="locales-dropdown" id="locales-dropdown-selector">
             </div>
+          </li>
+          <li class="nav-item dropup">
+            <a class="nav-link dropdown-toggle i18n" href="#" id="countries-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-i18n="ftm-country-switcher">
+              Country
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="countries-dropdown" id="countries-dropdown-selector">
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+      <div class="heading-container">
+        <img class="logo" src="images/logo-color.svg" alt="Find The Masks logo" />
+        <!-- <h1>#findthemasks</h1> -->
+        <div class="member-of i18n" data-i18n="[html]ftm-index-site-coalition">A member of the <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/">GetUsPPE.org</a> coalition</div>
+        
+      </div>
+      <div class="subhead">
+        <div class="subhead-left i18n" data-i18n="ftm-index-need-helpers">Let's Help The Helpers</div>
+        <div class="subhead-right i18n" data-i18n="[html]ftm-index-getmeppe-twitter-cta"> 
+          Find where you can donate your masks or other personal protective equipment (PPE) in your local area.
+        </div>
+      </div>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 ppe-example">
+            <img style="height:140px"src="images/goggles.png" alt="example of personal protective equipment: goggles"/>
+            <div class="ppe-example-caption i18n" data-i18n="ftm-item-goggles">goggles</div>
+          </div>
+          <div class="col-lg-4 ppe-example">
+            <img style="height:210px" src="images/masks.png" alt="example of personal protective equipment: surgical mask, N95"/>
+            <div class="ppe-example-caption i18n" data-i18n="ftm-item-masks">Surgical mask & N95 Masks</div>
+          </div>
+          <div class="col-lg-4 ppe-example">
+            <img style="height:185px" src="images/faceshield.png" alt="example of personal protective equipment: face shield "/>
+            <div class="ppe-example-caption i18n" data-i18n="ftm-item-face-shields">Face Shield</div>
           </div>
         </div>
-
-        <div id="map" data-enable-search="true"></div>
-
-        <div class="filters-container" style="display: none; padding-top: 30px;">
-          <h4><span class="i18n" data-i18n="ftm-filters">Filters</span></h4>
-          <form name="filters" class="filters-list"></form>
-        </div>
-
-        <div id="locations-list" class="locations-list"></div>
       </div>
+      
+      <div class="content-container" style="margin-bottom: 40px;">
+        <h2>Protecting healthcare workers protects everybody</h2>
 
-        <p style="padding-top: 30px;" class="i18n" data-i18n="[html]ftm-add-donation-site">To add a donation site, update information, or request we take down information, please
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>.
-          <b>Your submission will be approved and updated as soon as possible.</b><br><br>
-          Got a comment or suggestion not related to data updates? Want to help? contact@findthemasks.com or join us on
-          <a href="https://github.com/r-pop/findthemasks">our Github</a>.
+        <p class="i18n" data-i18n="ftm-index-where-to-find-ppe">
+          Maybe you bought N95 masks a few weeks ago or already have some in your house. Right now healthcare workers are running dangerously low on PPE like masks, hospital gowns, booties, and face shields to protect them while they risk their lives to save others.
+        <p>
+        </p >
+          By donating, you protect <em>everybody</em>: doctors, nurses, hospital staff, patients, and the general public.
+        <p>
+        </p class="i18n" data-i18n="[html]ftm-index-types-of-ppe">
+          If you know construction workers, vets, scientists, or dentists, please share this link with them.
         </p>
 
-      <p><span class='i18n' data-i18n="[html]ftm-made-with-love">Made with &lt;3 in Seattle by</span> <a href="whoweare.html" class="end">findthemasks.com</a></p>
-    </div>
-</main>
-</body>
+        <hr/>
+        <h2 class="i18n" data-i18n="ftm-what-to-do-header">How to Donate PPE</h2>
+        <p>Our network of volunteers has created a global map of over 1700+ locations, like hospitals and clinics, where you can donate your masks, gowns, and other PPE.</p>
+        <ol>
+          <li class="i18n" data-i18n="[html]ftm-what-to-do-1"><b>Use our map</b> below to find a hospital or health center near you accepting donations.</li>
+          <li class="i18n" data-i18n="[html]ftm-what-to-do-2"><b>Follow their instructions</b> for what they accept and how to drop it off.</li>
+          <li class="i18n" data-i18n="[html]ftm-what-to-do-3"><b>If you are donating opened packages</b>, please put them in a ziploc bag with a note saying whether they have been used, whether anyone in your household has been sick or travelled outside the country, and the expiration date if known.</li>
+        </ol>
+        
+        <div class="question i18n" data-i18n="[html]ftm-large-donation-question">Have <em>a lot</em> (500+ items) to donate?</div>
+        <p class="i18n" data-i18n="[html]ftm-large-donation-answer">We encourage large donors to use another site we work with to help route donations. Register at <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/give">getusppe.org/give</a>.</p>
+        
+        <div class="question">Can't find a donation site near you?</div>
+        <p>Visit <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/give">getusppe.org</a> to let them know what you have available.</p>
+        
+        <div class="question i18n" data-i18n="ftm-add-donation-site-question">Want to add a donation site? update or remove information?</div>
+        <p class="i18n" data-i18n="[html]ftm-add-donation-site-answer">Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill out this form</a>. We will review it as soon as possible.</p>
+        <hr/>
+      </div>
+      <h2 class="i18n" data-i18n= "ftm-map-of-sites">Donation Sites</h2>
+      <div id="list-stats"></div>
+
+      <div class="locations-loading">
+        <img src="images/icons/loader.svg" alt="" class="load-spinner"> <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
+      </div>
+
+    <div class="locations-container" style="display: none;">
+      <div class="row" style="margin: 30px 0px 20px 0px;">
+        <div class="offset-xs-1 col-xs-10 offset-lg-2 col-lg-8">
+          <div class="map-search-wrap">
+            <div class="search-input">
+              <input type="search" name="map-search" id="map-search" placeholder="Search by city, zip, or address" data-i18n="[placeholder]ftm-maps-search-placeholder">
+              <!-- Icon credit to https://feathericons.com/  -->
+              <img class="search-icon" src="images/icons/search.svg">
+            </div>
+            <!-- BETA: To enable search field, either change data-enable-search to "true" in #map below, or add hide-search=false/show-search=true to query string. -->
+            <div class="search-controls">
+              <a href="javascript:;" class="map-action-link" id="use-location"><span data-i18n="ftm-maps-search-use-location"></span>
+                Use my location<span class="search-control-separator">|</span></a>
+
+              <a href="javascript:;" class="map-action-link" id="reset-map"><span data-i18n="ftm-maps-search-reset"></span>Reset map</a></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="map" data-enable-search="true"></div>
+
+      <div class="filters-container" style="display: none; padding-top: 30px;">
+        <form name="filters" class="filters-list"></form>
+      </div>
+
+      <div id="locations-list" class="locations-list"></div>
+
+      <div class="footer">
+        <div style="height:50px"></div>
+        <div class="question i18n" data-i18n="ftm-add-donation-site-question">Want to add a donation site, or update or remove information?</div>
+        <p class="i18n" data-i18n="[html]ftm-add-donation-site-answer">Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill out this form</a>. We will review it as soon as possible.</p>
+        <div class="question">Got a comment or suggestion not related to data updates? Want to help? </div>
+        <p>
+          Email us at contact@findthemasks.com or join us on <a target="_blank" rel="noreferrer noopener" href="https://github.com/r-pop/findthemasks">our Github</a>.
+        </p>
+
+        <p class="i18n" data-i18n="[html]ftm-made-with-love">made with &lt;3 in Seattle</p>
+        <a href="whoweare.html" class="end">who we are</a>
+      </div>
+    
+
+  </body>
 </html>
