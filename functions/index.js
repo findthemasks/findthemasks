@@ -19,7 +19,8 @@ let GOOGLE_MAPS_API_KEY = '';
 const SHEETS = {
   us: '1GwP7Ly6iaqgcms0T80QGCNW4y2gJ7tzVND2CktFqnXM',
   fr: '18xoednmU_2oKiKG5rDIhcvf_Mc_2LkyGWis752KNZXQ',
-  ch: '1mFbEzrWW8XLfrkAL0eCzGd1pCVNl6-QUxkoeubtdbPI'
+  ch: '1mFbEzrWW8XLfrkAL0eCzGd1pCVNl6-QUxkoeubtdbPI',
+  ca: '1STjEiAZVZncXMCUBkfLumRNk1PySLSmkvZuPqflQ1Yk'
 };
 
 if (functions.config().googleapi !== undefined) {
