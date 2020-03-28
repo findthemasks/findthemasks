@@ -113,7 +113,7 @@ const locales = {
     "ftm-what-to-do-2": "<b>Follow their instructions</b> for what they accept and how to drop it off.",
     "ftm-what-to-do-3": "<b>If you are donating opened packages</b>, please put them in a ziploc bag with a note saying whether they have been used, whether anyone in your household has been sick or travelled outside the country, and the expiration date if known.",
     "ftm-add-donation-site-question": "Want to add a donation site? update or remove information?",
-    "ftm-add-donation-site-answer": "Please <a href='https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform'>fill out this form</a>. We will review it as soon as possible.",
+    "ftm-add-donation-site-answer": "Please <a class=\"add-donation-site-form\">fill in this form</a>. We will review it as soon as possible.",
     "ftm-donations-site-loading": "Loading donation sites...",
     "ftm-large-donation-question": "Have <em>a lot</em> (500+ items) to donate?",
     "ftm-large-donation-answer": "We encourage large donors to use another site we work with to help route donations. Register at <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'>getusppe.org/give</a>.",
