@@ -43,7 +43,7 @@ rsync -lr --delete --exclude data-*.json ~/src/findthemasks/public/ ~/findthemas
 popd > /dev/null
 
 # Get latest data.
-for country in ch fr us; do
+for country in ca ch fr us; do
   curl --fail https://storage.googleapis.com/findthemasks.appspot.com/data-$country.json > ~/findthemasks.com/data-$country.json_
   mv ~/findthemasks.com/data-$country.json_ ~/findthemasks.com/data-$country.json
 done
