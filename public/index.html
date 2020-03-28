@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-161442455-1"></script>
     <script>
@@ -51,7 +51,7 @@
     <meta property="og:image" content="https://findthemasks.com/images/n95.jpg"/>
     <meta property="og:type" content="website"/>
     <!-- END Open Graph Tags -->
-    <style>
+    <style type="text/css">
       /* Styling for the JS generated locations list */
       html {
         height: 100%;
@@ -82,6 +82,9 @@
         width: 60%;
       }
 
+      .translated-content {
+        display: none; /* hidden until translations load */
+      }
 
       .heading-container {
         padding-top: 30px;
@@ -520,6 +523,7 @@
         * END MAP SEARCH STYLES *
         *************************/
 
+
       @media screen and (max-width: 768px) {
         .content-container {
           margin-left: 15px;
@@ -570,146 +574,161 @@
         }
       }
 
-      </style>
+    </style>
+  </head>
 
   <body>
-    <nav class="navbar fixed-bottom navbar-expand-lg navbar-light bg-light nav-drop-shadow">
-      <div class="ml-auto">
-        <ul class="navbar-nav">
-          <li class="nav-item dropup">
-            <a class="nav-link dropdown-toggle" href="#" id="locales-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="locales-dropdown" id="locales-dropdown-selector">
+    <div class="languages-loading" style="position: fixed;top: 50%; left: 50%;">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading translations...</span>
+        </div>
+    </div>
+
+    <div class="translated-content">
+      <nav class="navbar fixed-bottom navbar-expand-lg navbar-light bg-light nav-drop-shadow">
+        <div class="ml-auto">
+          <ul class="navbar-nav">
+            <li class="nav-item dropup">
+              <a class="nav-link dropdown-toggle" href="#" id="locales-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="locales-dropdown" id="locales-dropdown-selector">
+              </div>
+            </li>
+            <li class="nav-item dropup">
+              <a class="nav-link dropdown-toggle" href="#" id="countries-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              </a>
+              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="countries-dropdown" id="countries-dropdown-selector">
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+        <div class="heading-container">
+          <img class="logo" src="images/logo-color.svg" alt="Find The Masks logo" />
+          <!-- <h1>#findthemasks</h1> -->
+          <div class="member-of i18n" data-i18n="[html]ftm-index-site-coalition">A member of the <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/">GetUsPPE.org</a> coalition</div>
+
+        </div>
+        <div class="subhead">
+          <div class="subhead-left i18n" data-i18n="ftm-index-need-helpers">Let's Help The Helpers</div>
+          <div class="subhead-right i18n" data-i18n="[html]ftm-index-getmeppe-twitter-cta">
+            Find where you can donate your masks or other personal protective equipment (PPE) in your local area.
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-4 ppe-example">
+              <img style="height:140px"src="images/goggles.png" alt="example of personal protective equipment: goggles"/>
+              <div class="ppe-example-caption i18n" data-i18n="ftm-item-goggles">goggles</div>
             </div>
-          </li>
-          <li class="nav-item dropup">
-            <a class="nav-link dropdown-toggle" href="#" id="countries-dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            </a>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="countries-dropdown" id="countries-dropdown-selector">
+            <div class="col-lg-4 ppe-example">
+              <img style="height:210px" src="images/masks.png" alt="example of personal protective equipment: surgical mask, N95"/>
+              <div class="ppe-example-caption i18n" data-i18n="ftm-item-masks">Surgical mask & N95 Masks</div>
             </div>
-          </li>
-        </ul>
-      </div>
-    </nav>
-      <div class="heading-container">
-        <img class="logo" src="images/logo-color.svg" alt="Find The Masks logo" />
-        <!-- <h1>#findthemasks</h1> -->
-        <div class="member-of i18n" data-i18n="[html]ftm-index-site-coalition">A member of the <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/">GetUsPPE.org</a> coalition</div>
-
-      </div>
-      <div class="subhead">
-        <div class="subhead-left i18n" data-i18n="ftm-index-need-helpers">Let's Help The Helpers</div>
-        <div class="subhead-right i18n" data-i18n="[html]ftm-index-getmeppe-twitter-cta">
-          Find where you can donate your masks or other personal protective equipment (PPE) in your local area.
-        </div>
-      </div>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-4 ppe-example">
-            <img style="height:140px"src="images/goggles.png" alt="example of personal protective equipment: goggles"/>
-            <div class="ppe-example-caption i18n" data-i18n="ftm-item-goggles">goggles</div>
-          </div>
-          <div class="col-lg-4 ppe-example">
-            <img style="height:210px" src="images/masks.png" alt="example of personal protective equipment: surgical mask, N95"/>
-            <div class="ppe-example-caption i18n" data-i18n="ftm-item-masks">Surgical mask & N95 Masks</div>
-          </div>
-          <div class="col-lg-4 ppe-example">
-            <img style="height:185px" src="images/faceshield.png" alt="example of personal protective equipment: face shield "/>
-            <div class="ppe-example-caption i18n" data-i18n="ftm-item-face-shields">Face Shield</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="content-container" style="margin-bottom: 40px;">
-        <h2>Protecting healthcare workers protects everybody</h2>
-
-        <p class="i18n" data-i18n="ftm-index-where-to-find-ppe">
-          Maybe you bought N95 masks a few weeks ago or already have some in your house. Right now healthcare workers are running dangerously low on PPE like masks, hospital gowns, booties, and face shields to protect them while they risk their lives to save others.
-        <p>
-        </p >
-          By donating, you protect <em>everybody</em>: doctors, nurses, hospital staff, patients, and the general public.
-        <p>
-        </p class="i18n" data-i18n="[html]ftm-index-types-of-ppe">
-          If you know construction workers, vets, scientists, or dentists, please share this link with them.
-        </p>
-
-        <hr/>
-
-        <h2 class="i18n" data-i18n="ftm-add-donation-site-header">Do you need PPE?</h2>
-        <div class="need-ppe">
-          <div class="i18n" data-i18n="ftm-add-donation-site-question"> Want to add a donation site? update or remove information?</div>
-          <div class="i18n" data-i18n="[html]ftm-add-donation-site-answer">
-            Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">
-            fill out this form</a>. We will review it as soon as possible.
-          </div>
-        </div>
-
-        <hr/>
-
-        <h2 class="i18n" data-i18n="ftm-what-to-do-header">How to Donate PPE</h2>
-        <p>Our network of volunteers has created a global map of over 1700+ locations, like hospitals and clinics, where you can donate your masks, gowns, and other PPE.</p>
-        <ol>
-          <li class="i18n" data-i18n="[html]ftm-what-to-do-1"><b>Use our map</b> below to find a hospital or health center near you accepting donations.</li>
-          <li class="i18n" data-i18n="[html]ftm-what-to-do-2"><b>Follow their instructions</b> for what they accept and how to drop it off.</li>
-          <li class="i18n" data-i18n="[html]ftm-what-to-do-3"><b>If you are donating opened packages</b>, please put them in a ziploc bag with a note saying whether they have been used, whether anyone in your household has been sick or travelled outside the country, and the expiration date if known.</li>
-        </ol>
-
-        <div class="question i18n" data-i18n="[html]ftm-large-donation-question">Have <em>a lot</em> (500+ items) to donate?</div>
-        <p class="i18n" data-i18n="[html]ftm-large-donation-answer">We encourage large donors to use another site we work with to help route donations. Register at <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/give">getusppe.org/give</a>.</p>
-
-        <div class="question">Can't find a donation site near you?</div>
-        <p>Visit <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/give">getusppe.org</a> to let them know what you have available.</p>
-
-        <hr/>
-
-      </div>
-      <h2 class="i18n" data-i18n= "ftm-map-of-sites">Donation Sites</h2>
-      <div id="list-stats"></div>
-
-      <div class="locations-loading">
-        <img src="images/icons/loader.svg" alt="" class="load-spinner"> <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
-      </div>
-
-    <div class="locations-container" style="display: none;">
-      <div class="row" style="margin: 30px 0px 20px 0px;">
-        <div class="offset-xs-1 col-xs-10 offset-lg-2 col-lg-8">
-          <div class="map-search-wrap">
-            <div class="search-input">
-              <input type="search" name="map-search" id="map-search" placeholder="Search by city, zip, or address" data-i18n="[placeholder]ftm-maps-search-placeholder">
-              <!-- Icon credit to https://feathericons.com/  -->
-              <img class="search-icon" src="images/icons/search.svg">
+            <div class="col-lg-4 ppe-example">
+              <img style="height:185px" src="images/faceshield.png" alt="example of personal protective equipment: face shield "/>
+              <div class="ppe-example-caption i18n" data-i18n="ftm-item-face-shields">Face Shield</div>
             </div>
-            <!-- BETA: To enable search field, either change data-enable-search to "true" in #map below, or add hide-search=false/show-search=true to query string. -->
-            <div class="search-controls">
-              <a href="javascript:;" class="map-action-link" id="use-location"><span data-i18n="ftm-maps-search-use-location"></span>
-                Use my location<span class="search-control-separator">|</span></a>
-
-              <a href="javascript:;" class="map-action-link" id="reset-map"><span data-i18n="ftm-maps-search-reset"></span>Reset map</a></div>
           </div>
         </div>
+
+        <div class="content-container" style="margin-bottom: 40px;">
+          <h2 class="i18n" data-i18n="ftm-protecting-healthcare-workers">Protecting healthcare workers protects everybody</h2>
+
+          <p class="i18n" data-i18n="ftm-index-where-to-find-ppe">
+            Maybe you bought N95 masks a few weeks ago or already have some in your house. Right now healthcare workers are running dangerously low on PPE like masks, hospital gowns, booties, and face shields to protect them while they risk their lives to save others.
+          </p>
+          <p>
+            By donating, you protect <em>everybody</em>: doctors, nurses, hospital staff, patients, and the general public.
+          </p>
+          <p class="i18n" data-i18n="[html]ftm-index-types-of-ppe">
+            If you know construction workers, vets, scientists, or dentists, please share this link with them.
+          </p>
+
+          <hr/>
+
+          <h2 class="i18n" data-i18n="ftm-add-donation-site-header">Do you need PPE?</h2>
+          <div class="need-ppe">
+            <div class="i18n" data-i18n="ftm-add-donation-site-question"> Want to add a donation site? update or remove information?</div>
+            <div class="i18n" data-i18n="[html]ftm-add-donation-site-answer">
+              Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">
+              fill out this form</a>. We will review it as soon as possible.
+            </div>
+          </div>
+
+          <hr/>
+
+          <h2 class="i18n" data-i18n="ftm-what-to-do-header">How to Donate PPE</h2>
+          <p>Our network of volunteers has created a global map of over 1700+ locations, like hospitals and clinics, where you can donate your masks, gowns, and other PPE.</p>
+          <ol>
+            <li class="i18n" data-i18n="[html]ftm-what-to-do-1"><b>Use our map</b> below to find a hospital or health center near you accepting donations.</li>
+            <li class="i18n" data-i18n="[html]ftm-what-to-do-2"><b>Follow their instructions</b> for what they accept and how to drop it off.</li>
+            <li class="i18n" data-i18n="[html]ftm-what-to-do-3"><b>If you are donating opened packages</b>, please put them in a ziploc bag with a note saying whether they have been used, whether anyone in your household has been sick or travelled outside the country, and the expiration date if known.</li>
+          </ol>
+
+          <div class="question i18n" data-i18n="[html]ftm-large-donation-question">Have <em>a lot</em> (500+ items) to donate?</div>
+          <p class="i18n" data-i18n="[html]ftm-large-donation-answer">We encourage large donors to use another site we work with to help route donations. Register at <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/give">getusppe.org/give</a>.</p>
+
+          <div class="question i18n" data-i18n="ftm-cant-find-donation-site-question">Can't find a donation site near you?</div>
+          <p class="i18n" data-i18n="[html]ftm-cant-find-donation-site-answer">Visit <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'>getusppe.org</a> to let them know what you have available.</p>
+
+          <div class="question i18n" data-i18n="ftm-add-donation-site-question">Want to add a donation site? update or remove information?</div>
+          <p class="i18n" data-i18n="[html]ftm-add-donation-site-answer">Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill out this form</a>. We will review it as soon as possible.</p>
+          <hr/>
+
+        </div>
+        <h2 class="i18n" data-i18n= "ftm-map-of-sites">Donation Sites</h2>
+        <div id="list-stats"></div>
+
+        <div class="locations-loading">
+          <img src="images/icons/loader.svg" alt="" class="load-spinner"> <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
+        </div>
+
+      <div class="locations-container" style="display: none;">
+        <div class="row" style="margin: 30px 0px 20px 0px;">
+          <div class="offset-xs-1 col-xs-10 offset-lg-2 col-lg-8">
+            <div class="map-search-wrap">
+              <div class="search-input">
+                <input type="search" name="map-search" id="map-search" placeholder="Search by city, zip, or address" data-i18n="[placeholder]ftm-maps-search-placeholder">
+                <!-- Icon credit to https://feathericons.com/  -->
+                <img class="search-icon" src="images/icons/search.svg">
+              </div>
+              <!-- BETA: To enable search field, either change data-enable-search to "true" in #map below, or add hide-search=false/show-search=true to query string. -->
+              <div class="search-controls">
+                <a href="javascript:;" class="map-action-link" id="use-location">
+                  <span data-i18n="ftm-maps-search-use-location">Use my location</span>
+                  <span class="search-control-separator">|</span>
+                </a>
+
+                <a href="javascript:;" class="map-action-link" id="reset-map">
+                  <span data-i18n="ftm-maps-search-reset">Reset map</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="map" data-enable-search="true"></div>
+
+        <div class="filters-container" style="display: none; padding-top: 30px;">
+          <form name="filters" class="filters-list"></form>
+        </div>
+
+        <div id="locations-list" class="locations-list"></div>
+
+        <div class="footer">
+          <div style="height:50px"></div>
+          <div class="question i18n" data-i18n="ftm-add-donation-site-question">Want to add a donation site, or update or remove information?</div>
+          <p class="i18n" data-i18n="[html]ftm-add-donation-site-answer">Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill out this form</a>. We will review it as soon as possible.</p>
+          <div class="question">Got a comment or suggestion not related to data updates? Want to help? </div>
+          <p>
+            Email us at contact@findthemasks.com or join us on <a target="_blank" rel="noreferrer noopener" href="https://github.com/r-pop/findthemasks">our Github</a>.
+          </p>
+
+          <p class="i18n" data-i18n="[html]ftm-made-with-love">made with &lt;3 in Seattle</p>
+          <a href="whoweare.html" class="end">who we are</a>
+        </div>
       </div>
-
-      <div id="map" data-enable-search="true"></div>
-
-      <div class="filters-container" style="display: none; padding-top: 30px;">
-        <form name="filters" class="filters-list"></form>
-      </div>
-
-      <div id="locations-list" class="locations-list"></div>
-
-      <div class="footer">
-        <div style="height:50px"></div>
-        <div class="question i18n" data-i18n="ftm-add-donation-site-question">Want to add a donation site, or update or remove information?</div>
-        <p class="i18n" data-i18n="[html]ftm-add-donation-site-answer">Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill out this form</a>. We will review it as soon as possible.</p>
-        <div class="question">Got a comment or suggestion not related to data updates? Want to help? </div>
-        <p>
-          Email us at contact@findthemasks.com or join us on <a target="_blank" rel="noreferrer noopener" href="https://github.com/r-pop/findthemasks">our Github</a>.
-        </p>
-
-        <p class="i18n" data-i18n="[html]ftm-made-with-love">made with &lt;3 in Seattle</p>
-        <a href="whoweare.html" class="end">who we are</a>
-      </div>
-
-
+    </div>
   </body>
 </html>

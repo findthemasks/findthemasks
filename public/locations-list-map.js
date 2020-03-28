@@ -56,7 +56,7 @@ const generateBottomNav = () => {
       }
 
       const element = document.createElement('a');
-      element.className = 'dropdown-item i18n';
+      element.className = 'dropdown-item';
       const currentUrl = new URL(window.location.href);
       currentUrl.searchParams.set('locale', locale.localeCode);
       element.setAttribute('href', currentUrl.href);
@@ -315,7 +315,13 @@ function getFilteredContent(data, filters) {
 $(function () {
   const url = new URL(window.location);
   const country = GetCountry();
-  generateBottomNav();
+
+  // this should happen after the translations load
+  $('html').on('i18n:ready', function() {
+    generateBottomNav();
+
+    $('.add-donation-site-form').attr({href: `/${country}/donation-form`});
+  });
 
   // TODO(ajwong): This should not be required anymore.
   let countryDataFilename = 'data.json';
@@ -323,11 +329,6 @@ $(function () {
     countryDataFilename = `data-${country}.json`;
   }
 
-  const donationSiteForms = document.getElementsByClassName("add-donation-site-form");
-
-  for (let i = 0; i < donationSiteForms.length; i++) {
-    donationSiteForms[i].setAttribute('href', `/${country}/donation-form`);
-  }
 
   $.getJSON(`https://findthemasks.com/${countryDataFilename}`, function (result) {
     // may end up using this for search / filtering...
