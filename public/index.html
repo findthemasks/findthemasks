@@ -660,7 +660,9 @@
           <hr/>
 
           <h2 class="i18n" data-i18n="ftm-what-to-do-header">How to Donate PPE</h2>
-          <p>Our network of volunteers has created a global map of over 1700+ locations, like hospitals and clinics, where you can donate your masks, gowns, and other PPE.</p>
+          <p class="i18n" data-i18n="ftm-volunteer-network">
+            Our network of volunteers has created a global map of over 1700+ locations, like hospitals and clinics, where you can donate your masks, gowns, and other PPE.
+          </p>
           <ol>
             <li class="i18n" data-i18n="[html]ftm-what-to-do-1"><b>Use our map</b> below to find a hospital or health center near you accepting donations.</li>
             <li class="i18n" data-i18n="[html]ftm-what-to-do-2"><b>Follow their instructions</b> for what they accept and how to drop it off.</li>
@@ -698,12 +700,12 @@
               <!-- BETA: To enable search field, either change data-enable-search to "true" in #map below, or add hide-search=false/show-search=true to query string. -->
               <div class="search-controls">
                 <a href="javascript:;" class="map-action-link" id="use-location">
-                  <span data-i18n="ftm-maps-search-use-location">Use my location</span>
+                  <span class="i18n" data-i18n="ftm-maps-search-use-location">Use my location</span>
                   <span class="search-control-separator">|</span>
                 </a>
 
                 <a href="javascript:;" class="map-action-link" id="reset-map">
-                  <span data-i18n="ftm-maps-search-reset">Reset map</span>
+                  <span class="i18n" data-i18n="ftm-maps-search-reset">Reset map</span>
                 </a>
               </div>
             </div>
@@ -722,13 +724,13 @@
           <div style="height:50px"></div>
           <div class="question i18n" data-i18n="ftm-add-donation-site-question">Want to add a donation site, or update or remove information?</div>
           <p class="i18n" data-i18n="[html]ftm-add-donation-site-answer">Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill out this form</a>. We will review it as soon as possible.</p>
-          <div class="question">Got a comment or suggestion not related to data updates? Want to help? </div>
-          <p>
+          <div class="question i18n" data-i18n="ftm-comments-questions">Got a comment or suggestion not related to data updates? Want to help?</div>
+          <p class="i18n" data-i18n="[html]ftm-contact-info">
             Email us at contact@findthemasks.com or join us on <a target="_blank" rel="noreferrer noopener" href="https://github.com/r-pop/findthemasks">our Github</a>.
           </p>
 
           <p class="i18n" data-i18n="[html]ftm-made-with-love">made with &lt;3 in Seattle</p>
-          <a href="whoweare.html" class="end">who we are</a>
+          <a href="javascript:;" onclick="window.location='whoweare.html'+window.location.search;" class="end i18n" data-i18n="ftm-who-we-are">who we are</a>
         </div>
       </div>
     </div>
