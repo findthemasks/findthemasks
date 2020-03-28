@@ -11,8 +11,8 @@
     "ftm-accepting": "Accepte",
     "ftm-accepts-open-boxes": "Accepte les boîtes / sacs ouverts",
     "ftm-ack-data-sources": "Ce site contient également des données <a href=\"https://tinyurl.com/hospitals-needing-ppe\">https://tinyurl.com/hospitals-needing-ppe</a> un projet de",
-    // "ftm-add-donation-site-answer": "",
-    // "ftm-add-donation-site-question": "",
+    "ftm-add-donation-site-answer": "Veuillez <a class=\"add-donation-site-form\"> remplir ce formulaire </a>. Nous l'examinerons dès que possible.", // Google Translate
+    "ftm-add-donation-site-question": "Vous souhaitez ajouter un site de don? mettre à jour ou supprimer des informations?", // Google Translate
     "ftm-address": "Adresse",
     "ftm-anonymous-volunteers": "et d'autres qui sont anonymes",
     "ftm-canada": "Canada",
@@ -42,8 +42,8 @@
     "ftm-item-respirators": "Respirateurs avancés (PAPR / CAPR / etc.)",
     "ftm-item-sanitizer": "Désinfectant pour les mains",
     "ftm-language-switcher": "Langue",
-    // "ftm-large-donation-answer": "",
-    // "ftm-large-donation-question": "",
+    "ftm-large-donation-answer": "Nous encourageons les grands donateurs à utiliser un autre site avec lequel nous travaillons pour aider à acheminer les dons. Inscrivez-vous sur <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'>getusppe.org/give</a>.", // Google Translate
+    "ftm-large-donation-question": "Vous avez <em> beaucoup </em> (plus de 500 articles) à donner?", // Google Translate
     "ftm-list-of-sites": "Liste des sites de don",
     "ftm-made-with-love": "Fabriqué avec &lt;3 à Seattle par",
     "ftm-map-of-sites": "Carte des sites de don",
