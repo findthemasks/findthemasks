@@ -306,7 +306,7 @@
          *************************/
 
          /* Overall page styles */
-         .container {
+         .translated-content {
            display: none;
          }
     </style>
@@ -322,48 +322,54 @@
         </div>
     </div>
 
-    <div class="container" style="padding-bottom: 40px;">
-      <div class="map-container" style="display: none;">
+    <div class="translated-content">
+      <div class="container" style="padding-bottom: 40px;">
+        <div class="map-container" style="display: none;">
 
-        <div class="row" style="margin: 30px 0px 20px 0px;">
-          <div class="col-xl-3" style="padding: 0px">
-            <h3 style="white-space: nowrap"><span class="i18n" data-i18n="ftm-map-of-sites">Donation sites</span> <span id="map-stats"></span></h3>
-          </div>
-          <div class="col-xl-9" style="padding: 0px">
-            <div class="map-search-wrap">
-              <div class="search-input">
-                <input style="" type="search" name="map-search" id="map-search" placeholder="Search by city, zip, or address" data-i18n="[placeholder]ftm-maps-search-placeholder">
-                <!-- Icon credit to https://feathericons.com/  -->
-                <img class="search-icon" src="images/icons/search.svg">
+          <div class="row" style="margin: 30px 0px 20px 0px;">
+            <div class="col-xl-3" style="padding: 0px">
+              <h3 style="white-space: nowrap"><span class="i18n" data-i18n="ftm-map-of-sites">Donation sites</span> <span id="map-stats"></span></h3>
+            </div>
+            <div class="col-xl-9" style="padding: 0px">
+              <div class="map-search-wrap">
+                <div class="search-input">
+                  <input style="" type="search" name="map-search" id="map-search" placeholder="Search by city, zip, or address" data-i18n="[placeholder]ftm-maps-search-placeholder">
+                  <!-- Icon credit to https://feathericons.com/  -->
+                  <img class="search-icon" src="images/icons/search.svg">
+                </div>
+                <!-- BETA: To enable search field, either change data-enable-search to "true" in #map below, or add hide-search=false/show-search=true to query string. -->
+                <div class="search-controls">
+                  <a href="javascript:;" class="map-action-link" id="use-location"><span data-i18n="ftm-maps-search-use-location"></span>
+                    Use my location<span class="search-control-separator">|</span></a>
+
+                <a href="javascript:;" class="map-action-link" id="reset-map"><span data-i18n="ftm-maps-search-reset"></span>Reset map</a></div>
               </div>
-              <!-- BETA: To enable search field, either change data-enable-search to "true" in #map below, or add hide-search=false/show-search=true to query string. -->
-              <div class="search-controls">
-                <a href="javascript:;" class="map-action-link" id="use-location"><span data-i18n="ftm-maps-search-use-location"></span>
-                  Use my location<span class="search-control-separator">|</span></a>
-
-              <a href="javascript:;" class="map-action-link" id="reset-map"><span data-i18n="ftm-maps-search-reset"></span>Reset map</a></div>
             </div>
           </div>
+
+          <div id="map" data-enable-search="true"></div>
         </div>
 
-        <div id="map" data-enable-search="true"></div>
-      </div>
-
-      <div class="locations-loading">
-        <div class="spinner-border" role="status"></div>
-        <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
-      </div>
-
-      <div class="locations-container" style="display: none;">
-        <h3 style="padding: 30px 0px 5px 0px; margin: 0px;"><span class="i18n" data-i18n="ftm-list-of-sites">List of donation sites</span> <span id="list-stats"></span></h3>
-        <p class="i18n" data-i18n="[html]ftm-add-donation-site">To add a donation site, update information, or request we take down information, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>. Your submission will be approved and updated as soon as possible.</p>
-
-        <div class="filters-container" style="display: none;">
-          <h4 style="padding-top: 0px;" class='i18n' data-i18n="ftm-filters">Filters</h4>
-          <form name="filters" class="filters-list"></form>
+        <div class="locations-loading">
+          <div class="spinner-border" role="status"></div>
+          <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
         </div>
 
-        <div id="locations-list" class="locations-list"></div>
+        <div class="locations-container" style="display: none;">
+          <h3 style="padding: 30px 0px 5px 0px; margin: 0px;"><span class="i18n" data-i18n="ftm-list-of-sites">List of donation sites</span> <span id="list-stats"></span></h3>
+          <span class="i18n" data-i18n="ftm-add-donation-site-question"> Want to add a donation site? update or remove information?</span>
+          <span class="i18n" data-i18n="[html]ftm-add-donation-site-answer">
+            Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">
+            fill out this form</a>. We will review it as soon as possible.
+          </span>
+
+          <div class="filters-container" style="display: none;">
+            <h4 style="padding-top: 0px;" class='i18n' data-i18n="ftm-filters">Filters</h4>
+            <form name="filters" class="filters-list"></form>
+          </div>
+
+          <div id="locations-list" class="locations-list"></div>
+        </div>
       </div>
     </div>
 </main>
