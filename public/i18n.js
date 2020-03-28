@@ -1,6 +1,7 @@
 // NOTE: Trailing commas in this object are fine, per ECMAScript 5 (circa 2009).
 
 const locales = {
+<<<<<<< HEAD
   "@metadata": {
     "authors": [
       "Ian Baker"
@@ -193,17 +194,29 @@ const locales = {
     "ftm-english": "Anglais"
   }
 };
+=======
+  "qqq": "i18n/qqq.json",
+  "en": "i18n/en.json",
+  "fr": "i18n/fr-fr.json",
+  "fr-FR": "i18n/fr-fr.json"
+}
+>>>>>>> Moved translations to json so smartling can make more of them easily, switched to bootstrap spinner
 
 $(function () {
   const searchParams = new URLSearchParams((new URL(window.location)).search);
   const locale = searchParams.get('locale');
 
-  if (locale) {
-    $.i18n({ locale }).load(locales);
-  } else {
-    $.i18n().load(locales);
+  const init = function() {
+    // translate static elements and initialize translations
+    // then, remove spinner and show page content
+    $('.i18n').i18n();
+    $('.container').css({display: 'block'});
+    $('.languages-loading').css({display: 'none'});
   }
 
-  // translate static elements
-  $('.i18n').i18n();
+  if (locale) {
+    $.i18n({ locale: locale }).load(locales).done(init);
+  } else {
+    $.i18n().load(locales).done(init);
+  }
 });

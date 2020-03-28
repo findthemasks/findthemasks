@@ -51,7 +51,7 @@
     <meta property="og:image" content="https://findthemasks.com/images/n95.jpg"/>
     <meta property="og:type" content="website"/>
     <!-- END Open Graph Tags -->
-    <style>
+    <style type="text/css">
       /* Styling for the JS generated locations list */
       html {
         height: 100%;
@@ -520,6 +520,7 @@
         * END MAP SEARCH STYLES *
         *************************/
 
+
       @media screen and (max-width: 768px) {
         .content-container {
           margin-left: 15px;
@@ -568,6 +569,11 @@
         .nav-link {
           font-size: 0.7rem;
         }
+      }
+
+      /* Overall page styles */
+      .container {
+        display: none;
       }
 
       </style>
@@ -620,6 +626,12 @@
         </div>
       </div>
 
+      <div class="languages-loading" style="position: fixed;top: 50%; left: 50%;">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading translations...</span>
+          </div>
+      </div>
+
       <div class="content-container" style="margin-bottom: 40px;">
         <h2>Protecting healthcare workers protects everybody</h2>
 
@@ -660,11 +672,15 @@
         <div class="question">Can't find a donation site near you?</div>
         <p>Visit <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/give">getusppe.org</a> to let them know what you have available.</p>
 
+        <div class="question i18n" data-i18n="ftm-add-donation-site-question">Want to add a donation site? update or remove information?</div>
+        <p class="i18n" data-i18n="[html]ftm-add-donation-site-answer">Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill out this form</a>. We will review it as soon as possible.</p>
         <hr/>
 
       </div>
       <h2 class="i18n" data-i18n= "ftm-map-of-sites">Donation Sites</h2>
       <div id="list-stats"></div>
+
+      <h5 class="i18n" data-i18n="[html]ftm-add-donation-site">To add a donation site, update information, or request we take down information, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>. Your submission will be approved and updated as soon as possible.</h5>
 
       <div class="locations-loading">
         <img src="images/icons/loader.svg" alt="" class="load-spinner"> <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
