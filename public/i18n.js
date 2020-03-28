@@ -112,6 +112,7 @@ const locales = {
     "ftm-what-to-do-1": "<b>Use our map</b> below to find a hospital or health center near you accepting donations.",
     "ftm-what-to-do-2": "<b>Follow their instructions</b> for what they accept and how to drop it off.",
     "ftm-what-to-do-3": "<b>If you are donating opened packages</b>, please put them in a ziploc bag with a note saying whether they have been used, whether anyone in your household has been sick or travelled outside the country, and the expiration date if known.",
+    "ftm-add-donation-site-header": "Do you need PPE?",
     "ftm-add-donation-site-question": "Want to add a donation site? update or remove information?",
     "ftm-add-donation-site-answer": "Please <a class=\"add-donation-site-form\">fill in this form</a>. We will review it as soon as possible.",
     "ftm-donations-site-loading": "Loading donation sites...",
