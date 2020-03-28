@@ -35,6 +35,60 @@ function GetCountry() {
   return 'us';
 }
 
+const languages = [
+  {
+    i18nString: 'ftm-english',
+    localeCode: 'en'
+  },
+  {
+    i18nString: 'ftm-french',
+    localeCode: 'fr'
+  }
+];
+
+const countries = [
+  {
+    i18nString: 'ftm-canada',
+    countryCode: 'ca'
+  },
+  {
+    i18nString: 'ftm-france',
+    countryCode: 'fr'
+  },
+  {
+    i18nString: 'ftm-united-states',
+    countryCode: 'us'
+  }
+];
+
+const generateBottomNav = () => {
+  const languageDropdown = document.getElementById('locales-dropdown-selector');
+  const countryDropdown = document.getElementById('countries-dropdown-selector');
+
+  languages.forEach((language) => {
+    const element = document.createElement('a');
+    element.className = 'dropdown-item i18n';
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('locale', language.localeCode);
+    element.setAttribute('href', currentUrl.href);
+    element.textContent = $.i18n(language.i18nString);
+    languageDropdown.appendChild(element);
+  });
+
+  countries.forEach((country) => {
+    const element = document.createElement('a');
+    element.className = 'dropdown-item i18n';
+    const currentUrl = new URL(window.location.href);
+    const href = currentUrl.href;
+    element.setAttribute(
+      'href',
+      href.replace(/\/([a-z]{2})\//, `/${country.countryCode}/`)
+    );
+    element.textContent = $.i18n(country.i18nString);
+    countryDropdown.appendChild(element);
+  });
+};
+
 function createFiltersListHTML() {
   const filters = [];
   filters.push(`<h4>${$.i18n('ftm-states')}</h4>`);
@@ -232,6 +286,7 @@ function getFilteredContent(data, filters) {
 $(function () {
   const url = new URL(window.location);
   const country = GetCountry();
+  generateBottomNav();
 
   // TODO(ajwong): This should not be required anymore.
   let countryDataFilename = 'data.json';
