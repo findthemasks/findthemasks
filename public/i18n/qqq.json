@@ -13,6 +13,7 @@
     "ftm-accepts-open-boxes": "Long heading for whether the hospital accepts Open Boxes/bags",
     "ftm-ack-data-sources": "Thanks for data included from other sources",
     "ftm-add-donation-site-answer": "Link to the donation site form, including a note that we will review it soon",
+    "ftm-add-donation-site-header": "Header prompt for whether the user needs PPE",
     "ftm-add-donation-site-question": "Prompt for how to add donation site",
     "ftm-address": "Heading for the hospital address",
     "ftm-anonymous-volunteers": "Volunteers who are anonymous description",
