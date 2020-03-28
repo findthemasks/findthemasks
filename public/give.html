@@ -305,6 +305,10 @@
          * END MAP SEARCH STYLES *
          *************************/
 
+         /* Overall page styles */
+         .container {
+           display: none;
+         }
     </style>
 
 
@@ -312,6 +316,12 @@
 
 <body>
 <main class="content">
+    <div class="languages-loading" style="position: fixed;top: 50%; left: 50%;">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading translations...</span>
+        </div>
+    </div>
+
     <div class="container" style="padding-bottom: 40px;">
       <div class="map-container" style="display: none;">
 
@@ -340,7 +350,8 @@
       </div>
 
       <div class="locations-loading">
-        <img src="images/icons/loader.svg" alt="" class="load-spinner"> <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
+        <div class="spinner-border" role="status"></div>
+        <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
       </div>
 
       <div class="locations-container" style="display: none;">
