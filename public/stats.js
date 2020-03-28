@@ -1,7 +1,19 @@
 import toDataByLocation from './toDataByLocation.js';
 
 document.addEventListener("DOMContentLoaded", function() {
-  $.getJSON("https://findthemasks.com/data.json", function(result){
+  const url = new URL(window.location);
+  const directories = url.pathname.split("/");
+
+  let countryDataFilename;
+
+  // TODO: super brittle
+  if (directories.length > 2 && directories[1] !== 'us') {
+    countryDataFilename = `data-${directories[1]}.json`;
+  } else {
+    countryDataFilename = 'data.json';
+  }
+
+  $.getJSON(`https://findthemasks.com/${countryDataFilename}`, function(result){
     const locations = toDataByLocation(result);
 
     let totalCount = 0;

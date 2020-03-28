@@ -1,65 +1,94 @@
 <!DOCTYPE html>
 <html>
-  <head>
-      <!-- Global site tag (gtag.js) - Google Analytics -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-161442455-1"></script>
-      <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag() { dataLayer.push(arguments); }
-          gtag('js', new Date());
-          gtag('config', 'UA-161442455-1');
-      </script>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.fallbacks.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.language.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.messagestore.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.parser.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.bidi.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify-element.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify-html.min.js"></script>
-      <script src="i18n.js"></script>
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-161442455-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-161442455-1');
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.fallbacks.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.language.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.messagestore.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.parser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.bidi.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify-element.min.js"></script>
+    <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
+    <script src="i18n.js"></script>
+    <script type="module" src="locations-list-map.js"></script>
+    <title>#Findthemasks</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <meta name="description" content="Help #findthemasks for covid-19" />
+    <meta name="keywords" content="#findthemasks, masks, n95, coronavirus, covid-19" />
+    <link rel="apple-touch-icon" sizes="180x180" href="images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/icons/favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-      <!-- API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info. -->
-      <script defer
-              src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s&libraries=geometry">
-      </script>
+    <link rel="canonical" href="https://findthemasks.com/" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!-- START Open Graph Tags -->
+    <!-- English -->
+    <meta lang="en" property="og:title" content="#findthemasks"/>
+    <meta lang="en" property="og:url" content="https://findthemasks.com/"/>
+    <meta lang="en" property="og:description" content="America’s frontline healthcare workers are treating COVID-19 patients without adequate protective gear, risking their lives! We need to find the masks. All of these masks can save lives now if you get them into the hands of healthcare workers."/>
 
-      <title>#Findthemasks</title>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
-      <meta name="description" content="Help #findthemasks for covid-19" />
-      <meta name="keywords" content="#findthemasks, masks, n95, coronavirus, covid-19" />
-      <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-      <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-      <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-      <link rel="manifest" href="site.webmanifest">
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-      <style>
-        /* Styling for the JS generated locations list */
+    <!-- French -->
+    <meta lang="fr" property="og:title" content="#findthemasks"/>
+    <meta lang="fr" property="og:url" content="https://findthemasks.com/"/>
+    <meta lang="fr" property="og:description" content="Les travailleurs de la santé de première ligne du monde entier traitent les patients atteints de COVID-19 sans équipement de protection adéquat, risquant leur vie! Nous devons trouver les masques. Tous ces masques peuvent maintenant sauver des vies si vous les remettez entre les mains de professionnels de la santé."/>
 
-        html {
-          height: 100%;
-          width: 100%;
-        }
-        
-        body {
-          box-sizing: border-box;
-          height: 100%;
-          margin: 0;
-          padding: 0;
-          line-height: 1.65;
-          background-color: #ffffff;
-          color: #222;
-          font-family: 'Roboto', 'Helvetica', sans-serif;
-          font-weight: normal;
-          font-style: normal;
-          font-variant: normal;
-          text-rendering: optimizeLegibility;
-        }
+    <meta property="og:image" content="https://findthemasks.com/images/n95.jpg"/>
+    <meta property="og:type" content="website"/>
+    <!-- END Open Graph Tags -->
+    <style>
+      /* Styling for the JS generated locations list */
+      html {
+        height: 100%;
+        width: 100%;
+      }
+      
+      body {
+        box-sizing: border-box;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        line-height: 1.65;
+        background-color: #ffffff;
+        color: #222;
+        font-family: 'Roboto', 'Helvetica', sans-serif;
+        font-weight: normal;
+        font-style: normal;
+        font-variant: normal;
+        text-rendering: optimizeLegibility;
+      }
+      .locations-list {
+          padding-bottom: 10px;
+          border-bottom: 1px solid #efefef;
+      }
+
+      .state:first-child {
+          padding-top: 25px;
+      }
+
+      .state h2 {
+          font-size: 28px;
+          padding-top: 20px;
+          padding-bottom: 20px;
+          margin: 0px;
+          font-weight: 400;
+          border-top: 1px solid #efefef;
+      }
 
         .content-container {
           margin-top: 15px;
@@ -149,181 +178,198 @@
             border-bottom: 1px solid #efefef;
         }
 
-        .state:first-child {
-            padding-top: 25px;
+      .filters-list h4 {
+          font-size: 16px;
+          font-weight: 600;
+          text-transform: uppercase;
+          margin-top: 15px;
+          margin-bottom: 10px;
+      }
+
+      .filters-list input {
+          display: none;
+      }
+
+      .filters-list label {
+          border: 1px #aadaff solid;
+          background: #aadaff30;
+          font-size: 18px;
+          padding: 0.2rem 0.4rem;
+          cursor: pointer;
+          border-radius: 3px;
+      }
+
+      .filters-list label:hover {
+          background-color: #aadaff59;
+      }
+
+      .filters-list label.selected {
+          background-color: #aadaff;
+      }
+
+      .map-container {
+          padding-top: 30px;
+          padding-bottom: 5px;
+      }
+
+      #map {
+          height: 400px; /* The height is 400 pixels */
+          width: 100%; /* The width is the width of the web page */
+      }
+
+      #map .label {
+          width: 105px;
+          padding-top: 6px;
+          padding-bottom: 2px;
+          text-transform: uppercase;
+          color: #999;
+          font-size: 11px;
+          font-weight: 400;
+      }
+
+      #map .value {
+          font-weight: 400
+      }
+
+      #map-stats, #list-stats {
+          font-weight: 300;
+      }
+
+      .locations-loading {
+        padding-top: 20px;
+      }
+      .load-spinner {
+        width: 21px;
+        height: 21px;
+        animation: 5s load-spinner infinite linear;
+        vertical-align: text-top;
+      }
+      @-webkit-keyframes load-spinner {
+        100% {
+          transform: rotate(360deg);
+          -webkit-transform: rotate(360deg);
+        }
+      }
+      @-moz-keyframes load-spinner {
+        100% {
+          transform: rotate(360deg);
+          -moz-transform: rotate(360deg);
+        }
+      }
+      @-ms-keyframes load-spinner {
+        100% {
+          transform: rotate(360deg);
+          -ms-transform: rotate(360deg);
+        }
+      }
+
+
+
+      /*********************
+         * MAP SEARCH STYLES *
+         *********************/
+
+        /* What actually varies with breakpoints */
+        .map-search-wrap {
+          width: 100%;
+          position: relative;
+          margin-top: 20px;
+          display: flex;
         }
 
-        .state h2 {
-            font-size: 28px;
-            padding-top: 20px;
-            padding-bottom: 20px;
-            margin: 0px;
-            font-weight: 400;
-            border-top: 1px solid #efefef;
+        .map-search-wrap:first-child {
+          margin-top: 0;
         }
 
-        .city h3 {
-            font-size: 20px;
-            padding-bottom: 20px;
-            margin: 0px;
-            text-transform: uppercase;
+        .search-icon {
+          top: 1; /* ... see height below... */
+          left: 10px;
+          width: 17px;
+          height: 2.3rem; /* synchronized w/ input field for vertical centering, being an SVG it should not warp */
+          position: absolute;
+          pointer-events: none; /* user clicks should fall through to input field instead */
+          opacity: 0.7;
+
         }
 
-        .city {
-            line-height: 1.2;
-            padding-bottom: 10px;
+        #map-search {
+          border: 1px solid #ccc;
+          height: 2.3rem;
         }
 
-        .city h4 {
-            font-size: 18px;
-            font-weight: 600;
-            padding-bottom: 5px;
-            margin: 0px;
+        #map-search {
+          outline-color: #000;
         }
 
-        .city p {
-            margin: 0px;
-            font-size: 18px;
+        #map-search {
+          line-height: 2.3rem;
+          width: 100%;
+          margin-bottom: 5px;
+          /* Set to match the filter labels for consistency. */
+          padding: 0.4rem 0.8rem;
+          padding-left: 35px; /* compensate for search button */
+          border-radius: 3px;
+          outline: none;
         }
 
-        .location {
-            padding-bottom: 20px;
-            overflow-wrap: break-word;
+        .search-input {
+          width: 100%;
+          position: relative;
+          display: flex;
+          width:100%;
+          margin: 0px 15px 0px 20px;
         }
 
-        .location label {
-            color: #999;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-top: 12px;
-            margin-bottom: 3px;
+        .search-controls {
+          display: flex;
+          padding-top: 7px;
         }
 
-        .donation-sites h1 {
-            margin-bottom: -10px;
+        .search-control-separator {
+          padding: 0px 8px;
+          color: #ccc;
+          font-size: 14px;
         }
 
-        .filters-list div {
-            display: inline-block;
+        .map-action-link {
+          white-space: nowrap;
+          font-size: 14px;
         }
 
-        .filters-list h4 {
-            font-size: 16px;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-top: 15px;
-            margin-bottom: 10px;
+        .map-action-link:hover {
+          text-decoration: none;
         }
 
-        .filters-list input {
-            display: none;
-        }
-
-        .filters-list label {
-            border: 1px #aadaff solid;
-            background: #aadaff30;
-            font-size: 18px;
-            padding: 0.2rem 0.4rem;
-            cursor: pointer;
-            border-radius: 3px;
-        }
-
-        .filters-list label:hover {
-            background-color: #aadaff59;
-        }
-
-        .filters-list label.selected {
-            background-color: #aadaff;
-        }
-
-        .map-container {
-            padding-top: 30px;
-            padding-bottom: 5px;
-        }
-
-        #map {
-            height: 400px; /* The height is 400 pixels */
-            width: 100%; /* The width is the width of the web page */
-        }
-
-        #map .label {
-            width: 105px;
-            padding-top: 6px;
-            padding-bottom: 2px;
-            text-transform: uppercase;
-            color: #999;
-            font-size: 11px;
-            font-weight: 400;
-        }
-
-        #map .value {
-            font-weight: 400
-        }
-
-        #map-stats, #list-stats {
-            font-weight: 300;
-        }
-
-        .locations-loading {
-          padding-top: 20px;
-        }
-        .load-spinner {
+        .map-action-link img {
+          padding-right: 5px;
           width: 21px;
           height: 21px;
-          animation: 5s load-spinner infinite linear;
-          vertical-align: text-top;
         }
-        @-webkit-keyframes load-spinner {
-          100% {
-            transform: rotate(360deg);
-            -webkit-transform: rotate(360deg);
+
+        /* Mobile first: Desktop breakpoint overrides below */
+
+        @media (max-width: 1200px) {
+          .search-input {
+            margin: 0px;
+            margin-right: 15px;
           }
-        }
-        @-moz-keyframes load-spinner {
-          100% {
-            transform: rotate(360deg);
-            -moz-transform: rotate(360deg);
-          }
-        }
-        @-ms-keyframes load-spinner {
-          100% {
-            transform: rotate(360deg);
-            -ms-transform: rotate(360deg);
+          .map-search-wrap {
+            padding-top: 4px;
           }
         }
 
-        @media screen and (max-width: 1023px) {
-          h2 {
-            text-align: left;
+        @media (max-width: 576px) {
+          .map-search-wrap {
+            display: block;
           }
-
-          .content-container {
-            margin-left: 40px;
-            margin-right: 40px;
-            width: auto;
-          }
-          .logo {
-            height: 110px;
-          }
-          .subhead {
-            width: 100%;
-            padding: 0;
-            flex-direction: column;
-          }
-          .subhead-left {
-            line-height: 1.5;
-            border: 0;
-            width: 100%;
-            padding: 0;
-            text-align: center;
-          }
-          .subhead-right {
-            font-size: 0.9rem;
-            width: 80%;
-            text-align: center;
+          .search-controls {
+            padding-top: 5px;
           }
         }
+
+        /*************************
+         * END MAP SEARCH STYLES *
+         *************************/
 
         @media screen and (max-width: 768px) {
           .content-container {
@@ -358,82 +404,84 @@
         }
 
       </style>
-  </head>
-
+    
   <body>
-      <div class="heading-container">
-        <img class="logo" src="images/logo-color.svg" alt="Find The Masks logo" />
-        <!-- <h1>#findthemasks</h1> -->
-        <div class="member-of">A member of the <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/">GetUsPPE.org</a> coalition</div>
-        
-      </div>
-      <div class="subhead">
-        <div class="subhead-left">Let's Help The Helpers</div>
-        <div class="subhead-right"> 
-          Healthcare workers are in dire need of masks, goggles, face shields, gowns and other personal protective equipment as they treat COVID-19 patients during this epidemic.
+  
+  <main class="content">
+
+    <div class="container" style="padding-bottom: 40px;">
+        <h1 style="padding: 20px 0px 0px 0px;">#findthemasks</h1>
+        <p style="padding: 0px;" class="i18n" data-i18n="[html]ftm-index-site-coalition">This site is part of the <a href="https://getusppe.org/">getusppe.org</a> coalition.</p>
+        <h4 style="padding-bottom: 20px; font-weight: 400;" class="i18n" data-i18n="[html]ftm-index-getmeppe-twitter-cta">America&rsquo;s frontline healthcare workers are treating COVID-19 patients, in some cases without adequate protective gear.
+          Some have taken to Twitter on <a href="https://twitter.com/search?q=%23GetMePPE&src=typeahead_click">#GetMePPE</a> to ask for help.</h4>
+
+        <p style="padding-top: 10px; margin: 0px;" class="i18n" data-i18n="ftm-index-need-helpers">We need to help the helpers, right now.</p>
+        <h3 style="padding-bottom: 20px" class="i18n" data-i18n="ftm-index-need-find-masks">We need to find the masks.</h3>
+
+      <p class="i18n" data-i18n="ftm-index-where-to-find-ppe">Look in your basement, your emergency kit, your bug out bag, your workbench for N95 masks.
+        If you find surgical masks, those are also in short supply, and in many places are being used in place of N95s.
+        All of these masks can save lives now if you get them into the hands of health care workers.</p>
+
+      <p class="i18n" data-i18n="[html]ftm-index-types-of-ppe">Other types of PPE like disposable <span class=embold>booties</span>, <span class=embold>safety goggles</span>, and
+        <span class=embold>disposable suits</span> are also in short supply. If you have these things or know someone who might
+        (HVAC installers? Construction workers?) please share this site with them. Large donors can register at
+        <a href="https://getusppe.org/">getusppe.org/give</a>.</p>
+
+        <a name="sites"></a>
+        <h3 style="padding: 20px 0px 10px 0px;" class="i18n" data-i18n="ftm-what-to-do-header">Here's what you can do:</h3>
+        <ol>
+          <li class="i18n" data-i18n="ftm-what-to-do-1">Look at our list of sites below. You can filter by state or supplies needed.</li>
+          <li class="i18n" data-i18n="ftm-what-to-do-2">If there's a site near you, drop off following their instructions.</li>
+          <li class="i18n" data-i18n="ftm-what-to-do-3">If you are donating open packages, please put them in a ziploc bag with a note saying whether they have been used, whether anyone in your household has been sick or travelled outside the country, and the expiration date if known.</li>
+          <li class="i18n" data-i18n="[html]ftm-what-to-do-4">If there's not a site near you, visit <a href="https://getusppe.org/give">getusppe.org</a> to let them know what you have available.</li>
+        </ol>
+
+        <h5 class="i18n" data-i18n="[html]ftm-add-donation-site">To add a donation site, update information, or request we take down information, please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>. Your submission will be approved and updated as soon as possible.</h5>
+
+        <div class="locations-loading">
+          <img src="images/icons/loader.svg" alt="" class="load-spinner"> <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
         </div>
-      </div>
-      
-      <div class="content-container">
-      <h2>We need to find more masks</h2>
-
-      <p>
-        Maybe you bought N95 masks a few weeks ago. Maybe you have an old stash of surgical masks in your basement. Whatever the case, personal protective equipment (PPE) is most useful right now on the people who need it the most: healthcare workers. Almost all types of PPE are in short supply as COVID overwhelms hospitals. By preventing its spread, PPE protects <em>everybody</em>: doctors, nurses, hospital staff, patients, and the general public.<br/><br/>Some healthcare workers have resorted to <a href="">trash bags</a>. Many have been reusing masks <a href="">for days</a>. You can help.
-        <br/><br/>
-        If you know someone who works in construction, HVAC, science, or dentistry, share this link with them. They might have a lot.
-        <br/><br/>
-        By donating PPE, you can save lives.
-      </p>
-
-      <hr/>
-      <h2>Where and how you can help</h2>
-      <p>Our network of volunteers has called hospitals and clinics throughout the world to find out what they need and how you can donate. We now have 1700+ sites where you can donate your masks, gowns, booties, and other PPE. </p>
-      <ol>
-        <li><b>Use our map below to find a hospital</b> or health center near you accepting donations.</li>
-        <li><b>Follow their instructions</b> for what they accept and how to drop it off.</li>
-        <li><b>If you are donating opened packages</b>, please put them in a ziploc bag with a note saying whether they have been used, whether anyone in your household has been sick or travelled outside the country, and the expiration date if known.</li>
-      </ol>
-      
-      <div class="question">Can't find a donation site near you?</div>
-      <p>Visit <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/give">getusppe.org</a> to let them know what you have available.</p>
-      
-      <div class="question">Have <em>a lot</em> to donate?</div>
-      <p>Register at <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/give">getusppe.org/give</a>.</p>
-
-      <div class="question">Want to add a donation site? update or remove information?</div>
-      <p>Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill out this form</a>. We will review it as soon as possible.</p>
-
-      <hr/>
-      <h2>Donation Sites</h2>
-
-      <div class="locations-loading">
-        <img src="images/icons/loader.svg" alt="loading" class="load-spinner"> Loading donation sites...
-      </div>
 
       <div class="locations-container" style="display: none;">
-        <h3 style="padding-top: 30px; padding-bottom: 10px;">Donation sites <span id="list-stats"></span></h3>
+        <div class="row" style="margin: 30px 0px 20px 0px;">
+          <div class="col-xl-3" style="padding: 0px">
+            <h3><span class="i18n" data-i18n="ftm-donation-sites">Donation sites</span> <span id="list-stats"></span></h3>
+          </div>
+          <div class="col-xl-9" style="padding: 0px">
+            <div class="map-search-wrap">
+              <div class="search-input">
+                <input style="" type="search" name="map-search" id="map-search" placeholder="Search by city, zip, or address" data-i18n="[placeholder]ftm-maps-search-placeholder">
+                <!-- Icon credit to https://feathericons.com/  -->
+                <img class="search-icon" src="images/icons/search.svg">
+              </div>
+              <!-- BETA: To enable search field, either change data-enable-search to "true" in #map below, or add hide-search=false/show-search=true to query string. -->
+              <div class="search-controls">
+                <a href="javascript:;" class="map-action-link" id="use-location"><span data-i18n="ftm-maps-search-use-location"></span>
+                  Use my location<span class="search-control-separator">|</span></a>
 
-        <div class="filters-container" style="display: none;">
+                <a href="javascript:;" class="map-action-link" id="reset-map"><span data-i18n="ftm-maps-search-reset"></span>Reset map</a></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="map" data-enable-search="true"></div>
+
+        <div class="filters-container" style="display: none; padding-top: 30px;">
+          <h4><span class="i18n" data-i18n="ftm-filters">Filters</span></h4>
           <form name="filters" class="filters-list"></form>
         </div>
 
-        <div class="map-container" style="display: none;">
-          <div id="map"></div>
-        </div>
         <div id="locations-list" class="locations-list"></div>
       </div>
 
-      <div style="height:50px"></div>
-      <hr/>
-      <div class="question">Want to add a donation site, or update or remove information?</div>
-      <p>Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill out this form</a>. We will review it as soon as possible.</p>
-      <div class="question">Got a comment or suggestion not related to data updates? Want to help? </div>
-      <p>
-        Email us at contact@findthemasks.com or join us on <a target="_blank" rel="noreferrer noopener" href="https://github.com/r-pop/findthemasks">our Github</a>.
-      </p>
+        <p style="padding-top: 30px;" class="i18n" data-i18n="[html]ftm-add-donation-site">To add a donation site, update information, or request we take down information, please
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill in this form</a>.
+          <b>Your submission will be approved and updated as soon as possible.</b><br><br>
+          Got a comment or suggestion not related to data updates? Want to help? contact@findthemasks.com or join us on
+          <a href="https://github.com/r-pop/findthemasks">our Github</a>.
+        </p>
 
-      <p>made with &lt;3 in Seattle</p>
-      <a href="whoweare.html" class="end">who we are</a>
+      <p><span class='i18n' data-i18n="[html]ftm-made-with-love">Made with &lt;3 in Seattle by</span> <a href="whoweare.html" class="end">findthemasks.com</a></p>
     </div>
   </body>
 </html>

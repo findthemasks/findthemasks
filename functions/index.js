@@ -14,13 +14,18 @@ const Client = require("@googlemaps/google-maps-services-js").Client;
 // googleapi.sheet_id = Google Sheet id (long string in middle of sheet URL)
 let CONFIG_CLIENT_ID = '';
 let CONFIG_CLIENT_SECRET = '';
-let CONFIG_SHEET_ID = '';
 let GOOGLE_MAPS_API_KEY = '';
 
-if (functions.config()['googleapi'] !== null) {
+const SHEETS = {
+  us: '1GwP7Ly6iaqgcms0T80QGCNW4y2gJ7tzVND2CktFqnXM',
+  fr: '18xoednmU_2oKiKG5rDIhcvf_Mc_2LkyGWis752KNZXQ',
+  ch: '1mFbEzrWW8XLfrkAL0eCzGd1pCVNl6-QUxkoeubtdbPI',
+  ca: '1STjEiAZVZncXMCUBkfLumRNk1PySLSmkvZuPqflQ1Yk'
+};
+
+if (functions.config().googleapi !== undefined) {
   CONFIG_CLIENT_ID = functions.config().googleapi.client_id
   CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
-  CONFIG_SHEET_ID = functions.config().googleapi.sheet_id;
   GOOGLE_MAPS_API_KEY = functions.config().findthemasks.geocode_key;
 }
 
@@ -83,19 +88,16 @@ async function getAuthorizedClient() {
   return functionsOauthClient;
 }
 
-function getHeaders(data) { return data.values[1]; }
+function splitValues(data) { return [ data.values[0], data.values[1], data.values.slice(2) ]; }
 
-function splitValues(data) { return [ data.values.slice(0,2), data.values.slice(2) ]; }
-
-async function annotateGeocode(data) {
+async function annotateGeocode(data, sheet_id) {
   // Annotate Geocodes for missing items. Track the updated rows. Write back.
-  const headers = getHeaders(data);
+  const headers = data[1];
   const maps_client = new Client({});
-  const [header_values, real_values] = splitValues(data);
+  const [header_values, col_labels, real_values] = splitValues(data);
 
   const approvedIndex = headers.findIndex( e => e === 'approved' );
   const addressIndex = headers.findIndex( e => e === 'address' );
-  const emailIndex = headers.findIndex( e => e === 'email' );
   const latIndex = headers.findIndex( e => e === 'lat' );
   const lngIndex = headers.findIndex( e => e === 'lng' );
   const timestampIdx = headers.findIndex( e => e === 'timestamp' );
@@ -111,7 +113,6 @@ async function annotateGeocode(data) {
   const promises = [];
   let num_lookups = 0;
   real_values.forEach( (entry, index) => {
-    entry[emailIndex] = "";
     if (entry[approvedIndex] === "x") {
       // Row numbers start at 1.
       const row_num = index + 1 + header_values.length;
@@ -148,7 +149,7 @@ async function annotateGeocode(data) {
   if (to_write_back.length > 0) {
     const data = [];
     const write_request = {
-      spreadsheetId: CONFIG_SHEET_ID,
+      spreadsheetId: sheet_id,
       resource: {
         valueInputOption: 'USER_ENTERED',
         data: data,
@@ -173,11 +174,12 @@ async function annotateGeocode(data) {
   }
 }
 
-async function getSpreadsheet(client) {
+async function getSpreadsheet(country, client) {
   const sheets = google.sheets('v4');
   const request = {
-    spreadsheetId: CONFIG_SHEET_ID,
-    range: 'moderated'};
+    spreadsheetId: SHEETS[country],
+    range: 'Form Responses 1'
+    };
   request.auth = client;
 
   const response = await sheets.spreadsheets.values.get(request);
@@ -190,21 +192,55 @@ async function getSpreadsheet(client) {
   return response.data;
 }
 
-async function snapshotData(filename, html_snippet_filename) {
+async function snapshotData(country) {
+  const json_filename = `data-${country}.json`;
+  const html_snippet_filename = `data_snippet-${country}.html`;
+
   // Talk to sheets.
   const client = await getAuthorizedClient();
-  const data = await getSpreadsheet(client);
+  const data = await getSpreadsheet(country, client);
 
-  const headers = getHeaders(data);
-  const approvedIndex = headers.findIndex( e => e === 'approved' );
+  console.log(data);
+  console.log(data.values.length);
+  if (data.values.length < 2) {
+    throw new Error("Too few rows. Is row 2 a the column labels?");
+  }
+
   // The first row is human readable form values.
   // The second row is reserved for a machine usable field tag.
   // Save those and filter the rest.
-  const [header_values, real_values] = splitValues(data);
-  data.values = header_values;
-  data.values.push(...real_values.filter((entry) => entry[approvedIndex] === "x"));
+  const [orig_headers, orig_col_labels, real_values] = splitValues(data);
 
-  const datafileRef = admin.storage().bucket().file(filename);
+  // Find all columns to be published.
+  const published_cols = new Set();
+  const headers = [];
+  const col_labels = [];
+  for (let i = 0; i < orig_col_labels.length; i++) {
+    if (orig_col_labels[i] !== "") {
+      headers.push(orig_headers[i]);
+      col_labels.push(orig_col_labels[i]);
+      published_cols.add(i);
+    }
+  }
+
+  // Add a row number label.
+  headers.push('Row');
+  col_labels.push('row');
+
+  const trimmed_values = real_values.map((row, row_num) => {
+    const result = row.filter((_, col_num) => published_cols.has(col_num));
+    result.push(row_num + 3);  // 2 rows of header and 1-base indexing.
+    return result;
+  });
+  const approvedIndex = col_labels.findIndex( e => e === 'approved' );
+  if (approvedIndex === -1) {
+    throw new Error("sheet missing expected columns. Ensure row 2 headers are sane?");
+  }
+
+  const approved_rows = trimmed_values.filter(e => e[approvedIndex] === "x");
+  data.values = [headers, col_labels, ...approved_rows];
+
+  const datafileRef = admin.storage().bucket().file(json_filename);
   await datafileRef.save(JSON.stringify(data), {
     gzip: true,
     metadata: {
@@ -274,10 +310,8 @@ function toDataByLocation(data) {
     }
     const entry_obj = {};
     headers.forEach( (value, index) => {
-      if (entry[index] !== undefined) {
+      if (entry[index] !== "") {
         entry_obj[value] = (typeof entry[index]) === 'string' ? entry[index].trim() : entry[index];
-      } else {
-        entry_obj[value] = ""
       }
     });
     entry_array.push(entry_obj);
@@ -293,8 +327,6 @@ function toHtmlSnippets(data_by_location) {
 
   addLine('<article>');
   padding += 2;
-
-  addLine('<h1>List of donation sites</h1>');
 
   // Output each entry by state.
   for (const state of Object.keys(data_by_location).sort()) {
@@ -356,8 +388,13 @@ function toHtmlSnippets(data_by_location) {
 }
 
 module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
-  const [data, html_snippets] = await snapshotData('data.json', 'data_snippet.html');
+  const country = req.path.split('/',2)[1] || 'us';
+  if (!(country in SHEETS)) {
+    res.status(400).send(`invalid country: ${country} for ${req.path}`);
+    return;
+  }
 
+  const [data, html_snippets] = await snapshotData(country);
   res.status(200).send(html_snippets);
 });
 

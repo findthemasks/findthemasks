@@ -40,18 +40,140 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 ?hide-map={true/false}
 ?hide-filters={true/false}
 ?hide-list={true/false} (also hides filters)
+?hide-search={true/false} (beta)
 ```
 
-All boolean parameters default to false.
+All boolean parameters default to false (unless they're in beta).
 
 So, for state-specific pages you can now use something like:
 <https://findthemasks.com/give.html?state=CA&hide-map=true&hide-filters=true>
 This will return just the filtered list of donations sites in California.
 
+**Beta features:**
+
+Since beta features are disabled by default, you can enable them via:
+
+```
+?show-search=true
+```
+
+## Changing Location and Locales
+
+We use a directory structure to view country-specific datasets.
+
+For example, `/us/give.html` will filter the map to the United States and `/fr/give.html` will filter to France.
+
+To view translated version of a country you can pass in a locale parameter. `/us/give.html?locale=fr-FR`
+will show the map of the United States in French and `/fr/give.html?locale=en-US` will show the map of France in English.
+
+To add a new country, create a subdirectory under public `/public/country_code` using the alpha-2 country code: https://www.iban.com/country-codes.
+Copy a `.htaccess` file from an existing country directory into the new one. Update the form redirect rule to the correct country code
+and ensure that the translated file has the country code short link so that it redirects properly.
+
 ## Directory structure
 
 - `/public` - The client-side code for the website. Currently has some symlinks to legacy file locations.
 - `/functions` - The cloud function used to generate data.json. Not needed for frontend work.
+
+## Firebase
+
+### Basic architecture
+Firebase is used to pull data from our moderated datastore and then generate a data.json. There is
+a production environment [findthemasks](https://console.firebase.google.com/project/findthemasks/overview)
+and a dev environment [findthemasks-dev](https://console.firebase.google.com/project/findthemasks-dev/overview).
+
+The setup uses cloud functions to provide http endpoints, cloud-storage to keep the generated results,
+and the firebase realtime database (NOT firestore) to cache oauth tokens.
+
+Adding an oauth token requires hitting the `/authgoogleapi?sheetid=longstring` on the
+cloud-function endpoint and granting an OAuth token for a user that has access to the sheet.
+
+### How to deploy
+- Install the [firebase cli](https://firebase.google.com/docs/cli?hl=vi) for your platform.
+- Do once
+  - `firebase login`
+  - `firebase use --add findthemasks-dev`
+  - `firebase use --add findthemasks`
+  - `cd functions; npm install`  # Note you need node v8 or higher. Look a [nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- Switch deployment envrionments `firebase use [findthemasks or findthemasks-dev]`
+- Deploy the cloud function. `cd functions; npm run deploy`
+
+### How to set config variables.
+Secrets and configs not checked into github are specified via cloud function configs.
+
+To set a config:
+```
+firebase functions:config:set findthemasks.geocode_key="some_client_id"
+```
+
+In code, this can be retrieved via:
+```
+functions.config().findthemasks.geocode_key
+```
+
+In get all configs:
+```
+firebase functions:config:get
+```
+
+The namespace can be anything. Add new configs to the `findthemasks` namespace.
+
+### How to locally develop
+Firebase comes with a local emulation environment that lets you live develop
+against localhost. Since we are using firebase configs, first we have to snag
+the configs from the environment. Do that with:
+
+```
+firebase functions:config:get > .runtimeconfig.json
+```
+
+Next generate a new Firebase Admin SDK private key here:
+  https://console.firebase.google.com/project/findthemasks-dev/settings/serviceaccounts/adminsdk
+
+And save it to `service_key.json`
+
+Then start up the emulator. Note this will talk to the production firebase
+database (likely okay as the firebase database is just storing oauth tokens).
+
+```
+export GOOGLE_APPLICATION_CREDENTIALS=/path/to/service_key.json
+firebase emulators:start --only functions
+```
+
+This will create localhost versions of everything. Cloud functions should be on
+[http://localhost:5001](http://localhost:5001) and `console.log()` messages will
+stream to the terminal.
+
+There is also a "shell"
+
+```firebase functions:shell```
+
+that can be used, but running the emulator and hitting with a web browser
+is often easier in our simple case.
+
+## Scripts that edit the spreadsheet (Apps Script)
+There are currently 2 scripts that automatically update the spreadsheet, and one
+that backs it up:
+
+* fillInGeocodes: fills in the lat/lng column based on the address in the "address" column.
+  (Note that the "address" column is defined as the column that has "address" in row 2.) 
+  Uses Google Maps geocoding API.  Currently runs once/minute.
+* createStandardAddress: fills in the "address" column based on the data in the "orig_address",
+  "city", and "state" columns.  Uses Google Maps geocoding API. Currently runs once/minute.
+* backupSheet: makes a timestamped copy of the sheet.  Currently runs once every 2 hours.
+
+There are a few important things to know about these scripts:
+
+* They are visible by navigating to tools > script editor from the Google Sheet.
+* They can be run by anyone who has edit permission to the Google Sheet.
+* Triggers (automation) can be set up by navigating to Edit > Edit current project's triggers.
+* The dev-owner of each sheet should set up a trigger for each of the 3 scripts.  (US spreadsheet
+  dev owner is @susanashlock's gmail).  
+* The scripts are run using quota of the user the user that runs them.
+* Each Gmail user has a fixed amount of geocoding quota per day.  This quota is somewhere
+  around 100-500 calls per day.  @susanashlock's account has 'special' quota.  We're not
+  sure exactly what it is, but is sufficient to support ~1000 calls per day.
+  
 
 ## Thanks
 

@@ -2,16 +2,23 @@
   "functions": {
     "predeploy": [
       "npm --prefix \"$RESOURCE_DIR\" run lint"
-    ]
+    ],
+    "source": "functions"
   },
   "hosting": {
     "public": "public",
     "headers": [
       {
-        "source" : "data-example.json",
-        "headers" : [
-          { "key" : "Cache-Control", "value" : "max-age=60" },
-          { "key" : "Access-Control-Allow-Origin", "value" : "*" }
+        "source": "data-example.json",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "max-age=60"
+          },
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
         ]
       }
     ],
@@ -21,12 +28,28 @@
       "**/node_modules/**"
     ],
     "redirects": [
-     { "source": "/", "destination": "https://findthemasks.com", "type": 302 }
+      {
+        "source": "/",
+        "destination": "https://findthemasks.com",
+        "type": 302
+      }
     ],
     "rewrites": [
-      { "source": "/authgoogleapi", "function": "authgoogleapi" },
-      { "source": "/oauthcallback", "function": "oauthcallback" },
-      { "source": "/reloadsheetdata", "function": "reloadsheetdata" }
+      {
+        "source": "/authgoogleapi",
+        "function": "authgoogleapi"
+      },
+      {
+        "source": "/oauthcallback",
+        "function": "oauthcallback"
+      },
+      {
+        "source": "/reloadsheetdata",
+        "function": "reloadsheetdata"
+      }
     ]
+  },
+  "database": {
+    "rules": "database.rules.json"
   }
 }

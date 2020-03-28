@@ -1,0 +1,26 @@
+<html>
+<head>
+<script>
+
+// TODO(ajwong): This is copied from location-list-map.html. Careful.
+function GetCountry() {
+  const url = new URL(window.location);
+  const directories = url.pathname.split("/");
+  if (directories.length > 2) {
+    return directories[1];
+  }
+
+  return 'us';
+}
+
+const DONATION_FORM = {
+  fr: 'https://docs.google.com/forms/d/e/1FAIpQLScys-wlfSEwCLNa5dnJIIR7LTdh7e3fpha7SL7A2jvJok8Tog/viewform',
+  ca: 'https://forms.gle/ja8aczRiFWfAjKM29',
+  us: 'https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform'
+};
+
+window.location.replace(DONATION_FORM[GetCountry()]);
+
+</script>
+</head>
+</html>
