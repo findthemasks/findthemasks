@@ -166,15 +166,19 @@
       }
 
       .question {
-        margin-bottom: 5px;
         font-weight: bold;
+      }
+
+      .need-ppe {
+        font-size: 18px;
+        text-align: center;
       }
 
       .ppe-container {
         margin-top: 30px;
         margin-bottom: 30px;
       }
-      
+
       .ppe-example {
         display: flex;
         flex-direction: column;
@@ -283,7 +287,7 @@
         margin-right: 3px;
         margin-bottom: 3px;
       }
-      
+
       .locations-list {
         padding-left: 30px;
         padding-right: 30px;
@@ -471,7 +475,7 @@
         width: 21px;
         height: 21px;
       }
-      
+
       .nav-drop-shadow {
         background-color: white;
         box-shadow: 0 -2px 15px rgba(0,0,0,0.09);
@@ -548,7 +552,7 @@
         .locations-list {
           padding-left: 15px;
           padding-right: 15px;
-        } 
+        }
         .state h2 {
           font-size: 24px;
           letter-spacing: 1px;
@@ -567,7 +571,7 @@
       }
 
       </style>
-    
+
   <body>
     <nav class="navbar fixed-bottom navbar-expand-lg navbar-light bg-light nav-drop-shadow">
       <div class="ml-auto">
@@ -593,11 +597,11 @@
         <img class="logo" src="images/logo-color.svg" alt="Find The Masks logo" />
         <!-- <h1>#findthemasks</h1> -->
         <div class="member-of i18n" data-i18n="[html]ftm-index-site-coalition">A member of the <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/">GetUsPPE.org</a> coalition</div>
-        
+
       </div>
       <div class="subhead">
         <div class="subhead-left i18n" data-i18n="ftm-index-need-helpers">Let's Help The Helpers</div>
-        <div class="subhead-right i18n" data-i18n="[html]ftm-index-getmeppe-twitter-cta"> 
+        <div class="subhead-right i18n" data-i18n="[html]ftm-index-getmeppe-twitter-cta">
           Find where you can donate your masks or other personal protective equipment (PPE) in your local area.
         </div>
       </div>
@@ -617,7 +621,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="content-container" style="margin-bottom: 40px;">
         <h2>Protecting healthcare workers protects everybody</h2>
 
@@ -632,6 +636,18 @@
         </p>
 
         <hr/>
+
+        <h2 class="i18n" data-i18n="ftm-add-donation-site-header">Do you need PPE?</h2>
+        <div class="need-ppe">
+          <div class="i18n" data-i18n="ftm-add-donation-site-question"> Want to add a donation site? update or remove information?</div>
+          <div class="i18n" data-i18n="[html]ftm-add-donation-site-answer">
+            Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">
+            fill out this form</a>. We will review it as soon as possible.
+          </div>
+        </div>
+
+        <hr/>
+
         <h2 class="i18n" data-i18n="ftm-what-to-do-header">How to Donate PPE</h2>
         <p>Our network of volunteers has created a global map of over 1700+ locations, like hospitals and clinics, where you can donate your masks, gowns, and other PPE.</p>
         <ol>
@@ -639,16 +655,15 @@
           <li class="i18n" data-i18n="[html]ftm-what-to-do-2"><b>Follow their instructions</b> for what they accept and how to drop it off.</li>
           <li class="i18n" data-i18n="[html]ftm-what-to-do-3"><b>If you are donating opened packages</b>, please put them in a ziploc bag with a note saying whether they have been used, whether anyone in your household has been sick or travelled outside the country, and the expiration date if known.</li>
         </ol>
-        
+
         <div class="question i18n" data-i18n="[html]ftm-large-donation-question">Have <em>a lot</em> (500+ items) to donate?</div>
         <p class="i18n" data-i18n="[html]ftm-large-donation-answer">We encourage large donors to use another site we work with to help route donations. Register at <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/give">getusppe.org/give</a>.</p>
-        
+
         <div class="question">Can't find a donation site near you?</div>
         <p>Visit <a target="_blank" rel="noreferrer noopener" href="https://getusppe.org/give">getusppe.org</a> to let them know what you have available.</p>
-        
-        <div class="question i18n" data-i18n="ftm-add-donation-site-question">Want to add a donation site? update or remove information?</div>
-        <p class="i18n" data-i18n="[html]ftm-add-donation-site-answer">Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill out this form</a>. We will review it as soon as possible.</p>
+
         <hr/>
+
       </div>
       <h2 class="i18n" data-i18n= "ftm-map-of-sites">Donation Sites</h2>
       <div id="list-stats"></div>
@@ -696,7 +711,7 @@
         <p class="i18n" data-i18n="[html]ftm-made-with-love">made with &lt;3 in Seattle</p>
         <a href="whoweare.html" class="end">who we are</a>
       </div>
-    
+
 
   </body>
 </html>
