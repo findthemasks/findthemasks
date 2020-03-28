@@ -62,6 +62,13 @@ const locales = {
     "ftm-maps-search-placeholder": "Placeholder inside the map search field above the map",
     "ftm-maps-search-use-location": "Link to allow user to center map on their current location",
     "ftm-maps-search-reset": "Link that resets the map appearance",
+    "ftm-language-switcher": "Navigation to change languages",
+    "ftm-country-switcher": "Navigation to change countries",
+    "ftm-france": "country of France",
+    "ftm-canada": "country of Canada",
+    "ftm-united-states": "country of United States",
+    "ftm-french": "French language",
+    "ftm-english": "English language"
   },
   "en": {
     "ftm-map-of-sites": "Donation sites",
@@ -118,8 +125,15 @@ const locales = {
     "ftm-maps-search-placeholder": "Search by city, zip, or address",
     "ftm-maps-search-use-location": "Use my location",
     "ftm-maps-search-reset": "Reset map",
+    "ftm-language-switcher": "Language",
+    "ftm-country-switcher": "Country",
+    "ftm-france": "France",
+    "ftm-canada": "Canada",
+    "ftm-united-states": "United States",
+    "ftm-french": "French",
+    "ftm-english": "English"
   },
-  "fr-FR": {
+  "fr": {
     "ftm-map-of-sites": "Carte des sites de don",
     "ftm-list-of-sites": "Liste des sites de don",
     "ftm-donation-sites": "Sites de don",
@@ -172,7 +186,14 @@ const locales = {
     "ftm-project-volunteers": "Nos bénévoles comprennent:",
     "ftm-maps-search-placeholder": "Entrer un code postal",
     "ftm-maps-search-use-location": "Utiliser ma localisation",
-    "ftm-maps-search-reset": "Recharger la carte"
+    "ftm-maps-search-reset": "Recharger la carte",
+    "ftm-language-switcher": "Langue",
+    "ftm-country-switcher": "Pays",
+    "ftm-france": "France",
+    "ftm-canada": "Canada",
+    "ftm-united-states": "États Unis",
+    "ftm-french": "Français",
+    "ftm-english": "Anglais"
   }
 };
 
