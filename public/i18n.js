@@ -15,6 +15,7 @@ $(function () {
     // translate static elements and initialize translations
     // then, remove spinner and show page content
     $('.i18n').i18n();
+    window.i18nReady = true;
     $('html').trigger('i18n:ready');
     $('.translated-content').css({display: 'block'});
     $('.languages-loading').css({display: 'none'});

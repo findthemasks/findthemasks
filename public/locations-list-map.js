@@ -329,8 +329,7 @@ $(function () {
     countryDataFilename = `data-${country}.json`;
   }
 
-
-  $.getJSON(`https://findthemasks.com/${countryDataFilename}`, function (result) {
+  const renderListings = function(result) {
     // may end up using this for search / filtering...
     window.locations = result;
     window.data_by_location = toDataByLocation(locations);
@@ -388,6 +387,16 @@ $(function () {
       }
 
       $(".locations-list").empty().append(getFilteredContent(data_by_location, filters));
+    }
+  };
+
+  $.getJSON(`https://findthemasks.com/${countryDataFilename}`, function (result) {
+    if(window.i18nReady) {
+      renderListings(result);
+    } else {
+      $('html').on('i18n:ready', function() {
+        renderListings(result);
+      });
     }
   });
 });
