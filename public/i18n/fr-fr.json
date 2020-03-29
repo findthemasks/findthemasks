@@ -1,4 +1,7 @@
 {
+  "smartling" : {
+    "placeholder_format_custom" : ["\\$\\d{1,}"]
+  },
   "@metadata" : {
     "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
@@ -77,7 +80,7 @@
   "ftm-contact-info" : "Écrivez-nous à contact@findthemasks.com ou rejoignez-nous sur <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://github.com/r-pop/findthemasks\">notre Github</a>.",
   "ftm-who-we-are" : "qui nous sommes",
   "ftm-and" : "et",
-  "ftm-administrative-region-donation-sites" : "Sites de dons de $1:",
+  "ftm-administrative-region-donation-sites" : "Sites de dons par $1 :",
   "ftm-administrative-region-filter" : "Filtrer par $1",
   "ftm-administrative-region-province" : "Province",
   "ftm-administrative-region-department" : "Département",
