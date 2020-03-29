@@ -107,7 +107,6 @@ function createFilters() {
     'booties': { name: $.i18n('ftm-item-booties'), isSet: false },
     'goggles': { name: $.i18n('ftm-item-goggles'), isSet: false },
     'gloves': { name: $.i18n('ftm-item-gloves'), isSet: false },
-    'kleenex': { name: $.i18n('ftm-item-kleenex'), isSet: false },
     'sanitizer': { name: $.i18n('ftm-item-sanitizer'), isSet: false },
     'overalls': { name: $.i18n('ftm-item-overalls'), isSet: false },
     'gowns': { name: $.i18n('ftm-item-gowns'), isSet: false },
