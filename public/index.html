@@ -82,7 +82,7 @@
         margin-top: 15px;
         margin-left: auto;
         margin-right: auto;
-        margin-bottom: 60px;
+        margin-bottom: 40px;
         width: 60%;
       }
 
@@ -177,8 +177,16 @@
       }
 
       .need-ppe {
-        font-size: 18px;
+        margin-top: 30px;
+        border: 1px solid #ccc;
+        padding: 30px 50px;
         text-align: center;
+        margin-left: -10%;
+        margin-right: -10%;
+      }
+
+      .need-ppe h2 {
+        margin-top: 0;
       }
 
       .ppe-container {
@@ -197,6 +205,19 @@
         height: 200px;
         width: auto;
       }
+
+      #masks-img {
+        height: 210px;
+      }
+
+      #goggle-img {
+        height: 140px;
+      }
+
+      #faceshield-img {
+        height: 185px;
+      }
+
       .ppe-example-caption {
         color: #444;
         font-size: 12px;
@@ -367,8 +388,22 @@
 
       #map-stats, #list-stats {
         font-weight: 300;
-        font-size: 20px;
+        font-size: 18px;
         text-align: center;
+        color: #333;
+        margin-left: 10px;
+      }
+
+      .donation-map-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+      .donation-map-title h2 {
+        display: inline;
+        margin: 0;
+        padding: 0;
       }
 
       .locations-loading {
@@ -576,6 +611,29 @@
         .nav-link {
           font-size: 0.7rem;
         }
+
+        .need-ppe {
+          margin-left: 0;
+          margin-right: 0;
+          padding-left: 0;
+          padding-right: 0;
+        }
+        
+        #masks-img {
+          height: 160px;
+        }
+
+        #goggle-img {
+          height: 115px;
+        }
+
+        #faceshield-img {
+          height: 150px;
+        }
+        .ppe-example-caption {
+          margin-top: 4px;
+          margin-bottom: 10px;
+        }
       }
 
     </style>
@@ -622,21 +680,21 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-4 ppe-example">
-              <img style="height:140px"src="images/goggles.png" alt="example of personal protective equipment: goggles"/>
+              <img id="goggle-img" src="images/goggles.png" alt="example of personal protective equipment: goggles"/>
               <div class="ppe-example-caption i18n" data-i18n="ftm-item-goggles">goggles</div>
             </div>
             <div class="col-lg-4 ppe-example">
-              <img style="height:210px" src="images/masks.png" alt="example of personal protective equipment: surgical mask, N95"/>
+              <img id="masks-img" src="images/masks.png" alt="example of personal protective equipment: surgical mask, N95"/>
               <div class="ppe-example-caption i18n" data-i18n="ftm-item-masks">Surgical mask & N95 Masks</div>
             </div>
             <div class="col-lg-4 ppe-example">
-              <img style="height:185px" src="images/faceshield.png" alt="example of personal protective equipment: face shield "/>
+              <img id="faceshield-img" src="images/faceshield.png" alt="example of personal protective equipment: face shield "/>
               <div class="ppe-example-caption i18n" data-i18n="ftm-item-face-shields">Face Shield</div>
             </div>
           </div>
         </div>
 
-        <div class="content-container" style="margin-bottom: 40px;">
+        <div class="content-container">
           <h2 class="i18n" data-i18n="ftm-protecting-healthcare-workers">Protecting healthcare workers protects everybody</h2>
 
           <p class="i18n" data-i18n="ftm-index-where-to-find-ppe">
@@ -649,18 +707,14 @@
             If you know construction workers, vets, scientists, or dentists, please share this link with them.
           </p>
 
-          <hr/>
-
-          <h2 class="i18n" data-i18n="ftm-add-donation-site-header">Do you need PPE?</h2>
           <div class="need-ppe">
-            <div class="i18n" data-i18n="ftm-add-donation-site-question"> Want to add a donation site? update or remove information?</div>
+            <h2 class="i18n" data-i18n="ftm-add-donation-site-header">Do you need PPE?</h2>
+            <div class="i18n" data-i18n="ftm-add-donation-site-question"><p>Want to add a donation site? update or remove information?</p></div>
             <div class="i18n" data-i18n="[html]ftm-add-donation-site-answer">
-              Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">
-              fill out this form</a>. We will review it as soon as possible.
+              <p>Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">
+              fill out this form</a>. We will review it as soon as possible.</p>
             </div>
           </div>
-
-          <hr/>
 
           <h2 class="i18n" data-i18n="ftm-what-to-do-header">How to Donate PPE</h2>
           <p class="i18n" data-i18n="ftm-volunteer-network">
@@ -684,8 +738,10 @@
           <hr/>
 
         </div>
-        <h2 class="i18n" data-i18n= "ftm-map-of-sites">Donation Sites</h2>
-        <div id="list-stats"></div>
+        <div class="donation-map-title">
+          <h2 class="i18n" data-i18n= "ftm-map-of-sites">Donation Sites</h2>
+          <span id="list-stats"></span>
+        </div>
 
         <div class="locations-loading">
           <img src="images/icons/loader.svg" alt="" class="load-spinner"> <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
