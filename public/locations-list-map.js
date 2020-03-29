@@ -700,7 +700,7 @@ window.showMarkers = showMarkers; // Exposed for debug/testing.
 
 // Source for country center points: https://developers.google.com/public-data/docs/canonical/countries_csv
 const MAP_INITIAL_VIEW = {
-  ca: { zoom: 4, center:{ lat: 52.2384141, lng: -98.3288223 }},
+  ca: { zoom: 3, center:{ lat: 56.130366, lng: -106.346771 }},
   ch: { zoom: 7, center:{ lat: 46.818188, lng: 8.227512 }},
   de: { zoom: 5, center:{ lat: 51.165691, lng: 10.451526 }},
   fr: { zoom: 5, center:{ lat: 46.227638, lng: 2.213749 }},
