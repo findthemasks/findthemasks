@@ -8,6 +8,9 @@
     "locale": "en",
     "message-documentation": "qqq"
   },
+  "smartling": {
+    "placeholder_format_custom": ["\\$\\d{1,}"]
+  },
   "ftm-accepted-items": "Filter by Accepted Items",
   "ftm-accepting": "Accepting",
   "ftm-accepts-open-boxes": "Accepts Opened Boxes/bags",
