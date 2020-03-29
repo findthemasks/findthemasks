@@ -83,7 +83,8 @@ include translations for all official languages in that country.
 it is OK to launch a new language using an international variant. e.g. you can launch Canada
 with `en` translations and `fr` translations, they do not need to be localized to `en-CA` and `fr-CA`.
 4. Update the list of languages and countries in `countries.js` and `locales.js` and ensure that
-they propagate correctly to the language and country dropdowns.
+they propagate correctly to the language and country dropdowns. In `countries.js` you should also add
+the name of the string for that country's administrative region. e.g. US = "State", CA "Province", FR = "Department".
 
 ## Directory structure
 

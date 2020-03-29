@@ -1,6 +1,10 @@
 import toDataByLocation from './toDataByLocation.js';
+import countries from './countries.js';
+import getCountry from './getCountry.js';
 
 document.addEventListener("DOMContentLoaded", function() {
+  const currentCountry = getCountry();
+
   const url = new URL(window.location);
   const directories = url.pathname.split("/");
 
@@ -37,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     statsHtml.push(`<p><strong>${$.i18n('ftm-total-donation-sites-count')}</strong> ${totalCount}</p>`);
     statsHtml.push(`<p><strong>${$.i18n('ftm-total-donation-sites-cities-count')}</strong> ${totalCities}</p>`);
-    statsHtml.push(`<p><strong>${$.i18n('ftm-state-donation-sites')}</strong></p>`);
+    statsHtml.push(`<p><strong>${$.i18n('ftm-administrative-region-donation-sites', $.i18n(countries[currentCountry].administrativeRegionI18nString))}</strong></p>`);
     for (const state of Object.keys(stateCounts)) {
       statsHtml.push(`<div>${state}: ${stateCounts[state]}</div>`);
     }

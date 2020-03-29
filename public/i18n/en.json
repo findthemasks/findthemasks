@@ -1,4 +1,7 @@
 {
+  "smartling": {
+    "placeholder_format_custom": ["\\$\\d{1,}"]
+  },
   "@metadata": {
     "authors": [
       "Ian Baker",
@@ -67,8 +70,6 @@
   "ftm-protecting-healthcare-workers": "Protecting healthcare workers protects everybody",
   "ftm-index-protect-with-donations": "By donating, you protect <em>everybody</em>: doctors, nurses, hospital staff, patients, and the general public.",
   "ftm-site-launch-info": "This site was launched on <a href=\"https://twitter.com/arrkay/status/1240704610186092546\">March 19th</a> by <a href=\"https://www.linkedin.com/in/rachelpopkin/\">Rachel Popkin</a> and has been improved by many fantastic volunteers. Many of us are tech workers in Seattle. We are advised by a group of doctors and nurses around the country.",
-  "ftm-state-donation-sites": "Donation Sites by State:",
-  "ftm-states": "Filter by State",
   "ftm-stats": "Stats",
   "ftm-total-donation-sites-cities-count": "Total Cities with Donation Sites:",
   "ftm-total-donation-sites-count": "Total Donation Sites:",
@@ -81,5 +82,10 @@
   "ftm-comments-questions": "Got a comment or suggestion not related to data updates? Want to help?",
   "ftm-contact-info": "Email us at contact@findthemasks.com or join us on <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://github.com/r-pop/findthemasks\">our Github</a>.",
   "ftm-who-we-are": "who we are",
-  "ftm-and": "and"
+  "ftm-and": "and",
+  "ftm-administrative-region-donation-sites": "Donation Sites by $1:",
+  "ftm-administrative-region-filter": "Filter by $1",
+  "ftm-administrative-region-province": "Province",
+  "ftm-administrative-region-department": "Department",
+  "ftm-administrative-region-state": "State"
 }
