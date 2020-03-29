@@ -64,8 +64,6 @@
   "ftm-protecting-healthcare-workers" : "Protéger les professionnels de santé protège tout le monde",
   "ftm-index-protect-with-donations" : "En faisant un don, vous protégez <em> tout le monde </em> : les médecins, les infirmières, le personnel hospitalier, les patients et le grand public.",
   "ftm-site-launch-info" : "Ce site a été lancé le <a href=\"https://twitter.com/arrkay/status/1240704610186092546\">19 mars</a> par <a href=\"https://www.linkedin.com/in/rachelpopkin/\">Rachel Popkin</a> et a été amélioré par de nombreux et merveilleux bénévoles. Beaucoup d'entre nous sont des techniciens à Seattle. Nous sommes conseillés par un groupe de médecins et d'infirmières à travers le pays.",
-  "ftm-state-donation-sites" : "Sites de dons par État:",
-  "ftm-states" : "États",
   "ftm-stats" : "Statistiques",
   "ftm-total-donation-sites-cities-count" : "Nombre total de villes avec des sites de donation:",
   "ftm-total-donation-sites-count" : "Nombre total de sites de donation:",
@@ -78,5 +76,10 @@
   "ftm-comments-questions" : "Vous avez un commentaire ou une suggestion sans rapport avec les mises à jour des données? Voulez-vous aider?",
   "ftm-contact-info" : "Écrivez-nous à contact@findthemasks.com ou rejoignez-nous sur <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://github.com/r-pop/findthemasks\">notre Github</a>.",
   "ftm-who-we-are" : "qui nous sommes",
-  "ftm-and" : "et"
+  "ftm-and" : "et",
+  "ftm-administrative-region-donation-sites" : "Sites de dons de $1:",
+  "ftm-administrative-region-filter" : "Filtrer par $1",
+  "ftm-administrative-region-province" : "Province",
+  "ftm-administrative-region-department" : "département",
+  "ftm-administrative-region-state" : "Etat"
 }
