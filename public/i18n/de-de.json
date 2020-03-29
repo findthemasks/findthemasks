@@ -64,8 +64,6 @@
   "ftm-protecting-healthcare-workers" : "Der Schutz der Beschäftigten im Gesundheitswesen schützt alle",
   "ftm-index-protect-with-donations" : "Durch eine Spende schützen Sie <em> alle </em> : Ärzte, Krankenschwestern, Krankenhauspersonal, Patienten und die breite Öffentlichkeit.",
   "ftm-site-launch-info" : "Diese Seite wurde am gestartet <a href=\"https://twitter.com/arrkay/status/1240704610186092546\"> 19. März </a> von <a href=\"https://www.linkedin.com/in/rachelpopkin/\"> Rachel Popkin </a> und wird von vielen fantastisch Freiwilligen verbessert. Viele von uns sind Techniker in Seattle. Wir werden von einer Gruppe von Ärzten und Krankenschwestern im ganzen Land beraten.",
-  "ftm-state-donation-sites" : "Spendenstandorte nach Bundesländern:",
-  "ftm-states" : "Nach Status filtern",
   "ftm-stats" : "Statistiken",
   "ftm-total-donation-sites-cities-count" : "Städte mit Spendenstandorte insgesamt:",
   "ftm-total-donation-sites-count" : "Gesamtspendenstandorte:",
@@ -78,5 +76,10 @@
   "ftm-comments-questions" : "Haben Sie einen Kommentar oder Vorschlag, der nicht mit Datenaktualisierungen zusammenhängt? Helfen wollen?",
   "ftm-contact-info" : "Mailen Sie uns an contact@findthemasks.com oder besuchen Sie uns auf <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://github.com/r-pop/findthemasks\"> unsere Github </a> .",
   "ftm-who-we-are" : "Wer wir sind",
-  "ftm-and" : "und"
+  "ftm-and" : "und",
+  "ftm-administrative-region-donation-sites" : "Spendenseiten von $ 1:",
+  "ftm-administrative-region-filter" : "Filtern Sie nach $ 1",
+  "ftm-administrative-region-province" : "Provinz",
+  "ftm-administrative-region-department" : "Abteilung",
+  "ftm-administrative-region-state" : "Zustand"
 }
