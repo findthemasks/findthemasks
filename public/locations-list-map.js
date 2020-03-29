@@ -1,7 +1,7 @@
 import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
 import locales from './locales.js';
-
+import getCountry from './getCountry.js';
 
 /******************************************
  * MODULE VARS AVAILABLE TO ALL FUNCTIONS *
@@ -23,17 +23,6 @@ let openInfoWindows = [];
  * END MODULE LEVEL VARS *
  *************************/
 
-// TODO(ajwong): This is copied into donation-form-bounce.html. Careful.
-function GetCountry() {
-  const url = new URL(window.location);
-  const directories = url.pathname.split("/");
-  if (directories.length > 2) {
-    return directories[1];
-  }
-
-  return 'us';
-}
-
 const getCurrentLocale = () => {
   const url = new URL(window.location);
 
@@ -41,7 +30,7 @@ const getCurrentLocale = () => {
 };
 
 const generateBottomNav = () => {
-  const currentCountry = GetCountry();
+  const currentCountry = getCountry();
   const currentLocale = getCurrentLocale();
 
   const localeDropdownLink = document.getElementById('locales-dropdown');
@@ -64,7 +53,9 @@ const generateBottomNav = () => {
       localeDropdownItems.appendChild(element);
     });
 
-    countries.forEach((country) => {
+    Object.keys(countries).forEach((countryCode) => {
+      const country = countries[countryCode];
+
       if (country.countryCode === currentCountry.toLowerCase()) {
         countryDropdownLink.textContent = $.i18n(country.i18nString);
       }
@@ -138,6 +129,8 @@ function updateFilters(filters) {
 }
 
 function createFilterElements(filters) {
+  const currentCountry = getCountry();
+
   const container = ce('div');
 
   function createFilter(filter, key, value, prefix) {
@@ -164,7 +157,7 @@ function createFilterElements(filters) {
     return filterContainer;
   }
 
-  container.appendChild(ce('h4', null, ctn($.i18n('ftm-states'))));
+  container.appendChild(ce('h4', null, ctn($.i18n('ftm-administrative-region-filter', $.i18n(countries[currentCountry].administrativeRegionI18nString)))));
   for (const state of Object.keys(filters.states).sort()) {
     const stateFilter = filters.states[state];
     container.appendChild(createFilter(stateFilter, state, stateFilter.name, 'states'));
@@ -313,7 +306,7 @@ function getFilteredContent(data, filters) {
 
 $(function () {
   const url = new URL(window.location);
-  const country = GetCountry();
+  const country = getCountry();
 
   // this should happen after the translations load
   $('html').on('i18n:ready', function() {
@@ -709,7 +702,7 @@ const MAP_INITIAL_VIEW = {
 
 function centerMapToBounds(map, bounds, maxZoom) {
   if (bounds.isEmpty()) {
-    const params = MAP_INITIAL_VIEW[GetCountry()];
+    const params = MAP_INITIAL_VIEW[getCountry()];
     // Default view if no specific bounds
     map.setCenter(params.center);
     map.setZoom(params.zoom);
