@@ -1,4 +1,7 @@
 {
+  "smartling": {
+    "placeholder_format_custom": ["\\$\\d{1,}"]
+  },
   "@metadata": {
     "authors": [
       "Ian Baker",
@@ -7,9 +10,6 @@
     "last-updated": "2020-03-27",
     "locale": "en",
     "message-documentation": "qqq"
-  },
-  "smartling": {
-    "placeholder_format_custom": ["\\$\\d{1,}"]
   },
   "ftm-accepted-items": "Filter by Accepted Items",
   "ftm-accepting": "Accepting",
