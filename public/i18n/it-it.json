@@ -3,9 +3,9 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Many Others"],
-    "last-updated" : "2020-03-27",
-    "locale" : "en",
+    "authors" : ["Ian Baker", "Molti altri"],
+    "last-updated" : "2020/03/27",
+    "locale" : "it",
     "message-documentation" : "qqq"
   },
   "ftm-accepted-items" : "Filtra per Articoli accettati",
