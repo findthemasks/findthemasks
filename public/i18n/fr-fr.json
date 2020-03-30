@@ -3,7 +3,7 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Many Others"],
+    "authors" : ["Ian Baker", "Beaucoup d'autres"],
     "last-updated" : "2020-03-27",
     "locale" : "en",
     "message-documentation" : "qqq"
@@ -33,7 +33,7 @@
   "ftm-index-getmeppe-twitter-cta" : "Trouvez où vous pouvez donner vos masques et autres équipements de protection individuelle (EPI) dans votre région.",
   "ftm-index-need-find-masks" : "Nous devons trouver des masques.",
   "ftm-index-need-helpers" : "Nous devons aider les personnels soignants tout de suite.",
-  "ftm-index-site-coalition" : "Ce site fait partie de la coalition <a href=\"https://getusppe.org/\">getusppe.org</a>",
+  "ftm-index-site-coalition" : "Ce site fait partie de la coalition <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/'>getusppe.org</a>",
   "ftm-index-types-of-ppe" : "Si vous connaissez des ouvriers du bâtiment, des vétérinaires, des scientifiques ou des dentistes, veuillez partager ce lien avec eux.",
   "ftm-index-where-to-find-ppe" : "Vous avez peut-être acheté des masques il y a quelques semaines ou en avez déjà chez vous. À l'heure actuelle, les personnels de santé manquent dangereusement d'EPI comme des masques, des blouses d'hôpital, des sur-chaussures et des écrans faciaux pour les protéger pendant qu'ils risquent leur vie pour sauver celle des autres.",
   "ftm-instructions" : "Instructions",
