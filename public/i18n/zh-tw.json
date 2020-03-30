@@ -9,7 +9,7 @@
     "message-documentation" : "qqq"
   },
   "ftm-accepted-items" : "按接受項目篩選",
-  "ftm-accepting" : "接受",
+  "ftm-accepting" : "接受：",
   "ftm-accepts-open-boxes" : "接受打開的盒子/袋子",
   "ftm-ack-data-sources" : "該站點還包含來自<a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a>數據，該數據來自：",
   "ftm-add-donation-site-answer" : "請<a class=\"add-donation-site-form\">填寫此表格</a> 。我們將盡快對其進行審核。",
@@ -29,6 +29,7 @@
   "ftm-french" : "法文",
   "ftm-italian" : "義大利文",
   "ftm-german" : "德語",
+  "ftm-spanish" : "西班牙文",
   "ftm-have-you-donated-question" : "您已經捐款了嗎？",
   "ftm-have-you-donated-answer" : "告訴我們您的幫助，方法是在<a target='_blank' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <i class='fab fa-facebook-square'> </i>上發布findthemasks </a> 。",
   "ftm-index-getmeppe-twitter-cta" : "在當地找到可以捐贈口罩或其他個人防護設備（PPE）的地方。",
