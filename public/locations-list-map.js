@@ -50,6 +50,7 @@ const generateBottomNav = () => {
       currentUrl.searchParams.set('locale', locale.localeCode);
       element.setAttribute('href', currentUrl.href);
       element.textContent = $.i18n(locale.i18nString);
+      element.addEventListener("click", () =>  sendEvent("i18n", 'set-locale', locale.localeCode));
       localeDropdownItems.appendChild(element);
     });
 
@@ -72,6 +73,7 @@ const generateBottomNav = () => {
         currentUrl.href
       );
       element.textContent = $.i18n(country.i18nString);
+      element.addEventListener("click", () =>  sendEvent("i18n", 'set-country', country.countryCode));
       countryDropdownItems.appendChild(element);
     });
   }
