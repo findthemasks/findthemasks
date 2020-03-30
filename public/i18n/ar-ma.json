@@ -3,10 +3,10 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Many Others"],
+    "authors" : ["إيان بيكر", "آخرين كثر"],
     "last-updated" : "2020-03-27",
     "locale" : "en",
-    "message-documentation" : "qqq"
+    "message-documentation" : "ف ف"
   },
   "ftm-accepted-items" : "تصفية حسب العناصر المقبولة",
   "ftm-accepting" : "قبول",
