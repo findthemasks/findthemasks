@@ -3,15 +3,15 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Many Others"],
+    "authors" : ["Ian Baker", "Wiele innych"],
     "last-updated" : "2020-03-27",
     "locale" : "en",
     "message-documentation" : "qqq"
   },
-  "ftm-accepted-items" : "Filter by Accepted Items",
-  "ftm-accepting" : "Accepting",
+  "ftm-accepted-items" : "Filtruj według elementów zaakceptowanych",
+  "ftm-accepting" : "Akceptując",
   "ftm-accepts-open-boxes" : "Przyjmuje otwarte pudełka / torby",
-  "ftm-ack-data-sources" : "This site also includes data from <a href=\"https://tinyurl.com/hospitals-needing-ppe\">https://tinyurl.com/hospitals-needing-ppe</a>, a project by:",
+  "ftm-ack-data-sources" : "Ta strona zawiera również dane z <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , projektu:",
   "ftm-add-donation-site-answer" : "Proszę <a class=\"add-donation-site-form\"> wypełnić ten formularz </a> . Sprawdzimy to jak najszybciej.",
   "ftm-add-donation-site-header" : "Potrzebujesz ŚOI?",
   "ftm-add-donation-site-question" : "Chcesz dodać stronę z darowiznami? zaktualizować czy usunąć informacje?",
