@@ -128,6 +128,14 @@ function updateFilters(filters) {
   }
 }
 
+// Sends event to gtag for analytics
+function sendEvent(category, action, label) {
+  gtag('event', action, {
+    'event_category': category,
+    'event_label': label
+  });
+};
+
 function createFilterElements(filters) {
   const currentCountry = getCountry();
 
@@ -144,6 +152,7 @@ function createFilterElements(filters) {
     const label = ce('label', null, ctn(value));
     label.id = `${ prefix }-${ key }-label`;
     label.htmlFor = input.id;
+    label.addEventListener("click", () =>  sendEvent("map", `filter-${ prefix }`, key));
     filterContainer.appendChild(label);
 
     if (filter.isSet) {
