@@ -3,9 +3,9 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Many Others"],
+    "authors" : ["伊恩·貝克", "好多其它的"],
     "last-updated" : "2020-03-27",
-    "locale" : "en",
+    "locale" : "恩",
     "message-documentation" : "qqq"
   },
   "ftm-accepted-items" : "按接受項目篩選",
