@@ -3,7 +3,7 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Many Others"],
+    "authors" : ["Ian Baker", "Viele andere"],
     "last-updated" : "2020-03-27",
     "locale" : "en",
     "message-documentation" : "qqq"
@@ -86,7 +86,9 @@
   "ftm-large-donation-question" : "Benötigen Sie logistische Hilfe oder Entschädigung, um mehr als 500 PSA-Artikel zu spenden?",
   "ftm-canada-province-british-columbia" : "Britisch-Kolumbien",
   "ftm-canada-province-ontario" : "Ontario",
-  "ftm-canada-large-donations" : "Bitte besuchen Sie die provinzspezifischen ( $1 ) und nationalen Bemühungen ( $2 ), wenn Sie Hersteller oder Lieferant sind.",
+  "ftm-canada-manufacturer-call" : "Bundesaufruf für Hersteller",
+  "ftm-canada-supplier-call" : "Bundesaufruf für Lieferanten",
+  "ftm-canada-large-donations" : "Bitte besuchen Sie die Provinz ( $1 ), wenn Sie große Spenden haben, oder die nationalen Bemühungen ( $2 ), wenn Sie ein Hersteller oder Lieferant sind.",
   "ftm-canada-no-donation-sites-near-me" : "E-Mail <a href=\"mailto:COVID19donationsCA@gmail.com\"> COVID19donationsCA@gmail.com </a> , um sie wissen zu lassen, wo Sie sind und was Sie zur Verfügung haben. Ein Freiwilliger wird sich bei Ihnen melden.",
   "ftm-united-states-large-donations" : "Unsere Partner unter <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org/give </a> haben ein Aufnahmeformular, in dem Sie sich registrieren können, und ein Freiwilliger wird sich bei Ihnen melden.",
   "ftm-united-states-no-donation-sites-near-me" : "Besuchen Sie <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> , um sie wissen zu lassen, was Sie zur Verfügung haben.",
