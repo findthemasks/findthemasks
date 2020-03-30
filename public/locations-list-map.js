@@ -152,7 +152,7 @@ function createFilterElements(filters) {
     const label = ce('label', null, ctn(value));
     label.id = `${ prefix }-${ key }-label`;
     label.htmlFor = input.id;
-    label.addEventListener("click", () =>  sendEvent("map", `filter-${ prefix }`, key));
+    label.addEventListener("click", () =>  sendEvent("filters", `${ prefix }`, key));
     filterContainer.appendChild(label);
 
     if (filter.isSet) {
@@ -540,11 +540,13 @@ function initMapSearch(filters) {
   // Setup event listeners for map action links.
   $('#use-location').on('click', (e) => {
     e.preventDefault();
+    sendEvent("map","center","user-location");
     centerMapToMarkersNearUser();
   });
 
   $('#reset-map').on('click', (e) => {
     e.preventDefault();
+    sendEvent("map","reset","default-location");
     resetMap(filters);
   });
 }
