@@ -3,10 +3,10 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Many Others"],
+    "authors" : ["إيان بيكر", "آخرين كثر"],
     "last-updated" : "2020-03-27",
     "locale" : "en",
-    "message-documentation" : "qqq"
+    "message-documentation" : "ف ف"
   },
   "ftm-accepted-items" : "تصفية حسب العناصر المقبولة",
   "ftm-accepting" : "قبول",
@@ -86,7 +86,9 @@
   "ftm-large-donation-question" : "هل تحتاج إلى مساعدة أو تعويض لوجستي للتبرع بـ 500 عنصر من معدات الوقاية الشخصية؟",
   "ftm-canada-province-british-columbia" : "كولومبيا البريطانية",
   "ftm-canada-province-ontario" : "أونتاريو",
-  "ftm-canada-large-donations" : "يرجى زيارة الجهود الخاصة بالمقاطعة ( $1 ) والجهود الوطنية ( $2 ) إذا كنت منتجًا أو موردًا.",
+  "ftm-canada-manufacturer-call" : "دعوة اتحادية للمصنعين",
+  "ftm-canada-supplier-call" : "دعوة اتحادية للموردين",
+  "ftm-canada-large-donations" : "يرجى زيارة المنطقة ( $1 ) الخاصة بالمقاطعة إذا كان لديك تبرعات كبيرة ، أو الجهود الوطنية ( $2 ) إذا كنت منتجًا أو موردًا.",
   "ftm-canada-no-donation-sites-near-me" : "أرسل بريدًا إلكترونيًا إلى <a href=\"mailto:COVID19donationsCA@gmail.com\"> COVID19donationsCA@gmail.com </a> لإخبارهم بمكان تواجدك وما هو متاح لديك. سيتطوع المتطوع بك.",
   "ftm-united-states-large-donations" : "شركاؤنا على <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org/give </a> لديهم نموذج دخول حيث يمكنك التسجيل ، وسيتطوع أحد المتطوعين إليك.",
   "ftm-united-states-no-donation-sites-near-me" : "قم بزيارة <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> لإخبارهم بما هو متوفر لديك.",

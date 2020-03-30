@@ -3,7 +3,7 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Many Others"],
+    "authors" : ["Ian Baker", "Beaucoup d'autres"],
     "last-updated" : "2020-03-27",
     "locale" : "en",
     "message-documentation" : "qqq"
@@ -33,7 +33,7 @@
   "ftm-index-getmeppe-twitter-cta" : "Trouvez où vous pouvez donner vos masques et autres équipements de protection individuelle (EPI) dans votre région.",
   "ftm-index-need-find-masks" : "Nous devons trouver des masques.",
   "ftm-index-need-helpers" : "Nous devons aider les personnels soignants tout de suite.",
-  "ftm-index-site-coalition" : "Ce site fait partie de la coalition <a href=\"https://getusppe.org/\">getusppe.org</a>",
+  "ftm-index-site-coalition" : "Ce site fait partie de la coalition <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/'>getusppe.org</a>",
   "ftm-index-types-of-ppe" : "Si vous connaissez des ouvriers du bâtiment, des vétérinaires, des scientifiques ou des dentistes, veuillez partager ce lien avec eux.",
   "ftm-index-where-to-find-ppe" : "Vous avez peut-être acheté des masques il y a quelques semaines ou en avez déjà chez vous. À l'heure actuelle, les personnels de santé manquent dangereusement d'EPI comme des masques, des blouses d'hôpital, des sur-chaussures et des écrans faciaux pour les protéger pendant qu'ils risquent leur vie pour sauver celle des autres.",
   "ftm-instructions" : "Instructions",
@@ -86,7 +86,9 @@
   "ftm-large-donation-question" : "Besoin d'une aide logistique ou d'une compensation pour donner plus de 500 articles d'EPI?",
   "ftm-canada-province-british-columbia" : "Colombie britannique",
   "ftm-canada-province-ontario" : "Ontario",
-  "ftm-canada-large-donations" : "Veuillez consulter les efforts nationaux ( $1 ) et nationaux ( $2 ) si vous êtes un fabricant ou un fournisseur.",
+  "ftm-canada-manufacturer-call" : "Appel fédéral aux fabricants",
+  "ftm-canada-supplier-call" : "Appel de fournisseurs fédéral",
+  "ftm-canada-large-donations" : "Veuillez visiter la province ( $1 ) si vous avez des dons importants, ou les efforts nationaux ( $2 ) si vous êtes un fabricant ou un fournisseur.",
   "ftm-canada-no-donation-sites-near-me" : "Envoyez un courriel à <a href=\"mailto:COVID19donationsCA@gmail.com\"> COVID19donationsCA@gmail.com </a> pour leur faire savoir où vous êtes et ce dont vous disposez. Un volontaire vous répondra.",
   "ftm-united-states-large-donations" : "Nos partenaires à <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org/give </a> ont un formulaire d'enregistrement où vous pouvez vous inscrire. Un volontaire vous répondra.",
   "ftm-united-states-no-donation-sites-near-me" : "Visitez <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> pour leur faire savoir ce dont vous disposez.",
