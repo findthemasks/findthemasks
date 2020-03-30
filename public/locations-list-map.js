@@ -92,7 +92,7 @@ const addDonationSites = () => {
     )).join(', ');
 
     const nationalLinksHtml = countryDonationSites.nationalLinks && countryDonationSites.nationalLinks.map((link) => (
-      `<a href="${link.url}" target='_blank' rel='noreferrer noopener'>${link.label}</a>`
+      `<a href="${link.url}" target='_blank' rel='noreferrer noopener'>${$.i18n(link.labelI18nString)}</a>`
     )).join(', ');
 
     largeDonationElement.innerHTML = $.i18n(countryDonationSites.i18nString, administrativeRegionStringHtml, nationalLinksHtml);

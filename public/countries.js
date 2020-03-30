@@ -17,11 +17,11 @@ export default {
       ],
       nationalLinks: [
         {
-          label: 'https://www.canada.ca/en/services/business/maintaingrowimprovebusiness/manufacturers-needed.html',
+          labelI18nString: 'ftm-canada-manufacturer-call',
           url: 'https://www.canada.ca/en/services/business/maintaingrowimprovebusiness/manufacturers-needed.html'
         },
         {
-          label: 'https://buyandsell.gc.ca/calling-all-suppliers-help-canada-combat-covid-19',
+          labelI18nString: 'ftm-canada-supplier-call',
           url: 'https://buyandsell.gc.ca/calling-all-suppliers-help-canada-combat-covid-19'
         }
       ]
