@@ -34,7 +34,7 @@ For now you can hack things into place.  After starting a NodeJS REPL, you can s
 $ node
 > .load index.js
 > get_live_data()
-> dbl = toDataByLocation(static_data)
+> dbl = toDataByLocation(data_static)
 ```
 
 * (TODO) Running firebase locally
