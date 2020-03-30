@@ -3,9 +3,9 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Many Others"],
+    "authors" : ["伊恩·貝克", "好多其它的"],
     "last-updated" : "2020-03-27",
-    "locale" : "en",
+    "locale" : "恩",
     "message-documentation" : "qqq"
   },
   "ftm-accepted-items" : "按接受項目篩選",
@@ -86,7 +86,9 @@
   "ftm-large-donation-question" : "需要後勤幫助或補償來捐贈500多個PPE？",
   "ftm-canada-province-british-columbia" : "不列顛哥倫比亞省",
   "ftm-canada-province-ontario" : "安大略省",
-  "ftm-canada-large-donations" : "如果您是製造商或供應商，請訪問各省（ $1 ）和國家（ $2 ）。",
+  "ftm-canada-manufacturer-call" : "聯邦呼籲製造商",
+  "ftm-canada-supplier-call" : "聯邦呼籲供應商",
+  "ftm-canada-large-donations" : "如果您有大量捐款，請訪問特定省份（ $1 ），如果您是製造商或供應商，請訪問全國性活動（ $2 ）。",
   "ftm-canada-no-donation-sites-near-me" : "電子郵件<a href=\"mailto:COVID19donationsCA@gmail.com\"> COVID19donationsCA@gmail.com </a> ，讓他們知道您在哪里以及有什麼可用。志願者將與您聯繫。",
   "ftm-united-states-large-donations" : "我們在<a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org/give </a>上的合作夥伴提供了一份錄取表格，您可以在其中進行註冊，志願者會與您聯繫。",
   "ftm-united-states-no-donation-sites-near-me" : "請訪問<a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> ，讓他們知道您有什麼可用。",
