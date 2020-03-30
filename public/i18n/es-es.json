@@ -3,7 +3,7 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Many Others"],
+    "authors" : ["Ian Baker", "Muchos otros"],
     "last-updated" : "2020-03-27",
     "locale" : "en",
     "message-documentation" : "qqq"
@@ -86,7 +86,9 @@
   "ftm-large-donation-question" : "¿Necesita ayuda logística o compensación para donar más de 500 artículos de PPE?",
   "ftm-canada-province-british-columbia" : "Columbia Británica",
   "ftm-canada-province-ontario" : "Ontario",
-  "ftm-canada-large-donations" : "Visite los esfuerzos específicos de la provincia ( $1 ) y nacionales ( $2 ) si es un fabricante o proveedor.",
+  "ftm-canada-manufacturer-call" : "Llamada federal para fabricantes",
+  "ftm-canada-supplier-call" : "Llamada federal para proveedores",
+  "ftm-canada-large-donations" : "Visite la provincia específica ( $1 ) si tiene grandes donaciones, o los esfuerzos nacionales ( $2 ) si es un fabricante o proveedor.",
   "ftm-canada-no-donation-sites-near-me" : "Envíe un correo electrónico a <a href=\"mailto:COVID19donationsCA@gmail.com\"> COVID19donationsCA@gmail.com </a> para informarles dónde se encuentra y qué tiene disponible. Un voluntario se pondrá en contacto con usted.",
   "ftm-united-states-large-donations" : "Nuestros socios en <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org/give </a> tienen un formulario de admisión donde puede registrarse y un voluntario se pondrá en contacto con usted.",
   "ftm-united-states-no-donation-sites-near-me" : "Visite <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> para hacerles saber lo que tiene disponible.",

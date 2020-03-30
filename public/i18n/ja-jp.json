@@ -3,7 +3,7 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Many Others"],
+    "authors" : ["イアン・ベイカー", "その他多数"],
     "last-updated" : "2020-03-27",
     "locale" : "en",
     "message-documentation" : "qqq"
@@ -86,7 +86,9 @@
   "ftm-large-donation-question" : "PPEの500以上のアイテムを寄付するための後方支援または補償が必要ですか？",
   "ftm-canada-province-british-columbia" : "ブリティッシュコロンビア",
   "ftm-canada-province-ontario" : "オンタリオ",
-  "ftm-canada-large-donations" : "メーカーまたはサプライヤーの方は、州別（ $1 ）および国別の取り組み（ $2 ）をご覧ください。",
+  "ftm-canada-manufacturer-call" : "連邦政府の製造業者への呼びかけ",
+  "ftm-canada-supplier-call" : "連邦政府によるサプライヤーの募集",
+  "ftm-canada-large-donations" : "寄付額が多い場合は州別（ $1 ）を、メーカーまたはサプライヤーの場合は全国的な取り組み（ $2 ）をご覧ください。",
   "ftm-canada-no-donation-sites-near-me" : "<a href=\"mailto:COVID19donationsCA@gmail.com\"> COVID19donationsCA@gmail.com </a>にメールを送信して、あなたがどこにいて、何が利用できるかを知らせます。ボランティアがあなたに返信します。",
   "ftm-united-states-large-donations" : "<a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org/give </a>パートナーには、登録できるインテークフォームがあり、ボランティアがあなたに返信します。",
   "ftm-united-states-no-donation-sites-near-me" : "<a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a>にアクセスして、入手可能なものを知らせてください。",

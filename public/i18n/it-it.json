@@ -3,9 +3,9 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Many Others"],
-    "last-updated" : "2020-03-27",
-    "locale" : "en",
+    "authors" : ["Ian Baker", "Molti altri"],
+    "last-updated" : "2020/03/27",
+    "locale" : "it",
     "message-documentation" : "qqq"
   },
   "ftm-accepted-items" : "Filtra per Articoli accettati",
@@ -86,7 +86,9 @@
   "ftm-large-donation-question" : "Hai bisogno di aiuto logistico o di compensazione per donare oltre 500 articoli di DPI?",
   "ftm-canada-province-british-columbia" : "British Columbia",
   "ftm-canada-province-ontario" : "Ontario",
-  "ftm-canada-large-donations" : "Visitare gli sforzi specifici della provincia ( $1 ) e nazionali ( $2 ) se si è produttori o fornitori.",
+  "ftm-canada-manufacturer-call" : "Chiamata federale per i produttori",
+  "ftm-canada-supplier-call" : "Chiamata federale per i fornitori",
+  "ftm-canada-large-donations" : "Si prega di visitare la provincia specifica ( $1 ) se si dispone di grandi donazioni, o gli sforzi nazionali ( $2 ) se si è un produttore o fornitore.",
   "ftm-canada-no-donation-sites-near-me" : "Email <a href=\"mailto:COVID19donationsCA@gmail.com\"> COVID19donationsCA@gmail.com </a> per far loro sapere dove ti trovi e cosa hai a disposizione. Un volontario ti risponderà.",
   "ftm-united-states-large-donations" : "I nostri partner su <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org/give </a> hanno un modulo di assunzione in cui è possibile registrarsi e un volontario ti risponderà.",
   "ftm-united-states-no-donation-sites-near-me" : "Visita <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> per far sapere loro cosa hai a disposizione.",
