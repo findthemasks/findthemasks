@@ -3,7 +3,7 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Muitos outros"],
+    "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
     "locale" : "en",
     "message-documentation" : "qqq"
@@ -12,7 +12,7 @@
   "ftm-accepting" : "Aceitando",
   "ftm-accepts-open-boxes" : "Aceita caixas abertas / sacos",
   "ftm-ack-data-sources" : "Este site também inclui dados de <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , um projeto de:",
-  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn btn-primary'> Preencha este formulário </button> </a>",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Preencha este formulário </button> </a>",
   "ftm-add-donation-site-header" : "Você precisa de EPI?",
   "ftm-add-donation-site-question" : "Você trabalha em um hospital ou clínica e precisa de EPI? Deseja atualizar ou remover informações?",
   "ftm-address" : "Endereço",
@@ -25,8 +25,8 @@
   "ftm-filters" : "Filtros",
   "ftm-france" : "França",
   "ftm-french" : "Francês",
-  "ftm-italian" : "italiano",
-  "ftm-german" : "alemão",
+  "ftm-italian" : "Italiano",
+  "ftm-german" : "Alemão",
   "ftm-spanish" : "espanhol",
   "ftm-have-you-donated-question" : "Você já doou?",
   "ftm-have-you-donated-answer" : "Conte-nos como você ajudou publicando em <a target='_blank' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <i class='fab fa-facebook-square'> </i> findthemasks </a> .",
