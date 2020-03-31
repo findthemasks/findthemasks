@@ -253,11 +253,12 @@ async function snapshotData(country) {
   });
 
   // Build a simple csv file
+  console.log("Preparing CSV File\n");
   const csvFileRef = admin.storage().bucket().file(csv_filename);
   let csv_file_list = [];
   for (let i = 0; i < data.values.length; i++) {
-      row_string = data.values[i].join(",");
-      csv_file_list.push(row_string);
+      row_string = JSON.stringify(data.values[i]);
+      csv_file_list.push(row_string.substr(1, row_string.length - 2);
   }
   csv_file_string = csv_file_list.join("\n");
   await csvFileRef.save(csv_file_string, {
