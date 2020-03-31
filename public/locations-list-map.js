@@ -50,6 +50,7 @@ const generateBottomNav = () => {
       currentUrl.searchParams.set('locale', locale.localeCode);
       element.setAttribute('href', currentUrl.href);
       element.textContent = $.i18n(locale.i18nString);
+      element.addEventListener("click", () =>  sendEvent("i18n", 'set-locale', locale.localeCode));
       localeDropdownItems.appendChild(element);
     });
 
@@ -72,6 +73,7 @@ const generateBottomNav = () => {
         currentUrl.href
       );
       element.textContent = $.i18n(country.i18nString);
+      element.addEventListener("click", () =>  sendEvent("i18n", 'set-country', country.countryCode));
       countryDropdownItems.appendChild(element);
     });
   }
@@ -175,7 +177,7 @@ function createFilterElements(filters) {
     const label = ce('label', null, ctn(value));
     label.id = `${ prefix }-${ key }-label`;
     label.htmlFor = input.id;
-    label.addEventListener("click", () =>  sendEvent("map", `filter-${ prefix }`, key));
+    label.addEventListener("click", () =>  sendEvent("filters", `${ prefix }`, key));
     filterContainer.appendChild(label);
 
     if (filter.isSet) {
@@ -534,16 +536,18 @@ function initMapSearch(filters) {
   autocomplete.addListener('place_changed', () => {
     let place = autocomplete.getPlace();
     if (place.geometry) {
-      // Get the location object that we can map.setCenter() on.
+      // Get the location object that we can map.setCenter() on
+      sendEvent("map","autocomplete", $search.val());
       let location = place.geometry.location;
       if (location) {
         centerMapToMarkersNearCoords(location.lat(), location.lng())
-
       } else {
+        sendEvent("map","autocomplete-fail", $search.val());
         console.warn('Location data not found in place geometry (place.geometry.location).')
       }
     } else {
       console.warn('No geometry found, attempting geocode...');
+      sendEvent("map","search", $search.val());
 
       // Attempt a geocode of the direct user input instead.
       const geocoder = new google.maps.Geocoder();
@@ -552,10 +556,10 @@ function initMapSearch(filters) {
         // Ensure we got a valid response with an array of at least one result.
         if (status === 'OK' && Array.isArray(results) && results.length > 0) {
           let location = results[0].geometry.location;
-          centerMapToMarkersNearCoords(location.lat(), location.lng())
-
+          centerMapToMarkersNearCoords(location.lat(), location.lng());
         } else {
           console.warn('Geocode failed: ' + status);
+          sendEvent("map","geocode-fail", $search.val());
         }
       });
     }
@@ -564,11 +568,13 @@ function initMapSearch(filters) {
   // Setup event listeners for map action links.
   $('#use-location').on('click', (e) => {
     e.preventDefault();
+    sendEvent("map","center","user-location");
     centerMapToMarkersNearUser();
   });
 
   $('#reset-map').on('click', (e) => {
     e.preventDefault();
+    sendEvent("map","reset","default-location");
     resetMap(filters);
   });
 }
