@@ -18,6 +18,7 @@ let markers = [];
 // Markers from outside the current country
 const otherMarkers = [];
 let markerCluster = null;
+let otherCluster = null;
 
 // Configuration defined in query string. Initialized in jQuery DOM ready function.
 let showMapSearch = false; // BETA FEATURE: Default to false.
@@ -358,7 +359,7 @@ function loadOtherCountries(data, filters) {
           const otherData = countryData[code] = toDataByLocation(result);
 
           otherMarkers.push(...getMarkers(otherData, {}, null));
-          showMarkers(data, filters);
+          otherCluster && otherCluster.addMarkers(otherMarkers);
         }
       );
     }
@@ -512,10 +513,17 @@ function initMap(data, filters) {
   $(".map-container").show();
 
   map = new google.maps.Map(element);
+  otherCluster = new MarkerClusterer(map, otherMarkers, {
+    clusterClass: 'othercluster',
+    imagePath: 'images/markercluster/m',
+    minimumClusterSize: 5,
+    zIndex: 1,
+  });
   markerCluster = new MarkerClusterer(map, [],
     {
       imagePath: 'images/markercluster/m',
-      minimumClusterSize: 5
+      minimumClusterSize: 5,
+      zIndex: 2
     });
 
   showMarkers(data, filters);
@@ -742,10 +750,6 @@ function showMarkers(data, filters) {
   markers = getMarkers(data, applied, hasFilters && bounds);
 
   markerCluster.addMarkers(markers);
-
-  if (!hasFilters) {
-    markerCluster.addMarkers(otherMarkers);
-  }
 
   let $mapStats = $('#map-stats');
   updateStats($mapStats, markers.length);
