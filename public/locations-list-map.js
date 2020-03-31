@@ -14,11 +14,27 @@ const currentCountry = getCountry();
 // Map, markers and map associated UI components are initialized in initMap().
 let autocomplete;
 let map = null;
-let markers = [];
+// Markers shown with primary prominence: in current country, in selected state(s), matching filters
+let primaryMarkers = [];
+// Markers shown with secondary prominence: in current country, outside selected state(s), matching filters
+let secondaryMarkers = [];
 // Markers from outside the current country
 const otherMarkers = [];
-let markerCluster = null;
-let otherCluster = null;
+
+// Primary markers shown in primary cluster
+let primaryCluster = null;
+// Secondary + other markers shown in secondary cluster
+let secondaryCluster = null;
+
+const secondaryMarkerOptions = {
+  icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Ccircle cx='4' cy='4' r='4' style='fill:red'/%3E%3C/svg%3E",
+  opacity: 0.4
+};
+
+const primaryMarkerOptions = {
+  icon: null, // Use default
+  opacity: 1
+};
 
 // Configuration defined in query string. Initialized in jQuery DOM ready function.
 let showMapSearch = false; // BETA FEATURE: Default to false.
@@ -248,9 +264,8 @@ function createContent(data) {
 
 function getFilteredContent(data, filters) {
   const content = [];
-  const applied = filters.applied;
-  const filterAcceptKeys = applied && applied.acceptItems && Object.keys(applied.acceptItems);
-
+  const applied = filters.applied || {};
+  const filterAcceptKeys = applied.acceptItems && Object.keys(applied.acceptItems);
   let listCount = 0; // TODO: hacky, see note below.
 
   for (const stateName of Object.keys(data).sort()) {
@@ -352,13 +367,6 @@ function getCountryDataFilename(country) {
 
 function loadOtherCountries() {
   const countryCodes = Object.keys(countries);
-  const icon = {
-    path: 0,  // google.maps.SymbolPath.CIRCLE
-    fillColor: 'red',
-    fillOpacity: 1,
-    scale: 4,
-    strokeWeight: 0,
-  };
 
   for (const code of countryCodes) {
     if (code !== currentCountry) {
@@ -369,8 +377,8 @@ function loadOtherCountries() {
 
           // opacity value matches what's in css for the .othercluster class -
           // can set a css class for the clusters, but not for individual pins.
-          otherMarkers.push(...getMarkers(otherData, {}, null, { icon: icon, opacity: 0.4 }));
-          otherCluster && otherCluster.addMarkers(otherMarkers);
+          otherMarkers.push(...getMarkers(otherData, {}, null, secondaryMarkerOptions).outofstate);
+          updateClusters(null, secondaryCluster);
         }
       );
     }
@@ -527,13 +535,13 @@ function initMap(data, filters) {
   $(".map-container").show();
 
   map = new google.maps.Map(element);
-  otherCluster = new MarkerClusterer(map, otherMarkers, {
-    clusterClass: 'othercluster',
+  secondaryCluster = new MarkerClusterer(map, [], {
+    clusterClass: 'secondarycluster',
     imagePath: 'images/markercluster/m',
     minimumClusterSize: 5,
     zIndex: 1,
   });
-  markerCluster = new MarkerClusterer(map, [],
+  primaryCluster = new MarkerClusterer(map, [],
     {
       imagePath: 'images/markercluster/m',
       minimumClusterSize: 5,
@@ -658,7 +666,7 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
   //Compute the distances of all markers from the user
   var markerDistances = new Map(); // an associative array containing the marker referenced by the computed distance
   var distances = []; // all the distances, so we can sort and then call markerDistances
-  for (const marker of markers) {
+  for (const marker of primaryMarkers) {
     let distance = google.maps.geometry.spherical.computeDistanceBetween(marker.position, latlng);
 
     // HACK: In the unlikely event that the exact same distance is computed, add one meter to the distance to give it a unique distance
@@ -699,15 +707,11 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
 
 function getMarkers(data, appliedFilters, bounds, markerOptions) {
   const filterAcceptKeys = appliedFilters.acceptItems && Object.keys(appliedFilters.acceptItems);
-  const markers = [];
+  const inStateMarkers = [];
+  const outOfStateMarkers = [];
 
   for (const stateName of Object.keys(data)) {
-    let inStateFilter = true;
-
-    if (appliedFilters.states && !appliedFilters.states[stateName]) {
-      inStateFilter = false;
-    }
-
+    const inStateFilter = appliedFilters.states && appliedFilters.states[stateName];
     const state = data[stateName];
     const cities = state.cities;
 
@@ -726,11 +730,11 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
         let marker = entry.marker;
 
         if (marker) {
-          if (!inStateFilter || !inAcceptFilter) {
+          if (!inAcceptFilter) {
             marker.setMap(null);
             marker = null;
           }
-        } else if (inStateFilter && inAcceptFilter) {
+        } else if (inAcceptFilter) {
           const lat = Number(entry.lat);
           const lng = Number(entry.lng);
 
@@ -741,37 +745,75 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
         }
 
         if (marker) {
-          markers.push(marker);
-          bounds && bounds.extend(marker.position);
+          if (inStateFilter) {
+            inStateMarkers.push(marker);
+            bounds && bounds.extend(marker.position);
+          } else {
+            outOfStateMarkers.push(marker);
+          }
         }
       }
     }
   }
 
-  return markers;
+  return {
+    instate: inStateMarkers,
+    outofstate: outOfStateMarkers
+  };
 }
 
 /**
  * Changes the markers currently rendered on the map based strictly on . This will reset the 'markers' module variable as well.
  */
 function showMarkers(data, filters) {
-  if (!map || !markerCluster) {
+  if (!map || !primaryCluster) {
     return;
   }
-
-  markerCluster.clearMarkers()
 
   const bounds = new google.maps.LatLngBounds();
   const applied = filters.applied || {};
   const hasFilters = applied.states || applied.acceptItems;
 
-  markers = getMarkers(data, applied, hasFilters && bounds);
+  const markers = getMarkers(data, applied, hasFilters && bounds);
 
-  markerCluster.addMarkers(markers);
+  if (applied.states) {
+    primaryMarkers = markers.instate;
+    secondaryMarkers = markers.outofstate;
+  } else {
+    primaryMarkers = markers.outofstate;
+    secondaryMarkers = [];
+  }
+
+  primaryCluster && primaryCluster.clearMarkers();
+  secondaryCluster && secondaryCluster.clearMarkers();
+
+  for (const marker of primaryMarkers) {
+    marker.setOptions(primaryMarkerOptions);
+  }
+
+  for (const marker of secondaryMarkers) {
+    marker.setOptions(secondaryMarkerOptions);
+  }
+
+  updateClusters(primaryCluster, secondaryCluster);
 
   let $mapStats = $('#map-stats');
   updateStats($mapStats, markers.length);
   centerMapToBounds(map, bounds, 9)
+}
+
+// Updates one or both clusters with the latest batch of markers
+function updateClusters(primaryCluster, secondaryCluster) {
+  if (primaryCluster) {
+    primaryCluster.clearMarkers();
+    primaryCluster.addMarkers(primaryMarkers);
+  }
+
+  if (secondaryCluster) {
+    secondaryCluster.clearMarkers();
+    secondaryCluster.addMarkers(otherMarkers);
+    secondaryCluster.addMarkers(secondaryMarkers);
+  }
 }
 
 // Source for country center points: https://developers.google.com/public-data/docs/canonical/countries_csv
