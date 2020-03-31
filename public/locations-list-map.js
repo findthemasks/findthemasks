@@ -348,7 +348,7 @@ function getCountryDataFilename(country) {
   return countryDataFilename;
 }
 
-function loadOtherCountries(data, filters) {
+function loadOtherCountries() {
   const countryCodes = Object.keys(countries);
 
   for (const code of countryCodes) {
@@ -358,7 +358,9 @@ function loadOtherCountries(data, filters) {
         (result) => {
           const otherData = countryData[code] = toDataByLocation(result);
 
-          otherMarkers.push(...getMarkers(otherData, {}, null));
+          // opacity value matches what's in css for the .othercluster class -
+          // can set a css class for the clusters, but not for individual pins.
+          otherMarkers.push(...getMarkers(otherData, {}, null, { opacity: 0.4 }));
           otherCluster && otherCluster.addMarkers(otherMarkers);
         }
       );
@@ -383,6 +385,7 @@ $(function () {
     const showList = searchParams.get('hide-list') !== 'true';
     const showFilters = showList && searchParams.get('hide-filters') !== 'true';
     const showMap = searchParams.get('hide-map') !== 'true';
+    const showOthers = searchParams.get('show-others') === 'true';
 
     // BETA: Default initialized at module level scope (see above). Initialize search field, first check #map for default
     // config. Override with query string. Currently disabled by default because it's still in beta.
@@ -434,7 +437,9 @@ $(function () {
       $(".locations-list").empty().append(getFilteredContent(data, filters));
     }
 
-    loadOtherCountries(data, filters);
+    if (showOthers) {
+      loadOtherCountries();
+    }
   };
 
   $.getJSON(`https://findthemasks.com/${ getCountryDataFilename(currentCountry) }`, function (result) {
@@ -679,7 +684,7 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
  * END MAP SEARCH FUNCTIONALITY *
  ********************************/
 
-function getMarkers(data, appliedFilters, bounds) {
+function getMarkers(data, appliedFilters, bounds, markerOptions) {
   const filterAcceptKeys = appliedFilters.acceptItems && Object.keys(appliedFilters.acceptItems);
   const markers = [];
 
@@ -718,7 +723,7 @@ function getMarkers(data, appliedFilters, bounds) {
 
           // Guard against non-geocoded entries. Assuming no location exactly on the equator or prime meridian
           if (lat && lng) {
-            marker = entry.marker = createMarker(lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box);
+            marker = entry.marker = createMarker(lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box, markerOptions);
           }
         }
 
@@ -784,12 +789,15 @@ function centerMapToBounds(map, bounds, maxZoom) {
   }
 }
 
-function createMarker(latitude, longitude, address, name, instructions, accepting, open_accepted) {
+function createMarker(latitude, longitude, address, name, instructions, accepting, open_accepted, markerOptions) {
   const location = { lat: latitude, lng: longitude };
-  const marker = new google.maps.Marker({
-    position: location,
-    title: name
-  });
+  const options = Object.assign({
+      position: location,
+      title: name
+    },
+    markerOptions || {}
+  );
+  const marker = new google.maps.Marker(options);
 
   marker.addListener('click', () => {
     openInfoWindows.forEach(infowindow => infowindow.close());
