@@ -15,7 +15,7 @@
   "ftm-accepting": "Accepting",
   "ftm-accepts-open-boxes": "Accepts Opened Boxes/bags",
   "ftm-ack-data-sources": "This site also includes data from <a href=\"https://tinyurl.com/hospitals-needing-ppe\">https://tinyurl.com/hospitals-needing-ppe</a>, a project by:",
-  "ftm-add-donation-site-answer": "<a class='add-donation-site-form'><button style='margin-top:20px;' type='button' class='btn btn-primary'>Complete this form</button></a>",
+  "ftm-add-donation-site-answer": "<a class='add-donation-site-form'><button style='margin-top:20px;' type='button' class='btn-sm btn-primary'>Complete this form</button></a>",
   "ftm-add-donation-site-header": "Do you need PPE?",
   "ftm-add-donation-site-question": "Do you work in a hospital or clinic and need PPE? Want to update or remove information?",
   "ftm-address": "Address",
