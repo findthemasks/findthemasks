@@ -3,18 +3,18 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["إيان بيكر", "آخرين كثر"],
+    "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
     "locale" : "en",
-    "message-documentation" : "ف ف"
+    "message-documentation" : "qqq"
   },
   "ftm-accepted-items" : "تصفية حسب العناصر المقبولة",
   "ftm-accepting" : "قبول",
   "ftm-accepts-open-boxes" : "تقبل الصناديق / الحقائب المفتوحة",
   "ftm-ack-data-sources" : "يتضمن هذا الموقع أيضًا بيانات من <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> ، مشروع من:",
-  "ftm-add-donation-site-answer" : "يرجى <a class=\"add-donation-site-form\"> ملء هذا النموذج </a> . سنراجعها في أقرب وقت ممكن.",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> أكمل هذا النموذج </button> </a>",
   "ftm-add-donation-site-header" : "هل تحتاج معدات الوقاية الشخصية؟",
-  "ftm-add-donation-site-question" : "هل تريد إضافة موقع تبرع؟ تحديث أو إزالة المعلومات؟",
+  "ftm-add-donation-site-question" : "هل تعمل في مستشفى أو عيادة وتحتاج إلى معدات الوقاية الشخصية؟ هل تريد تحديث المعلومات أو إزالتها؟",
   "ftm-address" : "عنوان",
   "ftm-anonymous-volunteers" : "وغيرهم مجهولين",
   "ftm-canada" : "كندا",
