@@ -11,30 +11,42 @@ const locales = {
   "es-ES": "i18n/es-es.json"
 };
 
-const getLocale = (detectedLocale) => {
-  const searchParams = new URLSearchParams((new URL(window.location)).search);
-  return searchParams.get('locale') || detectedLocale;
-};
+const getConfigForLocale = (locale) => {
+  if (!locale) {
+    return null;
+  }
 
-const activeLocaleMap = (locale) => {
-  // if user explicitly tells us what they want only return that json file
-  if (locale && locales[locale]) {
+  if (locales[locale]) {
     return {
-      [locale]: locales[locale]
+      locale: locale,
+      map: {
+        [locale]: locales[locale]
+      }
     };
   }
 
   const language = locale.split('-')[0];
 
-  // if we do not have the locale, check if we have an international language version
-  if (locale && locales[language]) {
+  if (language && locales[language]) {
     return {
-      [language]: locales[language]
+      locale: language,
+      map: {
+        [language]: locales[language]
+      }
     };
   }
 
-  // we don't know what the user wants, load english
-  return { en: locales.en };
+  return null;
+};
+
+const determineLocaleConfig = (detectedLocale) => {
+  const searchParams = new URLSearchParams((new URL(window.location)).search);
+  const localeParam = searchParams.get('locale');
+
+  // first try locale selected in app by user
+  // next try locale detected by jQuery.i18n library
+  // if all else fails, give them English
+  return getConfigForLocale(localeParam) || getConfigForLocale(detectedLocale) || { en: locales.en };
 };
 
 $(function () {
@@ -49,12 +61,7 @@ $(function () {
   };
 
   const detectedLocale = $.i18n().locale;
-  const locale = getLocale(detectedLocale);
-  const localeMap = activeLocaleMap(locale);
+  const localeConfig = determineLocaleConfig(detectedLocale);
 
-  if (locale) {
-    $.i18n({ locale: locale }).load(localeMap).done(init);
-  } else {
-    $.i18n().load(localeMap).done(init);
-  }
+  $.i18n({ locale: localeConfig.locale }).load(localeConfig.map).done(init);
 });
