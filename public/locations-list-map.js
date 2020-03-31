@@ -7,10 +7,16 @@ import getCountry from './getCountry.js';
  * MODULE VARS AVAILABLE TO ALL FUNCTIONS *
  ******************************************/
 
+// Master data object, indexed by country code
+const countryData = {};
+const currentCountry = getCountry();
+
 // Map, markers and map associated UI components are initialized in initMap().
 let autocomplete;
 let map = null;
 let markers = [];
+// Markers from outside the current country
+const otherMarkers = [];
 let markerCluster = null;
 
 // Configuration defined in query string. Initialized in jQuery DOM ready function.
@@ -30,7 +36,6 @@ const getCurrentLocale = () => {
 };
 
 const generateBottomNav = () => {
-  const currentCountry = getCountry();
   const currentLocale = getCurrentLocale();
 
   const localeDropdownLink = document.getElementById('locales-dropdown');
@@ -78,7 +83,6 @@ const generateBottomNav = () => {
 };
 
 const addDonationSites = () => {
-  const currentCountry = getCountry();
   const countryConfig = countries[currentCountry.toLowerCase()];
 
   const largeDonationElement = document.getElementById('large-donation-selector');
@@ -105,12 +109,12 @@ const addDonationSites = () => {
 // If one or more values in a category is true, the filter is set - only items matching the filter are included
 // If two or more values in a category are true, the filter is the union of those values
 // If multiple categories have set values, the result is the intersection of those categories
-function createFilters() {
+function createFilters(data) {
   const filters = {
     states: {}
   };
 
-  for (const state of Object.keys(data_by_location)) {
+  for (const state of Object.keys(data)) {
     filters.states[state] = { name: state, isSet: false };
   }
 
@@ -159,9 +163,7 @@ function sendEvent(category, action, label) {
   });
 };
 
-function createFilterElements(filters) {
-  const currentCountry = getCountry();
-
+function createFilterElements(data, filters) {
   const container = ce('div');
 
   function createFilter(filter, key, value, prefix) {
@@ -170,7 +172,7 @@ function createFilterElements(filters) {
     input.type = 'checkbox';
     input.id = `${ prefix }-${ key }`;
     input.value = key;
-    input.addEventListener('change', () => onFilterChange(prefix, key, filters));
+    input.addEventListener('change', () => onFilterChange(data, prefix, key, filters));
     filterContainer.appendChild(input);
     const label = ce('label', null, ctn(value));
     label.id = `${ prefix }-${ key }-label`;
@@ -336,29 +338,46 @@ function getFilteredContent(data, filters) {
   return content;
 }
 
+function getCountryDataFilename(country) {
+  let countryDataFilename = 'data.json';
+  if (currentCountry !== 'us') {
+    countryDataFilename = `data-${ country }.json`;
+  }
+
+  return countryDataFilename;
+}
+
+function loadOtherCountries(data, filters) {
+  const countryCodes = Object.keys(countries);
+
+  for (const code of countryCodes) {
+    if (code !== currentCountry) {
+      $.getJSON(
+        `https://findthemasks.com/${ getCountryDataFilename(code) }`,
+        (result) => {
+          const otherData = countryData[code] = toDataByLocation(result);
+
+          otherMarkers.push(...getMarkers(otherData, {}, null));
+          showMarkers(data, filters);
+        }
+      );
+    }
+  }
+}
+
 $(function () {
   const url = new URL(window.location);
-  const country = getCountry();
 
   // this should happen after the translations load
-  $('html').on('i18n:ready', function() {
+  $('html').on('i18n:ready', function () {
     generateBottomNav();
     addDonationSites();
 
-    $('.add-donation-site-form').attr({href: `/${country}/donation-form`});
+    $('.add-donation-site-form').attr({ href: `/${ currentCountry }/donation-form` });
   });
 
-  // TODO(ajwong): This should not be required anymore.
-  let countryDataFilename = 'data.json';
-  if (country !== 'us') {
-    countryDataFilename = `data-${country}.json`;
-  }
-
-  const renderListings = function(result) {
-    // may end up using this for search / filtering...
-    window.locations = result;
-    window.data_by_location = toDataByLocation(locations);
-
+  const renderListings = function (result) {
+    const data = countryData[currentCountry] = toDataByLocation(result);
     const searchParams = new URLSearchParams(url.search);
     const showList = searchParams.get('hide-list') !== 'true';
     const showFilters = showList && searchParams.get('hide-filters') !== 'true';
@@ -381,9 +400,9 @@ $(function () {
     }
     // END BETA ONLY
 
-    showList && createContent(window.data_by_location);
+    showList && createContent(data);
 
-    const filters = createFilters();
+    const filters = createFilters(data);
 
     // Update filters to match any ?state= params
     const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
@@ -398,7 +417,7 @@ $(function () {
     updateFilters(filters);
 
     if (showMap) {
-      loadMapScript(searchParams, filters);
+      loadMapScript(searchParams, data, filters);
     }
 
     $('.locations-loading').hide();
@@ -407,15 +426,17 @@ $(function () {
       $('.locations-container').show();
 
       if (showFilters) {
-        $(".filters-list").append(createFilterElements(filters));
+        $(".filters-list").append(createFilterElements(data, filters));
         $(".filters-container").show();
       }
 
-      $(".locations-list").empty().append(getFilteredContent(data_by_location, filters));
+      $(".locations-list").empty().append(getFilteredContent(data, filters));
     }
+
+    loadOtherCountries(data, filters);
   };
 
-  $.getJSON(`https://findthemasks.com/${countryDataFilename}`, function (result) {
+  $.getJSON(`https://findthemasks.com/${ getCountryDataFilename(currentCountry) }`, function (result) {
     if(window.i18nReady) {
       renderListings(result);
     } else {
@@ -426,7 +447,7 @@ $(function () {
   });
 });
 
-function onFilterChange(prefix, key, filters) {
+function onFilterChange(data, prefix, key, filters) {
   const filter = filters[prefix] && filters[prefix][key];
 
   if (!filter) {
@@ -444,8 +465,8 @@ function onFilterChange(prefix, key, filters) {
   updateFilters(filters);
 
   const locationsList = $(".locations-list");
-  locationsList.empty().append(getFilteredContent(data_by_location, filters));
-  showMarkers(data_by_location, filters);
+  locationsList.empty().append(getFilteredContent(data, filters));
+  showMarkers(data, filters);
 
   locationsList[0].scrollIntoView({ 'behavior': 'smooth' });
 };
@@ -453,9 +474,9 @@ function onFilterChange(prefix, key, filters) {
 // Lazy-loads the Google maps script once we know we need it. Sets up
 // a global initMap callback on the window object so the gmap script
 // can find it.
-function loadMapScript(searchParams, filters) {
+function loadMapScript(searchParams, data, filters) {
   // Property created on window must match name passed in &callback= param
-  window.initMap = () => initMap(filters);
+  window.initMap = () => initMap(data, filters);
 
   // load map based on current lang
   const scriptTag = ce('script');
@@ -481,7 +502,7 @@ function loadMapScript(searchParams, filters) {
  *
  * TODO (patricknelson): Should the initMap() function only be responsible for initializing the map and then have the caller handle position/zoom/bounds etc?
  */
-function initMap(filters) {
+function initMap(data, filters) {
   const element = document.getElementById('map');
 
   if (!element) {
@@ -497,10 +518,10 @@ function initMap(filters) {
       minimumClusterSize: 5
     });
 
-  showMarkers(data_by_location, filters);
+  showMarkers(data, filters);
 
   // Initialize autosuggest/search field above the map.
-  initMapSearch(filters);
+  initMapSearch(data, filters);
 }
 
 /**********************************
@@ -510,7 +531,7 @@ function initMap(filters) {
 /**
  * Responsible for initializing the search field and links below the search field (e.g. use location, reset map, etc).
  */
-function initMapSearch(filters) {
+function initMapSearch(data, filters) {
   // If disabled, hide the search fields and don't bother attaching any functionality to them.
   if (!showMapSearch) {
     $('.map-search-wrap').hide();
@@ -569,7 +590,7 @@ function initMapSearch(filters) {
 
   $('#reset-map').on('click', (e) => {
     e.preventDefault();
-    resetMap(filters);
+    resetMap(data, filters);
   });
 }
 
@@ -577,8 +598,8 @@ function initMapSearch(filters) {
  * Strictly responsible for resetting the map to it's initial state on page load WITHOUT user's location (since we have
  * a link to link to go back to that appearance).
  */
-function resetMap(filters) {
-  showMarkers(window.data_by_location, filters);
+function resetMap(data, filters) {
+  showMarkers(data, filters);
 }
 
 /**
@@ -650,27 +671,14 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
  * END MAP SEARCH FUNCTIONALITY *
  ********************************/
 
-/**
- * Changes the markers currently rendered on the map based strictly on . This will reset the 'markers' module variable as well.
- */
-function showMarkers(data, filters) {
-  markers = [];
-
-  if (!map || !markerCluster) {
-    return;
-  }
-
-  markerCluster.clearMarkers()
-
-  const applied = filters.applied;
-  const bounds = new google.maps.LatLngBounds();
-  const filterAcceptKeys = applied.acceptItems && Object.keys(applied.acceptItems);
-  const hasFilters = applied.states || applied.acceptItems;
+function getMarkers(data, appliedFilters, bounds) {
+  const filterAcceptKeys = appliedFilters.acceptItems && Object.keys(appliedFilters.acceptItems);
+  const markers = [];
 
   for (const stateName of Object.keys(data)) {
     let inStateFilter = true;
 
-    if (applied.states && !applied.states[stateName]) {
+    if (appliedFilters.states && !appliedFilters.states[stateName]) {
       inStateFilter = false;
     }
 
@@ -702,26 +710,47 @@ function showMarkers(data, filters) {
 
           // Guard against non-geocoded entries. Assuming no location exactly on the equator or prime meridian
           if (lat && lng) {
-            marker = entry.marker = addMarkerToMap(null, lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box);
+            marker = entry.marker = createMarker(lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box);
           }
         }
 
         if (marker) {
           markers.push(marker);
-          marker.setMap(map);
-          hasFilters && bounds.extend(marker.position);
+          bounds && bounds.extend(marker.position);
         }
       }
     }
   }
 
-  markerCluster.addMarkers(markers)
+  return markers;
+}
+
+/**
+ * Changes the markers currently rendered on the map based strictly on . This will reset the 'markers' module variable as well.
+ */
+function showMarkers(data, filters) {
+  if (!map || !markerCluster) {
+    return;
+  }
+
+  markerCluster.clearMarkers()
+
+  const bounds = new google.maps.LatLngBounds();
+  const applied = filters.applied || {};
+  const hasFilters = applied.states || applied.acceptItems;
+
+  markers = getMarkers(data, applied, hasFilters && bounds);
+
+  markerCluster.addMarkers(markers);
+
+  if (!hasFilters) {
+    markerCluster.addMarkers(otherMarkers);
+  }
 
   let $mapStats = $('#map-stats');
   updateStats($mapStats, markers.length);
   centerMapToBounds(map, bounds, 9)
 }
-window.showMarkers = showMarkers; // Exposed for debug/testing.
 
 // Source for country center points: https://developers.google.com/public-data/docs/canonical/countries_csv
 const MAP_INITIAL_VIEW = {
@@ -751,12 +780,11 @@ function centerMapToBounds(map, bounds, maxZoom) {
   }
 }
 
-function addMarkerToMap(map, latitude, longitude, address, name, instructions, accepting, open_accepted) {
+function createMarker(latitude, longitude, address, name, instructions, accepting, open_accepted) {
   const location = { lat: latitude, lng: longitude };
   const marker = new google.maps.Marker({
     position: location,
-    title: name,
-    map: map
+    title: name
   });
 
   marker.addListener('click', () => {
@@ -781,7 +809,7 @@ function addMarkerToMap(map, latitude, longitude, address, name, instructions, a
         content: content
       });
     }
-    marker.infowindow.open(map, marker);
+    marker.infowindow.open(null, marker);
     openInfoWindows.push(marker.infowindow);
   });
 
