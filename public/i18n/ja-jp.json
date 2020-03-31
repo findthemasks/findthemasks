@@ -3,7 +3,7 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["イアン・ベイカー", "その他多数"],
+    "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
     "locale" : "en",
     "message-documentation" : "qqq"
@@ -12,9 +12,9 @@
   "ftm-accepting" : "受け入れる",
   "ftm-accepts-open-boxes" : "開いたボックス/バッグを受け入れます",
   "ftm-ack-data-sources" : "このサイトには、次のプロジェクトによる<a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a>からのデータも含まれています。",
-  "ftm-add-donation-site-answer" : "このフォームに<a class=\"add-donation-site-form\">を入力してください</a> 。できるだけ早く確認いたします。",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'>このフォームに記入</button> </a>",
   "ftm-add-donation-site-header" : "PPEが必要ですか？",
-  "ftm-add-donation-site-question" : "寄付サイトを追加してみませんか？情報を更新または削除しますか？",
+  "ftm-add-donation-site-question" : "病院や診療所で働いており、PPEが必要ですか？情報を更新または削除したいですか？",
   "ftm-address" : "住所",
   "ftm-anonymous-volunteers" : "匿名の人たち",
   "ftm-canada" : "カナダ",
