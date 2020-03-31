@@ -193,7 +193,9 @@ async function getSpreadsheet(country, client) {
 }
 
 async function snapshotData(country) {
-  const json_filename = `data-${country}.json`;
+    const base_filename = `data-${country}`;
+    const csv_filename = `${base_filename}.csv`;
+    const json_filename = `${base_filename}.json`;
   const html_snippet_filename = `data_snippet-${country}.html`;
 
   // Talk to sheets.
@@ -246,6 +248,23 @@ async function snapshotData(country) {
     metadata: {
       cacheControl: "public, max-age=20",
       contentType: "application/json"
+    },
+    predefinedAcl: "publicRead",
+  });
+
+  // Build a simple csv file
+  const csvFileRef = admin.storage().bucket().file(csv_filename);
+  let csv_file_list = [];
+  for (let i = 0; i < data.values.length; i++) {
+      row_string = data.values[i].join(",");
+      csv_file_list.push(row_string);
+  }
+  csv_file_string = csv_file_list.join("\n");
+  await csvFileRef.save(csv_file_string, {
+    gzip: true,
+    metadata: {
+      cacheControl: "public, max-age=20",
+      contentType: "application/text"
     },
     predefinedAcl: "publicRead",
   });
