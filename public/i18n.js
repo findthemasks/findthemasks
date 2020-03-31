@@ -7,6 +7,8 @@ const locales = {
   "de-DE": "i18n/de-de.json",
   "it": "i18n/it-it.json",
   "it-IT": "i18n/it-it.json",
+  "es": "i18n/es-es.json",
+  "es-ES": "i18n/es-es.json"
 };
 
 $(function () {

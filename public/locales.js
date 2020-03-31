@@ -14,5 +14,9 @@ export default [
   {
     i18nString: 'ftm-german',
     localeCode: 'de'
+  },
+  {
+    i18nString: 'ftm-spanish',
+    localeCode: 'es'
   }
 ];

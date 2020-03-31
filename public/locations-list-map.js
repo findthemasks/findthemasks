@@ -77,6 +77,29 @@ const generateBottomNav = () => {
   }
 };
 
+const addDonationSites = () => {
+  const currentCountry = getCountry();
+  const countryConfig = countries[currentCountry.toLowerCase()];
+
+  const largeDonationElement = document.getElementById('large-donation-selector');
+  const noDonationsElement = document.getElementById('no-donations-selector');
+
+  if (largeDonationElement && noDonationsElement) {
+    const countryDonationSites = countryConfig.donationSites;
+
+    const administrativeRegionStringHtml = countryDonationSites.administrativeRegionLinks && countryDonationSites.administrativeRegionLinks.map((link) => (
+      `<a href="${link.url}" target='_blank' rel='noreferrer noopener'>${$.i18n(link.labelI18nString)}</a>`
+    )).join(', ');
+
+    const nationalLinksHtml = countryDonationSites.nationalLinks && countryDonationSites.nationalLinks.map((link) => (
+      `<a href="${link.url}" target='_blank' rel='noreferrer noopener'>${$.i18n(link.labelI18nString)}</a>`
+    )).join(', ');
+
+    largeDonationElement.innerHTML = $.i18n(countryDonationSites.i18nString, administrativeRegionStringHtml, nationalLinksHtml);
+    noDonationsElement.innerHTML = $.i18n(countryConfig.noDonationSitesNearMeI18nString);
+  }
+};
+
 // Builds the data structure for tracking which filters are set
 // If all values in a category are false, it's treated as no filter - all items are included
 // If one or more values in a category is true, the filter is set - only items matching the filter are included
@@ -128,6 +151,14 @@ function updateFilters(filters) {
   }
 }
 
+// Sends event to gtag for analytics
+function sendEvent(category, action, label) {
+  gtag('event', action, {
+    'event_category': category,
+    'event_label': label
+  });
+};
+
 function createFilterElements(filters) {
   const currentCountry = getCountry();
 
@@ -144,6 +175,7 @@ function createFilterElements(filters) {
     const label = ce('label', null, ctn(value));
     label.id = `${ prefix }-${ key }-label`;
     label.htmlFor = input.id;
+    label.addEventListener("click", () =>  sendEvent("map", `filter-${ prefix }`, key));
     filterContainer.appendChild(label);
 
     if (filter.isSet) {
@@ -311,6 +343,7 @@ $(function () {
   // this should happen after the translations load
   $('html').on('i18n:ready', function() {
     generateBottomNav();
+    addDonationSites();
 
     $('.add-donation-site-form').attr({href: `/${country}/donation-form`});
   });
