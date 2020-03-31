@@ -3,18 +3,18 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["伊恩·貝克", "好多其它的"],
+    "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
-    "locale" : "恩",
+    "locale" : "en",
     "message-documentation" : "qqq"
   },
   "ftm-accepted-items" : "按接受項目篩選",
   "ftm-accepting" : "接受：",
   "ftm-accepts-open-boxes" : "接受打開的盒子/袋子",
   "ftm-ack-data-sources" : "該站點還包含來自<a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a>數據，該數據來自：",
-  "ftm-add-donation-site-answer" : "請<a class=\"add-donation-site-form\">填寫此表格</a> 。我們將盡快對其進行審核。",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'>填寫此表格</button> </a>",
   "ftm-add-donation-site-header" : "您需要個人防護裝備嗎？",
-  "ftm-add-donation-site-question" : "要添加捐贈網站嗎？更新或刪除信息？",
+  "ftm-add-donation-site-question" : "您在醫院或診所工作並且需要個人防護裝備嗎？是否要更新或刪除信息？",
   "ftm-address" : "地址",
   "ftm-anonymous-volunteers" : "和其他匿名者",
   "ftm-canada" : "加拿大",
