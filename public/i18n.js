@@ -1,4 +1,4 @@
-const locales = {
+const localesMap = {
   "en": "i18n/en.json",
   "en-US": "i18n/en.json",
   "fr": "i18n/fr-fr.json",
@@ -11,29 +11,31 @@ const locales = {
   "es-ES": "i18n/es-es.json"
 };
 
-const getConfigForLocale = (locale) => {
-  if (!locale) {
-    return null;
-  }
+const getConfigForLocales = (locales) => {
+  for (let i = 0; i < locales.length; i++) {
+    const locale = locales[i];
 
-  if (locales[locale]) {
-    return {
-      locale: locale,
-      map: {
-        [locale]: locales[locale]
+    if (!!locale) {
+      if (localesMap[locale]) {
+        return {
+          locale: locale,
+          map: {
+            [locale]: localesMap[locale]
+          }
+        };
       }
-    };
-  }
 
-  const language = locale.split('-')[0];
+      const language = locale.split('-')[0];
 
-  if (language && locales[language]) {
-    return {
-      locale: language,
-      map: {
-        [language]: locales[language]
+      if (language && localesMap[language]) {
+        return {
+          locale: language,
+          map: {
+            [language]: localesMap[language]
+          }
+        };
       }
-    };
+    }
   }
 
   return null;
@@ -46,12 +48,10 @@ const determineLocaleConfig = (detectedLocale) => {
   // first try locale selected in app by user
   // next try locale detected by jQuery.i18n library
   // if all else fails, give them English
-  return getConfigForLocale(localeParam)
-    || getConfigForLocale(detectedLocale)
-    || {
-      locale: 'en',
-      map: { en: locales.en }
-    };
+  return getConfigForLocales([localeParam, detectedLocale]) || {
+    locale: 'en',
+    map: { en: locales.en }
+  };
 };
 
 $(function () {
