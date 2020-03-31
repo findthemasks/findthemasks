@@ -169,14 +169,18 @@
         }
 
         .locations-loading {
+          display: flex;
+          align-items: center;
           padding: 30px 0px;
           font-style: italic;
+        }
+        .spinner-border {
+          margin-right: 10px;
         }
         .load-spinner {
           width: 21px;
           height: 21px;
           animation: 5s load-spinner infinite linear;
-          vertical-align: text-top;
         }
         @-webkit-keyframes load-spinner {
           100% {
@@ -353,7 +357,7 @@
 
         <div class="locations-loading">
           <div class="spinner-border" role="status"></div>
-          <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
+          <div class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</div>
         </div>
 
         <div class="locations-container" style="display: none;">
