@@ -3,7 +3,7 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Viele andere"],
+    "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
     "locale" : "en",
     "message-documentation" : "qqq"
@@ -12,7 +12,7 @@
   "ftm-accepting" : "Akzeptieren",
   "ftm-accepts-open-boxes" : "Akzeptanz von bereits geöffneten Verpackungen oder Kartons",
   "ftm-ack-data-sources" : "Diese Site enthält auch Daten von <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , einem Projekt von:",
-  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn btn-primary'> Füllen Sie dieses Formular aus </button> </a>",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Füllen Sie dieses Formular aus </button> </a>",
   "ftm-add-donation-site-header" : "Benötigen Sie PSA?",
   "ftm-add-donation-site-question" : "Arbeiten Sie in einem Krankenhaus oder einer Klinik und benötigen PSA? Möchten Sie Informationen aktualisieren oder entfernen?",
   "ftm-address" : "Adresse",

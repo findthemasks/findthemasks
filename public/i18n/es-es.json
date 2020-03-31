@@ -3,7 +3,7 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Muchos otros"],
+    "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
     "locale" : "en",
     "message-documentation" : "qqq"
@@ -12,9 +12,9 @@
   "ftm-accepting" : "Aceptando",
   "ftm-accepts-open-boxes" : "Acepta cajas / bolsas abiertas",
   "ftm-ack-data-sources" : "Este sitio también incluye datos de <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , un proyecto de:",
-  "ftm-add-donation-site-answer" : "Por favor <a class=\"add-donation-site-form\"> complete este formulario </a> . Lo revisaremos lo antes posible.",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Complete este formulario </button> </a>",
   "ftm-add-donation-site-header" : "¿Necesitas EPP ( equipo de protección personal)?",
-  "ftm-add-donation-site-question" : "¿Quieres agregar un sitio de donación? actualizar o borrar información?",
+  "ftm-add-donation-site-question" : "¿Trabaja en un hospital o clínica y necesita EPP? ¿Quieres actualizar o borrar información?",
   "ftm-address" : "Direccion",
   "ftm-anonymous-volunteers" : "y otros que son anónimos",
   "ftm-canada" : "Canadá",
@@ -25,8 +25,8 @@
   "ftm-filters" : "Filtros",
   "ftm-france" : "Francia",
   "ftm-french" : "Francés",
-  "ftm-italian" : "italiano",
-  "ftm-german" : "alemán",
+  "ftm-italian" : "Italiano",
+  "ftm-german" : "Alemán",
   "ftm-spanish" : "Español",
   "ftm-have-you-donated-question" : "¿Ya has donado?",
   "ftm-have-you-donated-answer" : "Cuéntanos cómo ayudaste publicando en <a target='_blank' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <i class='fab fa-facebook-square'> </i> findthemasks </a> .",

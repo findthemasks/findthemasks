@@ -3,7 +3,7 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Beaucoup d'autres"],
+    "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
     "locale" : "en",
     "message-documentation" : "qqq"
@@ -12,7 +12,7 @@
   "ftm-accepting" : "Accepte",
   "ftm-accepts-open-boxes" : "Accepte les boîtes / sacs ouverts",
   "ftm-ack-data-sources" : "Ce site contient également des données de <a href=\"https://tinyurl.com/hospitals-needing-ppe\">https://tinyurl.com/hospitals-needing-ppe</a> un projet de",
-  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn btn-primary'> Remplissez ce formulaire </button> </a>",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Remplissez ce formulaire </button> </a>",
   "ftm-add-donation-site-header" : "Avez-vous besoin d'EPI?",
   "ftm-add-donation-site-question" : "Vous travaillez dans un hôpital ou une clinique et avez besoin d'EPI? Vous souhaitez mettre à jour ou supprimer des informations?",
   "ftm-address" : "Adresse",

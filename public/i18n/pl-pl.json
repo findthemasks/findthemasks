@@ -3,7 +3,7 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Wiele innych"],
+    "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
     "locale" : "en",
     "message-documentation" : "qqq"
@@ -12,7 +12,7 @@
   "ftm-accepting" : "Akceptując",
   "ftm-accepts-open-boxes" : "Przyjmuje otwarte pudełka / torby",
   "ftm-ack-data-sources" : "Ta strona zawiera również dane z <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , projektu:",
-  "ftm-add-donation-site-answer" : "Proszę <a class=\"add-donation-site-form\"> wypełnić ten formularz </a> . Sprawdzimy to jak najszybciej.",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Wypełnij ten formularz </button> </a>",
   "ftm-add-donation-site-header" : "Potrzebujesz ŚOI?",
   "ftm-add-donation-site-question" : "Czy pracujesz w szpitalu lub klinice i potrzebujesz środków ochrony indywidualnej? Chcesz zaktualizować lub usunąć informacje?",
   "ftm-address" : "Adres",

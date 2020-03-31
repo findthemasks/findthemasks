@@ -3,16 +3,16 @@
     "placeholder_format_custom" : ["\\$\\d{1,}"]
   },
   "@metadata" : {
-    "authors" : ["Ian Baker", "Molti altri"],
-    "last-updated" : "2020/03/27",
-    "locale" : "it",
+    "authors" : ["Ian Baker", "Many Others"],
+    "last-updated" : "2020-03-27",
+    "locale" : "en",
     "message-documentation" : "qqq"
   },
   "ftm-accepted-items" : "Filtra per Articoli accettati",
   "ftm-accepting" : "Accettare",
   "ftm-accepts-open-boxes" : "Accetta scatole / sacchetti aperti",
   "ftm-ack-data-sources" : "Questo sito include anche dati da <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , un progetto di:",
-  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn btn-primary'> Compila questo modulo </button> </a>",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Compila questo modulo </button> </a>",
   "ftm-add-donation-site-header" : "Hai bisogno di DPI?",
   "ftm-add-donation-site-question" : "Lavori in un ospedale o in una clinica e hai bisogno di DPI? Vuoi aggiornare o rimuovere informazioni?",
   "ftm-address" : "Indirizzo",
