@@ -350,6 +350,13 @@ function getCountryDataFilename(country) {
 
 function loadOtherCountries() {
   const countryCodes = Object.keys(countries);
+  const icon = {
+    path: 0,  // google.maps.SymbolPath.CIRCLE
+    fillColor: 'red',
+    fillOpacity: 1,
+    scale: 4,
+    strokeWeight: 0,
+  };
 
   for (const code of countryCodes) {
     if (code !== currentCountry) {
@@ -360,7 +367,7 @@ function loadOtherCountries() {
 
           // opacity value matches what's in css for the .othercluster class -
           // can set a css class for the clusters, but not for individual pins.
-          otherMarkers.push(...getMarkers(otherData, {}, null, { opacity: 0.4 }));
+          otherMarkers.push(...getMarkers(otherData, {}, null, { icon: icon, opacity: 0.4 }));
           otherCluster && otherCluster.addMarkers(otherMarkers);
         }
       );
