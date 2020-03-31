@@ -87,6 +87,7 @@
 
       .translated-content {
         display: none; /* hidden until translations load */
+        padding-bottom: 70px; /* pad against bottom nav */
       }
 
       .heading-container {
@@ -692,7 +693,7 @@
           <img src="images/icons/loader.svg" alt="" class="load-spinner"> <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
         </div>
 
-      <div class="locations-container" style="display: none;">
+      <div class="map-container" style="display: none;">
         <div class="row" style="margin: 30px 0px 20px 0px;">
           <div class="offset-xs-1 col-xs-10 offset-lg-2 col-lg-8">
             <div class="map-search-wrap">
@@ -717,7 +718,9 @@
         </div>
 
         <div id="map" data-enable-search="true"></div>
+      </div>
 
+      <div class="locations-container" style="display: none;">
         <div class="filters-container" style="display: none; padding-top: 30px;">
           <form name="filters" class="filters-list"></form>
         </div>
