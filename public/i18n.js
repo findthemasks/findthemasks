@@ -1,6 +1,6 @@
-const locales = {
-  "qqq": "i18n/qqq.json",
+const localesMap = {
   "en": "i18n/en.json",
+  "en-US": "i18n/en.json",
   "fr": "i18n/fr-fr.json",
   "fr-FR": "i18n/fr-fr.json",
   "de": "i18n/de-de.json",
@@ -11,10 +11,47 @@ const locales = {
   "es-ES": "i18n/es-es.json"
 };
 
-$(function () {
-  const searchParams = new URLSearchParams((new URL(window.location)).search);
-  const locale = searchParams.get('locale');
+const getConfigForLocales = (locales) => {
+  for (let i = 0; i < locales.length; i++) {
+    const locale = locales[i];
 
+    if (!!locale) {
+      if (localesMap[locale]) {
+        return {
+          locale: locale,
+          map: {
+            [locale]: localesMap[locale]
+          }
+        };
+      }
+
+      const language = locale.split('-')[0];
+
+      if (language && localesMap[language]) {
+        return {
+          locale: language,
+          map: {
+            [language]: localesMap[language]
+          }
+        };
+      }
+    }
+  }
+
+  return null;
+};
+
+const determineLocaleConfig = (detectedLocale) => {
+  const searchParams = new URLSearchParams((new URL(window.location)).search);
+  const localeParam = searchParams.get('locale');
+
+  // first try locale selected in app by user
+  // next try locale detected by jQuery.i18n library
+  // if all else fails, give them English
+  return getConfigForLocales([localeParam, detectedLocale, 'en']);
+};
+
+$(function () {
   const init = function () {
     // translate static elements and initialize translations
     // then, remove spinner and show page content
@@ -25,9 +62,8 @@ $(function () {
     $('.languages-loading').css({ display: 'none' });
   };
 
-  if (locale) {
-    $.i18n({ locale: locale }).load(locales).done(init);
-  } else {
-    $.i18n().load(locales).done(init);
-  }
+  const detectedLocale = $.i18n().locale;
+  const localeConfig = determineLocaleConfig(detectedLocale);
+
+  $.i18n({ locale: localeConfig.locale }).load(localeConfig.map).done(init);
 });
