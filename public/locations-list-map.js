@@ -799,7 +799,13 @@ function showMarkers(data, filters) {
 
   let $mapStats = $('#map-stats');
   updateStats($mapStats, markers.length);
-  centerMapToBounds(map, bounds, 9)
+
+  // HACK. On some browsers, the markercluster freaks out if it gets a bunch of new markers
+  // immediately followed by a map view change. Making the view change async works around
+  // this bug.
+  setTimeout(() => {
+    centerMapToBounds(map, bounds, 9);
+  }, 0);
 }
 
 // Updates one or both clusters with the latest batch of markers
