@@ -8,7 +8,11 @@ const localesMap = {
   "it": "i18n/it-it.json",
   "it-IT": "i18n/it-it.json",
   "es": "i18n/es-es.json",
-  "es-ES": "i18n/es-es.json"
+  "es-ES": "i18n/es-es.json",
+  "pt": "i18n/pt-pt.json",
+  "pt-PT": "i18n/pt-pt.json",
+  "pl": "i18n/pl-pl.json",
+  "pl-Pl": "i18n/pl-pl.json",
 };
 
 const getConfigForLocales = (locales) => {
