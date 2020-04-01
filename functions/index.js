@@ -1,5 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const csv_stringify = require('csv-stringify');
 const {request} = require('gaxios');
 
 admin.initializeApp();
@@ -255,20 +256,25 @@ async function snapshotData(country) {
   // Build a simple csv file
   console.log("Preparing CSV File\n");
   const csvFileRef = admin.storage().bucket().file(csv_filename);
-  let csv_file_list = [];
-  for (let i = 0; i < data.values.length; i++) {
-      row_string = JSON.stringify(data.values[i]);
-      csv_file_list.push(row_string.substr(1, row_string.length - 2);
-  }
-  csv_file_string = csv_file_list.join("\n");
-  await csvFileRef.save(csv_file_string, {
-    gzip: true,
-    metadata: {
-      cacheControl: "public, max-age=20",
-      contentType: "application/text"
-    },
-    predefinedAcl: "publicRead",
+
+  csv_stringify(data.values, async function(err, output) {
+    if (err !== null) {
+      console.log(err)
+    } else {
+      //console.log(output);
+      await csvFileRef.save(output, {
+	      gzip: true,
+	      metadata: {
+	        cacheControl: "public, max-age=20",
+                contentType: "application/text"
+	      },
+	      predefinedAcl: "publicRead",
+	 });
+    }
   });
+
+
+
 
   const data_by_location = toDataByLocation(data);
   const html_snippets = toHtmlSnippets(data_by_location);
