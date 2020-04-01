@@ -63,7 +63,7 @@ export default {
   },
   it: {
     i18nString: 'ftm-italy',
-    countryCode: 'de',
+    countryCode: 'it',
     administrativeRegionI18nString: 'ftm-administrative-region-region',
     donationSites: {
       i18nString: 'ftm-italy-large-donations',
