@@ -428,7 +428,7 @@ function renderNextListPage() {
   let $el = $(".locations-list");
   let renderLocation = lastLocationRendered + 1;
 
-  locationsListEntries.slice(lastLocationRendered + 1, lastLocationRendered + 41).forEach(function(entry) {
+  locationsListEntries.slice(renderLocation, renderLocation + 40).forEach(function(entry) {
     // Add city/state headers
     if(renderLocation == 0) {
       $el.append(getStateEl(entry));
@@ -447,7 +447,7 @@ function renderNextListPage() {
     renderLocation += 1;
   });
 
-  lastLocationRendered = renderLocation;
+  lastLocationRendered = renderLocation - 1;
 }
 
 function getEntryEl(entry) {
