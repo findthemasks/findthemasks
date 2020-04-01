@@ -26,6 +26,10 @@ let showMapSearch = false; // BETA FEATURE: Default to false.
 // Keep track of the previous info windows user has clicked so we can close them.
 let openInfoWindows = [];
 
+// The big list of displayed locations, as dom elements, and where we are in rendering them
+let locationsListEntries = [];
+let lastLocationRendered = -1;
+
 /*************************
  * END MODULE LEVEL VARS *
  *************************/
@@ -241,30 +245,10 @@ function multilineStringToNodes(input) {
   return returnedNodes.slice(0,-1);
 }
 
-function createContent(data) {
-  for (const stateName of Object.keys(data)) {
-    const state = data[stateName];
-
-    state.domElem = $(ce('div', 'state', ce('h2', null, ctn(stateName))));
-    state.containerElem = $(ce('div', 'all-cities-wrap'));
-    state.domElem.append(state.containerElem);
-
-    const cities = state.cities;
-    for (const cityName of Object.keys(cities)) {
-      const city = cities[cityName];
-
-      city.domElem = $(ce('div', 'city', ce('h3', null, ctn(cityName))));
-      city.containerElem = $(ce('div'));
-      city.domElem.append(city.containerElem);
-
-      // Array.prototype.sort sorts in-place, so only need to do it once per city
-      city.entries.sort((a, b) => a.name.localeCompare(b.name));
-    }
-  }
-}
-
-function getFilteredContent(data, filters) {
-  const content = [];
+// Return filtered data, sorted by location, in a flat list
+// (flattened so it's easy to present only a piece of the list at a time)
+function getFlatFilteredEntries(data, filters) {
+  const entries = [];
   const applied = filters.applied;
   const filterAcceptKeys = applied && applied.acceptItems && Object.keys(applied.acceptItems);
 
@@ -276,14 +260,9 @@ function getFilteredContent(data, filters) {
     }
 
     const state = data[stateName];
-    let hasCity = false;
-    state.containerElem.empty();
-
     const cities = state.cities;
     for (const cityName of Object.keys(cities).sort()) {
       const city = cities[cityName];
-      let hasEntry = false;
-      city.containerElem.empty();
 
       for (const entry of city.entries) {
         if (filterAcceptKeys) {
@@ -294,60 +273,10 @@ function getFilteredContent(data, filters) {
         }
 
         listCount++;
-
-        if (!entry.domElem) {
-          entry.domElem = $(ce('div', 'location'));
-          entry.domElem.append([
-            ce('h4', 'marginBotomZero', ctn(entry.name)),
-            ce('label', null, ctn($.i18n('ftm-address'))),
-          ]);
-          const addr = entry.address.trim().split('\n');
-
-          if (addr.length) {
-            const para = $(ce('p', 'marginTopZero medEmph'));
-            for (const line of addr) {
-              para.append([
-                ctn(line),
-                ce('br')
-              ]);
-            }
-            entry.domElem.append(para);
-          }
-
-          if (entry.instructions) {
-            entry.domElem.append([
-              ce('label', null, ctn($.i18n('ftm-instructions'))),
-              linkifyElement(ce('p', null, multilineStringToNodes(entry.instructions)))
-            ]);
-          }
-
-          if (entry.accepting) {
-            entry.domElem.append([
-              ce('label', null, ctn($.i18n('ftm-accepting'))),
-              ce('p', null, ctn(entry.accepting))
-            ]);
-          }
-
-          if (entry.open_box) {
-            entry.domElem.append([
-              ce('label', null, ctn($.i18n('ftm-open-packages'))),
-              ce('p', null, ctn(entry.open_box))
-            ]);
-          }
-        }
-
-        city.containerElem.append(entry.domElem);
-        hasEntry = true;
+        entry.cityName = cityName;
+        entry.stateName = stateName;
+        entries.push(entry);
       }
-
-      if (hasEntry) {
-        state.containerElem.append(city.domElem);
-        hasCity = true;
-      }
-    }
-
-    if (hasCity) {
-      content.push(state.domElem);
     }
   }
 
@@ -355,7 +284,7 @@ function getFilteredContent(data, filters) {
   //  not updating stats; however this is the quickest method for updating filter stats as well.
   updateStats($('#list-stats'), listCount);
 
-  return content;
+  return entries;
 }
 
 function getCountryDataFilename(country) {
@@ -430,8 +359,6 @@ $(function () {
     }
     // END BETA ONLY
 
-    showList && createContent(data);
-
     const filters = createFilters(data);
 
     // Update filters to match any ?state= params
@@ -460,7 +387,7 @@ $(function () {
         $(".filters-container").show();
       }
 
-      $(".locations-list").empty().append(getFilteredContent(data, filters));
+      refreshList(data, filters);
     }
 
     if (showOthers && currentCountry !== 'us') {
@@ -477,7 +404,104 @@ $(function () {
       });
     }
   });
+
+  const footerHeight = 440;  // footer + navbar + small buffer
+  $(window).scroll(function() {
+     if($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
+        renderNextListPage();
+     }
+  });
 });
+
+function refreshList(data, filters) {
+  locationsListEntries = getFlatFilteredEntries(data, filters);
+  lastLocationRendered = -1;
+  $(".locations-list").empty();
+  renderNextListPage();
+}
+
+function renderNextListPage() {
+  if(lastLocationRendered >= locationsListEntries.length - 1) {
+    return; // all rendered
+  }
+
+  let $el = $(".locations-list");
+  let renderLocation = lastLocationRendered + 1;
+
+  locationsListEntries.slice(renderLocation, renderLocation + 40).forEach(function(entry) {
+    // Add city/state headers
+    if(renderLocation == 0) {
+      $el.append(getStateEl(entry));
+      $el.append(getCityEl(entry));
+    } else {
+      const lastEntry = locationsListEntries[renderLocation - 1];
+      if(entry.stateName != lastEntry.stateName) {
+        $el.append(getStateEl(entry));
+      }
+      if(entry.cityName != lastEntry.cityName) {
+        $el.append(getCityEl(entry));
+      }
+    }
+
+    $el.append(getEntryEl(entry));
+    renderLocation += 1;
+  });
+
+  lastLocationRendered = renderLocation - 1;
+}
+
+function getEntryEl(entry) {
+  if (!entry.domElem) {
+    entry.domElem = $(ce('div', 'location'));
+    entry.domElem.append([
+      ce('h4', 'marginBotomZero', ctn(entry.name)),
+      ce('label', null, ctn($.i18n('ftm-address'))),
+    ]);
+    const addr = entry.address.trim().split('\n');
+
+    if (addr.length) {
+      const para = $(ce('p', 'marginTopZero medEmph'));
+      for (const line of addr) {
+        para.append([
+          ctn(line),
+          ce('br')
+        ]);
+      }
+      entry.domElem.append(para);
+    }
+
+    if (entry.instructions) {
+      entry.domElem.append([
+        ce('label', null, ctn($.i18n('ftm-instructions'))),
+        linkifyElement(ce('p', null, multilineStringToNodes(entry.instructions)))
+      ]);
+    }
+
+    if (entry.accepting) {
+      entry.domElem.append([
+        ce('label', null, ctn($.i18n('ftm-accepting'))),
+        ce('p', null, ctn(entry.accepting))
+      ]);
+    }
+
+    if (entry.open_box) {
+      entry.domElem.append([
+        ce('label', null, ctn($.i18n('ftm-open-packages'))),
+        ce('p', null, ctn(entry.open_box))
+      ]);
+    }
+  }
+
+  return entry.domElem; // TODO: generate this here.
+}
+
+function getStateEl(entry) {
+  return ce('h2', 'state', ctn(entry.state));
+}
+
+function getCityEl(entry) {
+  return ce('h3', 'city', ctn(entry.city));
+}
 
 function onFilterChange(data, prefix, key, filters) {
   const filter = filters[prefix] && filters[prefix][key];
@@ -495,11 +519,10 @@ function onFilterChange(data, prefix, key, filters) {
   }
 
   updateFilters(filters);
-
-  const locationsList = $(".locations-list");
-  locationsList.empty().append(getFilteredContent(data, filters));
+  refreshList(data, filters);
   showMarkers(data, filters);
 
+  const locationsList = $(".locations-list");
   locationsList[0].scrollIntoView({ 'behavior': 'smooth' });
 };
 
