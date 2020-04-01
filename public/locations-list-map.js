@@ -670,17 +670,20 @@ function centerMapToMarkersNearUser() {
  * Centers map around markers nearest to an arbitrary set of latitude/longitude coordinates.
  */
 function centerMapToMarkersNearCoords(latitude, longitude) {
-  var latlng = new google.maps.LatLng(latitude, longitude);
+  const latlng = new google.maps.LatLng(latitude, longitude);
 
   //Compute the distances of all markers from the user
-  var markerDistances = new Map(); // an associative array containing the marker referenced by the computed distance
-  var distances = []; // all the distances, so we can sort and then call markerDistances
+  const markerDistances = new Map(); // an associative array containing the marker referenced by the computed distance
+  const distances = []; // all the distances, so we can sort and then call markerDistances
+
   for (const marker of markers) {
     let distance = google.maps.geometry.spherical.computeDistanceBetween(marker.position, latlng);
 
     // HACK: In the unlikely event that the exact same distance is computed, add one meter to the distance to give it a unique distance
     // This could occur if a marker was added twice to the same location.
-    if (markerDistances.has(distance)) { distance = distance + 1; }
+    if (markerDistances.has(distance)) {
+      distance = distance + 1;
+    }
 
     markerDistances[distance] = marker;
 
@@ -692,22 +695,31 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
 
   // center the map on the user
   const bounds = new google.maps.LatLngBounds();
+  let hasMarker = false;
   bounds.extend(latlng);
 
   // Extend the bounds to contain the three closest markers
   for (let i = 0; i < 3; i++) {
+
     // Get one of the closest markers
-    let distance = distances[i];
-    let marker = markerDistances[distance];
+    const distance = distances[i];
+    const marker = markerDistances[distance];
 
-    const marker_lat = marker.position.lat();
-    const marker_lng = marker.position.lng();
+    if (!marker) {
+      break;
+    }
 
-    const loc = new google.maps.LatLng(marker_lat, marker_lng);
-    bounds.extend(loc);
+    hasMarker = true;
+    bounds.extend(marker.position);
   }
-  map.fitBounds(bounds);       // auto-zoom
-  map.panToBounds(bounds);     // auto-center
+
+  if (hasMarker) {
+    // zoom to fit user loc + nearest markers
+    map.fitBounds(bounds);
+  } else {
+    // just has user loc - shift view without zooming
+    map.setCenter(latlng);
+  }
 }
 
 /********************************
