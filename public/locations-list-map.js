@@ -576,6 +576,14 @@ function initMap(data, filters) {
       zIndex: 2
     });
 
+  markerCluster.addListener('click', function(e) {
+    sendEvent('map', 'click', 'markerCluster');
+  });
+
+  otherCluster.addListener('click', function(e) {
+    sendEvent('map', 'click', 'otherCluster');
+  });
+
   showMarkers(data, filters);
 
   // Initialize autosuggest/search field above the map.
@@ -849,6 +857,8 @@ function createMarker(latitude, longitude, address, name, instructions, acceptin
   const marker = new google.maps.Marker(options);
 
   marker.addListener('click', () => {
+    sendEvent('map', 'click', 'marker');
+
     openInfoWindows.forEach(infowindow => infowindow.close());
     openInfoWindows = [];
 
