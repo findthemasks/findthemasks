@@ -231,17 +231,7 @@
         white-space: nowrap;
       }
 
-      .state {
-        display: flex;
-        flex-wrap: wrap;
-        position: relative;
-      }
-
-      .state:first-child {
-          padding-top: 25px;
-      }
-
-      .state h2 {
+      h2.state {
         font-size: 24px;
         display: flex;
         margin: 0;
@@ -250,6 +240,8 @@
         font-family: 'Roboto';
         border: 1px solid #eee;
         height: 90px;
+        width: 90px;
+        position: absolute;
         justify-content: center;
         align-items: center;
         background-color: #333;
@@ -270,7 +262,7 @@
         width: 100%;
       }
 
-      .city h3 {
+      h3.city {
         font-size: 20px;
         padding-bottom: 20px;
         padding-top: 20px;
@@ -279,8 +271,8 @@
         text-transform: uppercase;
         color: #666;
         letter-spacing: 3px;
+        margin-left: 105px;
       }
-
 
       .city h4 {
         font-size: 18px;
@@ -298,6 +290,7 @@
       .location {
         padding-bottom: 20px;
         overflow-wrap: break-word;
+        margin-left: 105px;
       }
 
       .location label {
@@ -324,6 +317,7 @@
         padding-left: 30px;
         padding-right: 30px;
         padding-bottom: 10px;
+        margin-top: 20px;
       }
 
       .filters-container {
@@ -562,6 +556,17 @@
           justify-content: center;
           padding-top: 5px;
         }
+        h3.city {
+          margin-left: 10px;
+        }
+        .location {
+          margin-left: 10px;
+        }
+        h2.state {
+          position: relative;
+          width: auto;
+          height: auto;
+        }
       }
 
       /*************************
@@ -624,7 +629,7 @@
           padding-left: 0;
           padding-right: 0;
         }
-        
+
         #masks-img {
           height: 160px;
         }
