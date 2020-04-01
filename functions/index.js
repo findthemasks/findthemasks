@@ -313,7 +313,6 @@ async function getLatLng(address, client) {
 
 function toDataByLocation(data) {
   const headers = data.values[1];
-  const approvedIndex = headers.findIndex( e => e === 'approved' );
   const stateIndex = headers.findIndex( e => e === 'state' );
   const cityIndex = headers.findIndex( e => e === 'city' );
   const data_by_location = {};
