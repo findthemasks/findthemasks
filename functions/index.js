@@ -24,7 +24,7 @@ const SHEETS = {
 };
 
 if (functions.config().googleapi !== undefined) {
-  CONFIG_CLIENT_ID = functions.config().googleapi.client_id
+  CONFIG_CLIENT_ID = functions.config().googleapi.client_id;
   CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
   GOOGLE_MAPS_API_KEY = functions.config().findthemasks.geocode_key;
 }
