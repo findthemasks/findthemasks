@@ -5,7 +5,7 @@ export default function toDataByLocation(data) {
   const cityIndex = headers.findIndex( e => e === 'city' );
   const data_by_location = {};
 
-  const published_entries = data.values.slice(1).filter((entry) => entry[approvedIndex] === "x");
+  const published_entries = data.values.slice(1);
 
   published_entries.forEach( entry => {
     const state = entry[stateIndex].trim().toUpperCase();

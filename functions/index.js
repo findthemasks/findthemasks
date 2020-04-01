@@ -90,6 +90,13 @@ async function getAuthorizedClient() {
 
 function splitValues(data) { return [ data.values[0], data.values[1], data.values.slice(2) ]; }
 
+/**
+ * Geocodes entries that are approved in moderation google sheet
+ *
+ * @param data
+ * @param sheet_id
+ * @returns {Promise<void>}
+ */
 async function annotateGeocode(data, sheet_id) {
   // Annotate Geocodes for missing items. Track the updated rows. Write back.
   const headers = data[1];
@@ -113,7 +120,7 @@ async function annotateGeocode(data, sheet_id) {
   const promises = [];
   let num_lookups = 0;
   real_values.forEach( (entry, index) => {
-    if (entry[approvedIndex] === "x") {
+    if (isApproved(entry[approvedIndex])) {
       // Row numbers start at 1.
       const row_num = index + 1 + header_values.length;
 
@@ -192,6 +199,25 @@ async function getSpreadsheet(country, client) {
   return response.data;
 }
 
+/***
+ * Returns whether the column value indicates the row is approved.
+ *
+ * Case insensitive - 'x' or 'X' returns true. All other values return false.
+ * @returns {boolean}
+ */
+function isApproved(value) {
+  return value.toLowerCase() === "x";
+}
+
+
+
+/**
+ * Creates the data json file for a country from the Google Sheets file
+ *
+ * Yanks all the data for the sheet, finds all columns with a "header", and then outputs that into the json file
+ * @param country
+ * @returns {Promise<*[]>}
+ */
 async function snapshotData(country) {
   const json_filename = `data-${country}.json`;
   const html_snippet_filename = `data_snippet-${country}.html`;
@@ -237,7 +263,7 @@ async function snapshotData(country) {
     throw new Error("sheet missing expected columns. Ensure row 2 headers are sane?");
   }
 
-  const approved_rows = trimmed_values.filter(e => e[approvedIndex] === "x");
+  const approved_rows = trimmed_values.filter(e => isApproved(e[approvedIndex]));
   data.values = [headers, col_labels, ...approved_rows];
 
   const datafileRef = admin.storage().bucket().file(json_filename);
@@ -292,7 +318,7 @@ function toDataByLocation(data) {
   const cityIndex = headers.findIndex( e => e === 'city' );
   const data_by_location = {};
 
-  const published_entries = data.values.slice(1).filter((entry) => entry[approvedIndex] === "x");
+  const published_entries = data.values.slice(1);
 
   published_entries.forEach(async (entry) => {
     let entry_array;
