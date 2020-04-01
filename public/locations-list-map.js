@@ -347,7 +347,7 @@ $(function () {
     generateBottomNav();
     addDonationSites();
 
-    $('.add-donation-site-form').attr({href: `/${country}/donation-form`});
+    $('.add-donation-site-form').attr({href: `/${country}/donation-form?locale=${$.i18n().locale}`});
   });
 
   // TODO(ajwong): This should not be required anymore.
