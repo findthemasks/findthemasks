@@ -1,26 +1,59 @@
 <html>
 <head>
-<script>
+  <script>
+    const DONATION_FORMS_BY_COUNTRY = {
+      fr: {
+        defaultForm: 'https://docs.google.com/forms/d/e/1FAIpQLScys-wlfSEwCLNa5dnJIIR7LTdh7e3fpha7SL7A2jvJok8Tog/viewform',
+        fr: 'https://docs.google.com/forms/d/e/1FAIpQLScys-wlfSEwCLNa5dnJIIR7LTdh7e3fpha7SL7A2jvJok8Tog/viewform'
+      },
+      ca: {
+        defaultForm: 'https://docs.google.com/forms/d/e/1FAIpQLSf5JAiAikzMEEw86eyjoRMH5AFlwaMrOmjjlr3vGcL5RrJt9A/viewform',
+        en: 'https://docs.google.com/forms/d/e/1FAIpQLSf5JAiAikzMEEw86eyjoRMH5AFlwaMrOmjjlr3vGcL5RrJt9A/viewform',
+        fr: 'https://docs.google.com/forms/d/e/1FAIpQLSeM2Jt5zudVG9_IxCT0pXluTs4eHq7_p3X95klGCHSSSaDEFg/viewform'
+      },
+      us: {
+        defaultForm: 'https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform',
+        en: 'https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform'
+      }
+    };
 
-// TODO(ajwong): This is copied from getCountry.js. Careful.
-function GetCountry() {
-  const url = new URL(window.location);
-  const directories = url.pathname.split("/");
-  if (directories.length > 2) {
-    return directories[1];
-  }
+    // TODO(ajwong): This is copied from getCountry.js. Careful.
+    function getCountry() {
+      const url = new URL(window.location);
+      const directories = url.pathname.split("/");
+      if (directories.length > 2) {
+        return directories[1];
+      }
 
-  return 'us';
-}
+      return 'us';
+    }
 
-const DONATION_FORM = {
-  fr: 'https://docs.google.com/forms/d/e/1FAIpQLScys-wlfSEwCLNa5dnJIIR7LTdh7e3fpha7SL7A2jvJok8Tog/viewform',
-  ca: 'https://forms.gle/ja8aczRiFWfAjKM29',
-  us: 'https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform'
-};
+    const getLocale = () => {
+      const searchParams = new URLSearchParams((new URL(window.location)).search);
+      return searchParams.get('locale');
+    };
 
-window.location.replace(DONATION_FORM[GetCountry()]);
+    const identifyForm = () => {
+      const country = getCountry();
+      const countryForms = DONATION_FORMS_BY_COUNTRY[country];
+      const locale = getLocale();
 
-</script>
+      if (!!locale) {
+        if (countryForms[locale]) {
+          return countryForms[locale];
+        }
+
+        const language = locale.split('-')[0];
+
+        if (language && countryForms[language]) {
+          return countryForms[language];
+        }
+      }
+
+      return countryForms.defaultForm
+    };
+
+    window.location.replace(identifyForm());
+  </script>
 </head>
 </html>

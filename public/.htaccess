@@ -3,7 +3,7 @@ RewriteRule ^(.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
 # Handle the per-country donation form vanity URLs.
 RewriteCond "%{REQUEST_URI}" ^/[^/]+/donation-form$
-RewriteRule (.*) /donation-form-bounce.html [L]
+RewriteRule (.*) /donation-form-bounce.html [L,QSA]
 
 <IfModule mod_headers.c>
   <Files "data.json">

@@ -385,7 +385,7 @@ $(function () {
     generateBottomNav();
     addDonationSites();
 
-    $('.add-donation-site-form').attr({ href: `/${ currentCountry }/donation-form` });
+    $('.add-donation-site-form').attr({href: `/${ currentCountry }/donation-form?locale=${$.i18n().locale}`});
   });
 
   const renderListings = function (result) {
