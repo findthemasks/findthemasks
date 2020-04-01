@@ -28,7 +28,7 @@ let openInfoWindows = [];
 
 // The big list of displayed locations, as dom elements, and where we are in rendering them
 let locationsListEntries = [];
-let locationsListOffset = 0;
+let lastLocationRendered = -1;
 
 /*************************
  * END MODULE LEVEL VARS *
@@ -387,7 +387,7 @@ $(function () {
         $(".filters-container").show();
       }
 
-      refreshList(filters);
+      refreshList(data, filters);
     }
 
     if (showOthers && currentCountry !== 'us') {
@@ -413,29 +413,28 @@ $(function () {
   });
 });
 
-function refreshList(filters) {
-  locationsListEntries = getFlatFilteredEntries(data_by_location, filters);
-  locationsListOffset = 0;
+function refreshList(data, filters) {
+  locationsListEntries = getFlatFilteredEntries(data, filters);
+  lastLocationRendered = -1;
   $(".locations-list").empty();
   renderNextListPage();
 }
 
 function renderNextListPage() {
-  if(locationsListOffset > locationsListEntries.length) {
+  if(lastLocationRendered >= locationsListEntries.length - 1) {
     return; // all rendered
   }
 
   let $el = $(".locations-list");
-  let idx = 0;
+  let renderLocation = lastLocationRendered + 1;
 
-  locationsListEntries.slice(locationsListOffset, locationsListOffset + 40).forEach(function(entry, i) {
-    idx = locationsListOffset + i;
+  locationsListEntries.slice(lastLocationRendered + 1, lastLocationRendered + 41).forEach(function(entry) {
     // Add city/state headers
-    if(idx == 0) {
+    if(renderLocation == 0) {
       $el.append(getStateEl(entry));
       $el.append(getCityEl(entry));
     } else {
-      const lastEntry = locationsListEntries[idx - 1];
+      const lastEntry = locationsListEntries[renderLocation - 1];
       if(entry.stateName != lastEntry.stateName) {
         $el.append(getStateEl(entry));
       }
@@ -445,9 +444,10 @@ function renderNextListPage() {
     }
 
     $el.append(getEntryEl(entry));
+    renderLocation += 1;
   });
 
-  locationsListOffset = idx;
+  lastLocationRendered = renderLocation;
 }
 
 function getEntryEl(entry) {
@@ -519,7 +519,7 @@ function onFilterChange(data, prefix, key, filters) {
   }
 
   updateFilters(filters);
-  refreshList(filters);
+  refreshList(data, filters);
   showMarkers(data, filters);
 
   const locationsList = $(".locations-list");
