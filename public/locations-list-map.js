@@ -720,7 +720,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
 
       for (const entry of city.entries) {
         let inAcceptFilter = true;
-        if (inStateFilter && filterAcceptKeys) {
+        if (filterAcceptKeys) {
           const acc = (entry.accepting || "").toLowerCase();
           if (!filterAcceptKeys.some(s => acc.includes(s))) {
             inAcceptFilter = false;
