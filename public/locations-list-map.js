@@ -211,17 +211,34 @@ function createFilterElements(data, filters) {
 
 // Wrapper for document.createElement - creates an element of type elementName
 // if className is passed, assigns class attribute
-// if child is passed, appends to created element
+// if child (either a node or an array of nodes) is passed, appends to created element.
 function ce(elementName, className, child) {
   const el = document.createElement(elementName);
   className && (el.className = className);
-  child && el.appendChild(child);
+  if (child) {
+    if (Array.isArray(child)) {
+      child.forEach((c) => el.appendChild(c));
+    } else {
+      el.appendChild(child);
+    }
+  }
   return el;
 }
 
 // Wrapper for document.createTextNode
 function ctn(text) {
   return document.createTextNode(text);
+}
+
+// Turns a string with embedded \n characters into an Array of text nodes separated by <br>
+function multilineStringToNodes(input) {
+  const textNodes = input.split('\n').map((s) => ctn(s));
+  let returnedNodes = [];
+  textNodes.forEach((e) => {
+    returnedNodes.push(e);
+    returnedNodes.push(document.createElement('br'));
+  })
+  return returnedNodes.slice(0,-1);
 }
 
 function createContent(data) {
@@ -300,7 +317,7 @@ function getFilteredContent(data, filters) {
           if (entry.instructions) {
             entry.domElem.append([
               ce('label', null, ctn($.i18n('ftm-instructions'))),
-              linkifyElement(ce('p', null, ctn(entry.instructions)))
+              linkifyElement(ce('p', null, multilineStringToNodes(entry.instructions)))
             ]);
           }
 
@@ -823,7 +840,7 @@ function createMarker(latitude, longitude, address, name, instructions, acceptin
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
         ce('div', 'value', ctn(address)),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
-        linkifyElement(ce('div', 'value', ctn(instructions))),
+        linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
         ce('div', 'value', ctn(accepting)),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
