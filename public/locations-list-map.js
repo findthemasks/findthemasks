@@ -523,7 +523,9 @@ function onFilterChange(data, prefix, key, filters) {
   showMarkers(data, filters);
 
   const locationsList = $(".locations-list");
-  locationsList[0].scrollIntoView({ 'behavior': 'smooth' });
+  
+  // locationsList[0].scrollIntoView({ 'behavior': 'smooth' });
+
 };
 
 // Lazy-loads the Google maps script once we know we need it. Sets up
