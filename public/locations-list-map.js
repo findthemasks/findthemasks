@@ -264,11 +264,13 @@ function getFlatFilteredEntries(data, filters) {
     for (const cityName of Object.keys(cities).sort()) {
       const city = cities[cityName];
 
-      for (const entry of city.entries) {
+      city.entries.sort(function (a, b) {
+          return a.name.localeCompare( b.name );
+      }).forEach(function(entry) {
         if (filterAcceptKeys) {
           const acc = (entry.accepting || "").toLowerCase();
           if (!filterAcceptKeys.some(s => acc.includes(s))) {
-            continue;
+            return;
           }
         }
 
@@ -276,7 +278,7 @@ function getFlatFilteredEntries(data, filters) {
         entry.cityName = cityName;
         entry.stateName = stateName;
         entries.push(entry);
-      }
+      });
     }
   }
 
@@ -523,7 +525,7 @@ function onFilterChange(data, prefix, key, filters) {
   showMarkers(data, filters);
 
   const locationsList = $(".locations-list");
-  
+
   // locationsList[0].scrollIntoView({ 'behavior': 'smooth' });
 
 };
