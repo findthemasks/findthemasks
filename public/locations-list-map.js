@@ -500,7 +500,16 @@ function onFilterChange(data, prefix, key, filters) {
   locationsList.empty().append(getFilteredContent(data, filters));
   showMarkers(data, filters);
 
-  locationsList[0].scrollIntoView({ 'behavior': 'smooth' });
+  let scrollElem = locationsList[0];
+  const map = document.getElementById('map');
+
+  // Scroll to the map if it exists and is visible
+  if (map && map.offsetHeight) {
+    scrollElem = map;
+  }
+
+
+  scrollElem.scrollIntoView({ 'behavior': 'smooth' });
 };
 
 // Lazy-loads the Google maps script once we know we need it. Sets up
