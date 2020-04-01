@@ -104,6 +104,14 @@ const addDonationSites = () => {
 
     largeDonationElement.innerHTML = $.i18n(countryDonationSites.i18nString, administrativeRegionStringHtml, nationalLinksHtml);
     noDonationsElement.innerHTML = $.i18n(countryConfig.noDonationSitesNearMeI18nString);
+
+    $(largeDonationElement).find('a').click(function(e) {
+      sendEvent('largeDonation', 'click', $(this).attr('href'));
+    });
+
+    $(noDonationsElement).find('a').click(function(e) {
+      sendEvent('noDonation', 'click', $(this).attr('href'));
+    });
   }
 };
 
@@ -402,7 +410,18 @@ $(function () {
     generateBottomNav();
     addDonationSites();
 
-    $('.add-donation-site-form').attr({href: `/${ currentCountry }/donation-form?locale=${$.i18n().locale}`});
+    $('.add-donation-site-form')
+      .attr({href: `/${ currentCountry }/donation-form?locale=${$.i18n().locale}`})
+      .click(function(e) {
+        sendEvent('addDonationSite', 'click', $(this).attr('href'));
+      });
+
+    // currently only have a Facebook link under .social-link
+    // if that changes, will need to accurately detect the event
+    // label from either href or text
+    $('.social-link').click(function(e) {
+      sendEvent('socialLink', 'click', 'facebook');
+    });
   });
 
   const renderListings = function (result) {
