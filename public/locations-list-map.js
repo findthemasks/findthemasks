@@ -343,7 +343,7 @@ function getFilteredContent(data, filters) {
 
 function getCountryDataFilename(country) {
   let countryDataFilename = 'data.json';
-  if (currentCountry !== 'us') {
+  if (country !== 'us') {
     countryDataFilename = `data-${ country }.json`;
   }
 
@@ -446,7 +446,7 @@ $(function () {
       $(".locations-list").empty().append(getFilteredContent(data, filters));
     }
 
-    if (showOthers) {
+    if (showOthers && currentCountry !== 'us') {
       loadOtherCountries();
     }
   };
