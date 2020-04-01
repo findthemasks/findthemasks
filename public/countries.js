@@ -1,4 +1,15 @@
 export default {
+  at:  {
+    i18nString: 'ftm-austria',
+    countryCode: 'at',
+    administrativeRegionI18nString: 'ftm-administrative-region-bundesland',
+    donationSites: {
+      i18nString: 'ftm-austria-large-donations',
+      administrativeRegionLinks: null,
+      nationalLinks: null
+    },
+    noDonationSitesNearMeI18nString: 'ftm-austria-no-donation-sites-near-me'
+  },
   ca: {
     i18nString: 'ftm-canada',
     countryCode: 'ca',
@@ -38,6 +49,84 @@ export default {
       nationalLinks: null
     },
     noDonationSitesNearMeI18nString: 'ftm-france-no-donation-sites-near-me'
+  },
+  de: {
+    i18nString: 'ftm-germany',
+    countryCode: 'de',
+    administrativeRegionI18nString: 'ftm-administrative-region-german-land',
+    donationSites: {
+      i18nString: 'ftm-germany-large-donations',
+      administrativeRegionLinks: null,
+      nationalLinks: null
+    },
+    noDonationSitesNearMeI18nString: 'ftm-germany-no-donation-sites-near-me'
+  },
+  it: {
+    i18nString: 'ftm-italy',
+    countryCode: 'de',
+    administrativeRegionI18nString: 'ftm-administrative-region-region',
+    donationSites: {
+      i18nString: 'ftm-italy-large-donations',
+      administrativeRegionLinks: null,
+      nationalLinks: null
+    },
+    noDonationSitesNearMeI18nString: 'ftm-germany-no-donation-sites-near-me'
+  },
+  pl: {
+    i18nString: 'ftm-poland',
+    countryCode: 'pl',
+    // TODO(nburt): update to correct administrative region for poland
+    administrativeRegionI18nString: 'ftm-administrative-region-state',
+    donationSites: {
+      i18nString: 'ftm-poland-large-donations',
+      administrativeRegionLinks: null,
+      nationalLinks: null
+    },
+    noDonationSitesNearMeI18nString: 'ftm-poland-no-donation-sites-near-me'
+  },
+  pt: {
+    i18nString: 'ftm-portugal',
+    countryCode: 'pt',
+    administrativeRegionI18nString: 'ftm-administrative-region-precinct',
+    donationSites: {
+      i18nString: 'ftm-poland-large-donations',
+      administrativeRegionLinks: null,
+      nationalLinks: null
+    },
+    noDonationSitesNearMeI18nString: 'ftm-poland-no-donation-sites-near-me'
+  },
+  es: {
+    i18nString: 'ftm-spain',
+    countryCode: 'es',
+    administrativeRegionI18nString: 'ftm-administrative-region-province',
+    donationSites: {
+      i18nString: 'ftm-spain-large-donations',
+      administrativeRegionLinks: null,
+      nationalLinks: null
+    },
+    noDonationSitesNearMeI18nString: 'ftm-spain-no-donation-sites-near-me'
+  },
+  ch: {
+    i18nString: 'ftm-switzerland',
+    countryCode: 'ch',
+    administrativeRegionI18nString: 'ftm-administrative-region-canton',
+    donationSites: {
+      i18nString: 'ftm-switzerland-large-donations',
+      administrativeRegionLinks: null,
+      nationalLinks: null
+    },
+    noDonationSitesNearMeI18nString: 'ftm-switzerland-no-donation-sites-near-me'
+  },
+  gb: {
+    i18nString: 'ftm-united-kingdom',
+    countryCode: 'gb',
+    administrativeRegionI18nString: null,
+    donationSites: {
+      i18nString: 'ftm-united-kingdom-large-donations',
+      administrativeRegionLinks: null,
+      nationalLinks: null
+    },
+    noDonationSitesNearMeI18nString: 'ftm-united-kingdom-no-donation-sites-near-me'
   },
   us: {
     i18nString: 'ftm-united-states',
