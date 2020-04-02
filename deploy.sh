@@ -38,7 +38,7 @@ pushd ~/src/findthemasks > /dev/null
 git fetch
 git reset --hard origin/master
 git clean -f
-rsync -lr --delete --exclude data-*.json data-*.csv ~/src/findthemasks/public/ ~/findthemasks.com
+rsync -lr --delete --exclude data-*.json --exclude data-*.csv ~/src/findthemasks/public/ ~/findthemasks.com
 
 popd > /dev/null
 
