@@ -31,7 +31,7 @@
   "ftm-portuguese" : "葡萄牙語",
   "ftm-polish" : "拋光",
   "ftm-have-you-donated-question" : "您已經捐款了嗎？",
-  "ftm-have-you-donated-answer" : "告訴我們您的幫助，方法是在<a target='_blank' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <img class='fb-logo' src='images/fb.svg'/>上發布findthemasks </a> 。",
+  "ftm-have-you-donated-answer" : "告訴我們您的幫助，方法是在<a target='_blank' class='social-link' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <img class='fb-logo' src='images/fb.svg'/>上發布findthemasks </a> 。",
   "ftm-index-getmeppe-twitter-cta" : "在當地找到可以捐贈口罩或其他個人防護設備（PPE）的地方。",
   "ftm-index-need-find-masks" : "我們需要找到口罩",
   "ftm-index-need-helpers" : "讓'幫助助手",
