@@ -39,7 +39,13 @@ const generateBottomNav = () => {
   const countryDropdownItems = document.getElementById('countries-dropdown-selector');
 
   if (localeDropdownLink && countryDropdownLink && localeDropdownItems && countryDropdownItems) {
-    locales.forEach((locale) => {
+    const sortedLocales = locales.sort((localeA, localeB) => {
+      const aLocalized = $.i18n(localeA.i18nString);
+      const bLocalized = $.i18n(localeB.i18nString);
+      return aLocalized.localeCompare(bLocalized);
+    });
+
+    sortedLocales.forEach((locale) => {
       if (locale.localeCode === currentLocale.toLowerCase()) {
         localeDropdownLink.textContent = $.i18n(locale.i18nString);
       }
@@ -54,7 +60,17 @@ const generateBottomNav = () => {
       localeDropdownItems.appendChild(element);
     });
 
-    Object.keys(countries).forEach((countryCode) => {
+    const sortedCountryKeys = Object.keys(countries).sort((a, b) => {
+      const countryA = countries[a];
+      const countryB = countries[b];
+
+      const aLocalized = $.i18n(countryA.i18nString);
+      const bLocalized = $.i18n(countryB.i18nString);
+
+      return aLocalized.localeCompare(bLocalized);
+    });
+
+    sortedCountryKeys.forEach((countryCode) => {
       const country = countries[countryCode];
 
       if (country.countryCode === currentCountry.toLowerCase()) {
