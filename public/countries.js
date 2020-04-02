@@ -72,18 +72,18 @@ export default {
     },
     noDonationSitesNearMeI18nString: 'ftm-germany-no-donation-sites-near-me'
   },
-  pl: {
-    i18nString: 'ftm-poland',
-    countryCode: 'pl',
+  // pl: {
+  //   i18nString: 'ftm-poland',
+  //   countryCode: 'pl',
     // TODO(nburt): update to correct administrative region for poland
-    administrativeRegionI18nString: 'ftm-administrative-region-state',
-    donationSites: {
-      i18nString: 'ftm-poland-large-donations',
-      administrativeRegionLinks: null,
-      nationalLinks: null
-    },
-    noDonationSitesNearMeI18nString: 'ftm-poland-no-donation-sites-near-me'
-  },
+    // administrativeRegionI18nString: 'ftm-administrative-region-state',
+    // donationSites: {
+    //   i18nString: 'ftm-poland-large-donations',
+    //   administrativeRegionLinks: null,
+    //   nationalLinks: null
+    // },
+    // noDonationSitesNearMeI18nString: 'ftm-poland-no-donation-sites-near-me'
+  // },
   pt: {
     i18nString: 'ftm-portugal',
     countryCode: 'pt',
@@ -117,17 +117,17 @@ export default {
     },
     noDonationSitesNearMeI18nString: 'ftm-switzerland-no-donation-sites-near-me'
   },
-  gb: {
-    i18nString: 'ftm-united-kingdom',
-    countryCode: 'gb',
-    administrativeRegionI18nString: null,
-    donationSites: {
-      i18nString: 'ftm-united-kingdom-large-donations',
-      administrativeRegionLinks: null,
-      nationalLinks: null
-    },
-    noDonationSitesNearMeI18nString: 'ftm-united-kingdom-no-donation-sites-near-me'
-  },
+  // gb: {
+  //   i18nString: 'ftm-united-kingdom',
+  //   countryCode: 'gb',
+  //   administrativeRegionI18nString: null,
+  //   donationSites: {
+  //     i18nString: 'ftm-united-kingdom-large-donations',
+  //     administrativeRegionLinks: null,
+  //     nationalLinks: null
+  //   },
+  //   noDonationSitesNearMeI18nString: 'ftm-united-kingdom-no-donation-sites-near-me'
+  // },
   us: {
     i18nString: 'ftm-united-states',
     countryCode: 'us',
