@@ -703,6 +703,7 @@ function initMapSearch(data, filters) {
   $('#reset-map').on('click', (e) => {
     e.preventDefault();
     resetMap(data, filters);
+    $search.val('');
     sendEvent("map","reset","default-location");
   });
 }
