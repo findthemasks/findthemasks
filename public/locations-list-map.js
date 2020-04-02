@@ -329,7 +329,7 @@ function loadOtherCountries() {
         (result) => {
           const otherData = countryData[code] = toDataByLocation(result);
 
-          // opacity value matches what's in css for the .othercluster class -
+          // opacity value matches what's in css for the .secondarycluster class -
           // can set a css class for the clusters, but not for individual pins.
           otherMarkers.push(...getMarkers(otherData, {}, null, secondaryMarkerOptions).outofstate);
           updateClusters(null, secondaryCluster);
@@ -550,7 +550,7 @@ function onFilterChange(data, prefix, key, filters) {
   showMarkers(data, filters);
 
   const locationsList = $(".locations-list");
-  
+
   // locationsList[0].scrollIntoView({ 'behavior': 'smooth' });
 
 };
@@ -609,12 +609,12 @@ function initMap(data, filters) {
       zIndex: 2
     });
 
-  markerCluster.addListener('click', function(e) {
-    sendEvent('map', 'click', 'markerCluster');
+  primaryCluster.addListener('click', function(e) {
+    sendEvent('map', 'click', 'primaryCluster');
   });
 
-  otherCluster.addListener('click', function(e) {
-    sendEvent('map', 'click', 'otherCluster');
+  secondaryCluster.addListener('click', function(e) {
+    sendEvent('map', 'click', 'secondaryCluster');
   });
 
   showMarkers(data, filters);
