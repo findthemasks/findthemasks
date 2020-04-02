@@ -35,6 +35,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="images/icons/favicon-16x16.png">
     <link rel="manifest" href="site.webmanifest">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css" />
     <link rel="canonical" href="https://findthemasks.com/give.html" />
     <!-- START Open Graph Tags -->
     <!-- English -->
@@ -50,275 +51,10 @@
     <meta property="og:image" content="https://findthemasks.com/images/n95.jpg"/>
     <meta property="og:type" content="website"/>
     <!-- END Open Graph Tags -->
-    <style>
-
-        /* Styling for the JS generated locations list */
-
-        .locations-list {
-          padding-bottom: 10px;
-          border-bottom: 1px solid #efefef;
-        }
-
-        .state h2 {
-          font-size: 28px;
-          padding-top: 20px;
-          padding-bottom: 20px;
-          margin: 0px;
-          font-weight: 400;
-          border-top: 1px solid #efefef;
-        }
-
-        .city h3 {
-          font-size: 20px;
-          padding-bottom: 20px;
-          margin: 0px;
-          text-transform: uppercase;
-        }
-
-        .city {
-          line-height: 1.2;
-          padding-bottom: 10px;
-        }
-
-        .city h4 {
-          font-size: 18px;
-          font-weight: 600;
-          padding-bottom: 5px;
-          margin: 0px;
-        }
-
-        .city p {
-          margin: 0px;
-          font-size: 18px;
-        }
-
-        .location {
-          padding-bottom: 20px;
-          overflow-wrap: break-word;
-        }
-
-        .location label {
-          color: #999;
-          font-size: 11px;
-          font-weight: 600;
-          text-transform: uppercase;
-          margin-top: 12px;
-          margin-bottom: 3px;
-        }
-
-        .donation-sites h1 {
-          margin-bottom: -10px;
-        }
-
-        .filters-list {
-          margin-bottom: 30px;
-        }
-
-        .filters-list div {
-          display: inline-block;
-          margin-right: 6px;
-        }
-
-        .filters-list h4 {
-          font-size: 20px;
-          text-transform: uppercase;
-          margin-top: 20px;
-          margin-bottom: 10px;}
-
-        .filters-list input {
-          display: none;
-        }
-
-        .filters-list label {
-          border: 1px #aadaff solid;
-          background: #aadaff30;
-          font-size: 18px;
-          padding: 0.3rem 0.4rem;
-          cursor: pointer;
-          border-radius: 3px;
-        }
-
-        .filters-list label:hover {
-          background-color: #aadaff59;
-        }
-
-        .filters-list label.selected {
-          background-color: #aadaff;
-        }
-
-        #map {
-          height: 400px; /* The height is 400 pixels */
-          width: 100%; /* The width is the width of the web page */
-        }
-
-        #map .label {
-          width: 105px;
-          padding-top: 6px;
-          padding-bottom: 2px;
-          text-transform: uppercase;
-          color: #999;
-          font-size: 11px;
-          font-weight: 400;
-        }
-
-        #map .value {
-          font-weight: 400
-        }
-
-        #map-stats, #list-stats {
-          font-weight: 300;
-        }
-
-        .locations-loading {
-          display: flex;
-          align-items: center;
-          padding: 30px 0px;
-          font-style: italic;
-        }
-        .spinner-border {
-          margin-right: 10px;
-        }
-        .load-spinner {
-          width: 21px;
-          height: 21px;
-          animation: 5s load-spinner infinite linear;
-        }
-        @-webkit-keyframes load-spinner {
-          100% {
-            transform: rotate(360deg);
-            -webkit-transform: rotate(360deg);
-          }
-        }
-        @-moz-keyframes load-spinner {
-          100% {
-            transform: rotate(360deg);
-            -moz-transform: rotate(360deg);
-          }
-        }
-        @-ms-keyframes load-spinner {
-          100% {
-            transform: rotate(360deg);
-            -ms-transform: rotate(360deg);
-          }
-        }
-
-        .secondarycluster {
-          opacity: 0.4;
-        }
-
-        /*********************
-         * MAP SEARCH STYLES *
-         *********************/
-
-        /* What actually varies with breakpoints */
-        .map-search-wrap {
-          width: 100%;
-          position: relative;
-          margin-top: 20px;
-          display: flex;
-        }
-
-        .map-search-wrap:first-child {
-          margin-top: 0;
-        }
-
-        .search-icon {
-          top: 1; /* ... see height below... */
-          left: 10px;
-          width: 17px;
-          height: 2.3rem; /* synchronized w/ input field for vertical centering, being an SVG it should not warp */
-          position: absolute;
-          pointer-events: none; /* user clicks should fall through to input field instead */
-          opacity: 0.7;
-        }
-
-        #map {
-          margin-bottom: 5px;
-        }
-
-        #map-search {
-          line-height: 2.3rem;
-          width: 100%;
-          margin-bottom: 5px;
-          padding: 0.4rem 0.8rem;
-          padding-left: 35px;
-          border-radius: 3px;
-          outline: none;
-          border: 1px solid #ccc;
-          height: 2.3rem;
-          outline-color: #000;
-        }
-
-        .search-input {
-          width: 100%;
-          position: relative;
-          display: flex;
-          width:100%;
-          margin-right: 15px;
-        }
-
-        .search-controls {
-          display: flex;
-          padding-top: 7px;
-        }
-
-        .search-control-separator {
-          padding: 0px 8px;
-          color: #ccc;
-          font-size: 14px;
-        }
-
-        .map-action-link {
-          white-space: nowrap;
-          font-size: 14px;
-        }
-
-        .map-action-link:hover {
-          text-decoration: none;
-        }
-
-        .map-action-link img {
-          padding-right: 5px;
-          width: 21px;
-          height: 21px;
-        }
-
-        /* Mobile first: Desktop breakpoint overrides below */
-
-        @media (max-width: 1200px) {
-          .search-input {
-            margin: 0px;
-            margin-right: 15px;
-          }
-          .map-search-wrap {
-            padding-top: 4px;
-          }
-        }
-
-        @media (max-width: 576px) {
-          .map-search-wrap {
-            display: block;
-          }
-          .search-controls {
-            padding-top: 5px;
-          }
-        }
-
-        /*************************
-         * END MAP SEARCH STYLES *
-         *************************/
-
-         /* Overall page styles */
-         .translated-content {
-           display: none;
-         }
-    </style>
-
-
 </head>
 
 <body>
-<main class="content">
+<main class="content give">
     <div class="languages-loading" style="position: fixed;top: 50%; left: 50%;">
         <div class="spinner-border" role="status">
           <span class="sr-only">Loading translations...</span>
@@ -329,7 +65,7 @@
       <div class="container" style="padding-bottom: 40px;">
         <div class="map-container" style="display: none;">
 
-          <div class="row" style="margin: 30px 0px 20px 0px;">
+          <div class="row" style="margin: 0px 0px 20px 0px;">
             <div class="col-xl-4" style="padding: 0px">
               <h3 style="white-space: nowrap"><span class="i18n" data-i18n="ftm-map-of-sites">Donation sites</span> <span id="map-stats"></span></h3>
             </div>
@@ -365,7 +101,6 @@
         <div class="locations-container" style="display: none;">
           <h3 style="padding: 30px 0px 5px 0px; margin: 0px;"><span class="i18n" data-i18n="ftm-list-of-sites">List of donation sites</span> <span id="list-stats"></span></h3>
           <div class="filters-container" style="display: none;">
-            <h4 style="padding-top: 10px; margin: 0px;" class='i18n' data-i18n="ftm-filters">Filters</h4>
             <form name="filters" class="filters-list"></form>
           </div>
 

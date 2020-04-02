@@ -38,12 +38,15 @@ pushd ~/src/findthemasks > /dev/null
 git fetch
 git reset --hard origin/master
 git clean -f
-rsync -lr --delete --exclude data-*.json ~/src/findthemasks/public/ ~/findthemasks.com
+rsync -lr --delete --exclude data-*.json --exclude data-*.csv ~/src/findthemasks/public/ ~/findthemasks.com
 
 popd > /dev/null
 
 # Get latest data.
-for country in ca ch fr us; do
+for country in at ca ch de es fr it pt us; do
   curl --fail https://storage.googleapis.com/findthemasks.appspot.com/data-$country.json > ~/findthemasks.com/data-$country.json_
   mv ~/findthemasks.com/data-$country.json_ ~/findthemasks.com/data-$country.json
+
+  curl --fail https://storage.googleapis.com/findthemasks.appspot.com/data-$country.csv > ~/findthemasks.com/data-$country.csv_
+  mv ~/findthemasks.com/data-$country.csv_ ~/findthemasks.com/data-$country.csv
 done
