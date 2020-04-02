@@ -31,7 +31,7 @@
   "ftm-portuguese" : "Português",
   "ftm-polish" : "polonês",
   "ftm-have-you-donated-question" : "Você já doou?",
-  "ftm-have-you-donated-answer" : "Conte-nos como você ajudou publicando em <a target='_blank' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <i class='fab fa-facebook-square'> </i> findthemasks </a> .",
+  "ftm-have-you-donated-answer" : "Conte-nos como você ajudou publicando em <a target='_blank' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <img class='fb-logo' src='images/fb.svg'/> findthemasks </a> .",
   "ftm-index-getmeppe-twitter-cta" : "Descubra onde você pode doar suas máscaras ou outro equipamento de proteção individual (EPI) na sua região.",
   "ftm-index-need-find-masks" : "Precisamos encontrar máscaras",
   "ftm-index-need-helpers" : "Vamos ajudar os ajudantes",
