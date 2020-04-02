@@ -876,12 +876,16 @@ function showMarkers(data, filters) {
 
 // Source for country center points: https://developers.google.com/public-data/docs/canonical/countries_csv
 const MAP_INITIAL_VIEW = {
-  ca: { zoom: 3, center:{ lat: 56.130366, lng: -106.346771 }},
-  ch: { zoom: 7, center:{ lat: 46.818188, lng: 8.227512 }},
-  de: { zoom: 5, center:{ lat: 51.165691, lng: 10.451526 }},
-  fr: { zoom: 5, center:{ lat: 46.227638, lng: 2.213749 }},
-  gb: { zoom: 5, center:{ lat: 55.378051, lng: -3.435973 }},
-  us: { zoom: 4, center:{ lat: 37.09024, lng: -95.712891 }},
+  at: { zoom: 6, center: { lat:47.716231, lng:	13.90072 }},
+  ca: { zoom: 3, center: { lat: 56.130366, lng: -106.346771 }},
+  ch: { zoom: 7, center: { lat: 46.818188, lng: 8.227512 }},
+  de: { zoom: 5, center: { lat: 51.165691, lng: 10.451526 }},
+  es: { zoom: 5, center: { lat: 40.163667, lng:	-3.74922 }},
+  fr: { zoom: 5, center: { lat: 46.227638, lng: 2.213749 }},
+  gb: { zoom: 5, center: { lat: 55.378051, lng: -3.435973 }},
+  it: { zoom: 5, center: { lat: 41.87194, lng: 12.56738 }},
+  pt: { zoom: 6, center: { lat: 39.399872, lng: -8.224454 }},
+  us: { zoom: 4, center: { lat: 37.09024, lng: -95.712891 }},
 };
 
 function centerMapToBounds(map, bounds, maxZoom) {
