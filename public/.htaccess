@@ -6,39 +6,9 @@ RewriteCond "%{REQUEST_URI}" ^/[^/]+/donation-form$
 RewriteRule (.*) /donation-form-bounce.html [L,QSA]
 
 <IfModule mod_headers.c>
-  <Files "data.json">
+  <FilesMatch ~ "^data(-\w\w)?\.json$">
     Header set Access-Control-Allow-Origin "*"
-  </Files>
-  <Files "data-at.json">
-    Header set Access-Control-Allow-Origin "*"
-  </Files>
-  <Files "data-ca.json">
-    Header set Access-Control-Allow-Origin "*"
-  </Files>
-  <Files "data-ch.json">
-    Header set Access-Control-Allow-Origin "*"
-  </Files>
-  <Files "data-de.json">
-    Header set Access-Control-Allow-Origin "*"
-  </Files>
-  <Files "data-es.json">
-    Header set Access-Control-Allow-Origin "*"
-  </Files>
-  <Files "data-fr.json">
-    Header set Access-Control-Allow-Origin "*"
-  </Files>
-  <Files "data-gb.json">
-    Header set Access-Control-Allow-Origin "*"
-  </Files>
-  <Files "data-it.json">
-    Header set Access-Control-Allow-Origin "*"
-  </Files>
-  <Files "data-pt.json">
-    Header set Access-Control-Allow-Origin "*"
-  </Files>
-  <Files "data-us.json">
-    Header set Access-Control-Allow-Origin "*"
-  </Files>
+  </FilesMatch>
 </IfModule>
 
 <IfModule mod_expires.c>
