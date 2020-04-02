@@ -18,6 +18,13 @@
   "ftm-address": "Heading for the hospital address",
   "ftm-anonymous-volunteers": "Volunteers who are anonymous description",
   "ftm-canada": "country of Canada",
+  "ftm-united-kingdom": "country of United Kingdom",
+  "ftm-switzerland": "country of Switzerland",
+  "ftm-germany": "country of Germany",
+  "ftm-poland": "country of Poland",
+  "ftm-spain": "country of Spain",
+  "ftm-italy": "country of Italy",
+  "ftm-austria": "country of Austria",
   "ftm-cant-find-donation-site-answer": "Link and link text direct users who can't find a local PPE donation site to getusppe.org",
   "ftm-cant-find-donation-site-question": "Question prompt for if the user can find a local PPE donation site",
   "ftm-country-switcher": "Navigation to change countries",
@@ -87,5 +94,10 @@
   "ftm-administrative-region-filter": "Heading for administrative region filter",
   "ftm-administrative-region-province": "Province of Canada",
   "ftm-administrative-region-department": "Department of France",
-  "ftm-administrative-region-state": "State of United States"
+  "ftm-administrative-region-state": "State of United States",
+  "ftm-administrative-region-canton": "Canton of Switzerland",
+  "ftm-administrative-region-german-land": "State of Germany",
+  "ftm-administrative-region-region": "Region of Italy",
+  "ftm-administrative-region-precinct": "Precinct of Portugal",
+  "ftm-administrative-region-bundesland": "Federal State of Austria"
 }
