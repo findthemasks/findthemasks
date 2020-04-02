@@ -42,6 +42,10 @@ let showMapSearch = false; // BETA FEATURE: Default to false.
 // Keep track of the previous info windows user has clicked so we can close them.
 let openInfoWindows = [];
 
+// The big list of displayed locations, as dom elements, and where we are in rendering them
+let locationsListEntries = [];
+let lastLocationRendered = -1;
+
 /*************************
  * END MODULE LEVEL VARS *
  *************************/
@@ -227,11 +231,17 @@ function createFilterElements(data, filters) {
 
 // Wrapper for document.createElement - creates an element of type elementName
 // if className is passed, assigns class attribute
-// if child is passed, appends to created element
+// if child (either a node or an array of nodes) is passed, appends to created element.
 function ce(elementName, className, child) {
   const el = document.createElement(elementName);
   className && (el.className = className);
-  child && el.appendChild(child);
+  if (child) {
+    if (Array.isArray(child)) {
+      child.forEach((c) => el.appendChild(c));
+    } else {
+      el.appendChild(child);
+    }
+  }
   return el;
 }
 
@@ -240,30 +250,21 @@ function ctn(text) {
   return document.createTextNode(text);
 }
 
-function createContent(data) {
-  for (const stateName of Object.keys(data)) {
-    const state = data[stateName];
-
-    state.domElem = $(ce('div', 'state', ce('h2', null, ctn(stateName))));
-    state.containerElem = $(ce('div', 'all-cities-wrap'));
-    state.domElem.append(state.containerElem);
-
-    const cities = state.cities;
-    for (const cityName of Object.keys(cities)) {
-      const city = cities[cityName];
-
-      city.domElem = $(ce('div', 'city', ce('h3', null, ctn(cityName))));
-      city.containerElem = $(ce('div'));
-      city.domElem.append(city.containerElem);
-
-      // Array.prototype.sort sorts in-place, so only need to do it once per city
-      city.entries.sort((a, b) => a.name.localeCompare(b.name));
-    }
-  }
+// Turns a string with embedded \n characters into an Array of text nodes separated by <br>
+function multilineStringToNodes(input) {
+  const textNodes = input.split('\n').map((s) => ctn(s));
+  let returnedNodes = [];
+  textNodes.forEach((e) => {
+    returnedNodes.push(e);
+    returnedNodes.push(document.createElement('br'));
+  })
+  return returnedNodes.slice(0,-1);
 }
 
-function getFilteredContent(data, filters) {
-  const content = [];
+// Return filtered data, sorted by location, in a flat list
+// (flattened so it's easy to present only a piece of the list at a time)
+function getFlatFilteredEntries(data, filters) {
+  const entries = [];
   const applied = filters.applied || {};
   const filterAcceptKeys = applied.acceptItems && Object.keys(applied.acceptItems);
   let listCount = 0; // TODO: hacky, see note below.
@@ -274,14 +275,9 @@ function getFilteredContent(data, filters) {
     }
 
     const state = data[stateName];
-    let hasCity = false;
-    state.containerElem.empty();
-
     const cities = state.cities;
     for (const cityName of Object.keys(cities).sort()) {
       const city = cities[cityName];
-      let hasEntry = false;
-      city.containerElem.empty();
 
       for (const entry of city.entries) {
         if (filterAcceptKeys) {
@@ -292,60 +288,10 @@ function getFilteredContent(data, filters) {
         }
 
         listCount++;
-
-        if (!entry.domElem) {
-          entry.domElem = $(ce('div', 'location'));
-          entry.domElem.append([
-            ce('h4', 'marginBotomZero', ctn(entry.name)),
-            ce('label', null, ctn($.i18n('ftm-address'))),
-          ]);
-          const addr = entry.address.trim().split('\n');
-
-          if (addr.length) {
-            const para = $(ce('p', 'marginTopZero medEmph'));
-            for (const line of addr) {
-              para.append([
-                ctn(line),
-                ce('br')
-              ]);
-            }
-            entry.domElem.append(para);
-          }
-
-          if (entry.instructions) {
-            entry.domElem.append([
-              ce('label', null, ctn($.i18n('ftm-instructions'))),
-              linkifyElement(ce('p', null, ctn(entry.instructions)))
-            ]);
-          }
-
-          if (entry.accepting) {
-            entry.domElem.append([
-              ce('label', null, ctn($.i18n('ftm-accepting'))),
-              ce('p', null, ctn(entry.accepting))
-            ]);
-          }
-
-          if (entry.open_box) {
-            entry.domElem.append([
-              ce('label', null, ctn($.i18n('ftm-open-packages'))),
-              ce('p', null, ctn(entry.open_box))
-            ]);
-          }
-        }
-
-        city.containerElem.append(entry.domElem);
-        hasEntry = true;
+        entry.cityName = cityName;
+        entry.stateName = stateName;
+        entries.push(entry);
       }
-
-      if (hasEntry) {
-        state.containerElem.append(city.domElem);
-        hasCity = true;
-      }
-    }
-
-    if (hasCity) {
-      content.push(state.domElem);
     }
   }
 
@@ -353,7 +299,7 @@ function getFilteredContent(data, filters) {
   //  not updating stats; however this is the quickest method for updating filter stats as well.
   updateStats($('#list-stats'), listCount);
 
-  return content;
+  return entries;
 }
 
 function getCountryDataFilename(country) {
@@ -421,8 +367,6 @@ $(function () {
     }
     // END BETA ONLY
 
-    showList && createContent(data);
-
     const filters = createFilters(data);
 
     // Update filters to match any ?state= params
@@ -451,7 +395,7 @@ $(function () {
         $(".filters-container").show();
       }
 
-      $(".locations-list").empty().append(getFilteredContent(data, filters));
+      refreshList(data, filters);
     }
 
     if (showOthers && currentCountry !== 'us') {
@@ -468,7 +412,104 @@ $(function () {
       });
     }
   });
+
+  const footerHeight = 440;  // footer + navbar + small buffer
+  $(window).scroll(function() {
+     if($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
+        renderNextListPage();
+     }
+  });
 });
+
+function refreshList(data, filters) {
+  locationsListEntries = getFlatFilteredEntries(data, filters);
+  lastLocationRendered = -1;
+  $(".locations-list").empty();
+  renderNextListPage();
+}
+
+function renderNextListPage() {
+  if(lastLocationRendered >= locationsListEntries.length - 1) {
+    return; // all rendered
+  }
+
+  let $el = $(".locations-list");
+  let renderLocation = lastLocationRendered + 1;
+
+  locationsListEntries.slice(renderLocation, renderLocation + 40).forEach(function(entry) {
+    // Add city/state headers
+    if(renderLocation == 0) {
+      $el.append(getStateEl(entry));
+      $el.append(getCityEl(entry));
+    } else {
+      const lastEntry = locationsListEntries[renderLocation - 1];
+      if(entry.stateName != lastEntry.stateName) {
+        $el.append(getStateEl(entry));
+      }
+      if(entry.cityName != lastEntry.cityName) {
+        $el.append(getCityEl(entry));
+      }
+    }
+
+    $el.append(getEntryEl(entry));
+    renderLocation += 1;
+  });
+
+  lastLocationRendered = renderLocation - 1;
+}
+
+function getEntryEl(entry) {
+  if (!entry.domElem) {
+    entry.domElem = $(ce('div', 'location'));
+    entry.domElem.append([
+      ce('h4', 'marginBotomZero', ctn(entry.name)),
+      ce('label', null, ctn($.i18n('ftm-address'))),
+    ]);
+    const addr = entry.address.trim().split('\n');
+
+    if (addr.length) {
+      const para = $(ce('p', 'marginTopZero medEmph'));
+      for (const line of addr) {
+        para.append([
+          ctn(line),
+          ce('br')
+        ]);
+      }
+      entry.domElem.append(para);
+    }
+
+    if (entry.instructions) {
+      entry.domElem.append([
+        ce('label', null, ctn($.i18n('ftm-instructions'))),
+        linkifyElement(ce('p', null, multilineStringToNodes(entry.instructions)))
+      ]);
+    }
+
+    if (entry.accepting) {
+      entry.domElem.append([
+        ce('label', null, ctn($.i18n('ftm-accepting'))),
+        ce('p', null, ctn(entry.accepting))
+      ]);
+    }
+
+    if (entry.open_box) {
+      entry.domElem.append([
+        ce('label', null, ctn($.i18n('ftm-open-packages'))),
+        ce('p', null, ctn(entry.open_box))
+      ]);
+    }
+  }
+
+  return entry.domElem; // TODO: generate this here.
+}
+
+function getStateEl(entry) {
+  return ce('h2', 'state', ctn(entry.state));
+}
+
+function getCityEl(entry) {
+  return ce('h3', 'city', ctn(entry.city));
+}
 
 function onFilterChange(data, prefix, key, filters) {
   const filter = filters[prefix] && filters[prefix][key];
@@ -486,12 +527,13 @@ function onFilterChange(data, prefix, key, filters) {
   }
 
   updateFilters(filters);
-
-  const locationsList = $(".locations-list");
-  locationsList.empty().append(getFilteredContent(data, filters));
+  refreshList(data, filters);
   showMarkers(data, filters);
 
-  locationsList[0].scrollIntoView({ 'behavior': 'smooth' });
+  const locationsList = $(".locations-list");
+  
+  // locationsList[0].scrollIntoView({ 'behavior': 'smooth' });
+
 };
 
 // Lazy-loads the Google maps script once we know we need it. Sets up
@@ -661,17 +703,20 @@ function centerMapToMarkersNearUser() {
  * Centers map around markers nearest to an arbitrary set of latitude/longitude coordinates.
  */
 function centerMapToMarkersNearCoords(latitude, longitude) {
-  var latlng = new google.maps.LatLng(latitude, longitude);
+  const latlng = new google.maps.LatLng(latitude, longitude);
 
   //Compute the distances of all markers from the user
-  var markerDistances = new Map(); // an associative array containing the marker referenced by the computed distance
-  var distances = []; // all the distances, so we can sort and then call markerDistances
+  const markerDistances = new Map(); // an associative array containing the marker referenced by the computed distance
+  const distances = []; // all the distances, so we can sort and then call markerDistances
+
   for (const marker of primaryMarkers) {
     let distance = google.maps.geometry.spherical.computeDistanceBetween(marker.position, latlng);
 
     // HACK: In the unlikely event that the exact same distance is computed, add one meter to the distance to give it a unique distance
     // This could occur if a marker was added twice to the same location.
-    if (markerDistances.has(distance)) { distance = distance + 1; }
+    if (markerDistances.has(distance)) {
+      distance = distance + 1;
+    }
 
     markerDistances[distance] = marker;
 
@@ -683,22 +728,31 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
 
   // center the map on the user
   const bounds = new google.maps.LatLngBounds();
+  let hasMarker = false;
   bounds.extend(latlng);
 
   // Extend the bounds to contain the three closest markers
   for (let i = 0; i < 3; i++) {
+
     // Get one of the closest markers
-    let distance = distances[i];
-    let marker = markerDistances[distance];
+    const distance = distances[i];
+    const marker = markerDistances[distance];
 
-    const marker_lat = marker.position.lat();
-    const marker_lng = marker.position.lng();
+    if (!marker) {
+      break;
+    }
 
-    const loc = new google.maps.LatLng(marker_lat, marker_lng);
-    bounds.extend(loc);
+    hasMarker = true;
+    bounds.extend(marker.position);
   }
-  map.fitBounds(bounds);       // auto-zoom
-  map.panToBounds(bounds);     // auto-center
+
+  if (hasMarker) {
+    // zoom to fit user loc + nearest markers
+    map.fitBounds(bounds);
+  } else {
+    // just has user loc - shift view without zooming
+    map.setCenter(latlng);
+  }
 }
 
 /********************************
@@ -871,7 +925,7 @@ function createMarker(latitude, longitude, address, name, instructions, acceptin
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
         ce('div', 'value', ctn(address)),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
-        linkifyElement(ce('div', 'value', ctn(instructions))),
+        linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
         ce('div', 'value', ctn(accepting)),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),

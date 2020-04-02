@@ -1,5 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const csv_stringify = require('csv-stringify');
 const {request} = require('gaxios');
 
 admin.initializeApp();
@@ -193,7 +194,9 @@ async function getSpreadsheet(country, client) {
 }
 
 async function snapshotData(country) {
-  const json_filename = `data-${country}.json`;
+    const base_filename = `data-${country}`;
+    const csv_filename = `${base_filename}.csv`;
+    const json_filename = `${base_filename}.json`;
   const html_snippet_filename = `data_snippet-${country}.html`;
 
   // Talk to sheets.
@@ -249,6 +252,29 @@ async function snapshotData(country) {
     },
     predefinedAcl: "publicRead",
   });
+
+  // Build a simple csv file
+  console.log("Preparing CSV File\n");
+  const csvFileRef = admin.storage().bucket().file(csv_filename);
+
+  csv_stringify(data.values, async function(err, output) {
+    if (err !== null) {
+      console.log(err)
+    } else {
+      //console.log(output);
+      await csvFileRef.save(output, {
+	      gzip: true,
+	      metadata: {
+	        cacheControl: "public, max-age=20",
+                contentType: "application/text"
+	      },
+	      predefinedAcl: "publicRead",
+	 });
+    }
+  });
+
+
+
 
   const data_by_location = toDataByLocation(data);
   const html_snippets = toHtmlSnippets(data_by_location);
