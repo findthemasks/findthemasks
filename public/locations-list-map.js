@@ -880,7 +880,7 @@ const MAP_INITIAL_VIEW = {
   ca: { zoom: 3, center: { lat: 56.130366, lng: -106.346771 }},
   ch: { zoom: 7, center: { lat: 46.818188, lng: 8.227512 }},
   de: { zoom: 5, center: { lat: 51.165691, lng: 10.451526 }},
-  es: { zoom: 5.5, center: { lat: 40.163667, lng:	-3.74922 }},
+  es: { zoom: 5, center: { lat: 40.163667, lng:	-3.74922 }},
   fr: { zoom: 5, center: { lat: 46.227638, lng: 2.213749 }},
   gb: { zoom: 5, center: { lat: 55.378051, lng: -3.435973 }},
   it: { zoom: 5, center: { lat: 41.87194, lng: 12.56738 }},
