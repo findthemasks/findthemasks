@@ -9,6 +9,9 @@ RewriteRule (.*) /donation-form-bounce.html [L,QSA]
   <Files "data.json">
     Header set Access-Control-Allow-Origin "*"
   </Files>
+  <Files "data-at.json">
+    Header set Access-Control-Allow-Origin "*"
+  </Files>
   <Files "data-ca.json">
     Header set Access-Control-Allow-Origin "*"
   </Files>
@@ -18,10 +21,19 @@ RewriteRule (.*) /donation-form-bounce.html [L,QSA]
   <Files "data-de.json">
     Header set Access-Control-Allow-Origin "*"
   </Files>
+  <Files "data-es.json">
+    Header set Access-Control-Allow-Origin "*"
+  </Files>
   <Files "data-fr.json">
     Header set Access-Control-Allow-Origin "*"
   </Files>
   <Files "data-gb.json">
+    Header set Access-Control-Allow-Origin "*"
+  </Files>
+  <Files "data-it.json">
+    Header set Access-Control-Allow-Origin "*"
+  </Files>
+  <Files "data-pt.json">
     Header set Access-Control-Allow-Origin "*"
   </Files>
   <Files "data-us.json">
