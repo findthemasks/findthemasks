@@ -48,6 +48,11 @@ body {
   margin-bottom: 15px;
 }
 
+.fb-logo {
+  height: 1em;
+  margin-bottom: 4px;
+}
+
 h1 {
   font-weight: 800;
 }
