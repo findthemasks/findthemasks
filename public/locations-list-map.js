@@ -7,17 +7,28 @@ import getCountry from './getCountry.js';
  * MODULE VARS AVAILABLE TO ALL FUNCTIONS *
  ******************************************/
 
+// Master data object, indexed by country code
+const countryData = {};
+const currentCountry = getCountry();
+
 // Map, markers and map associated UI components are initialized in initMap().
 let autocomplete;
 let map = null;
 let markers = [];
+// Markers from outside the current country
+const otherMarkers = [];
 let markerCluster = null;
+let otherCluster = null;
 
 // Configuration defined in query string. Initialized in jQuery DOM ready function.
 let showMapSearch = false; // BETA FEATURE: Default to false.
 
 // Keep track of the previous info windows user has clicked so we can close them.
 let openInfoWindows = [];
+
+// The big list of displayed locations, as dom elements, and where we are in rendering them
+let locationsListEntries = [];
+let lastLocationRendered = -1;
 
 /*************************
  * END MODULE LEVEL VARS *
@@ -30,7 +41,6 @@ const getCurrentLocale = () => {
 };
 
 const generateBottomNav = () => {
-  const currentCountry = getCountry();
   const currentLocale = getCurrentLocale();
 
   const localeDropdownLink = document.getElementById('locales-dropdown');
@@ -96,7 +106,6 @@ const generateBottomNav = () => {
 };
 
 const addDonationSites = () => {
-  const currentCountry = getCountry();
   const countryConfig = countries[currentCountry.toLowerCase()];
 
   const largeDonationElement = document.getElementById('large-donation-selector');
@@ -115,6 +124,14 @@ const addDonationSites = () => {
 
     largeDonationElement.innerHTML = $.i18n(countryDonationSites.i18nString, administrativeRegionStringHtml, nationalLinksHtml);
     noDonationsElement.innerHTML = $.i18n(countryConfig.noDonationSitesNearMeI18nString);
+
+    $(largeDonationElement).find('a').click(function(e) {
+      sendEvent('largeDonation', 'click', $(this).attr('href'));
+    });
+
+    $(noDonationsElement).find('a').click(function(e) {
+      sendEvent('noDonation', 'click', $(this).attr('href'));
+    });
   }
 };
 
@@ -123,12 +140,12 @@ const addDonationSites = () => {
 // If one or more values in a category is true, the filter is set - only items matching the filter are included
 // If two or more values in a category are true, the filter is the union of those values
 // If multiple categories have set values, the result is the intersection of those categories
-function createFilters() {
+function createFilters(data) {
   const filters = {
     states: {}
   };
 
-  for (const state of Object.keys(data_by_location)) {
+  for (const state of Object.keys(data)) {
     filters.states[state] = { name: state, isSet: false };
   }
 
@@ -177,9 +194,7 @@ function sendEvent(category, action, label) {
   });
 };
 
-function createFilterElements(filters) {
-  const currentCountry = getCountry();
-
+function createFilterElements(data, filters) {
   const container = ce('div');
 
   function createFilter(filter, key, value, prefix) {
@@ -188,7 +203,7 @@ function createFilterElements(filters) {
     input.type = 'checkbox';
     input.id = `${ prefix }-${ key }`;
     input.value = key;
-    input.addEventListener('change', () => onFilterChange(prefix, key, filters));
+    input.addEventListener('change', () => onFilterChange(data, prefix, key, filters));
     filterContainer.appendChild(input);
     const label = ce('label', null, ctn(value));
     label.id = `${ prefix }-${ key }-label`;
@@ -224,11 +239,17 @@ function createFilterElements(filters) {
 
 // Wrapper for document.createElement - creates an element of type elementName
 // if className is passed, assigns class attribute
-// if child is passed, appends to created element
+// if child (either a node or an array of nodes) is passed, appends to created element.
 function ce(elementName, className, child) {
   const el = document.createElement(elementName);
   className && (el.className = className);
-  child && el.appendChild(child);
+  if (child) {
+    if (Array.isArray(child)) {
+      child.forEach((c) => el.appendChild(c));
+    } else {
+      el.appendChild(child);
+    }
+  }
   return el;
 }
 
@@ -237,30 +258,21 @@ function ctn(text) {
   return document.createTextNode(text);
 }
 
-function createContent(data) {
-  for (const stateName of Object.keys(data)) {
-    const state = data[stateName];
-
-    state.domElem = $(ce('div', 'state', ce('h2', null, ctn(stateName))));
-    state.containerElem = $(ce('div', 'all-cities-wrap'));
-    state.domElem.append(state.containerElem);
-
-    const cities = state.cities;
-    for (const cityName of Object.keys(cities)) {
-      const city = cities[cityName];
-
-      city.domElem = $(ce('div', 'city', ce('h3', null, ctn(cityName))));
-      city.containerElem = $(ce('div'));
-      city.domElem.append(city.containerElem);
-
-      // Array.prototype.sort sorts in-place, so only need to do it once per city
-      city.entries.sort((a, b) => a.name.localeCompare(b.name));
-    }
-  }
+// Turns a string with embedded \n characters into an Array of text nodes separated by <br>
+function multilineStringToNodes(input) {
+  const textNodes = input.split('\n').map((s) => ctn(s));
+  let returnedNodes = [];
+  textNodes.forEach((e) => {
+    returnedNodes.push(e);
+    returnedNodes.push(document.createElement('br'));
+  })
+  return returnedNodes.slice(0,-1);
 }
 
-function getFilteredContent(data, filters) {
-  const content = [];
+// Return filtered data, sorted by location, in a flat list
+// (flattened so it's easy to present only a piece of the list at a time)
+function getFlatFilteredEntries(data, filters) {
+  const entries = [];
   const applied = filters.applied;
   const filterAcceptKeys = applied && applied.acceptItems && Object.keys(applied.acceptItems);
 
@@ -272,78 +284,25 @@ function getFilteredContent(data, filters) {
     }
 
     const state = data[stateName];
-    let hasCity = false;
-    state.containerElem.empty();
-
     const cities = state.cities;
     for (const cityName of Object.keys(cities).sort()) {
       const city = cities[cityName];
-      let hasEntry = false;
-      city.containerElem.empty();
 
-      for (const entry of city.entries) {
+      city.entries.sort(function (a, b) {
+          return a.name.localeCompare( b.name );
+      }).forEach(function(entry) {
         if (filterAcceptKeys) {
           const acc = (entry.accepting || "").toLowerCase();
           if (!filterAcceptKeys.some(s => acc.includes(s))) {
-            continue;
+            return;
           }
         }
 
         listCount++;
-
-        if (!entry.domElem) {
-          entry.domElem = $(ce('div', 'location'));
-          entry.domElem.append([
-            ce('h4', 'marginBotomZero', ctn(entry.name)),
-            ce('label', null, ctn($.i18n('ftm-address'))),
-          ]);
-          const addr = entry.address.trim().split('\n');
-
-          if (addr.length) {
-            const para = $(ce('p', 'marginTopZero medEmph'));
-            for (const line of addr) {
-              para.append([
-                ctn(line),
-                ce('br')
-              ]);
-            }
-            entry.domElem.append(para);
-          }
-
-          if (entry.instructions) {
-            entry.domElem.append([
-              ce('label', null, ctn($.i18n('ftm-instructions'))),
-              linkifyElement(ce('p', null, ctn(entry.instructions)))
-            ]);
-          }
-
-          if (entry.accepting) {
-            entry.domElem.append([
-              ce('label', null, ctn($.i18n('ftm-accepting'))),
-              ce('p', null, ctn(entry.accepting))
-            ]);
-          }
-
-          if (entry.open_box) {
-            entry.domElem.append([
-              ce('label', null, ctn($.i18n('ftm-open-packages'))),
-              ce('p', null, ctn(entry.open_box))
-            ]);
-          }
-        }
-
-        city.containerElem.append(entry.domElem);
-        hasEntry = true;
-      }
-
-      if (hasEntry) {
-        state.containerElem.append(city.domElem);
-        hasCity = true;
-      }
-    }
-
-    if (hasCity) {
-      content.push(state.domElem);
+        entry.cityName = cityName;
+        entry.stateName = stateName;
+        entries.push(entry);
+      });
     }
   }
 
@@ -351,36 +310,74 @@ function getFilteredContent(data, filters) {
   //  not updating stats; however this is the quickest method for updating filter stats as well.
   updateStats($('#list-stats'), listCount);
 
-  return content;
+  return entries;
+}
+
+function getCountryDataFilename(country) {
+  let countryDataFilename = 'data.json';
+  if (country !== 'us') {
+    countryDataFilename = `data-${ country }.json`;
+  }
+
+  return countryDataFilename;
+}
+
+function loadOtherCountries() {
+  const countryCodes = Object.keys(countries);
+  const icon = {
+    path: 0,  // google.maps.SymbolPath.CIRCLE
+    fillColor: 'red',
+    fillOpacity: 1,
+    scale: 4,
+    strokeWeight: 0,
+  };
+
+  for (const code of countryCodes) {
+    if (code !== currentCountry) {
+      $.getJSON(
+        `https://findthemasks.com/${ getCountryDataFilename(code) }`,
+        (result) => {
+          const otherData = countryData[code] = toDataByLocation(result);
+
+          // opacity value matches what's in css for the .othercluster class -
+          // can set a css class for the clusters, but not for individual pins.
+          otherMarkers.push(...getMarkers(otherData, {}, null, { icon: icon, opacity: 0.4 }));
+          otherCluster && otherCluster.addMarkers(otherMarkers);
+        }
+      );
+    }
+  }
 }
 
 $(function () {
   const url = new URL(window.location);
-  const country = getCountry();
 
   // this should happen after the translations load
-  $('html').on('i18n:ready', function() {
+  $('html').on('i18n:ready', function () {
     generateBottomNav();
     addDonationSites();
 
-    $('.add-donation-site-form').attr({href: `/${country}/donation-form?locale=${$.i18n().locale}`});
+    $('.add-donation-site-form')
+      .attr({href: `/${ currentCountry }/donation-form?locale=${$.i18n().locale}`})
+      .click(function(e) {
+        sendEvent('addDonationSite', 'click', $(this).attr('href'));
+      });
+
+    // currently only have a Facebook link under .social-link
+    // if that changes, will need to accurately detect the event
+    // label from either href or text
+    $('.social-link').click(function(e) {
+      sendEvent('socialLink', 'click', 'facebook');
+    });
   });
 
-  // TODO(ajwong): This should not be required anymore.
-  let countryDataFilename = 'data.json';
-  if (country !== 'us') {
-    countryDataFilename = `data-${country}.json`;
-  }
-
-  const renderListings = function(result) {
-    // may end up using this for search / filtering...
-    window.locations = result;
-    window.data_by_location = toDataByLocation(locations);
-
+  const renderListings = function (result) {
+    const data = countryData[currentCountry] = toDataByLocation(result);
     const searchParams = new URLSearchParams(url.search);
     const showList = searchParams.get('hide-list') !== 'true';
     const showFilters = showList && searchParams.get('hide-filters') !== 'true';
     const showMap = searchParams.get('hide-map') !== 'true';
+    const showOthers = searchParams.get('show-others') === 'true';
 
     // BETA: Default initialized at module level scope (see above). Initialize search field, first check #map for default
     // config. Override with query string. Currently disabled by default because it's still in beta.
@@ -399,9 +396,7 @@ $(function () {
     }
     // END BETA ONLY
 
-    showList && createContent(window.data_by_location);
-
-    const filters = createFilters();
+    const filters = createFilters(data);
 
     // Update filters to match any ?state= params
     const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
@@ -416,7 +411,7 @@ $(function () {
     updateFilters(filters);
 
     if (showMap) {
-      loadMapScript(searchParams, filters);
+      loadMapScript(searchParams, data, filters);
     }
 
     $('.locations-loading').hide();
@@ -425,15 +420,19 @@ $(function () {
       $('.locations-container').show();
 
       if (showFilters) {
-        $(".filters-list").append(createFilterElements(filters));
+        $(".filters-list").append(createFilterElements(data, filters));
         $(".filters-container").show();
       }
 
-      $(".locations-list").empty().append(getFilteredContent(data_by_location, filters));
+      refreshList(data, filters);
+    }
+
+    if (showOthers && currentCountry !== 'us') {
+      loadOtherCountries();
     }
   };
 
-  $.getJSON(`https://findthemasks.com/${countryDataFilename}`, function (result) {
+  $.getJSON(`https://findthemasks.com/${ getCountryDataFilename(currentCountry) }`, function (result) {
     if(window.i18nReady) {
       renderListings(result);
     } else {
@@ -442,9 +441,106 @@ $(function () {
       });
     }
   });
+
+  const footerHeight = 440;  // footer + navbar + small buffer
+  $(window).scroll(function() {
+     if($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
+        renderNextListPage();
+     }
+  });
 });
 
-function onFilterChange(prefix, key, filters) {
+function refreshList(data, filters) {
+  locationsListEntries = getFlatFilteredEntries(data, filters);
+  lastLocationRendered = -1;
+  $(".locations-list").empty();
+  renderNextListPage();
+}
+
+function renderNextListPage() {
+  if(lastLocationRendered >= locationsListEntries.length - 1) {
+    return; // all rendered
+  }
+
+  let $el = $(".locations-list");
+  let renderLocation = lastLocationRendered + 1;
+
+  locationsListEntries.slice(renderLocation, renderLocation + 40).forEach(function(entry) {
+    // Add city/state headers
+    if(renderLocation == 0) {
+      $el.append(getStateEl(entry));
+      $el.append(getCityEl(entry));
+    } else {
+      const lastEntry = locationsListEntries[renderLocation - 1];
+      if(entry.stateName != lastEntry.stateName) {
+        $el.append(getStateEl(entry));
+      }
+      if(entry.cityName != lastEntry.cityName) {
+        $el.append(getCityEl(entry));
+      }
+    }
+
+    $el.append(getEntryEl(entry));
+    renderLocation += 1;
+  });
+
+  lastLocationRendered = renderLocation - 1;
+}
+
+function getEntryEl(entry) {
+  if (!entry.domElem) {
+    entry.domElem = $(ce('div', 'location'));
+    entry.domElem.append([
+      ce('h4', 'marginBotomZero', ctn(entry.name)),
+      ce('label', null, ctn($.i18n('ftm-address'))),
+    ]);
+    const addr = entry.address.trim().split('\n');
+
+    if (addr.length) {
+      const para = $(ce('p', 'marginTopZero medEmph'));
+      for (const line of addr) {
+        para.append([
+          ctn(line),
+          ce('br')
+        ]);
+      }
+      entry.domElem.append(para);
+    }
+
+    if (entry.instructions) {
+      entry.domElem.append([
+        ce('label', null, ctn($.i18n('ftm-instructions'))),
+        linkifyElement(ce('p', null, multilineStringToNodes(entry.instructions)))
+      ]);
+    }
+
+    if (entry.accepting) {
+      entry.domElem.append([
+        ce('label', null, ctn($.i18n('ftm-accepting'))),
+        ce('p', null, ctn(entry.accepting))
+      ]);
+    }
+
+    if (entry.open_box) {
+      entry.domElem.append([
+        ce('label', null, ctn($.i18n('ftm-open-packages'))),
+        ce('p', null, ctn(entry.open_box))
+      ]);
+    }
+  }
+
+  return entry.domElem; // TODO: generate this here.
+}
+
+function getStateEl(entry) {
+  return ce('h2', 'state', ctn(entry.state));
+}
+
+function getCityEl(entry) {
+  return ce('h3', 'city', ctn(entry.city));
+}
+
+function onFilterChange(data, prefix, key, filters) {
   const filter = filters[prefix] && filters[prefix][key];
 
   if (!filter) {
@@ -460,20 +556,21 @@ function onFilterChange(prefix, key, filters) {
   }
 
   updateFilters(filters);
+  refreshList(data, filters);
+  showMarkers(data, filters);
 
   const locationsList = $(".locations-list");
-  locationsList.empty().append(getFilteredContent(data_by_location, filters));
-  showMarkers(data_by_location, filters);
 
-  locationsList[0].scrollIntoView({ 'behavior': 'smooth' });
+  // locationsList[0].scrollIntoView({ 'behavior': 'smooth' });
+
 };
 
 // Lazy-loads the Google maps script once we know we need it. Sets up
 // a global initMap callback on the window object so the gmap script
 // can find it.
-function loadMapScript(searchParams, filters) {
+function loadMapScript(searchParams, data, filters) {
   // Property created on window must match name passed in &callback= param
-  window.initMap = () => initMap(filters);
+  window.initMap = () => initMap(data, filters);
 
   // load map based on current lang
   const scriptTag = ce('script');
@@ -499,7 +596,7 @@ function loadMapScript(searchParams, filters) {
  *
  * TODO (patricknelson): Should the initMap() function only be responsible for initializing the map and then have the caller handle position/zoom/bounds etc?
  */
-function initMap(filters) {
+function initMap(data, filters) {
   const element = document.getElementById('map');
 
   if (!element) {
@@ -509,16 +606,31 @@ function initMap(filters) {
   $(".map-container").show();
 
   map = new google.maps.Map(element);
+  otherCluster = new MarkerClusterer(map, otherMarkers, {
+    clusterClass: 'othercluster',
+    imagePath: 'images/markercluster/m',
+    minimumClusterSize: 5,
+    zIndex: 1,
+  });
   markerCluster = new MarkerClusterer(map, [],
     {
       imagePath: 'images/markercluster/m',
-      minimumClusterSize: 5
+      minimumClusterSize: 5,
+      zIndex: 2
     });
 
-  showMarkers(data_by_location, filters);
+  markerCluster.addListener('click', function(e) {
+    sendEvent('map', 'click', 'markerCluster');
+  });
+
+  otherCluster.addListener('click', function(e) {
+    sendEvent('map', 'click', 'otherCluster');
+  });
+
+  showMarkers(data, filters);
 
   // Initialize autosuggest/search field above the map.
-  initMapSearch(filters);
+  initMapSearch(data, filters);
 }
 
 /**********************************
@@ -528,7 +640,7 @@ function initMap(filters) {
 /**
  * Responsible for initializing the search field and links below the search field (e.g. use location, reset map, etc).
  */
-function initMapSearch(filters) {
+function initMapSearch(data, filters) {
   // If disabled, hide the search fields and don't bother attaching any functionality to them.
   if (!showMapSearch) {
     $('.map-search-wrap').hide();
@@ -590,8 +702,8 @@ function initMapSearch(filters) {
 
   $('#reset-map').on('click', (e) => {
     e.preventDefault();
+    resetMap(data, filters);
     sendEvent("map","reset","default-location");
-    resetMap(filters);
   });
 }
 
@@ -599,8 +711,8 @@ function initMapSearch(filters) {
  * Strictly responsible for resetting the map to it's initial state on page load WITHOUT user's location (since we have
  * a link to link to go back to that appearance).
  */
-function resetMap(filters) {
-  showMarkers(window.data_by_location, filters);
+function resetMap(data, filters) {
+  showMarkers(data, filters);
 }
 
 /**
@@ -628,17 +740,20 @@ function centerMapToMarkersNearUser() {
  * Centers map around markers nearest to an arbitrary set of latitude/longitude coordinates.
  */
 function centerMapToMarkersNearCoords(latitude, longitude) {
-  var latlng = new google.maps.LatLng(latitude, longitude);
+  const latlng = new google.maps.LatLng(latitude, longitude);
 
   //Compute the distances of all markers from the user
-  var markerDistances = new Map(); // an associative array containing the marker referenced by the computed distance
-  var distances = []; // all the distances, so we can sort and then call markerDistances
+  const markerDistances = new Map(); // an associative array containing the marker referenced by the computed distance
+  const distances = []; // all the distances, so we can sort and then call markerDistances
+
   for (const marker of markers) {
     let distance = google.maps.geometry.spherical.computeDistanceBetween(marker.position, latlng);
 
     // HACK: In the unlikely event that the exact same distance is computed, add one meter to the distance to give it a unique distance
     // This could occur if a marker was added twice to the same location.
-    if (markerDistances.has(distance)) { distance = distance + 1; }
+    if (markerDistances.has(distance)) {
+      distance = distance + 1;
+    }
 
     markerDistances[distance] = marker;
 
@@ -650,49 +765,45 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
 
   // center the map on the user
   const bounds = new google.maps.LatLngBounds();
+  let hasMarker = false;
   bounds.extend(latlng);
 
   // Extend the bounds to contain the three closest markers
   for (let i = 0; i < 3; i++) {
+
     // Get one of the closest markers
-    let distance = distances[i];
-    let marker = markerDistances[distance];
+    const distance = distances[i];
+    const marker = markerDistances[distance];
 
-    const marker_lat = marker.position.lat();
-    const marker_lng = marker.position.lng();
+    if (!marker) {
+      break;
+    }
 
-    const loc = new google.maps.LatLng(marker_lat, marker_lng);
-    bounds.extend(loc);
+    hasMarker = true;
+    bounds.extend(marker.position);
   }
-  map.fitBounds(bounds);       // auto-zoom
-  map.panToBounds(bounds);     // auto-center
+
+  if (hasMarker) {
+    // zoom to fit user loc + nearest markers
+    map.fitBounds(bounds);
+  } else {
+    // just has user loc - shift view without zooming
+    map.setCenter(latlng);
+  }
 }
 
 /********************************
  * END MAP SEARCH FUNCTIONALITY *
  ********************************/
 
-/**
- * Changes the markers currently rendered on the map based strictly on . This will reset the 'markers' module variable as well.
- */
-function showMarkers(data, filters) {
-  markers = [];
-
-  if (!map || !markerCluster) {
-    return;
-  }
-
-  markerCluster.clearMarkers()
-
-  const applied = filters.applied;
-  const bounds = new google.maps.LatLngBounds();
-  const filterAcceptKeys = applied.acceptItems && Object.keys(applied.acceptItems);
-  const hasFilters = applied.states || applied.acceptItems;
+function getMarkers(data, appliedFilters, bounds, markerOptions) {
+  const filterAcceptKeys = appliedFilters.acceptItems && Object.keys(appliedFilters.acceptItems);
+  const markers = [];
 
   for (const stateName of Object.keys(data)) {
     let inStateFilter = true;
 
-    if (applied.states && !applied.states[stateName]) {
+    if (appliedFilters.states && !appliedFilters.states[stateName]) {
       inStateFilter = false;
     }
 
@@ -724,26 +835,43 @@ function showMarkers(data, filters) {
 
           // Guard against non-geocoded entries. Assuming no location exactly on the equator or prime meridian
           if (lat && lng) {
-            marker = entry.marker = addMarkerToMap(null, lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box);
+            marker = entry.marker = createMarker(lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box, markerOptions);
           }
         }
 
         if (marker) {
           markers.push(marker);
-          marker.setMap(map);
-          hasFilters && bounds.extend(marker.position);
+          bounds && bounds.extend(marker.position);
         }
       }
     }
   }
 
-  markerCluster.addMarkers(markers)
+  return markers;
+}
+
+/**
+ * Changes the markers currently rendered on the map based strictly on . This will reset the 'markers' module variable as well.
+ */
+function showMarkers(data, filters) {
+  if (!map || !markerCluster) {
+    return;
+  }
+
+  markerCluster.clearMarkers()
+
+  const bounds = new google.maps.LatLngBounds();
+  const applied = filters.applied || {};
+  const hasFilters = applied.states || applied.acceptItems;
+
+  markers = getMarkers(data, applied, hasFilters && bounds);
+
+  markerCluster.addMarkers(markers);
 
   let $mapStats = $('#map-stats');
   updateStats($mapStats, markers.length);
   centerMapToBounds(map, bounds, 9)
 }
-window.showMarkers = showMarkers; // Exposed for debug/testing.
 
 // Source for country center points: https://developers.google.com/public-data/docs/canonical/countries_csv
 const MAP_INITIAL_VIEW = {
@@ -773,15 +901,19 @@ function centerMapToBounds(map, bounds, maxZoom) {
   }
 }
 
-function addMarkerToMap(map, latitude, longitude, address, name, instructions, accepting, open_accepted) {
+function createMarker(latitude, longitude, address, name, instructions, accepting, open_accepted, markerOptions) {
   const location = { lat: latitude, lng: longitude };
-  const marker = new google.maps.Marker({
-    position: location,
-    title: name,
-    map: map
-  });
+  const options = Object.assign({
+      position: location,
+      title: name
+    },
+    markerOptions || {}
+  );
+  const marker = new google.maps.Marker(options);
 
   marker.addListener('click', () => {
+    sendEvent('map', 'click', 'marker');
+
     openInfoWindows.forEach(infowindow => infowindow.close());
     openInfoWindows = [];
 
@@ -792,7 +924,7 @@ function addMarkerToMap(map, latitude, longitude, address, name, instructions, a
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
         ce('div', 'value', ctn(address)),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
-        linkifyElement(ce('div', 'value', ctn(instructions))),
+        linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
         ce('div', 'value', ctn(accepting)),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
@@ -803,7 +935,7 @@ function addMarkerToMap(map, latitude, longitude, address, name, instructions, a
         content: content
       });
     }
-    marker.infowindow.open(map, marker);
+    marker.infowindow.open(null, marker);
     openInfoWindows.push(marker.infowindow);
   });
 

@@ -1,5 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const csv_stringify = require('csv-stringify');
 const {request} = require('gaxios');
 
 admin.initializeApp();
@@ -17,10 +18,16 @@ let CONFIG_CLIENT_SECRET = '';
 let GOOGLE_MAPS_API_KEY = '';
 
 const SHEETS = {
-  us: '1GwP7Ly6iaqgcms0T80QGCNW4y2gJ7tzVND2CktFqnXM',
-  fr: '18xoednmU_2oKiKG5rDIhcvf_Mc_2LkyGWis752KNZXQ',
+  at: '19gKSyKmT4yU7F32R3lBM6p0rmMJXusX_uMYDq1CMTIo',
+  ca: '1STjEiAZVZncXMCUBkfLumRNk1PySLSmkvZuPqflQ1Yk',
   ch: '1mFbEzrWW8XLfrkAL0eCzGd1pCVNl6-QUxkoeubtdbPI',
-  ca: '1STjEiAZVZncXMCUBkfLumRNk1PySLSmkvZuPqflQ1Yk'
+  de: '1qiR4JRvPrbOwlPnEXCoUFWpfZtV9xadjBTCOhVy-dJM',
+  es: '1S3FO5gmXUvQdsGXjC0hBSUxBJZoaUzy1ctylTjUGOlM',
+  fr: '1YGWlGPOfJFEsUP6VTFCVohlsHxKMYA5HppatbLwNBVk',
+  gb: '1qPUdGOEZl-c8sQ6Vlm7h48OZScBOVGjzz88AyGCQvEc',
+  it: '1YHt6G1ghcXrRqXflevxHAwg2XOXmG2Cym6nSS5vXe7Q',
+  pt: '1QnyjUUBT_P476dEl0WfQwVnW15Ie7ogty7DiOkMhHLo',
+  us: '1GwP7Ly6iaqgcms0T80QGCNW4y2gJ7tzVND2CktFqnXM',
 };
 
 if (functions.config().googleapi !== undefined) {
@@ -182,7 +189,15 @@ async function getSpreadsheet(country, client) {
     };
   request.auth = client;
 
-  const response = await sheets.spreadsheets.values.get(request);
+  // Transition code as we rename the output sheet from
+  // Form Responses 1 to Combined.
+  let response = null;
+  try {
+    response = await sheets.spreadsheets.values.get(request);
+  } catch (err) {
+    request.range = 'Combined';
+    response = await sheets.spreadsheets.values.get(request);
+  }
   const data = response.data;
 
   // Geocode annotation is being done via appscript right now.
@@ -193,52 +208,57 @@ async function getSpreadsheet(country, client) {
 }
 
 async function snapshotData(country) {
-  const json_filename = `data-${country}.json`;
+    const base_filename = `data-${country}`;
+    const csv_filename = `${base_filename}.csv`;
+    const json_filename = `${base_filename}.json`;
   const html_snippet_filename = `data_snippet-${country}.html`;
 
   // Talk to sheets.
   const client = await getAuthorizedClient();
-  const data = await getSpreadsheet(country, client);
+  let data = {}
+  try {
+    data = await getSpreadsheet(country, client);
 
-  console.log(data);
-  console.log(data.values.length);
-  if (data.values.length < 2) {
-    throw new Error("Too few rows. Is row 2 a the column labels?");
-  }
-
-  // The first row is human readable form values.
-  // The second row is reserved for a machine usable field tag.
-  // Save those and filter the rest.
-  const [orig_headers, orig_col_labels, real_values] = splitValues(data);
-
-  // Find all columns to be published.
-  const published_cols = new Set();
-  const headers = [];
-  const col_labels = [];
-  for (let i = 0; i < orig_col_labels.length; i++) {
-    if (orig_col_labels[i] !== "") {
-      headers.push(orig_headers[i]);
-      col_labels.push(orig_col_labels[i]);
-      published_cols.add(i);
+    if (data.values.length < 2) {
+      throw new Error("Too few rows. Is row 2 a the column labels?");
     }
+
+    // The first row is human readable form values.
+    // The second row is reserved for a machine usable field tag.
+    // Save those and filter the rest.
+    const [orig_headers, orig_col_labels, real_values] = splitValues(data);
+
+    // Find all columns to be published.
+    const published_cols = new Set();
+    const headers = [];
+    const col_labels = [];
+    for (let i = 0; i < orig_col_labels.length; i++) {
+      if (orig_col_labels[i] !== "") {
+        headers.push(orig_headers[i]);
+        col_labels.push(orig_col_labels[i]);
+        published_cols.add(i);
+      }
+    }
+
+    // Add a row number label.
+    headers.push('Row');
+    col_labels.push('row');
+
+    const trimmed_values = real_values.map((row, row_num) => {
+      const result = row.filter((_, col_num) => published_cols.has(col_num));
+      result.push(row_num + 3);  // 2 rows of header and 1-base indexing.
+      return result;
+    });
+    const approvedIndex = col_labels.findIndex( e => e === 'approved' );
+    if (approvedIndex === -1) {
+      throw new Error("sheet missing expected columns. Ensure row 2 headers are sane?");
+    }
+
+    const approved_rows = trimmed_values.filter(e => e[approvedIndex] === "x");
+    data.values = [headers, col_labels, ...approved_rows];
+  } catch (err) {
+    console.error(err);
   }
-
-  // Add a row number label.
-  headers.push('Row');
-  col_labels.push('row');
-
-  const trimmed_values = real_values.map((row, row_num) => {
-    const result = row.filter((_, col_num) => published_cols.has(col_num));
-    result.push(row_num + 3);  // 2 rows of header and 1-base indexing.
-    return result;
-  });
-  const approvedIndex = col_labels.findIndex( e => e === 'approved' );
-  if (approvedIndex === -1) {
-    throw new Error("sheet missing expected columns. Ensure row 2 headers are sane?");
-  }
-
-  const approved_rows = trimmed_values.filter(e => e[approvedIndex] === "x");
-  data.values = [headers, col_labels, ...approved_rows];
 
   const datafileRef = admin.storage().bucket().file(json_filename);
   await datafileRef.save(JSON.stringify(data), {
@@ -248,6 +268,27 @@ async function snapshotData(country) {
       contentType: "application/json"
     },
     predefinedAcl: "publicRead",
+  });
+
+  // Build a simple csv file
+  console.log("Preparing CSV File");
+  const csvFileRef = admin.storage().bucket().file(csv_filename);
+
+  // TODO(awong): This looks like a race as the async callback isn't
+  // guaranteed to execute before the calling function returns.
+  csv_stringify(data.values, async (err, output) => {
+    if (err !== null) {
+      console.log(err)
+    } else {
+      await csvFileRef.save(output, {
+	      gzip: true,
+	      metadata: {
+	        cacheControl: "public, max-age=20",
+                contentType: "application/text"
+	      },
+	      predefinedAcl: "publicRead",
+	 });
+    }
   });
 
   const data_by_location = toDataByLocation(data);
