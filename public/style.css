@@ -332,10 +332,11 @@ h3.city {
 
 #map-stats, #list-stats {
   font-weight: 300;
-  font-size: 18px;
+  font-size: 22px;
   text-align: center;
   color: #333;
   margin-left: 10px;
+  padding-top: 1px;
 }
 
 .donation-map-title {
