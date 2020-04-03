@@ -898,7 +898,7 @@ function showMarkers(data, filters) {
   updateClusters(primaryCluster, secondaryCluster);
 
   let $mapStats = $('#map-stats');
-  updateStats($mapStats, markers.length);
+  updateStats($mapStats, markers.instate.length + markers.outofstate.length);
 
   // HACK. On some browsers, the markercluster freaks out if it gets a bunch of new markers
   // immediately followed by a map view change. Making the view change async works around
