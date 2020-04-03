@@ -6,7 +6,7 @@ RewriteCond "%{REQUEST_URI}" ^/[^/]+/donation-form$
 RewriteRule (.*) /donation-form-bounce.html [L,QSA]
 
 <IfModule mod_headers.c>
-  <FilesMatch ~ "^data(-\w\w)?\.json$">
+  <FilesMatch "^data(-\w\w)?\.json$">
     Header set Access-Control-Allow-Origin "*"
   </FilesMatch>
 </IfModule>
