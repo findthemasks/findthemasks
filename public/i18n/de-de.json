@@ -122,5 +122,10 @@
   "ftm-italy-large-donations" : "Unsere Partner unter <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org/give </a> haben ein Aufnahmeformular, in dem Sie sich registrieren können, und ein Freiwilliger wird sich bei Ihnen melden.",
   "ftm-italy-no-donation-sites-near-me" : "Besuchen Sie <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> , um sie wissen zu lassen, was Sie zur Verfügung haben.",
   "ftm-austria-large-donations" : "Unsere Partner unter <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org/give </a> haben ein Aufnahmeformular, in dem Sie sich registrieren können, und ein Freiwilliger wird sich bei Ihnen melden.",
-  "ftm-austria-no-donation-sites-near-me" : "Besuchen Sie <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> , um sie wissen zu lassen, was Sie zur Verfügung haben."
+  "ftm-austria-no-donation-sites-near-me" : "Besuchen Sie <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> , um sie wissen zu lassen, was Sie zur Verfügung haben.",
+  "ftm-developer-contributors" : "Unsere Entwickler-Mitwirkenden sind hier <a href=\"https://github.com/findthemasks/findthemasks/graphs/contributors\"> aufgelistet </a> .",
+  "ftm-thanks-companies" : "Ein besonderer Dank geht an folgende Unternehmen:",
+  "ftm-thanks-smartling" : "Smartling für den Zugriff auf ihre Übersetzungsverwaltungsplattform",
+  "ftm-thanks-google" : "API-Gutschriften für Google for Maps",
+  "ftm-thanks-slack" : "Locker für ein Pro-Konto"
 }
