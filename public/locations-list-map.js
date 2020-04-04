@@ -490,6 +490,14 @@ function renderNextListPage() {
   lastLocationRendered = renderLocation - 1;
 }
 
+function getOneLineAddress(address) {
+  return address.trim().replace(/\n/g, " ");
+}
+
+function googleMapsUri(address) {
+  return encodeURI(`https://www.google.com/maps/search/?api=1&query=${address}`);
+}
+
 function getEntryEl(entry) {
   if (!entry.domElem) {
     entry.domElem = $(ce('div', 'location'));
@@ -503,11 +511,11 @@ function getEntryEl(entry) {
       const para = $(ce('p', 'marginTopZero medEmph'));
       const link = ce('a', 'map-link');
       const $link = $(link);
-      const oneLineAddress = entry.address.trim().replace(/\n/g, " ");
-      link.href =  encodeURI(`https://www.google.com/maps/search/?api=1&query=${oneLineAddress}`);
+      const address = getOneLineAddress(entry.address);
+      link.href =  googleMapsUri(address);
       link.target = '_blank';
       $link.click(function() {
-        sendEvent('listView', 'clickAddress', oneLineAddress);
+        sendEvent('listView', 'clickAddress', address);
       });
       para.append($link);
       for (const line of addr) {
@@ -978,10 +986,22 @@ function createMarker(latitude, longitude, address, name, instructions, acceptin
 
     if (!marker.infowindow) {
       // Text to go into InfoWindow
+
+      // setup google maps link
+      const mapLinkEl = ce('a','map-link');
+      const oneLineAddress = getOneLineAddress(address);
+      mapLinkEl.href = googleMapsUri(oneLineAddress);
+      mapLinkEl.target = '_blank';
+      const $mapLinkEl = $(mapLinkEl);
+      $mapLinkEl.click(function() {
+        sendEvent('map', 'clickAddress', oneLineAddress);
+      });
+      $mapLinkEl.append(ctn(address));
+
       const content = $(ce('div')).append([
         ce('h5', null, ctn(name)),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
-        ce('div', 'value', ctn(address)),
+        ce('div', 'value', mapLinkEl),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
         linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
