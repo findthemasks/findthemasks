@@ -433,8 +433,6 @@ $(function () {
 
       refreshList(data, filters);
     }
-
-    loadOtherCountries();
   };
 
   $.getJSON(`https://findthemasks.com/${ getCountryDataFilename(currentCountry) }`, function (result) {
@@ -645,6 +643,8 @@ function initMap(data, filters) {
 
   // Initialize autosuggest/search field above the map.
   initMapSearch(data, filters);
+
+  loadOtherCountries();
 }
 
 /**********************************
