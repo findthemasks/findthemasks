@@ -122,5 +122,10 @@
   "ftm-italy-large-donations" : "我們在<a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org/give </a>上的合作夥伴提供了一份錄取表格，您可以在其中進行註冊，志願者會與您聯繫。",
   "ftm-italy-no-donation-sites-near-me" : "請訪問<a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> ，讓他們知道您有什麼可用。",
   "ftm-austria-large-donations" : "我們在<a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org/give </a>上的合作夥伴提供了一份錄取表格，您可以在其中進行註冊，志願者會與您聯繫。",
-  "ftm-austria-no-donation-sites-near-me" : "請訪問<a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> ，讓他們知道您有什麼可用。"
+  "ftm-austria-no-donation-sites-near-me" : "請訪問<a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> ，讓他們知道您有什麼可用。",
+  "ftm-developer-contributors" : "我們的開發人員貢獻者在這裡<a href=\"https://github.com/findthemasks/findthemasks/graphs/contributors\">列出</a> 。",
+  "ftm-thanks-companies" : "特別感謝以下公司：",
+  "ftm-thanks-smartling" : "通過Smartling訪問其翻譯管理平台",
+  "ftm-thanks-google" : "Google for Maps API積分",
+  "ftm-thanks-slack" : "專業版帳戶鬆弛"
 }
