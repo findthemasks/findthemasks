@@ -503,8 +503,17 @@ function getEntryEl(entry) {
 
     if (addr.length) {
       const para = $(ce('p', 'marginTopZero medEmph'));
+      const link = ce('a', 'map-link');
+      const $link = $(link);
+      const oneLineAddress = entry.address.trim().replace(/\n/g, " ");
+      link.href =  encodeURI(`https://www.google.com/maps/search/?api=1&query=${oneLineAddress}`);
+      link.target = '_blank';
+      $link.click(function() {
+        sendEvent('listView', 'clickAddress', oneLineAddress);
+      });
+      para.append($link);
       for (const line of addr) {
-        para.append([
+        $link.append([
           ctn(line),
           ce('br')
         ]);
