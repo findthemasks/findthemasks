@@ -2,6 +2,7 @@ import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
 import locales from './locales.js';
 import getCountry from './getCountry.js';
+import enumKeyLookups from './i18n/enumKeyLookups.js';
 
 /******************************************
  * MODULE VARS AVAILABLE TO ALL FUNCTIONS *
@@ -529,14 +530,14 @@ function getEntryEl(entry) {
     if (entry.accepting) {
       entry.domElem.append([
         ce('label', null, ctn($.i18n('ftm-accepting'))),
-        ce('p', null, ctn(entry.accepting))
+        ce('p', null, ctn(translateEnumList(entry.accepting)))
       ]);
     }
 
     if (entry.open_box) {
       entry.domElem.append([
         ce('label', null, ctn($.i18n('ftm-open-packages'))),
-        ce('p', null, ctn(entry.open_box))
+        ce('p', null, ctn(translateEnumValue(entry.open_box)))
       ]);
     }
   }
@@ -960,6 +961,26 @@ function centerMapToBounds(map, bounds, maxZoom) {
   }
 }
 
+const translateEnumValue = (value) => {
+  const i18nKey = enumKeyLookups[value];
+
+  if (i18nKey) {
+    return $.i18n(i18nKey);
+  }
+
+  return value;
+};
+
+const translateEnumList = (enumListString) => {
+  if (enumListString) {
+    return enumListString.split(', ').map((stringValue) => (
+      translateEnumValue(stringValue)
+    )).join(', ')
+  }
+
+  return enumListString;
+};
+
 function createMarker(latitude, longitude, address, name, instructions, accepting, open_accepted, markerOptions) {
   const location = { lat: latitude, lng: longitude };
   const options = Object.assign({
@@ -985,9 +1006,9 @@ function createMarker(latitude, longitude, address, name, instructions, acceptin
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
         linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
-        ce('div', 'value', ctn(accepting)),
+        ce('div', 'value', ctn(translateEnumList(accepting))),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
-        ce('div', 'value', ctn(open_accepted)),
+        ce('div', 'value', ctn(translateEnumValue(open_accepted))),
       ])[0];
 
       marker.infowindow = new google.maps.InfoWindow({
