@@ -122,5 +122,10 @@
   "ftm-italy-large-donations" : "<a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org/give </a> 의 파트너는 등록 양식을 제공하며 자원 봉사자가 다시 연락을 드릴 것입니다.",
   "ftm-italy-no-donation-sites-near-me" : "이용 가능한 정보를 알려면 <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> 을 방문하십시오.",
   "ftm-austria-large-donations" : "<a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org/give </a> 의 파트너는 등록 양식을 제공하며 자원 봉사자가 다시 연락을 드릴 것입니다.",
-  "ftm-austria-no-donation-sites-near-me" : "이용 가능한 정보를 알려면 <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> 을 방문하십시오."
+  "ftm-austria-no-donation-sites-near-me" : "이용 가능한 정보를 알려면 <a target='_blank' rel='noreferrer noopener' href='https://getusppe.org/give'> getusppe.org </a> 을 방문하십시오.",
+  "ftm-developer-contributors" : "우리의 개발자 기고자들은 여기에 <a href=\"https://github.com/findthemasks/findthemasks/graphs/contributors\"> 으로 표시됩니다 </a> .",
+  "ftm-thanks-companies" : "다음 회사에 특별한 감사를드립니다 :",
+  "ftm-thanks-smartling" : "번역 관리 플랫폼에 대한 액세스를위한 Smartling",
+  "ftm-thanks-google" : "Google Maps API 크레딧",
+  "ftm-thanks-slack" : "프로 계정 여유"
 }
