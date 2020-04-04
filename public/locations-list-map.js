@@ -385,7 +385,6 @@ $(function () {
     const showList = searchParams.get('hide-list') !== 'true';
     const showFilters = showList && searchParams.get('hide-filters') !== 'true';
     const showMap = searchParams.get('hide-map') !== 'true';
-    const showOthers = searchParams.get('show-others') === 'true';
 
     // BETA: Default initialized at module level scope (see above). Initialize search field, first check #map for default
     // config. Override with query string. Currently disabled by default because it's still in beta.
@@ -435,9 +434,7 @@ $(function () {
       refreshList(data, filters);
     }
 
-    if (showOthers && currentCountry !== 'us') {
-      loadOtherCountries();
-    }
+    loadOtherCountries();
   };
 
   $.getJSON(`https://findthemasks.com/${ getCountryDataFilename(currentCountry) }`, function (result) {
