@@ -1,3 +1,5 @@
+import { getCurrentLocaleParam } from './i18nUtils.js';
+
 const localesMap = {
   "en": "i18n/en.json",
   "en-US": "i18n/en.json",
@@ -12,7 +14,7 @@ const localesMap = {
   "pt": "i18n/pt-pt.json",
   "pt-PT": "i18n/pt-pt.json",
   "pl": "i18n/pl-pl.json",
-  "pl-Pl": "i18n/pl-pl.json",
+  "pl-PL": "i18n/pl-pl.json"
 };
 
 const getConfigForLocales = (locales) => {
@@ -46,8 +48,7 @@ const getConfigForLocales = (locales) => {
 };
 
 const determineLocaleConfig = (detectedLocale) => {
-  const searchParams = new URLSearchParams((new URL(window.location)).search);
-  const localeParam = searchParams.get('locale');
+  const localeParam = getCurrentLocaleParam();
 
   // first try locale selected in app by user
   // next try locale detected by jQuery.i18n library
