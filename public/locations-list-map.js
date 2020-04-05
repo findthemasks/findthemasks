@@ -795,15 +795,11 @@ function fitMapToMarkersNearBounds(bounds) {
   let hasMarker = false;
 
   // extend bounds to fit closest three markers
-  [0,1,2].forEach((i) => {
-    const marker = markersByDistance[i];
-    if (marker) {
-      hasMarker = true;
+  markersByDistance.forEach((marker) => {
       bounds.extend(marker.position);
-    }
   });
 
-  if (hasMarker) {
+  if (!bounds.getNorthEast().equals(bounds.getSouthWest())) {
     // zoom to fit user loc + nearest markers
     map.fitBounds(bounds);
   } else {
@@ -835,7 +831,7 @@ function getMarkersByDistanceFrom(latitude, longitude, n=3) {
   // order markerDistances by key (distance)
   let distances = [...markerDistances.keys()].sort((a,b) => a -b);
   // return array of markers in order of distance ascending
-  return distances.map((distance) => markerDistances.get(distance)).slice(0, n);
+  return distances.slice(0, n).map((distance) => markerDistances.get(distance));
 }
 
 /********************************
