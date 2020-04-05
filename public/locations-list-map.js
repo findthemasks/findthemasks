@@ -11,6 +11,8 @@ import getCountry from './getCountry.js';
 const countryData = {};
 const currentCountry = getCountry();
 
+document.body.setAttribute("data-country", currentCountry);
+
 // Map, markers and map associated UI components are initialized in initMap().
 let autocomplete;
 let map = null;
@@ -211,7 +213,7 @@ function sendEvent(category, action, label) {
 };
 
 function createFilterElements(data, filters) {
-  const container = ce('div');
+  const filterElements = [];
 
   function createFilter(filter, key, value, prefix) {
     const filterContainer = ce('div');
@@ -238,19 +240,19 @@ function createFilterElements(data, filters) {
     return filterContainer;
   }
 
-  container.appendChild(ce('h4', null, ctn($.i18n('ftm-administrative-region-filter', $.i18n(countries[currentCountry].administrativeRegionI18nString)))));
+  filterElements.push(ce('h4', null, ctn($.i18n('ftm-administrative-region-filter', $.i18n(countries[currentCountry].administrativeRegionI18nString)))));
   for (const state of Object.keys(filters.states).sort()) {
     const stateFilter = filters.states[state];
-    container.appendChild(createFilter(stateFilter, state, stateFilter.name, 'states'));
+    filterElements.push(createFilter(stateFilter, state, stateFilter.name, 'states'));
   }
 
-  container.appendChild(ce('h4', null, ctn($.i18n('ftm-accepted-items'))));
+  filterElements.push(ce('h4', null, ctn($.i18n('ftm-accepted-items'))));
   for (const item of Object.keys(filters.acceptItems)) {
     const itemFilter = filters.acceptItems[item];
-    container.appendChild(createFilter(itemFilter, item, itemFilter.name, 'acceptItems'));
+    filterElements.push(createFilter(itemFilter, item, itemFilter.name, 'acceptItems'));
   }
 
-  return container;
+  return filterElements;
 }
 
 // Wrapper for Node.appendChild.
@@ -509,7 +511,7 @@ function getEntryEl(entry) {
   if (!entry.domElem) {
     entry.domElem = ce('div', 'location');
     ac(entry.domElem, [
-      ce('h4', 'marginBotomZero', ctn(entry.name)),
+      ce('h4', null, ctn(entry.name)),
       ce('label', null, ctn($.i18n('ftm-address'))),
     ]);
     const addr = entry.address.trim().split('\n');
@@ -769,7 +771,7 @@ function fitMapToMarkersNearBounds(bounds) {
   // get center of bounding box and use it to sort markers by distance
   let center = bounds.getCenter();
   const markersByDistance = getMarkersByDistanceFrom(center.lat(), center.lng());
-  
+
   // extend bounds to fit closest three markers
   [0,1,2].forEach((i) => {
     const marker = markersByDistance[i];
@@ -828,7 +830,7 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
       bounds.extend(marker.position);
     }
   });
-  
+
   if (hasMarker) {
     // zoom to fit user loc + nearest markers
     map.fitBounds(bounds);
