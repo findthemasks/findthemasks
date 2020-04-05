@@ -787,7 +787,8 @@ function centerMapToMarkersNearUser() {
 function fitMapToMarkersNearBounds(bounds) {
   // get center of bounding box and use it to sort markers by distance
   let center = bounds.getCenter();
-  const markersByDistance = getMarkersByDistanceFrom(center.lat(), center.lng());
+
+  const markersByDistance = getMarkersByDistanceFrom(center.lat(), center.lng(), 3);
 
   // extend bounds to fit closest three markers
   [0,1,2].forEach((i) => {
@@ -803,7 +804,7 @@ function fitMapToMarkersNearBounds(bounds) {
 /**
  * Returns a list of markers sorted by distance from an arbitrary set of lat/lng coords.
  */
-function getMarkersByDistanceFrom(latitude, longitude) {
+function getMarkersByDistanceFrom(latitude, longitude, n=3) {
   const latlng = new google.maps.LatLng(latitude, longitude);
 
   const markerDistances = new Map();
@@ -823,14 +824,14 @@ function getMarkersByDistanceFrom(latitude, longitude) {
   // order markerDistances by key (distance)
   let distances = [...markerDistances.keys()].sort((a,b) => a -b);
   // return array of markers in order of distance ascending
-  return distances.map((distance) => markerDistances.get(distance));
+  return distances.map((distance) => markerDistances.get(distance)).slice(0, n);
 }
 
 /**
  * Centers map around markers nearest to an arbitrary set of latitude/longitude coordinates.
  */
 function centerMapToMarkersNearCoords(latitude, longitude) {
-  const markersByDistance = getMarkersByDistanceFrom(latitude, longitude);
+  const markersByDistance = getMarkersByDistanceFrom(latitude, longitude, 3);
 
   // center the map on the user
   const latlng = new google.maps.LatLng(latitude, longitude);
