@@ -595,10 +595,8 @@ function loadMapScript(searchParams, data, filters) {
 
   // API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info.
   const apiKey = 'AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s';
-  let scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry,places&callback=initMap&key=${ apiKey }`;
-
   const languageRegion = getMapsLanguageRegion();
-  scriptSrc += `&language=${languageRegion.language}&region=${languageRegion.region}`;
+  const scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry,places&callback=initMap&key=${apiKey}&language=${languageRegion.language}&region=${languageRegion.region}`;
 
   scriptTag.setAttribute('src', scriptSrc);
   scriptTag.setAttribute('defer', '');

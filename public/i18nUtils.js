@@ -13,16 +13,10 @@ export const getMapsLanguageRegion = () => {
   const currentLocale = getCurrentLocaleParam(DEFAULT_LOCALE);
 
   let language;
-  let region;
+  const region = getCountry().toUpperCase();
 
   if (currentLocale) {
-    // use region from locale if provided, e.g. fr-FR
-    [language, region] = currentLocale.split('-');
-  }
-
-  if (!region) {
-    // if region not provided in locale, use current country
-    region = getCountry().toUpperCase();
+    language = currentLocale.split('-')[0];
   }
 
   return { language: language, region: region };
