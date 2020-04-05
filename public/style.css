@@ -160,7 +160,7 @@ h2.state {
   color: #000;
   font: 800 24px 'Roboto';
   letter-spacing: 3px;
-  margin: 0 15px 0 0;
+  margin: 0;
   padding: 4px 15px;
   text-align: left;
 }
@@ -459,16 +459,12 @@ h3.city {
     justify-content: center;
     padding-top: 5px;
   }
-  h3.city {
-    margin-left: 10px;
+  h2.state {
+    padding: 4px 10px;
   }
+  h3.city,
   .location {
     margin-left: 10px;
-  }
-  h2.state {
-    position: relative;
-    width: auto;
-    height: auto;
   }
 }
 
@@ -505,17 +501,15 @@ h3.city {
     text-align: center;
   }
 
+  .filters-container {
+    margin: 0 15px;
+  }
+
   .locations-list {
     padding-left: 15px;
     padding-right: 15px;
   }
-  .state h2 {
-    font-size: 22px;
-    letter-spacing: 1px;
-    min-width: 70px;
-    height: 70px;
 
-  }
   .footer {
     padding-left: 20px;
     padding-right: 20px;

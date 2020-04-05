@@ -213,7 +213,7 @@ function sendEvent(category, action, label) {
 };
 
 function createFilterElements(data, filters) {
-  const container = ce('div');
+  const filterElements = [];
 
   function createFilter(filter, key, value, prefix) {
     const filterContainer = ce('div');
@@ -240,19 +240,19 @@ function createFilterElements(data, filters) {
     return filterContainer;
   }
 
-  container.appendChild(ce('h4', null, ctn($.i18n('ftm-administrative-region-filter', $.i18n(countries[currentCountry].administrativeRegionI18nString)))));
+  filterElements.push(ce('h4', null, ctn($.i18n('ftm-administrative-region-filter', $.i18n(countries[currentCountry].administrativeRegionI18nString)))));
   for (const state of Object.keys(filters.states).sort()) {
     const stateFilter = filters.states[state];
-    container.appendChild(createFilter(stateFilter, state, stateFilter.name, 'states'));
+    filterElements.push(createFilter(stateFilter, state, stateFilter.name, 'states'));
   }
 
-  container.appendChild(ce('h4', null, ctn($.i18n('ftm-accepted-items'))));
+  filterElements.push(ce('h4', null, ctn($.i18n('ftm-accepted-items'))));
   for (const item of Object.keys(filters.acceptItems)) {
     const itemFilter = filters.acceptItems[item];
-    container.appendChild(createFilter(itemFilter, item, itemFilter.name, 'acceptItems'));
+    filterElements.push(createFilter(itemFilter, item, itemFilter.name, 'acceptItems'));
   }
 
-  return container;
+  return filterElements;
 }
 
 // Wrapper for Node.appendChild.
