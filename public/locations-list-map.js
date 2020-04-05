@@ -497,6 +497,14 @@ function renderNextListPage() {
   lastLocationRendered = renderLocation - 1;
 }
 
+function getOneLineAddress(address) {
+  return address.trim().replace(/\n/g, " ");
+}
+
+function googleMapsUri(address) {
+  return encodeURI(`https://www.google.com/maps/search/?api=1&query=${address}`);
+}
+
 function getEntryEl(entry) {
   if (!entry.domElem) {
     entry.domElem = ce('div', 'location');
@@ -510,11 +518,11 @@ function getEntryEl(entry) {
       const para = ce('p', 'marginTopZero medEmph');
       const link = ce('a', 'map-link');
       const $link = $(link);
-      const oneLineAddress = entry.address.trim().replace(/\n/g, " ");
-      link.href =  encodeURI(`https://www.google.com/maps/search/?api=1&query=${oneLineAddress}`);
+      const address = getOneLineAddress(entry.address);
+      link.href =  googleMapsUri(address);
       link.target = '_blank';
       $link.click(function() {
-        sendEvent('listView', 'clickAddress', oneLineAddress);
+        sendEvent('listView', 'clickAddress', address);
       });
       ac(para, link);
       for (const line of addr) {
@@ -683,9 +691,9 @@ function initMapSearch(data, filters) {
     if (place.geometry) {
       // Get the location object that we can map.setCenter() on
       sendEvent("map","autocomplete", $search.val());
-      let location = place.geometry.location;
-      if (location) {
-        centerMapToMarkersNearCoords(location.lat(), location.lng())
+      let viewport = place.geometry.viewport;
+      if (viewport) {
+        fitMapToMarkersNearBounds(viewport);
       } else {
         sendEvent("map","autocomplete-fail", $search.val());
         console.warn('Location data not found in place geometry (place.geometry.location).')
@@ -700,8 +708,8 @@ function initMapSearch(data, filters) {
       geocoder.geocode({ address: searchText }, (results, status) => {
         // Ensure we got a valid response with an array of at least one result.
         if (status === 'OK' && Array.isArray(results) && results.length > 0) {
-          let location = results[0].geometry.location;
-          centerMapToMarkersNearCoords(location.lat(), location.lng());
+          let viewport = results[0].geometry.viewport;
+          fitMapToMarkersNearBounds(viewport);
         } else {
           console.warn('Geocode failed: ' + status);
           sendEvent("map","geocode-fail", $search.val());
@@ -755,14 +763,31 @@ function centerMapToMarkersNearUser() {
 }
 
 /**
- * Centers map around markers nearest to an arbitrary set of latitude/longitude coordinates.
+ * Fits map to bounds, expanding the bounds to include at least three markers as necessary.
+*/
+function fitMapToMarkersNearBounds(bounds) {
+  // get center of bounding box and use it to sort markers by distance
+  let center = bounds.getCenter();
+  const markersByDistance = getMarkersByDistanceFrom(center.lat(), center.lng());
+  
+  // extend bounds to fit closest three markers
+  [0,1,2].forEach((i) => {
+    const marker = markersByDistance[i];
+    if (marker) {
+      bounds.extend(marker.position);
+    }
+  });
+
+  map.fitBounds(bounds);
+}
+
+/**
+ * Returns a list of markers sorted by distance from an arbitrary set of lat/lng coords.
  */
-function centerMapToMarkersNearCoords(latitude, longitude) {
+function getMarkersByDistanceFrom(latitude, longitude) {
   const latlng = new google.maps.LatLng(latitude, longitude);
 
-  //Compute the distances of all markers from the user
-  const markerDistances = new Map(); // an associative array containing the marker referenced by the computed distance
-  const distances = []; // all the distances, so we can sort and then call markerDistances
+  const markerDistances = new Map();
 
   for (const marker of primaryMarkers) {
     let distance = google.maps.geometry.spherical.computeDistanceBetween(marker.position, latlng);
@@ -773,34 +798,37 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
       distance = distance + 1;
     }
 
-    markerDistances[distance] = marker;
-
-    distances.push(distance);
+    markerDistances.set(distance, marker);
   }
 
-  // sort the distances and set bounds to closest three
-  distances.sort((a, b) => a - b);
+  // order markerDistances by key (distance)
+  let distances = [...markerDistances.keys()].sort((a,b) => a -b);
+  // return array of markers in order of distance ascending
+  return distances.map((distance) => markerDistances.get(distance));
+}
+
+/**
+ * Centers map around markers nearest to an arbitrary set of latitude/longitude coordinates.
+ */
+function centerMapToMarkersNearCoords(latitude, longitude) {
+  const markersByDistance = getMarkersByDistanceFrom(latitude, longitude);
 
   // center the map on the user
+  const latlng = new google.maps.LatLng(latitude, longitude);
   const bounds = new google.maps.LatLngBounds();
   let hasMarker = false;
   bounds.extend(latlng);
 
   // Extend the bounds to contain the three closest markers
-  for (let i = 0; i < 3; i++) {
+  [0,1,2].forEach((i) => {
+    const marker = markersByDistance[i];
 
-    // Get one of the closest markers
-    const distance = distances[i];
-    const marker = markerDistances[distance];
-
-    if (!marker) {
-      break;
+    if (marker) {
+      hasMarker = true;
+      bounds.extend(marker.position);
     }
-
-    hasMarker = true;
-    bounds.extend(marker.position);
-  }
-
+  });
+  
   if (hasMarker) {
     // zoom to fit user loc + nearest markers
     map.fitBounds(bounds);
@@ -981,10 +1009,21 @@ function createMarker(latitude, longitude, address, name, instructions, acceptin
 
     if (!marker.infowindow) {
       // Text to go into InfoWindow
+
+      // setup google maps link
+      const mapLinkEl = ce('a','map-link');
+      const oneLineAddress = getOneLineAddress(address);
+      mapLinkEl.href = googleMapsUri(oneLineAddress);
+      mapLinkEl.target = '_blank';
+      mapLinkEl.addEventListener('click', () => {
+        sendEvent('map', 'clickAddress', oneLineAddress);
+      });
+      mapLinkEl.appendChild(ctn(address));
+
       const content = ce('div', null, [
         ce('h5', null, ctn(name)),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
-        ce('div', 'value', ctn(address)),
+        ce('div', 'value', mapLinkEl),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
         linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
