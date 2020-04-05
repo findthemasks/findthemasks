@@ -1,3 +1,5 @@
+import { DEFAULT_LOCALE, getCurrentLocaleParam } from './i18nUtils.js';
+
 const localesMap = {
   "en": "i18n/en.json",
   "en-US": "i18n/en.json",
@@ -12,33 +14,29 @@ const localesMap = {
   "pt": "i18n/pt-pt.json",
   "pt-PT": "i18n/pt-pt.json",
   "pl": "i18n/pl-pl.json",
-  "pl-Pl": "i18n/pl-pl.json",
+  "pl-PL": "i18n/pl-pl.json"
 };
 
-const getConfigForLocales = (locales) => {
-  for (let i = 0; i < locales.length; i++) {
-    const locale = locales[i];
+const getConfigForLocale = (locale) => {
+  if (!!locale) {
+    if (localesMap[locale]) {
+      return {
+        locale: locale,
+        map: {
+          [locale]: localesMap[locale]
+        }
+      };
+    }
 
-    if (!!locale) {
-      if (localesMap[locale]) {
-        return {
-          locale: locale,
-          map: {
-            [locale]: localesMap[locale]
-          }
-        };
-      }
+    const language = locale.split('-')[0];
 
-      const language = locale.split('-')[0];
-
-      if (language && localesMap[language]) {
-        return {
-          locale: language,
-          map: {
-            [language]: localesMap[language]
-          }
-        };
-      }
+    if (language && localesMap[language]) {
+      return {
+        locale: language,
+        map: {
+          [language]: localesMap[language]
+        }
+      };
     }
   }
 
@@ -46,13 +44,12 @@ const getConfigForLocales = (locales) => {
 };
 
 const determineLocaleConfig = (detectedLocale) => {
-  const searchParams = new URLSearchParams((new URL(window.location)).search);
-  const localeParam = searchParams.get('locale');
+  const localeParam = getCurrentLocaleParam(detectedLocale || DEFAULT_LOCALE);
 
   // first try locale selected in app by user
   // next try locale detected by jQuery.i18n library
   // if all else fails, give them English
-  return getConfigForLocales([localeParam, detectedLocale, 'en']);
+  return getConfigForLocale(localeParam);
 };
 
 $(function () {

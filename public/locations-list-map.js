@@ -2,6 +2,7 @@ import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
 import locales from './locales.js';
 import getCountry from './getCountry.js';
+import { getMapsLanguageRegion, getCurrentLocaleParam, DEFAULT_LOCALE } from  './i18nUtils.js';
 
 /******************************************
  * MODULE VARS AVAILABLE TO ALL FUNCTIONS *
@@ -52,14 +53,8 @@ let lastLocationRendered = -1;
  * END MODULE LEVEL VARS *
  *************************/
 
-const getCurrentLocale = () => {
-  const url = new URL(window.location);
-
-  return url.searchParams.get('locale') || 'en';
-};
-
 const generateBottomNav = () => {
-  const currentLocale = getCurrentLocale();
+  const currentLocale = getCurrentLocaleParam(DEFAULT_LOCALE);
 
   const localeDropdownLink = document.getElementById('locales-dropdown');
   const countryDropdownLink = document.getElementById('countries-dropdown');
@@ -602,14 +597,8 @@ function loadMapScript(searchParams, data, filters) {
 
   // API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info.
   const apiKey = 'AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s';
-  let scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry,places&callback=initMap&key=${ apiKey }`;
-
-  const currentLocale = searchParams.get('locale') || 'en-US';
-  const [language, region] = currentLocale.split('-');
-
-  if (language) {
-    scriptSrc += `&language=${ language }&region=${ region }`;
-  }
+  const languageRegion = getMapsLanguageRegion();
+  const scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry,places&callback=initMap&key=${apiKey}&language=${languageRegion.language}&region=${languageRegion.region}`;
 
   scriptTag.setAttribute('src', scriptSrc);
   scriptTag.setAttribute('defer', '');
