@@ -767,9 +767,11 @@ function centerMapToMarkersNearUser() {
   // First check to see if the user will accept getting their location, if not, silently return
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
-      // Use navigator provided lat/long coords to center map now.
-      centerMapToMarkersNearCoords(position.coords.latitude, position.coords.longitude);
+      const bounds = new google.maps.LatLngBounds();
+      const latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      bounds.extend(latlng);
 
+      fitMapToMarkersNearBounds(bounds);
     }, (err) => {
       // Hide the "User my location" link since we know that will not work.
       $('#use-location').hide();
@@ -790,15 +792,24 @@ function fitMapToMarkersNearBounds(bounds) {
 
   const markersByDistance = getMarkersByDistanceFrom(center.lat(), center.lng(), 3);
 
+  let hasMarker = false;
+
   // extend bounds to fit closest three markers
   [0,1,2].forEach((i) => {
     const marker = markersByDistance[i];
     if (marker) {
+      hasMarker = true;
       bounds.extend(marker.position);
     }
   });
 
-  map.fitBounds(bounds);
+  if (hasMarker) {
+    // zoom to fit user loc + nearest markers
+    map.fitBounds(bounds);
+  } else {
+    // just has user loc - shift view without zooming
+    map.setCenter(center);
+  }
 }
 
 /**
@@ -825,37 +836,6 @@ function getMarkersByDistanceFrom(latitude, longitude, n=3) {
   let distances = [...markerDistances.keys()].sort((a,b) => a -b);
   // return array of markers in order of distance ascending
   return distances.map((distance) => markerDistances.get(distance)).slice(0, n);
-}
-
-/**
- * Centers map around markers nearest to an arbitrary set of latitude/longitude coordinates.
- */
-function centerMapToMarkersNearCoords(latitude, longitude) {
-  const markersByDistance = getMarkersByDistanceFrom(latitude, longitude, 3);
-
-  // center the map on the user
-  const latlng = new google.maps.LatLng(latitude, longitude);
-  const bounds = new google.maps.LatLngBounds();
-  let hasMarker = false;
-  bounds.extend(latlng);
-
-  // Extend the bounds to contain the three closest markers
-  [0,1,2].forEach((i) => {
-    const marker = markersByDistance[i];
-
-    if (marker) {
-      hasMarker = true;
-      bounds.extend(marker.position);
-    }
-  });
-
-  if (hasMarker) {
-    // zoom to fit user loc + nearest markers
-    map.fitBounds(bounds);
-  } else {
-    // just has user loc - shift view without zooming
-    map.setCenter(latlng);
-  }
 }
 
 /********************************
