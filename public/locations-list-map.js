@@ -596,7 +596,7 @@ function loadMapScript(searchParams, data, filters) {
   const scriptTag = ce('script');
 
   // API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info.
-  const apiKey = 'AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s';
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY || 'AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s';
   const languageRegion = getMapsLanguageRegion();
   const scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry,places&callback=initMap&key=${apiKey}&language=${languageRegion.language}&region=${languageRegion.region}`;
 
