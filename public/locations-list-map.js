@@ -2,6 +2,7 @@ import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
 import locales from './locales.js';
 import getCountry from './getCountry.js';
+import getLocaleParam from './getLocaleParam.js';
 
 /******************************************
  * MODULE VARS AVAILABLE TO ALL FUNCTIONS *
@@ -50,14 +51,8 @@ let lastLocationRendered = -1;
  * END MODULE LEVEL VARS *
  *************************/
 
-const getCurrentLocale = () => {
-  const url = new URL(window.location);
-
-  return url.searchParams.get('locale') || 'en';
-};
-
 const generateBottomNav = () => {
-  const currentLocale = getCurrentLocale();
+  const currentLocale = getLocaleParam('en');
 
   const localeDropdownLink = document.getElementById('locales-dropdown');
   const countryDropdownLink = document.getElementById('countries-dropdown');
@@ -586,7 +581,7 @@ function onFilterChange(data, prefix, key, filters) {
   updateFilters(filters);
   refreshList(data, filters);
   showMarkers(data, filters);
-};
+}
 
 // Lazy-loads the Google maps script once we know we need it. Sets up
 // a global initMap callback on the window object so the gmap script
@@ -602,7 +597,7 @@ function loadMapScript(searchParams, data, filters) {
   const apiKey = 'AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s';
   let scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry,places&callback=initMap&key=${ apiKey }`;
 
-  const currentLocale = searchParams.get('locale') || 'en-US';
+  const currentLocale = getLocaleParam('en-US');
   const [language, region] = currentLocale.split('-');
 
   if (language) {
@@ -769,7 +764,7 @@ function fitMapToMarkersNearBounds(bounds) {
   // get center of bounding box and use it to sort markers by distance
   let center = bounds.getCenter();
   const markersByDistance = getMarkersByDistanceFrom(center.lat(), center.lng());
-  
+
   // extend bounds to fit closest three markers
   [0,1,2].forEach((i) => {
     const marker = markersByDistance[i];
@@ -828,7 +823,7 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
       bounds.extend(marker.position);
     }
   });
-  
+
   if (hasMarker) {
     // zoom to fit user loc + nearest markers
     map.fitBounds(bounds);
