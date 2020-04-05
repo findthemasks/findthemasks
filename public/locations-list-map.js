@@ -253,19 +253,25 @@ function createFilterElements(data, filters) {
   return container;
 }
 
-// Wrapper for document.createElement - creates an element of type elementName
-// if className is passed, assigns class attribute
-// if child (either a node or an array of nodes) is passed, appends to created element.
-function ce(elementName, className, child) {
-  const el = document.createElement(elementName);
-  className && (el.className = className);
-  if (child) {
+// Wrapper for Node.appendChild.
+// child (either a node or an array of nodes) is appended to the parent element
+function ac(el, child) {
+  if (el && child) {
     if (Array.isArray(child)) {
       child.forEach((c) => el.appendChild(c));
     } else {
       el.appendChild(child);
     }
   }
+}
+
+// Wrapper for document.createElement - creates an element of type elementName
+// if className is passed, assigns class attribute
+// if child (either a node or an array of nodes) is passed, appends to created element.
+function ce(elementName, className, child) {
+  const el = document.createElement(elementName);
+  className && (el.className = className);
+  child && ac(el, child);
   return el;
 }
 
@@ -427,7 +433,7 @@ $(function () {
       $('.locations-container').show();
 
       if (showFilters) {
-        $(".filters-list").append(createFilterElements(data, filters));
+        ac(document.getElementsByClassName('filters-list')[0], createFilterElements(data, filters));
         $(".filters-container").show();
       }
 
@@ -461,32 +467,33 @@ function refreshList(data, filters) {
 }
 
 function renderNextListPage() {
-  if(lastLocationRendered >= locationsListEntries.length - 1) {
+  if (lastLocationRendered >= locationsListEntries.length - 1) {
     return; // all rendered
   }
 
-  let $el = $(".locations-list");
+  const el = document.getElementsByClassName("locations-list")[0];
   let renderLocation = lastLocationRendered + 1;
+  const children = [];
 
-  locationsListEntries.slice(renderLocation, renderLocation + 40).forEach(function(entry) {
+  locationsListEntries.slice(renderLocation, renderLocation + 40).forEach(function (entry) {
     // Add city/state headers
-    if(renderLocation == 0) {
-      $el.append(getStateEl(entry));
-      $el.append(getCityEl(entry));
+    if (renderLocation == 0) {
+      children.push(getStateEl(entry), getCityEl(entry));
     } else {
       const lastEntry = locationsListEntries[renderLocation - 1];
-      if(entry.stateName != lastEntry.stateName) {
-        $el.append(getStateEl(entry));
+      if (entry.stateName != lastEntry.stateName) {
+        children.push(getStateEl(entry));
       }
-      if(entry.cityName != lastEntry.cityName) {
-        $el.append(getCityEl(entry));
+      if (entry.cityName != lastEntry.cityName) {
+        children.push(getCityEl(entry));
       }
     }
 
-    $el.append(getEntryEl(entry));
+    children.push(getEntryEl(entry));
     renderLocation += 1;
   });
 
+  ac(el, children);
   lastLocationRendered = renderLocation - 1;
 }
 
@@ -500,15 +507,15 @@ function googleMapsUri(address) {
 
 function getEntryEl(entry) {
   if (!entry.domElem) {
-    entry.domElem = $(ce('div', 'location'));
-    entry.domElem.append([
+    entry.domElem = ce('div', 'location');
+    ac(entry.domElem, [
       ce('h4', 'marginBotomZero', ctn(entry.name)),
       ce('label', null, ctn($.i18n('ftm-address'))),
     ]);
     const addr = entry.address.trim().split('\n');
 
     if (addr.length) {
-      const para = $(ce('p', 'marginTopZero medEmph'));
+      const para = ce('p', 'marginTopZero medEmph');
       const link = ce('a', 'map-link');
       const $link = $(link);
       const address = getOneLineAddress(entry.address);
@@ -517,32 +524,33 @@ function getEntryEl(entry) {
       $link.click(function() {
         sendEvent('listView', 'clickAddress', address);
       });
-      para.append($link);
+      ac(para, link);
       for (const line of addr) {
-        $link.append([
+        ac(link, [
           ctn(line),
           ce('br')
         ]);
       }
-      entry.domElem.append(para);
+
+      ac(entry.domElem, para);
     }
 
     if (entry.instructions) {
-      entry.domElem.append([
+      ac(entry.domElem, [
         ce('label', null, ctn($.i18n('ftm-instructions'))),
         linkifyElement(ce('p', null, multilineStringToNodes(entry.instructions)))
       ]);
     }
 
     if (entry.accepting) {
-      entry.domElem.append([
+      ac(entry.domElem, [
         ce('label', null, ctn($.i18n('ftm-accepting'))),
         ce('p', null, ctn(entry.accepting))
       ]);
     }
 
     if (entry.open_box) {
-      entry.domElem.append([
+      ac(entry.domElem, [
         ce('label', null, ctn($.i18n('ftm-open-packages'))),
         ce('p', null, ctn(entry.open_box))
       ]);
@@ -578,11 +586,6 @@ function onFilterChange(data, prefix, key, filters) {
   updateFilters(filters);
   refreshList(data, filters);
   showMarkers(data, filters);
-
-  const locationsList = $(".locations-list");
-
-  // locationsList[0].scrollIntoView({ 'behavior': 'smooth' });
-
 };
 
 // Lazy-loads the Google maps script once we know we need it. Sets up
@@ -1012,13 +1015,12 @@ function createMarker(latitude, longitude, address, name, instructions, acceptin
       const oneLineAddress = getOneLineAddress(address);
       mapLinkEl.href = googleMapsUri(oneLineAddress);
       mapLinkEl.target = '_blank';
-      const $mapLinkEl = $(mapLinkEl);
-      $mapLinkEl.click(function() {
+      mapLinkEl.addEventListener('click', () => {
         sendEvent('map', 'clickAddress', oneLineAddress);
       });
-      $mapLinkEl.append(ctn(address));
+      mapLinkEl.appendChild(ctn(address));
 
-      const content = $(ce('div')).append([
+      const content = ce('div', null, [
         ce('h5', null, ctn(name)),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
         ce('div', 'value', mapLinkEl),
@@ -1028,7 +1030,7 @@ function createMarker(latitude, longitude, address, name, instructions, acceptin
         ce('div', 'value', ctn(accepting)),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
         ce('div', 'value', ctn(open_accepted)),
-      ])[0];
+      ]);
 
       marker.infowindow = new google.maps.InfoWindow({
         content: content
