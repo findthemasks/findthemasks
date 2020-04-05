@@ -173,8 +173,15 @@ h2.state {
   word-break: break-all;
 }
 
-.all-cities-wrap {
-  width: calc(100% - 115px);
+body[data-country=fr] h2.state {
+  display: block;
+  float: none;
+  height: auto;
+  line-height: normal;
+  padding: 4px 15px;
+  position: static;
+  text-align: left;
+  width: auto;
 }
 
 h3.city {
@@ -185,6 +192,11 @@ h3.city {
   margin: 0 0 0 105px;
   padding: 20px 0;
   text-transform: uppercase;
+}
+
+body[data-country=fr] h3.city,
+body[data-country=fr] .location {
+  margin-left: 15px;
 }
 
 .locations-list h4 {

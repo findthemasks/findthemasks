@@ -11,6 +11,8 @@ import getCountry from './getCountry.js';
 const countryData = {};
 const currentCountry = getCountry();
 
+document.body.setAttribute("data-country", currentCountry);
+
 // Map, markers and map associated UI components are initialized in initMap().
 let autocomplete;
 let map = null;
@@ -769,7 +771,7 @@ function fitMapToMarkersNearBounds(bounds) {
   // get center of bounding box and use it to sort markers by distance
   let center = bounds.getCenter();
   const markersByDistance = getMarkersByDistanceFrom(center.lat(), center.lng());
-  
+
   // extend bounds to fit closest three markers
   [0,1,2].forEach((i) => {
     const marker = markersByDistance[i];
@@ -828,7 +830,7 @@ function centerMapToMarkersNearCoords(latitude, longitude) {
       bounds.extend(marker.position);
     }
   });
-  
+
   if (hasMarker) {
     // zoom to fit user loc + nearest markers
     map.fitBounds(bounds);
