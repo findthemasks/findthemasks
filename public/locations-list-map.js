@@ -511,7 +511,7 @@ function getEntryEl(entry) {
   if (!entry.domElem) {
     entry.domElem = ce('div', 'location');
     ac(entry.domElem, [
-      ce('h4', 'marginBotomZero', ctn(entry.name)),
+      ce('h4', null, ctn(entry.name)),
       ce('label', null, ctn($.i18n('ftm-address'))),
     ]);
     const addr = entry.address.trim().split('\n');
