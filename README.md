@@ -189,7 +189,7 @@ There are a few important things to know about these scripts:
   dev owner is @susanashlock's gmail).
 * The scripts are run using quota of the user the user that runs them.
 * Each Gmail user has a fixed amount of geocoding quota per day.  This quota is somewhere
-  around 100-500 calls per day.  @susanashlock's account has 'special' quota.  We're not
+  around 300 calls per day.  @susanashlock's account has 'special' quota.  We're not
   sure exactly what it is, but is sufficient to support ~1000 calls per day.
 
 
