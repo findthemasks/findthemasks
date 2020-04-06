@@ -1,0 +1,13 @@
+{
+  "name": "findthemasks",
+  "description": "findthemasks",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^8.0.0",
+    "express": "4.16.3"
+  }
+}

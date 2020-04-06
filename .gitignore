@@ -68,3 +68,9 @@ node_modules/
 # IDE specific
 .idea/
 *~
+
+# Country data files
+data.json
+data-*.json
+!data-fr.json
+data-*.csv
