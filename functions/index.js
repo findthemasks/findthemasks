@@ -48,7 +48,7 @@ const WRITEBACK_SHEET = "'Form Responses 1'";
 const FUNCTIONS_REDIRECT = `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com/oauthcallback`;
 
 // setup for authGoogleAPI
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const functionsOauthClient = new OAuth2Client(CONFIG_CLIENT_ID, CONFIG_CLIENT_SECRET,
   FUNCTIONS_REDIRECT);
 
@@ -97,9 +97,9 @@ async function getAuthorizedClient() {
 
 function splitValues(data) { return [ data.values[0], data.values[1], data.values.slice(2) ]; }
 
-async function annotateGeocode(data, sheet_id) {
+async function annotateGeocode(data, sheet_id, client) {
   // Annotate Geocodes for missing items. Track the updated rows. Write back.
-  const headers = data[1];
+  const headers = data.values[1];
   const maps_client = new Client({});
   const [header_values, col_labels, real_values] = splitValues(data);
 
@@ -112,21 +112,22 @@ async function annotateGeocode(data, sheet_id) {
   // The timestamp column is the first of the form response columns.
   // Subtracting it off gives us the right column ordinal for the
   // form response sheet.
-  const latColumn = COLUMNS[latIndex - timestampIdx + 1];
-  const lngColumn = COLUMNS[lngIndex - timestampIdx + 1];
-  console.log(`writing lat-long cols ${latColumn},${lngColumn1}`);
+  const latColumn = COLUMNS[latIndex];
+  const lngColumn = COLUMNS[lngIndex];
+  console.log(`writing lat-long cols ${latColumn},${lngColumn}`);
 
   const to_write_back = [];
   const promises = [];
   let num_lookups = 0;
   real_values.forEach( (entry, index) => {
     if (entry[approvedIndex] === "x") {
-      // Row numbers start at 1.
-      const row_num = index + 1 + header_values.length;
+      // Row numbers start at 1.  First 2 rows are headers, so we need to add 2.
+      const row_num = index + 1 + 2;
 
       // Check if entry's length is too short to possibly have a latitude, we need
       // to geocode.  If the value for lat is "", we also need to geocode.
       if (num_lookups < 50 && ((entry.length < (latIndex + 1)) || (entry[latIndex] === ""))) {
+
         // Geolocation only allows 50qps. Overkilling it causes rejects. Artifically cap here.
         // TODO(awong): do some smarter throttle system.
         num_lookups = num_lookups + 1;
@@ -177,7 +178,7 @@ async function annotateGeocode(data, sheet_id) {
         values: [ [e.lat_lng.lng] ]
       });
     });
-    const write_response = await sheets.spreadsheets.values.batchUpdate(write_request);
+    const write_response = await google.sheets('v4').spreadsheets.values.batchUpdate(write_request);
   }
 }
 
@@ -202,7 +203,7 @@ async function getSpreadsheet(country, client) {
 
   // Geocode annotation is being done via appscript right now.
   // When reenabling, ensure the oauth scope is made read/write.
-  // await annotateGeocode(data);
+  // await annotateGeocode(response.data, SHEETS[country], client);
 
   return response.data;
 }
