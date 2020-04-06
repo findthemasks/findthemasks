@@ -4,7 +4,7 @@
 */
 function backupSheets() {
   
-  var sheets = [{
+  const sheets = [{
       name: "Austria",
       sheet_id: "19gKSyKmT4yU7F32R3lBM6p0rmMJXusX_uMYDq1CMTIo",
       backup_folder_id: "1tbSRmLPTPL6KnF3yk9JpBUIrnhvpzrHc"
@@ -50,16 +50,16 @@ function backupSheets() {
       backup_folder_id: "1gaKQLiUxeIHGJl3it-sDpAtjGEAhT-wg"
     }];
   
-  var formattedDate = Utilities.formatDate(new Date(), "PST", "yyyy-MM-dd' 'HH:mm:ss");
+  const formattedDate = Utilities.formatDate(new Date(), "PST", "yyyy-MM-dd' 'HH:mm:ss");
   
-  var sheetsFolder = DriveApp.getFolderById("1scY72enARHyBS5nKow6qeT4TLH9feL09");
+  const sheetsFolder = DriveApp.getFolderById("1scY72enARHyBS5nKow6qeT4TLH9feL09");
   
-  for (var i = 0; i < sheets.length; i++) {
-    var name = "Backup of " + sheets[i].name + " " + formattedDate;
+  for (let i = 0; i < sheets.length; i++) {
+    const name = "Backup of " + sheets[i].name + " " + formattedDate;
   
-    var file = DriveApp.getFileById(sheets[i].sheet_id);
+    const file = DriveApp.getFileById(sheets[i].sheet_id);
   
-    var destination = DriveApp.getFolderById(sheets[i].backup_folder_id);
+    const destination = DriveApp.getFolderById(sheets[i].backup_folder_id);
   
     // Makes a copy of file with name "name" in the "destination" folder.
     file.makeCopy(name, destination);
@@ -73,10 +73,10 @@ function backupSheets() {
 }
 
 function cleanupFormCopies(folder) {
-  var filesIterator = folder.getFiles();
+  const filesIterator = folder.getFiles();
   
   while (filesIterator.hasNext()) {
-    var file = filesIterator.next();
+    const file = filesIterator.next();
     if (file.getName().indexOf("Copy of #findthemasks form") == -1) {
       continue;
     } else {
