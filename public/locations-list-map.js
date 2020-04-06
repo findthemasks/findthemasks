@@ -2,8 +2,9 @@ import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
 import locales from './locales.js';
 import getCountry from './getCountry.js';
-import enumKeyLookups from './i18n/enumKeyLookups.js';
+import { FILTER_ITEMS, ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getMapsLanguageRegion, getCurrentLocaleParam, DEFAULT_LOCALE } from  './i18nUtils.js';
+
 
 /******************************************
  * MODULE VARS AVAILABLE TO ALL FUNCTIONS *
@@ -163,18 +164,7 @@ function createFilters(data) {
     filters.states[state] = { name: state, isSet: false };
   }
 
-  filters.acceptItems = {
-    'n95s': { name: $.i18n('ftm-item-n95s'), isSet: false },
-    'masks': { name: $.i18n('ftm-item-masks'), isSet: false },
-    'shields': { name: $.i18n('ftm-item-face-shields'), isSet: false },
-    'booties': { name: $.i18n('ftm-item-booties'), isSet: false },
-    'goggles': { name: $.i18n('ftm-item-goggles'), isSet: false },
-    'gloves': { name: $.i18n('ftm-item-gloves'), isSet: false },
-    'sanitizer': { name: $.i18n('ftm-item-sanitizer'), isSet: false },
-    'overalls': { name: $.i18n('ftm-item-overalls'), isSet: false },
-    'gowns': { name: $.i18n('ftm-item-gowns'), isSet: false },
-    'respirators': { name: $.i18n('ftm-item-respirators'), isSet: false },
-  };
+  filters.acceptItems = FILTER_ITEMS;
 
   return filters;
 }
@@ -984,10 +974,10 @@ function centerMapToBounds(map, bounds, maxZoom) {
 }
 
 const translateEnumValue = (value) => {
-  const i18nKey = enumKeyLookups[value];
+  const enumValue = ENUM_MAPPINGS[value.toLowerCase()];
 
-  if (i18nKey) {
-    return $.i18n(i18nKey);
+  if (enumValue) {
+    return enumValue.name;
   }
 
   return value;
