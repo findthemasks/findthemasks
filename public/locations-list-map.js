@@ -150,14 +150,12 @@ const addDonationSites = () => {
   }
 };
 
+// i18n must be loaded before filter items can be translated
+// config stores the i18n string and this function calls i18n with it
 const translatedFilterItems = () => {
   const translated = {};
-  const filterItemKeys = Object.keys(FILTER_ITEMS);
 
-  for (let i = 0; i < filterItemKeys.length; i++) {
-    const filterItemKey = filterItemKeys[i];
-    const filterItem = FILTER_ITEMS[filterItemKey];
-
+  for (const [filterItemKey, filterItem] of Object.entries(FILTER_ITEMS)) {
     translated[filterItemKey] = {
       name: $.i18n(filterItem.name),
       isSet: filterItem.isSet
@@ -1003,7 +1001,7 @@ const translateEnumValue = (value) => {
 const translateEnumList = (enumListString) => {
   if (enumListString) {
     return enumListString.split(', ').map((stringValue) => (
-      translateEnumValue(stringValue)
+      translateEnumValue(stringValue && stringValue.trim())
     )).join(', ')
   }
 
