@@ -205,7 +205,35 @@ async function getSpreadsheet(country, client) {
   // When reenabling, ensure the oauth scope is made read/write.
   // await annotateGeocode(response.data, SHEETS[country], client);
 
-  return response.data;
+  try {
+    request.range = 'MergeConfig';
+    response = await sheets.spreadsheets.values.get(request);
+    const config_values = response.data.values;
+
+    // All parallel translation rows have in column 0 something of the form:
+    //   field_name|lang
+    // Search for things with a pipe. Split. And then create parallel array.
+    const field_translations = data['field_translations'] = {};
+    for (const row of config_values) {
+      console.log(row);
+      if (row.length > 0) {
+        const pipe_index = row[0].indexOf('|');
+        if (pipe_index !== -1) {
+          const field_name = row[0].substr(0, pipe_index);
+          const lang = row[0].substr(pipe_index + 1);
+          if (lang) {
+            field_translations[field_name] = field_translations[field_name] || {};
+            field_translations[field_name][lang] = row.slice(1);
+          }
+        }
+      }
+    }
+
+  } catch (err) {
+    console.error("Unable to fetch MergeConfig ", err);
+  }
+
+  return data;
 }
 
 async function snapshotData(country) {
