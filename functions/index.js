@@ -209,9 +209,9 @@ async function getSpreadsheet(country, client) {
 }
 
 async function snapshotData(country) {
-    const base_filename = `data-${country}`;
-    const csv_filename = `${base_filename}.csv`;
-    const json_filename = `${base_filename}.json`;
+  const base_filename = `data-${country}`;
+  const csv_filename = `${base_filename}.csv`;
+  const json_filename = `${base_filename}.json`;
   const html_snippet_filename = `data_snippet-${country}.html`;
 
   // Talk to sheets.
@@ -234,9 +234,10 @@ async function snapshotData(country) {
     const headers = [];
     const col_labels = [];
     for (let i = 0; i < orig_col_labels.length; i++) {
-      if (orig_col_labels[i] !== "") {
+      const orig_label = orig_col_labels[i];
+      if (orig_label && !orig_label.startsWith('_')) {
         headers.push(orig_headers[i]);
-        col_labels.push(orig_col_labels[i]);
+        col_labels.push(orig_label);
         published_cols.add(i);
       }
     }
