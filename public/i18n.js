@@ -40,7 +40,7 @@ const getConfigForLocale = (locale) => {
     }
   }
 
-  return null;
+  return { locale: DEFAULT_LOCALE, map: { [DEFAULT_LOCALE]: localesMap.en } };
 };
 
 const determineLocaleConfig = (detectedLocale) => {
