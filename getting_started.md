@@ -56,4 +56,8 @@ $ node
 
 ### Submission Workflow
 
-TODO
+This is the current Google Forms process:
+	1.	User submits form in some language (e.g. French)
+	2.	AppScript converts the "enum" categories to English so that filtering can be applied in a single language
+	3.	Sheet written to data.json file
+	4.	App loads sheet and renders it
