@@ -150,6 +150,23 @@ const addDonationSites = () => {
   }
 };
 
+const translatedFilterItems = () => {
+  const translated = {};
+  const filterItemKeys = Object.keys(FILTER_ITEMS);
+
+  for (let i = 0; i < filterItemKeys.length; i++) {
+    const filterItemKey = filterItemKeys[i];
+    const filterItem = FILTER_ITEMS[filterItemKey];
+
+    translated[filterItemKey] = {
+      name: $.i18n(filterItem.name),
+      isSet: filterItem.isSet
+    }
+  }
+
+  return translated;
+};
+
 // Builds the data structure for tracking which filters are set
 // If all values in a category are false, it's treated as no filter - all items are included
 // If one or more values in a category is true, the filter is set - only items matching the filter are included
@@ -164,7 +181,7 @@ function createFilters(data) {
     filters.states[state] = { name: state, isSet: false };
   }
 
-  filters.acceptItems = FILTER_ITEMS;
+  filters.acceptItems = translatedFilterItems();
 
   return filters;
 }
@@ -977,7 +994,7 @@ const translateEnumValue = (value) => {
   const enumValue = ENUM_MAPPINGS[value.toLowerCase()];
 
   if (enumValue) {
-    return enumValue.name;
+    return $.i18n(enumValue.name);
   }
 
   return value;
