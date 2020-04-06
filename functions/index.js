@@ -385,7 +385,7 @@ function toHtmlSnippets(data_by_location) {
 
       for (const entry of cities[city]) {
         const name = entry['name'];
-        const address = entry['address'];
+        const address = entry['address'] || '';
         const instructions = entry['instructions'];
         const accepting = entry['accepting'];
         const lat = entry['lat'];
