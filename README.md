@@ -88,6 +88,28 @@ the name of the string for that country's administrative region. e.g. US = "Stat
 FR = "Department", copy for who they should direct large donations to, and copy for who they should
 contact if there are no donation sites near them.
 
+## Data inflow, storage & moderation
+
+### Intake
+
+Currently information about PPE needs is contributed by members of the public through a Google Form.  We have at
+least one form per country; for CA and CH we have one per language.  See the
+[International Forms and Data](https://github.com/findthemasks/findthemasks/wiki/International-Forms-and-Data)
+section of the Wiki for details.
+
+### Storage
+
+Currently the data about PPE needs is stored in Google Sheets spreadsheets (one per country). Data from the forms
+(described above) automatically feeds into these sheets.  See
+[International Forms and Data](https://github.com/findthemasks/findthemasks/wiki/International-Forms-and-Data)
+section of the Wiki for details.
+
+### Moderation
+
+Moderation is done by volunteers in accordance with the guidance laid out in the findthemasks
+[wiki](https://github.com/findthemasks/findthemasks/wiki/Data-Quality-Procedure).
+
+
 ## Directory structure
 
 - `/public` - The client-side code for the website. Currently has some symlinks to legacy file locations.
