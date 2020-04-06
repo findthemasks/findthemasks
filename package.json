@@ -2,7 +2,7 @@
   "name": "findthemasks",
   "description": "findthemasks",
   "version": "1.0.0",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "start": "node server.js"
   },
