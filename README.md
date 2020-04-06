@@ -92,38 +92,17 @@ contact if there are no donation sites near them.
 
 ### Intake
 
-Currently about PPE needs is contributed by members of the public through a Google Form.  We have at least one 
-form per country; for CA and CH we have one per language.  Currently this includes:
-* [AT](https://docs.google.com/forms/d/e/1FAIpQLSeUzUPg9KZAQbMRCYV4ZrOI2hJ3RJ0oqp73XIIBlZjC1shGSA/viewform)
-* CA
-  * [CA-en](https://docs.google.com/forms/d/e/1FAIpQLSf5JAiAikzMEEw86eyjoRMH5AFlwaMrOmjjlr3vGcL5RrJt9A/viewform)
-  * [CA-fr](https://docs.google.com/forms/d/e/1FAIpQLSeM2Jt5zudVG9_IxCT0pXluTs4eHq7_p3X95klGCHSSSaDEFg/viewform)
-* CH
-  * [CH-de](https://docs.google.com/forms/d/e/1FAIpQLSefzkaIwCM2efWDsKffOy4YBAczz3Db0uWsdJobSETC1LYExw/viewform)
-  * [CH-en](https://docs.google.com/forms/d/e/1FAIpQLSdeS0Pvd2u7njuhwt-EqaSAtXUmKUPsVA47XqjGP5U1NqX2rA/viewform)
-  * [CH-fr](https://docs.google.com/forms/d/e/1FAIpQLSccTTMijFuFX_qimh9YMyHjInlsv7NITLfQ-LDj61aKVIV5hw/viewform)
-  * [CH-it](https://docs.google.com/forms/d/e/1FAIpQLSf9zYPc1il7Tog-tiIniYrGytZyYIL4L2lrc51BHzFgZEQcTQ/viewform)
-* [DE](https://docs.google.com/forms/d/e/1FAIpQLSdB7fIY9N0OtWwUvb3kyi3R82EQGqT__7Dczhjp5u-749g_1Q/viewform)
-* [ES](https://docs.google.com/forms/d/e/1FAIpQLSeSfhRSGcSuxW02Ag8WtcWyrN8sNKmh14qd7UgkYXJrSEAGYg/viewform)
-* FR
-  * [FR-en](https://docs.google.com/forms/d/e/1FAIpQLSewYYshU3GWARzMhy-QnguHES43hTL4AkDrlwV6XxhXMiLK0w/viewform)
-  * [FR-fr](https://docs.google.com/forms/d/e/1FAIpQLScys-wlfSEwCLNa5dnJIIR7LTdh7e3fpha7SL7A2jvJok8Tog/viewform)
-* [PT](https://docs.google.com/forms/d/e/1FAIpQLScbBpYJj6WTlHhdMsFjHnBGzD_Ge_quqNv42iJiUhGst1GPrg/viewform)
-* [USA](https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform)
+Currently information about PPE needs is contributed by members of the public through a Google Form.  We have at
+least one form per country; for CA and CH we have one per language.  See the
+[International Forms and Data](https://github.com/findthemasks/findthemasks/wiki/International-Forms-and-Data)
+section of the Wiki for details.
 
 ### Storage
 
 Currently the data about PPE needs is stored in Google Sheets spreadsheets (one per country). Data from the forms
-(described above) automatically feeds into these sheets.
-
-* [AT](https://docs.google.com/spreadsheets/d/19gKSyKmT4yU7F32R3lBM6p0rmMJXusX_uMYDq1CMTIo/edit#gid=1604454713)
-* [CA](https://docs.google.com/spreadsheets/d/1STjEiAZVZncXMCUBkfLumRNk1PySLSmkvZuPqflQ1Yk/edit#gid=465803002)
-* [CH](https://docs.google.com/spreadsheets/d/1mFbEzrWW8XLfrkAL0eCzGd1pCVNl6-QUxkoeubtdbPI/edit#gid=1220865648)
-* [DE](https://docs.google.com/spreadsheets/d/1qiR4JRvPrbOwlPnEXCoUFWpfZtV9xadjBTCOhVy-dJM/edit#gid=567379797)
-* [ES](https://docs.google.com/spreadsheets/d/1S3FO5gmXUvQdsGXjC0hBSUxBJZoaUzy1ctylTjUGOlM/edit#gid=1355538271)
-* [FR](https://docs.google.com/spreadsheets/d/1YGWlGPOfJFEsUP6VTFCVohlsHxKMYA5HppatbLwNBVk/edit#gid=1291956074)
-* [PT](https://docs.google.com/spreadsheets/d/1QnyjUUBT_P476dEl0WfQwVnW15Ie7ogty7DiOkMhHLo/edit#gid=2061172965)
-* [US](https://docs.google.com/spreadsheets/d/1GwP7Ly6iaqgcms0T80QGCNW4y2gJ7tzVND2CktFqnXM/edit#gid=2027792507&fvid=115388765)
+(described above) automatically feeds into these sheets.  See
+[International Forms and Data](https://github.com/findthemasks/findthemasks/wiki/International-Forms-and-Data)
+section of the Wiki for details.
 
 ### Moderation
 
