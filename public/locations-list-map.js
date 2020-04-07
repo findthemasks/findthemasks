@@ -162,7 +162,12 @@ const translatedFilterItems = (fieldTranslations) => {
   }
 
   for (const [filterItemKey, filterItem] of Object.entries(FILTER_ITEMS)) {
-    if (!countryAcceptedItems || countryAcceptedItems.includes(filterItemKey)) {
+    // TODO(nburt): US does not use the merge config yet so countryAcceptedItems are blank
+    if (
+      !countryAcceptedItems
+      || countryAcceptedItems.includes(filterItemKey)
+      || (filterItem.countrySpecific && filterItem.countrySpecific === currentCountry)
+    ) {
       translated[filterItemKey] = {
         name: $.i18n(filterItem.name),
         isSet: filterItem.isSet
@@ -1008,7 +1013,8 @@ const translateEnumValue = (value) => {
 
 const translateEnumList = (enumListString) => {
   if (enumListString) {
-    return enumListString.split(', ').map((stringValue) => (
+    // split on commas, unless the comma is in a parenthesis
+    return enumListString.split(/, (?![^(]*\))/).map((stringValue) => (
       translateEnumValue(stringValue && stringValue.trim())
     )).join(', ')
   }

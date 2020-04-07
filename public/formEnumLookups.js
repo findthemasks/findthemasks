@@ -62,6 +62,17 @@ export const FILTER_ITEMS = {
   'nasopharyngeal swabs': {
     name: 'ftm-accept-item-nasopharyngeal-swabs',
     isSet: false
+  },
+  // France uses certain country specific naming for accepted items
+  'ffp2 masks (n95) or ffp3': {
+    name: 'ftm-accept-item-france-n95s',
+    isSet: false,
+    countrySpecific: 'fr'
+  },
+  'surgical masks (type ii, iir)': {
+    name: 'ftm-accept-item-france-surgical-masks',
+    isSet: false,
+    countrySpecific: 'fr'
   }
 };
 
