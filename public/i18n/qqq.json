@@ -99,5 +99,10 @@
   "ftm-administrative-region-german-land": "State of Germany",
   "ftm-administrative-region-region": "Region of Italy",
   "ftm-administrative-region-precinct": "Precinct of Portugal",
-  "ftm-administrative-region-bundesland": "Federal State of Austria"
+  "ftm-administrative-region-bundesland": "Federal State of Austria",
+  "ftm-developer-contributors": "Link to developers who have contributed to findthemasks",
+  "ftm-thanks-companies": "Header content for thanking company donations",
+  "ftm-thanks-smartling": "Thanks for Smartling",
+  "ftm-thanks-google": "Thanks for Google",
+  "ftm-thanks-slack": "Thanks for Slack"
 }

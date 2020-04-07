@@ -56,7 +56,7 @@ function backupSheets() {
   
   const sheetsFolder = DriveApp.getFolderById(SHEETS_FOLDER);
   
-  for (const sheet of SHEETS {
+  for (const sheet of SHEETS) {
     const name = "Backup of " + sheet.name + " " + formattedDate;
     const destination = DriveApp.getFolderById(SHEETS[i].backup_folder_id);
     const source = SpreadsheetApp.openById(SHEETS[i].sheet_id);

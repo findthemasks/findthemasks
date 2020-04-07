@@ -48,7 +48,7 @@ const WRITEBACK_SHEET = "'Form Responses 1'";
 const FUNCTIONS_REDIRECT = `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com/oauthcallback`;
 
 // setup for authGoogleAPI
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
+const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const functionsOauthClient = new OAuth2Client(CONFIG_CLIENT_ID, CONFIG_CLIENT_SECRET,
   FUNCTIONS_REDIRECT);
 
@@ -97,9 +97,9 @@ async function getAuthorizedClient() {
 
 function splitValues(data) { return [ data.values[0], data.values[1], data.values.slice(2) ]; }
 
-async function annotateGeocode(data, sheet_id) {
+async function annotateGeocode(data, sheet_id, client) {
   // Annotate Geocodes for missing items. Track the updated rows. Write back.
-  const headers = data[1];
+  const headers = data.values[1];
   const maps_client = new Client({});
   const [header_values, col_labels, real_values] = splitValues(data);
 
@@ -112,21 +112,22 @@ async function annotateGeocode(data, sheet_id) {
   // The timestamp column is the first of the form response columns.
   // Subtracting it off gives us the right column ordinal for the
   // form response sheet.
-  const latColumn = COLUMNS[latIndex - timestampIdx + 1];
-  const lngColumn = COLUMNS[lngIndex - timestampIdx + 1];
-  console.log(`writing lat-long cols ${latColumn},${lngColumn1}`);
+  const latColumn = COLUMNS[latIndex];
+  const lngColumn = COLUMNS[lngIndex];
+  console.log(`writing lat-long cols ${latColumn},${lngColumn}`);
 
   const to_write_back = [];
   const promises = [];
   let num_lookups = 0;
   real_values.forEach( (entry, index) => {
     if (entry[approvedIndex] === "x") {
-      // Row numbers start at 1.
-      const row_num = index + 1 + header_values.length;
+      // Row numbers start at 1.  First 2 rows are headers, so we need to add 2.
+      const row_num = index + 1 + 2;
 
       // Check if entry's length is too short to possibly have a latitude, we need
       // to geocode.  If the value for lat is "", we also need to geocode.
       if (num_lookups < 50 && ((entry.length < (latIndex + 1)) || (entry[latIndex] === ""))) {
+
         // Geolocation only allows 50qps. Overkilling it causes rejects. Artifically cap here.
         // TODO(awong): do some smarter throttle system.
         num_lookups = num_lookups + 1;
@@ -177,7 +178,7 @@ async function annotateGeocode(data, sheet_id) {
         values: [ [e.lat_lng.lng] ]
       });
     });
-    const write_response = await sheets.spreadsheets.values.batchUpdate(write_request);
+    const write_response = await google.sheets('v4').spreadsheets.values.batchUpdate(write_request);
   }
 }
 
@@ -202,15 +203,43 @@ async function getSpreadsheet(country, client) {
 
   // Geocode annotation is being done via appscript right now.
   // When reenabling, ensure the oauth scope is made read/write.
-  // await annotateGeocode(data);
+  // await annotateGeocode(response.data, SHEETS[country], client);
 
-  return response.data;
+  try {
+    request.range = 'MergeConfig';
+    response = await sheets.spreadsheets.values.get(request);
+    const config_values = response.data.values;
+
+    // All parallel translation rows have in column 0 something of the form:
+    //   field_name|lang
+    // Search for things with a pipe. Split. And then create parallel array.
+    const field_translations = data['field_translations'] = {};
+    for (const row of config_values) {
+      console.log(row);
+      if (row.length > 0) {
+        const pipe_index = row[0].indexOf('|');
+        if (pipe_index !== -1) {
+          const field_name = row[0].substr(0, pipe_index);
+          const lang = row[0].substr(pipe_index + 1);
+          if (lang) {
+            field_translations[field_name] = field_translations[field_name] || {};
+            field_translations[field_name][lang] = row.slice(1);
+          }
+        }
+      }
+    }
+
+  } catch (err) {
+    console.error("Unable to fetch MergeConfig ", err);
+  }
+
+  return data;
 }
 
 async function snapshotData(country) {
-    const base_filename = `data-${country}`;
-    const csv_filename = `${base_filename}.csv`;
-    const json_filename = `${base_filename}.json`;
+  const base_filename = `data-${country}`;
+  const csv_filename = `${base_filename}.csv`;
+  const json_filename = `${base_filename}.json`;
   const html_snippet_filename = `data_snippet-${country}.html`;
 
   // Talk to sheets.
@@ -233,9 +262,10 @@ async function snapshotData(country) {
     const headers = [];
     const col_labels = [];
     for (let i = 0; i < orig_col_labels.length; i++) {
-      if (orig_col_labels[i] !== "") {
+      const orig_label = orig_col_labels[i];
+      if (orig_label && !orig_label.startsWith('_')) {
         headers.push(orig_headers[i]);
-        col_labels.push(orig_col_labels[i]);
+        col_labels.push(orig_label);
         published_cols.add(i);
       }
     }
