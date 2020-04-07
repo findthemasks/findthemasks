@@ -66,6 +66,15 @@ hr {margin-top: 1.7rem;}
   padding: 0 45px 90px 45px;
 }
 
+.social-media {
+  margin-top: 20px;
+}
+
+.social-media-icons {
+  margin-right: 10px;
+}
+
+
 .member-of {
   font-style: italic;
   font-size: 13px;
@@ -486,6 +495,7 @@ h3.city {
     padding: 0;
     flex-direction: column;
   }
+
   .subhead-left {
     border: 0;
     width: 100%;
@@ -493,6 +503,7 @@ h3.city {
     margin-bottom: 10px;
     text-align: center;
   }
+
   .subhead-right {
     font-size: 0.9rem;
     width: 80%;
@@ -522,13 +533,11 @@ h3.city {
     margin-right: 0;
   }
 
+
   #masks-img {
     height: 160px;
   }
 
-  .social-media {
-    margin-top: 20px;
-  }
 
   #goggle-img {
     height: 115px;
@@ -537,11 +546,12 @@ h3.city {
   #faceshield-img {
     height: 150px;
   }
+
   .ppe-example-caption {
     margin-top: 4px;
     margin-bottom: 10px;
   }
-
-
 }
+
+
 
