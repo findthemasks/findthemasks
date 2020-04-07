@@ -1,10 +1,4 @@
-/*
-  Create a backup of each country's sheet in a country-specific
-  Google Drive folder.
-*/
-function backupSheets() {
-  
-  const sheets = [{
+const SHEETS = [{
       name: "Austria",
       sheet_id: "19gKSyKmT4yU7F32R3lBM6p0rmMJXusX_uMYDq1CMTIo",
       backup_folder_id: "1tbSRmLPTPL6KnF3yk9JpBUIrnhvpzrHc"
@@ -49,39 +43,59 @@ function backupSheets() {
       sheet_id: "1GwP7Ly6iaqgcms0T80QGCNW4y2gJ7tzVND2CktFqnXM",
       backup_folder_id: "1gaKQLiUxeIHGJl3it-sDpAtjGEAhT-wg"
     }];
-  
+
+const SHEETS_FOLDER = "1scY72enARHyBS5nKow6qeT4TLH9feL09";
+
+/*
+  Create a backup of each country's sheet in a country-specific
+  Google Drive folder.
+*/
+function backupSheets() {
+    
   const formattedDate = Utilities.formatDate(new Date(), "PST", "yyyy-MM-dd' 'HH:mm:ss");
   
-  const sheetsFolder = DriveApp.getFolderById("1scY72enARHyBS5nKow6qeT4TLH9feL09");
+  const sheetsFolder = DriveApp.getFolderById(SHEETS_FOLDER);
   
-  for (let i = 0; i < sheets.length; i++) {
-    const name = "Backup of " + sheets[i].name + " " + formattedDate;
-  
-    const file = DriveApp.getFileById(sheets[i].sheet_id);
-  
-    const destination = DriveApp.getFolderById(sheets[i].backup_folder_id);
-  
-    // Makes a copy of file with name "name" in the "destination" folder.
-    file.makeCopy(name, destination);
+  for (const sheet of SHEETS) {
+    const name = "Backup of " + sheet.name + " " + formattedDate;
+    const destination = DriveApp.getFolderById(SHEETS[i].backup_folder_id);
+    const source = SpreadsheetApp.openById(SHEETS[i].sheet_id);
+    
+    copySheet(source, destination, name);
   }
-  
-  // HACKHACKHACK
-  // By default, any time you make a copy of a Google Sheet that is associated
-  // with a form, a copy of the associated form is made.  This function deletes
-  // those copies.
-  cleanupFormCopies(sheetsFolder);
 }
 
-function cleanupFormCopies(folder) {
-  const filesIterator = folder.getFiles();
+/*
+  If we do a simple file copy, we make a copy of the spreadsheet
+  and also the associated form(s) and script files, which is bad.
+  To work around this, we create a new spreadsheet and copy in the tabs
+  (sheets) from the source sheet.
+
+  Solution discovered at: https://stackoverflow.com/a/50569608
+*/
+function copySheet(sourceSpreadsheet, destinationFolder, name) {
+
+  // Create new Spreadsheet in destination with name 'name'
+  const newSpreadsheet = SpreadsheetApp.create(name);
   
-  while (filesIterator.hasNext()) {
-    const file = filesIterator.next();
-    if (file.getName().indexOf("Copy of #findthemasks form") == -1) {
-      continue;
-    } else {
-      Logger.log("Found file to clean up: " + file.getName());
-      folder.removeFile(file);
-    }
-  }  
+  const newFile = DriveApp.getFileById(newSpreadsheet.getId());
+  const parents = newFile.getParents();
+
+  while (parents.hasNext()) {
+    const parent = parents.next();
+    parent.removeFile(newFile); // Remove from default folder
+  }
+
+  destinationFolder.addFile(newFile);
+  
+  // Copy tabs one at a time into the new Spreadsheet
+  const sheets = sourceSpreadsheet.getSheets();
+
+  sheets.forEach(function(sheet) {
+     sheet.copyTo(newSpreadsheet);
+  });
+
+  // Remove empty first tab (created with new spreadsheet)
+  newSpreadsheet.deleteSheet(newSpreadsheet.getSheets()[0]);
 }
+
