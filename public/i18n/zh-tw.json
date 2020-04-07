@@ -140,5 +140,6 @@
   "ftm-thanks-companies" : "特別感謝以下公司：",
   "ftm-thanks-smartling" : "通過Smartling訪問其翻譯管理平台",
   "ftm-thanks-google" : "Google for Maps API積分",
-  "ftm-thanks-slack" : "專業版帳戶鬆弛"
+  "ftm-thanks-slack" : "專業版帳戶鬆弛",
+  "ftm-test-string" : "這是一個測試"
 }
