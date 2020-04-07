@@ -14,6 +14,10 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/');
 });
 
+app.get('/:countryCode/donation-form', (req, res) => {
+  res.redirect(`/${req.params.countryCode}/donation-form-bounce.html?locale=${req.query.locale}`);
+});
+
 app.get('/config.js', (req, res) => {
   const envVariables = [
     'GOOGLE_MAPS_API_KEY'
