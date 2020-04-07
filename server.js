@@ -3,6 +3,11 @@ require('dotenv').config();
 const app = new express();
 const port = process.env.PORT || 5000;
 
+app.use( (req, res, next) => {
+  res.set('Cache-Control', 'public, max-age=300');
+  next();
+});
+
 app.use(express.static('public'));
 
 app.get('/', (req, res) => {
@@ -10,7 +15,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/config.js', (req, res) => {
-  var envVariables = [
+  const envVariables = [
     'GOOGLE_MAPS_API_KEY'
   ];
   const envVarJSON = getEnvironmentVarJSON(envVariables);

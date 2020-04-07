@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# Create a hosts entry for findthemasks
-# So Google API key can work
-if ! grep 'localhost.findthemasks.com' /etc/hosts; then
-  echo "Creating hosts entry for local.findthemasks.com"
-  sudo echo '127.0.0.1 localhost.findthemasks.com local.findthemasks.com' | sudo tee -a /etc/hosts
-fi
-
 # Use a .env file with default settings
 if ! ls .env; then
   echo "Creating .env file"
