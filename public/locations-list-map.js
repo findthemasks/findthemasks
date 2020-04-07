@@ -166,11 +166,12 @@ const translatedFilterItems = (fieldTranslations) => {
     if (
       !countryAcceptedItems
       || countryAcceptedItems.includes(filterItemKey)
-      || (filterItem.countrySpecific && filterItem.countrySpecific === currentCountry)
     ) {
-      translated[filterItemKey] = {
-        name: $.i18n(filterItem.name),
-        isSet: filterItem.isSet
+      if (!Array.isArray(filterItem.countryBlacklist) || !filterItem.countryBlacklist.includes(currentCountry)) {
+        translated[filterItemKey] = {
+          name: $.i18n(filterItem.name),
+          isSet: filterItem.isSet
+        }
       }
     }
   }
