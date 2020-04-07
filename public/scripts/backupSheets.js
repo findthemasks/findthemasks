@@ -52,12 +52,12 @@ const SHEETS_FOLDER = "1scY72enARHyBS5nKow6qeT4TLH9feL09";
 */
 function backupSheets() {
     
-  var formattedDate = Utilities.formatDate(new Date(), "PST", "yyyy-MM-dd' 'HH:mm:ss");
+  const formattedDate = Utilities.formatDate(new Date(), "PST", "yyyy-MM-dd' 'HH:mm:ss");
   
-  var sheetsFolder = DriveApp.getFolderById(SHEETS_FOLDER);
+  const sheetsFolder = DriveApp.getFolderById(SHEETS_FOLDER);
   
-  for (var i = 0; i < SHEETS.length; i++) {
-    const name = "Backup of " + SHEETS[i].name + " " + formattedDate;
+  for (const sheet of SHEETS {
+    const name = "Backup of " + sheet.name + " " + formattedDate;
     const destination = DriveApp.getFolderById(SHEETS[i].backup_folder_id);
     const source = SpreadsheetApp.openById(SHEETS[i].sheet_id);
     
