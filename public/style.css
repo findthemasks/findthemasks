@@ -89,8 +89,6 @@ hr {margin-top: 1.7rem;}
   font-weight: light;
   letter-spacing: 3px;
   line-height: 1.8rem;
-  margin-right: 20px;
-  padding: 25px 20px 25px 0;
   text-align: right;
   text-transform: uppercase;
   width: calc(40% + 40px);
@@ -522,8 +520,6 @@ h3.city {
   .need-ppe {
     margin-left: 0;
     margin-right: 0;
-    padding-left: 0;
-    padding-right: 0;
   }
 
   #masks-img {
