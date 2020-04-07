@@ -64,6 +64,8 @@
   "ftm-accept-item-caprs" : "CAPR",
   "ftm-accept-item-walkie-talkies" : "トランシーバー/ベビーモニター",
   "ftm-accept-item-nasopharyngeal-swabs" : "鼻咽頭スワブ",
+  "ftm-accept-item-france-n95s" : "FFP2マスク（N95）またはFFP3",
+  "ftm-accept-item-france-surgical-masks" : "外科用マスク（タイプII、IIR）",
   "ftm-item-goggles" : "安全ゴーグル",
   "ftm-item-masks" : "外科用マスク& N95マスク",
   "ftm-item-face-shields" : "フェイスシールド",
