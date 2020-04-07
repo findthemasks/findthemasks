@@ -140,5 +140,6 @@
   "ftm-thanks-companies" : "निम्नलिखित कंपनियों के लिए एक विशेष धन्यवाद:",
   "ftm-thanks-smartling" : "उनके अनुवाद प्रबंधन मंच तक पहुंच के लिए स्मार्टलिंग",
   "ftm-thanks-google" : "मैप्स एपीआई क्रेडिट के लिए Google",
-  "ftm-thanks-slack" : "एक प्रो खाते के लिए सुस्त"
+  "ftm-thanks-slack" : "एक प्रो खाते के लिए सुस्त",
+  "ftm-test-string" : "यह एक परीक्षण है"
 }
