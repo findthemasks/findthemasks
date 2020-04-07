@@ -70,6 +70,8 @@ function backupSheets() {
   and also the associated form(s) and script files, which is bad.
   To work around this, we create a new spreadsheet and copy in the tabs
   (sheets) from the source sheet.
+
+  Solution discovered at: https://stackoverflow.com/a/50569608
 */
 function copySheet(sourceSpreadsheet, destinationFolder, name) {
 
