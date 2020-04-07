@@ -140,5 +140,6 @@
   "ftm-thanks-companies" : "شكر خاص للشركات التالية:",
   "ftm-thanks-smartling" : "Smartling للوصول إلى منصة إدارة الترجمة الخاصة بهم",
   "ftm-thanks-google" : "أرصدة Google for Maps API",
-  "ftm-thanks-slack" : "Slack لحساب Pro"
+  "ftm-thanks-slack" : "Slack لحساب Pro",
+  "ftm-test-string" : "هذا اختبار"
 }
