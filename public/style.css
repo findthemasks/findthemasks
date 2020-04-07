@@ -73,6 +73,22 @@ hr {margin-top: 1.7rem;}
 
 }
 
+.flag-wrapper {
+   text-align: center;
+   margin-top: -35px;
+   margin-bottom: 5px;
+}
+
+.flag-wrapper > span {
+   display: inline-block;
+   margin-left: 90px;
+}
+
+.flag-icon {
+  line-height: 1.64em;
+  width: 2.6666em;
+}
+
 .subhead {
   margin: 20px auto 40px auto;
   display: flex;
