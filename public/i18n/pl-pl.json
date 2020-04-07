@@ -140,5 +140,6 @@
   "ftm-thanks-companies" : "Specjalne podziękowania dla następujących firm:",
   "ftm-thanks-smartling" : "Smartling za dostęp do swojej platformy zarządzania tłumaczeniami",
   "ftm-thanks-google" : "Kredyty API Google for Maps",
-  "ftm-thanks-slack" : "Slack dla konta Pro"
+  "ftm-thanks-slack" : "Slack dla konta Pro",
+  "ftm-test-string" : "To jest test"
 }
