@@ -1,7 +1,10 @@
 const express = require('express');
 require('dotenv').config();
 const app = new express();
+const router = express.Router();
 const port = process.env.PORT || 3000;
+
+app.set('strict routing', true);
 
 app.use( (req, res, next) => {
   res.set('Cache-Control', 'public, max-age=300');
@@ -9,12 +12,13 @@ app.use( (req, res, next) => {
 });
 
 app.use(express.static('public'));
+router.use(express.static('public'));
 
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
   res.sendFile(__dirname + '/');
 });
 
-app.get('/:countryCode/donation-form', (req, res) => {
+router.get('/:countryCode/donation-form', (req, res) => {
   res.redirect(`/${req.params.countryCode}/donation-form-bounce.html?locale=${req.query.locale}`);
 });
 
@@ -24,10 +28,12 @@ app.get('/config.js', (req, res) => {
   ];
   const envVarJSON = getEnvironmentVarJSON(envVariables);
   const windowVarScript = createWindowVarScript(envVarJSON);
-
   res.type('.js');
   res.send(windowVarScript);
 });
+
+app.use('/', router);
+app.use('/:countryCode', router);
 
 const getEnvironmentVarJSON = variableArray => {
   let varJSON = {};
