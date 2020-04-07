@@ -79,14 +79,14 @@ hr {margin-top: 1.7rem;}
    margin-bottom: 5px;
 }
 
-.flag-wrapper > span {
+.flag-wrapper > img {
    display: inline-block;
    margin-left: 90px;
 }
 
-.flag-icon {
-  line-height: 1.64em;
-  width: 2.6666em;
+#flag-image {
+  margin-top: 5px;
+  width: 40px;
 }
 
 .subhead {

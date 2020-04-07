@@ -14,12 +14,11 @@
   },
   "dependencies": {
     "@googlemaps/google-maps-services-js": "^2.3.1",
-    "csv-stringify": "",
     "firebase-admin": "^8.6.0",
     "firebase-functions": "^3.3.0",
-    "flag-icon-css": "^3.4.6",
     "google-auth-library": "^5.10.1",
-    "googleapis": "^48.0.0"
+    "googleapis": "^48.0.0",
+    "csv-stringify": ""
   },
   "devDependencies": {
     "eslint": "^5.12.0",
