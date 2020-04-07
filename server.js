@@ -1,7 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const app = new express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 app.use( (req, res, next) => {
   res.set('Cache-Control', 'public, max-age=300');
