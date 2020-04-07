@@ -526,6 +526,10 @@ h3.city {
     height: 160px;
   }
 
+  .social-media {
+    margin-top: 20px;
+  }
+
   #goggle-img {
     height: 115px;
   }
@@ -537,5 +541,7 @@ h3.city {
     margin-top: 4px;
     margin-bottom: 10px;
   }
+
+
 }
 
