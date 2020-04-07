@@ -64,6 +64,8 @@
   "ftm-accept-item-caprs" : "CAPRs",
   "ftm-accept-item-walkie-talkies" : "اسلكي / مراقبي الأطفال",
   "ftm-accept-item-nasopharyngeal-swabs" : "مسحات البلعوم الأنفي",
+  "ftm-accept-item-europe-n95s" : "أقنعة FFP2 (N95) أو FFP3",
+  "ftm-accept-item-europe-surgical-masks" : "الأقنعة الجراحية (النوع الثاني والثاني)",
   "ftm-item-goggles" : "نظارات أمان",
   "ftm-item-masks" : "قناع جراحي & أقنعة N95",
   "ftm-item-face-shields" : "وقاء الوجه",

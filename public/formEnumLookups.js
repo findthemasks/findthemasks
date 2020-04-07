@@ -62,6 +62,18 @@ export const FILTER_ITEMS = {
   'nasopharyngeal swabs': {
     name: 'ftm-accept-item-nasopharyngeal-swabs',
     isSet: false
+  },
+  // TODO(nburt): Europe uses certain country specific naming for accepted items, blacklist CA / US
+  //  until US uses merge config
+  'ffp2 masks (n95) or ffp3': {
+    name: 'ftm-accept-item-europe-n95s',
+    isSet: false,
+    countryBlacklist: ['ca', 'us']
+  },
+  'surgical masks (type ii, iir)': {
+    name: 'ftm-accept-item-europe-surgical-masks',
+    isSet: false,
+    countryBlacklist: ['ca', 'us']
   }
 };
 
