@@ -532,6 +532,10 @@ h3.city {
     margin-right: 0;
   }
 
+  .entry-line-break {
+    border-top-width: medium;
+  }
+
   #masks-img {
     height: 160px;
   }

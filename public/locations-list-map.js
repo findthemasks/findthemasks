@@ -574,6 +574,8 @@ function getEntryEl(entry) {
         ce('p', null, ctn(translateEnumValue(entry.open_box)))
       ]);
     }
+
+    ac(entry.domElem, ce('hr', 'entry-line-break'));
   }
 
   return entry.domElem; // TODO: generate this here.
