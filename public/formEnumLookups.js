@@ -153,6 +153,9 @@ const ORG_TYPES = {
   'mental health': {
     name: 'ftm-org-type-mental-health'
   },
+  'other': {
+    name: 'ftm-org-type-other',
+  },
   'outpatient clinic': {
     name: 'ftm-org-type-outpatient-clinic'
   },
