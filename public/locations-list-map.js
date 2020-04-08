@@ -527,10 +527,16 @@ function googleMapsUri(address) {
 function getEntryEl(entry) {
   if (!entry.domElem) {
     entry.domElem = ce('div', 'location');
-    ac(entry.domElem, [
-      ce('h4', null, ctn(entry.name)),
-      ce('label', null, ctn($.i18n('ftm-address'))),
-    ]);
+    ac(entry.domElem, ce('h4', null, ctn(entry.name)));
+
+    if (entry.org_type.length) {
+      ac(entry.domElem, [
+        ce('label', null, ctn($.i18n('ftm-org-type'))),
+        ce('p', null, ctn(translateEnumValue(entry.org_type)))
+      ]);
+    }
+
+    ac(entry.domElem, ce('label', null, ctn($.i18n('ftm-address'))));
     const addr = entry.address.trim().split('\n');
 
     if (addr.length) {
@@ -890,7 +896,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
 
           // Guard against non-geocoded entries. Assuming no location exactly on the equator or prime meridian
           if (lat && lng) {
-            marker = entry.marker = createMarker(lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box, markerOptions);
+            marker = entry.marker = createMarker(lat, lng, entry.org_type, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box, markerOptions);
           }
         }
 
@@ -1025,7 +1031,7 @@ const translateEnumList = (enumListString) => {
   return enumListString;
 };
 
-function createMarker(latitude, longitude, address, name, instructions, accepting, open_accepted, markerOptions) {
+function createMarker(latitude, longitude, orgType, address, name, instructions, accepting, open_accepted, markerOptions) {
   const location = { lat: latitude, lng: longitude };
   const options = Object.assign({
       position: location,
@@ -1054,8 +1060,16 @@ function createMarker(latitude, longitude, address, name, instructions, acceptin
       });
       mapLinkEl.appendChild(ctn(address));
 
-      const content = ce('div', null, [
-        ce('h5', null, ctn(name)),
+      const contentTags = [ce('h5', null, ctn(name))];
+
+      if (orgType.length) {
+        contentTags.push(
+          ce('div', 'label', ctn($.i18n('ftm-maps-marker-org-type-label'))),
+          ce('div', 'value', ctn(translateEnumValue(orgType)))
+        );
+      }
+
+      contentTags.push(
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
         ce('div', 'value', mapLinkEl),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
@@ -1064,7 +1078,9 @@ function createMarker(latitude, longitude, address, name, instructions, acceptin
         ce('div', 'value', ctn(translateEnumList(accepting))),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
         ce('div', 'value', ctn(translateEnumValue(open_accepted)))
-      ]);
+      );
+
+      const content = ce('div', null, contentTags);
 
       marker.infowindow = new google.maps.InfoWindow({
         content: content
