@@ -1,6 +1,7 @@
 // TODO we should have the environment change so we don't alert on local dev machines
 let environment;
-if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+const hostname = location.hostname;
+if (hostname === "localhost" || hostname === "127.0.0.1" || hostname === "local.findthemasks.com") {
   environment = 'local'
 } else {
   environment = 'production'
