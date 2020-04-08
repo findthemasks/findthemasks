@@ -77,7 +77,112 @@ export const FILTER_ITEMS = {
   }
 };
 
-export const ENUM_MAPPINGS = Object.assign({}, FILTER_ITEMS, {
+const ORG_TYPES = {
+  'addiction facility': {
+    name: 'ftm-org-type-addiction-facility'
+  },
+  'ambulatory surgical center': {
+    name: 'ftm-org-type-ambulatory-surgical-center'
+  },
+  'assisted living': {
+    name: 'ftm-org-type-assisted-living'
+  },
+  'blood bank': {
+    name: 'ftm-org-type-blood-bank'
+  },
+  'community health organization': {
+    name: 'ftm-org-type-community-health-organization'
+  },
+  'covid-19 testing location': {
+    name: 'ftm-org-type-covid-19-testing-location'
+  },
+  'dentist': {
+    name: 'ftm-org-type-dentist'
+  },
+  'dentist - emergency practice': {
+    name: 'ftm-org-type-dentist-emergency-practice'
+  },
+  'dialysis center': {
+    name: 'ftm-org-type-dialysis-center'
+  },
+  'doctor\'s office': {
+    name: 'ftm-org-type-doctors-office'
+  },
+  'emergency medical services': {
+    name: 'ftm-org-type-ems'
+  },
+  'eye doctor (opthamology)': {
+    name: 'ftm-org-type-eye-doctor-opthamology'
+  },
+  'fire department': {
+    name: 'ftm-org-type-fire-department'
+  },
+  'food bank': {
+    name: 'ftm-org-type-food-bank'
+  },
+  'healthcare workers union': {
+    name: 'ftm-org-type-healthcare-workers-union'
+  },
+  'home care': {
+    name: 'ftm-org-type-home-care'
+  },
+  'homeless shelter': {
+    name: 'ftm-org-type-homeless-shelter'
+  },
+  'hospice': {
+    name: 'ftm-org-type-hospice'
+  },
+  'hospital': {
+    name: 'ftm-org-type-hospital'
+  },
+  'hospital foundation': {
+    name: 'ftm-org-type-hospital-foundation'
+  },
+  'jail/detention facility': {
+    name: 'ftm-org-type-jail-detention-facility'
+  },
+  'jail/detention facility (with medical clinic)': {
+    name: 'ftm-org-type-jail-detention-facility-with-medical-clinic'
+  },
+  'law enforcement': {
+    name: 'ftm-org-type-law-enforcement'
+  },
+  'medical transportation': {
+    name: 'ftm-org-type-medical-transportation'
+  },
+  'mental health': {
+    name: 'ftm-org-type-mental-health'
+  },
+  'outpatient clinic': {
+    name: 'ftm-org-type-outpatient-clinic'
+  },
+  'pharmacy': {
+    name: 'ftm-org-type-pharmacy'
+  },
+  'public health facility': {
+    name: 'ftm-org-type-public-health-facility'
+  },
+  'rehab facility': {
+    name: 'ftm-org-type-rehab-facility'
+  },
+  'skilled nursing facility': {
+    name: 'ftm-org-type-skilled-nursing-facility'
+  },
+  'testing/diagnostic laboratory': {
+    name: 'ftm-org-type-testing-diagnostic-laboratory'
+  },
+  'transportation': {
+    name: 'ftm-org-type-transportation'
+  },
+  'travel nurse': {
+    name: 'ftm-org-type-travel-nurse'
+  },
+  'urgent care': {
+    name: 'ftm-org-type-urgent-care'
+  }
+}
+
+export const ENUM_MAPPINGS = Object.assign({}, FILTER_ITEMS, ORG_TYPES, {
   'yes': {
     name: 'ftm-open-packages-yes'
   },
