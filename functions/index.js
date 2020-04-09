@@ -130,7 +130,7 @@ async function annotateGeocode(data, sheet_id) {
         // Geolocation only allows 50qps. Overkilling it causes rejects. Artifically cap here.
         // TODO(awong): do some smarter throttle system.
         num_lookups = num_lookups + 1;
-        
+
         // Do geocoding and add lat/lng to data iff we don't already have a latLng for
         // the address *and* the address has been moderated.  (In this code block, all
         // data has already been moderated.)
@@ -445,7 +445,7 @@ module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
 data_static = null;
 
 async function get_live_data() {
-  const url = 'https://findthemasks.com/data.json';
+  const url = 'https://storage.googleapis.com/findthemasks.appspot.com/data.json';
   let resp = await request({url});
   console.log('Setting global variable `data_static` to the contents of ' + url);
   data_static = resp.data;

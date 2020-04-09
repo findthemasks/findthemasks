@@ -438,7 +438,7 @@ $(function () {
     }
   };
 
-  $.getJSON(`https://findthemasks.com/${ getCountryDataFilename(currentCountry) }`, function (result) {
+  $.getJSON(`https://storage.googleapis.com/findthemasks.appspot.com/${ getCountryDataFilename(currentCountry) }`, function (result) {
     if(window.i18nReady) {
       renderListings(result);
     } else {
