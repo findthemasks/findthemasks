@@ -346,7 +346,7 @@ function loadOtherCountries() {
   for (const code of countryCodes) {
     if (code !== currentCountry) {
       $.getJSON(
-        `https://findthemasks.com/${ getCountryDataFilename(code) }`,
+        `https://storage.googleapis.com/findthemasks.appspot.com/${ getCountryDataFilename(code) }`,
         (result) => {
           const otherData = countryData[code] = toDataByLocation(result);
 
