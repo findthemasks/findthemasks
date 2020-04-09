@@ -11,10 +11,14 @@ const airbrake = new airbrakeJs.Client({
   projectKey: '2c966fe44a092a4dfe2abeb19c9e112d',
   environment: environment
 });
-try {
-  // This will throw if the document has no head tag
-  document.head.insertBefore(document.createElement("style"), null);
-} catch (err) {
-  airbrake.notify(err);
-  throw err;
+
+// automatic alerting only on production
+if (environment === 'production') {
+  try {
+    // This will throw if the document has no head tag
+    document.head.insertBefore(document.createElement("style"));
+  } catch (err) {
+    airbrake.notify(err);
+    throw err;
+  }
 }
