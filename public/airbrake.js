@@ -16,7 +16,7 @@ const airbrake = new airbrakeJs.Client({
 if (environment === 'production') {
   try {
     // This will throw if the document has no head tag
-    document.head.insertBefore(document.createElement("style"));
+    document.head.insertBefore(document.createElement("style"), null);
   } catch (err) {
     airbrake.notify(err);
     throw err;
