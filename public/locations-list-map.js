@@ -334,7 +334,7 @@ function getFlatFilteredEntries(data, filters) {
 function getCountryDataFilename(country) {
   // Always use country-specific data.json file
   let countryDataFilename;
-  
+
   countryDataFilename = `data-${ country }.json`;
   return countryDataFilename;
 }

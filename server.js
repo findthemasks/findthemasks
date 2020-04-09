@@ -1,4 +1,5 @@
 const express = require('express');
+const secure = require('express-force-https');
 const expressHandlebars = require('express-handlebars');
 require('dotenv').config();
 const app = new express();
@@ -9,6 +10,9 @@ app.engine('handlebars', expressHandlebars());
 app.set('view engine', 'handlebars');
 
 app.set('strict routing', true);
+
+// Force https
+app.use(secure);
 
 app.use((req, res, next) => {
   res.set('Cache-Control', 'public, max-age=300');
