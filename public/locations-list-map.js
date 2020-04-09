@@ -152,13 +152,27 @@ const addDonationSites = () => {
 
 // i18n must be loaded before filter items can be translated
 // config stores the i18n string and this function calls i18n with it
-const translatedFilterItems = () => {
+const translatedFilterItems = (fieldTranslations) => {
   const translated = {};
 
+  let countryAcceptedItems;
+
+  if (fieldTranslations && fieldTranslations.accepting && Array.isArray(fieldTranslations.accepting.canonical)) {
+    countryAcceptedItems = fieldTranslations.accepting.canonical.map((item) => item.toLowerCase());
+  }
+
   for (const [filterItemKey, filterItem] of Object.entries(FILTER_ITEMS)) {
-    translated[filterItemKey] = {
-      name: $.i18n(filterItem.name),
-      isSet: filterItem.isSet
+    // TODO(nburt): US does not use the merge config yet so countryAcceptedItems are blank
+    if (
+      !countryAcceptedItems
+      || countryAcceptedItems.includes(filterItemKey)
+    ) {
+      if (!Array.isArray(filterItem.countryBlacklist) || !filterItem.countryBlacklist.includes(currentCountry)) {
+        translated[filterItemKey] = {
+          name: $.i18n(filterItem.name),
+          isSet: filterItem.isSet
+        }
+      }
     }
   }
 
@@ -170,7 +184,7 @@ const translatedFilterItems = () => {
 // If one or more values in a category is true, the filter is set - only items matching the filter are included
 // If two or more values in a category are true, the filter is the union of those values
 // If multiple categories have set values, the result is the intersection of those categories
-function createFilters(data) {
+function createFilters(data, fieldTranslations) {
   const filters = {
     states: {}
   };
@@ -179,7 +193,7 @@ function createFilters(data) {
     filters.states[state] = { name: state, isSet: false };
   }
 
-  filters.acceptItems = translatedFilterItems();
+  filters.acceptItems = translatedFilterItems(fieldTranslations);
 
   return filters;
 }
@@ -368,6 +382,8 @@ function loadOtherCountries() {
 
 $(function () {
   const url = new URL(window.location);
+  // display flag of country
+  $('#flag-image'). attr("src", "images/flags/" + currentCountry + ".svg");
 
   // this should happen after the translations load
   $('html').on('i18n:ready', function () {
@@ -412,7 +428,7 @@ $(function () {
     }
     // END BETA ONLY
 
-    const filters = createFilters(data);
+    const filters = createFilters(data, result.field_translations);
 
     // Update filters to match any ?state= params
     const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
@@ -511,10 +527,16 @@ function googleMapsUri(address) {
 function getEntryEl(entry) {
   if (!entry.domElem) {
     entry.domElem = ce('div', 'location');
-    ac(entry.domElem, [
-      ce('h4', null, ctn(entry.name)),
-      ce('label', null, ctn($.i18n('ftm-address'))),
-    ]);
+    ac(entry.domElem, ce('h4', null, ctn(entry.name)));
+
+    if (entry.org_type.length) {
+      ac(entry.domElem, [
+        ce('label', null, ctn($.i18n('ftm-org-type'))),
+        ce('p', null, ctn(translateEnumValue(entry.org_type)))
+      ]);
+    }
+
+    ac(entry.domElem, ce('label', null, ctn($.i18n('ftm-address'))));
     const addr = entry.address.trim().split('\n');
 
     if (addr.length) {
@@ -874,7 +896,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
 
           // Guard against non-geocoded entries. Assuming no location exactly on the equator or prime meridian
           if (lat && lng) {
-            marker = entry.marker = createMarker(lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box, markerOptions);
+            marker = entry.marker = createMarker(lat, lng, entry.org_type, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box, markerOptions);
           }
         }
 
@@ -959,7 +981,7 @@ function updateClusters(primaryCluster, secondaryCluster) {
 // Source for country center points: https://developers.google.com/public-data/docs/canonical/countries_csv
 const MAP_INITIAL_VIEW = {
   at: { zoom: 6, center: { lat:47.716231, lng:	13.90072 }},
-  ca: { zoom: 3, center: { lat: 56.130366, lng: -106.346771 }},
+  ca: { zoom: 3, center: { lat: 57.130366, lng: -99.346771 }},
   ch: { zoom: 7, center: { lat: 46.818188, lng: 8.227512 }},
   de: { zoom: 5, center: { lat: 51.165691, lng: 10.451526 }},
   es: { zoom: 5, center: { lat: 40.163667, lng:	-3.74922 }},
@@ -1000,7 +1022,8 @@ const translateEnumValue = (value) => {
 
 const translateEnumList = (enumListString) => {
   if (enumListString) {
-    return enumListString.split(', ').map((stringValue) => (
+    // split on commas, unless the comma is in a parenthesis
+    return enumListString.split(/, (?![^(]*\))/).map((stringValue) => (
       translateEnumValue(stringValue && stringValue.trim())
     )).join(', ')
   }
@@ -1008,7 +1031,7 @@ const translateEnumList = (enumListString) => {
   return enumListString;
 };
 
-function createMarker(latitude, longitude, address, name, instructions, accepting, open_accepted, markerOptions) {
+function createMarker(latitude, longitude, orgType, address, name, instructions, accepting, open_accepted, markerOptions) {
   const location = { lat: latitude, lng: longitude };
   const options = Object.assign({
       position: location,
@@ -1037,8 +1060,16 @@ function createMarker(latitude, longitude, address, name, instructions, acceptin
       });
       mapLinkEl.appendChild(ctn(address));
 
-      const content = ce('div', null, [
-        ce('h5', null, ctn(name)),
+      const contentTags = [ce('h5', null, ctn(name))];
+
+      if (orgType.length) {
+        contentTags.push(
+          ce('div', 'label', ctn($.i18n('ftm-maps-marker-org-type-label'))),
+          ce('div', 'value', ctn(translateEnumValue(orgType)))
+        );
+      }
+
+      contentTags.push(
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
         ce('div', 'value', mapLinkEl),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
@@ -1047,7 +1078,9 @@ function createMarker(latitude, longitude, address, name, instructions, acceptin
         ce('div', 'value', ctn(translateEnumList(accepting))),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
         ce('div', 'value', ctn(translateEnumValue(open_accepted)))
-      ]);
+      );
+
+      const content = ce('div', null, contentTags);
 
       marker.infowindow = new google.maps.InfoWindow({
         content: content
