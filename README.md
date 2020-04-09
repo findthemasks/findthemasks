@@ -15,7 +15,7 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 
 ## Current setup
 
-- The website reads from a google sheet, generates a json blob, which is used to generate static HTML.
+- The website reads from a google sheet, generates a json blob, which is rendered by a Node server.
 
 ## Reading our data to build your own frontend
 
@@ -33,7 +33,7 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 <iframe style="width: 100%; height: 800px; border: none;" src="https://findthemasks.com/give.html"></iframe>
 ```
 
-- We also support state specific data views, hiding the map, and hiding the filters through query params:
+- We also support state specific data views, hiding the map, hiding the filters through query params, and specifying locale:
 
 ```html
 ?state={CA/WA/NY/etc}
@@ -41,6 +41,7 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 ?hide-filters={true/false}
 ?hide-list={true/false} (also hides filters)
 ?hide-search={true/false} (beta)
+?locale={see available locales in dropdown at https://findthemasks.com}
 ```
 
 All boolean parameters default to false (unless they're in beta).
