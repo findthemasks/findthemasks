@@ -792,8 +792,6 @@ function fitMapToMarkersNearBounds(bounds) {
 
   const markersByDistance = getMarkersByDistanceFrom(center.lat(), center.lng(), 3);
 
-  let hasMarker = false;
-
   // extend bounds to fit closest three markers
   markersByDistance.forEach((marker) => {
       bounds.extend(marker.position);
