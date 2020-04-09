@@ -1,5 +1,4 @@
 const express = require('express');
-const secure = require('express-force-https');
 const expressHandlebars = require('express-handlebars');
 require('dotenv').config();
 const app = new express();
@@ -11,16 +10,14 @@ app.set('view engine', 'handlebars');
 
 app.set('strict routing', true);
 
-// Force https except for local development
-// express-force-https already excludes localhost but we also use local.findthemasks.com
 app.use(function(req, res, next) {
   var schema = req.headers['x-forwarded-proto'];
   var host = req.headers.host.split(':')[0];
 
-  if (schema === 'https' || (host === 'local.findthemasks.com') ) {
+  if (schema === 'https' || host === 'local.findthemasks.com' || host === 'localhost' ) {
     next();
   } else {
-    secure(req, res, next);
+    res.redirect('https://' + req.headers.host + req.url);
   }
 });
 
