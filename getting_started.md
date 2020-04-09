@@ -8,11 +8,15 @@ The goal of this document is get the site and backend working locally on your de
 
 ### Public Site
 
+Install `node >= 12.x.x` and `npm`: https://nodejs.org/en/download/.
+
+If you are on Linux or macOS you can install using either [n](https://github.com/tj/n) or [nvm](https://github.com/nvm-sh/nvm)
+
 From the root directory of this repo:
 
 ```
-$ npm install -g http-server
-$ http-server
+$ ./local_setup.sh
+$ npm run dev
 ```
 
 Then you can open http://localhost:8080/ (or http://local.findthemasks.com:8080) in your browser.  If everything is working you should be able to see the dynamically populated "List of Donation Sites"
