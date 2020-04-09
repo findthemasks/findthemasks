@@ -97,6 +97,8 @@ async function getAuthorizedClient() {
 
 function splitValues(data) { return [ data.values[0], data.values[1], data.values.slice(2) ]; }
 
+function get_country_from_path(req) { return req.path.split('/',2)[1] || 'us'; }
+
 async function annotateGeocode(data, sheet_id, client) {
   // Annotate Geocodes for missing items. Track the updated rows. Write back.
   const headers = data.values[1];
@@ -186,19 +188,11 @@ async function getSpreadsheet(country, client) {
   const sheets = google.sheets('v4');
   const request = {
     spreadsheetId: SHEETS[country],
-    range: 'Form Responses 1'
+    range: 'Combined'
     };
   request.auth = client;
 
-  // Transition code as we rename the output sheet from
-  // Form Responses 1 to Combined.
-  let response = null;
-  try {
-    response = await sheets.spreadsheets.values.get(request);
-  } catch (err) {
-    request.range = 'Combined';
-    response = await sheets.spreadsheets.values.get(request);
-  }
+  let response = await sheets.spreadsheets.values.get(request);
   const data = response.data;
 
   // Geocode annotation is being done via appscript right now.
@@ -471,25 +465,17 @@ module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
 
 async function updateSheetWithGeocodes(country) {
   const client = await getAuthorizedClient();
-  let data = {}
 
   // Open relevant sheet
   const sheets = google.sheets('v4');
   const request = {
     spreadsheetId: SHEETS[country],
-    range: 'Form Responses 1'
+    range: 'Combined'
   };
   request.auth = client;
 
-  // Transition code as we rename the output sheet from
-  // Form Responses 1 to Combined.
-  let response = null;
-  try {
-    response = await sheets.spreadsheets.values.get(request);
-  } catch (err) {
-    request.range = 'Combined';
-    response = await sheets.spreadsheets.values.get(request);
-  }
+  let response = await sheets.spreadsheets.values.get(request);
+
   // Find rows that have been approved but not geocoded.
   // Call geocoder.
   // Fill in cells with lat, lng
@@ -497,7 +483,7 @@ async function updateSheetWithGeocodes(country) {
 }
 
 module.exports.geocode = functions.https.onRequest(async (req, res) => {
-  const country = req.path.split('/',2)[1] || 'us';
+  const country = get_country_from_path(req);
   if (!(country in SHEETS)) {
     res.status(400).send(`invalid country: ${country} for ${req.path}`);
     return;
