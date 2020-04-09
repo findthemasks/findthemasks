@@ -11,8 +11,8 @@ app.set('view engine', 'handlebars');
 app.set('strict routing', true);
 
 app.use(function(req, res, next) {
-  var schema = req.headers['x-forwarded-proto'];
-  var host = req.headers.host.split(':')[0];
+  const schema = req.headers['x-forwarded-proto'];
+  const host = req.headers.host.split(':')[0];
 
   if (schema === 'https' || host === 'local.findthemasks.com' || host === 'localhost' ) {
     next();
@@ -33,7 +33,8 @@ router.get(['/', '/index.html'], (req, res) => {
   res.render('index', {
     ogTitle: '#findthemasks',
     ogUrl: 'https://findthemasks.com/',
-    ogDescription: 'Find where you can donate your masks or other personal protective equipment (PPE) in your local area.'
+    ogDescription: 'Find where you can donate your masks or other personal protective equipment (PPE) in your local area.',
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
   });
 });
 
@@ -41,7 +42,8 @@ router.get(['/give', '/give.html'], (req, res) => {
   res.render('give', {
     ogTitle: '#findthemasks | give',
     ogUrl: 'https://findthemasks.com/give',
-    ogDescription: 'America’s frontline healthcare workers are treating COVID-19 patients without adequate protective gear, risking their lives! We need to find the masks. All of these masks can save lives now if you get them into the hands of healthcare workers.'
+    ogDescription: 'America’s frontline healthcare workers are treating COVID-19 patients without adequate protective gear, risking their lives! We need to find the masks. All of these masks can save lives now if you get them into the hands of healthcare workers.',
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
   });
 });
 
@@ -69,34 +71,8 @@ router.get('/:countryCode/donation-form', (req, res) => {
   res.redirect(`/${req.params.countryCode}/donation-form-bounce.html?locale=${req.query.locale}`);
 });
 
-app.get('/config.js', (req, res) => {
-  const envVariables = [
-    'GOOGLE_MAPS_API_KEY'
-  ];
-  const envVarJSON = getEnvironmentVarJSON(envVariables);
-  const windowVarScript = createWindowVarScript(envVarJSON);
-  res.type('.js');
-  res.send(windowVarScript);
-});
-
 app.use('/', router);
 app.use('/:countryCode', router);
-
-const getEnvironmentVarJSON = variableArray => {
-  let varJSON = {};
-  variableArray.forEach(variable => {
-    varJSON[variable] = process.env[variable];
-  });
-  return varJSON;
-};
-
-const createWindowVarScript = jsonData => {
-  var windowScript = '';
-  for (property in jsonData) {
-    windowScript += `window.${property} = "${jsonData[property]}";\n`;
-  }
-  return windowScript;
-};
 
 app.listen(port, () => {
   console.log('Server listening on port ' + port);
