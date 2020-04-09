@@ -473,7 +473,6 @@ async function updateSheetWithGeocodes(country) {
   const client = await getAuthorizedClient();
   let data = {}
 
-  console.log("Got client");
   // Open relevant sheet
   const sheets = google.sheets('v4');
   const request = {
@@ -491,7 +490,6 @@ async function updateSheetWithGeocodes(country) {
     request.range = 'Combined';
     response = await sheets.spreadsheets.values.get(request);
   }
-  console.log("Got sheet values");
   // Find rows that have been approved but not geocoded.
   // Call geocoder.
   // Fill in cells with lat, lng
@@ -505,8 +503,8 @@ module.exports.geocode = functions.https.onRequest(async (req, res) => {
     return;
   }
 
-  returnString = await updateSheetWithGeocodes(country);
-  res.status(200).send(returnString);
+  await updateSheetWithGeocodes(country);
+  res.status(200).send("Geocoded and updated spreadsheet successfully");
 });
 
 
