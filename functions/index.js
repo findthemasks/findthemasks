@@ -453,7 +453,7 @@ function toHtmlSnippets(data_by_location) {
 }
 
 module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
-  const country = req.path.split('/',2)[1] || 'us';
+  const country = get_country_from_path(req);
   if (!(country in SHEETS)) {
     res.status(400).send(`invalid country: ${country} for ${req.path}`);
     return;
