@@ -2,7 +2,9 @@ import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
 import locales from './locales.js';
 import getCountry from './getCountry.js';
+import { FILTER_ITEMS, ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getMapsLanguageRegion, getCurrentLocaleParam, DEFAULT_LOCALE } from  './i18nUtils.js';
+
 
 /******************************************
  * MODULE VARS AVAILABLE TO ALL FUNCTIONS *
@@ -148,12 +150,41 @@ const addDonationSites = () => {
   }
 };
 
+// i18n must be loaded before filter items can be translated
+// config stores the i18n string and this function calls i18n with it
+const translatedFilterItems = (fieldTranslations) => {
+  const translated = {};
+
+  let countryAcceptedItems;
+
+  if (fieldTranslations && fieldTranslations.accepting && Array.isArray(fieldTranslations.accepting.canonical)) {
+    countryAcceptedItems = fieldTranslations.accepting.canonical.map((item) => item.toLowerCase());
+  }
+
+  for (const [filterItemKey, filterItem] of Object.entries(FILTER_ITEMS)) {
+    // TODO(nburt): US does not use the merge config yet so countryAcceptedItems are blank
+    if (
+      !countryAcceptedItems
+      || countryAcceptedItems.includes(filterItemKey)
+    ) {
+      if (!Array.isArray(filterItem.countryBlacklist) || !filterItem.countryBlacklist.includes(currentCountry)) {
+        translated[filterItemKey] = {
+          name: $.i18n(filterItem.name),
+          isSet: filterItem.isSet
+        }
+      }
+    }
+  }
+
+  return translated;
+};
+
 // Builds the data structure for tracking which filters are set
 // If all values in a category are false, it's treated as no filter - all items are included
 // If one or more values in a category is true, the filter is set - only items matching the filter are included
 // If two or more values in a category are true, the filter is the union of those values
 // If multiple categories have set values, the result is the intersection of those categories
-function createFilters(data) {
+function createFilters(data, fieldTranslations) {
   const filters = {
     states: {}
   };
@@ -162,18 +193,7 @@ function createFilters(data) {
     filters.states[state] = { name: state, isSet: false };
   }
 
-  filters.acceptItems = {
-    'n95s': { name: $.i18n('ftm-item-n95s'), isSet: false },
-    'masks': { name: $.i18n('ftm-item-masks'), isSet: false },
-    'shields': { name: $.i18n('ftm-item-face-shields'), isSet: false },
-    'booties': { name: $.i18n('ftm-item-booties'), isSet: false },
-    'goggles': { name: $.i18n('ftm-item-goggles'), isSet: false },
-    'gloves': { name: $.i18n('ftm-item-gloves'), isSet: false },
-    'sanitizer': { name: $.i18n('ftm-item-sanitizer'), isSet: false },
-    'overalls': { name: $.i18n('ftm-item-overalls'), isSet: false },
-    'gowns': { name: $.i18n('ftm-item-gowns'), isSet: false },
-    'respirators': { name: $.i18n('ftm-item-respirators'), isSet: false },
-  };
+  filters.acceptItems = translatedFilterItems(fieldTranslations);
 
   return filters;
 }
@@ -361,6 +381,8 @@ function loadOtherCountries() {
 
 $(function () {
   const url = new URL(window.location);
+  // display flag of country
+  $('#flag-image'). attr("src", "images/flags/" + currentCountry + ".svg");
 
   // this should happen after the translations load
   $('html').on('i18n:ready', function () {
@@ -405,7 +427,7 @@ $(function () {
     }
     // END BETA ONLY
 
-    const filters = createFilters(data);
+    const filters = createFilters(data, result.field_translations);
 
     // Update filters to match any ?state= params
     const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
@@ -504,10 +526,16 @@ function googleMapsUri(address) {
 function getEntryEl(entry) {
   if (!entry.domElem) {
     entry.domElem = ce('div', 'location');
-    ac(entry.domElem, [
-      ce('h4', null, ctn(entry.name)),
-      ce('label', null, ctn($.i18n('ftm-address'))),
-    ]);
+    ac(entry.domElem, ce('h4', null, ctn(entry.name)));
+
+    if (entry.org_type.length) {
+      ac(entry.domElem, [
+        ce('label', null, ctn($.i18n('ftm-org-type'))),
+        ce('p', null, ctn(translateEnumValue(entry.org_type)))
+      ]);
+    }
+
+    ac(entry.domElem, ce('label', null, ctn($.i18n('ftm-address'))));
     const addr = entry.address.trim().split('\n');
 
     if (addr.length) {
@@ -541,14 +569,14 @@ function getEntryEl(entry) {
     if (entry.accepting) {
       ac(entry.domElem, [
         ce('label', null, ctn($.i18n('ftm-accepting'))),
-        ce('p', null, ctn(entry.accepting))
+        ce('p', null, ctn(translateEnumList(entry.accepting)))
       ]);
     }
 
     if (entry.open_box) {
       ac(entry.domElem, [
         ce('label', null, ctn($.i18n('ftm-open-packages'))),
-        ce('p', null, ctn(entry.open_box))
+        ce('p', null, ctn(translateEnumValue(entry.open_box)))
       ]);
     }
   }
@@ -738,9 +766,11 @@ function centerMapToMarkersNearUser() {
   // First check to see if the user will accept getting their location, if not, silently return
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
-      // Use navigator provided lat/long coords to center map now.
-      centerMapToMarkersNearCoords(position.coords.latitude, position.coords.longitude);
+      const bounds = new google.maps.LatLngBounds();
+      const latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+      bounds.extend(latlng);
 
+      fitMapToMarkersNearBounds(bounds);
     }, (err) => {
       // Hide the "User my location" link since we know that will not work.
       $('#use-location').hide();
@@ -758,23 +788,27 @@ function centerMapToMarkersNearUser() {
 function fitMapToMarkersNearBounds(bounds) {
   // get center of bounding box and use it to sort markers by distance
   let center = bounds.getCenter();
-  const markersByDistance = getMarkersByDistanceFrom(center.lat(), center.lng());
+
+  const markersByDistance = getMarkersByDistanceFrom(center.lat(), center.lng(), 3);
 
   // extend bounds to fit closest three markers
-  [0,1,2].forEach((i) => {
-    const marker = markersByDistance[i];
-    if (marker) {
+  markersByDistance.forEach((marker) => {
       bounds.extend(marker.position);
-    }
   });
 
-  map.fitBounds(bounds);
+  if (!bounds.getNorthEast().equals(bounds.getSouthWest())) {
+    // zoom to fit user loc + nearest markers
+    map.fitBounds(bounds);
+  } else {
+    // just has user loc - shift view without zooming
+    map.setCenter(center);
+  }
 }
 
 /**
  * Returns a list of markers sorted by distance from an arbitrary set of lat/lng coords.
  */
-function getMarkersByDistanceFrom(latitude, longitude) {
+function getMarkersByDistanceFrom(latitude, longitude, n=3) {
   const latlng = new google.maps.LatLng(latitude, longitude);
 
   const markerDistances = new Map();
@@ -794,38 +828,7 @@ function getMarkersByDistanceFrom(latitude, longitude) {
   // order markerDistances by key (distance)
   let distances = [...markerDistances.keys()].sort((a,b) => a -b);
   // return array of markers in order of distance ascending
-  return distances.map((distance) => markerDistances.get(distance));
-}
-
-/**
- * Centers map around markers nearest to an arbitrary set of latitude/longitude coordinates.
- */
-function centerMapToMarkersNearCoords(latitude, longitude) {
-  const markersByDistance = getMarkersByDistanceFrom(latitude, longitude);
-
-  // center the map on the user
-  const latlng = new google.maps.LatLng(latitude, longitude);
-  const bounds = new google.maps.LatLngBounds();
-  let hasMarker = false;
-  bounds.extend(latlng);
-
-  // Extend the bounds to contain the three closest markers
-  [0,1,2].forEach((i) => {
-    const marker = markersByDistance[i];
-
-    if (marker) {
-      hasMarker = true;
-      bounds.extend(marker.position);
-    }
-  });
-
-  if (hasMarker) {
-    // zoom to fit user loc + nearest markers
-    map.fitBounds(bounds);
-  } else {
-    // just has user loc - shift view without zooming
-    map.setCenter(latlng);
-  }
+  return distances.slice(0, n).map((distance) => markerDistances.get(distance));
 }
 
 /********************************
@@ -867,7 +870,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
 
           // Guard against non-geocoded entries. Assuming no location exactly on the equator or prime meridian
           if (lat && lng) {
-            marker = entry.marker = createMarker(lat, lng, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box, markerOptions);
+            marker = entry.marker = createMarker(lat, lng, entry.org_type, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box, markerOptions);
           }
         }
 
@@ -952,7 +955,7 @@ function updateClusters(primaryCluster, secondaryCluster) {
 // Source for country center points: https://developers.google.com/public-data/docs/canonical/countries_csv
 const MAP_INITIAL_VIEW = {
   at: { zoom: 6, center: { lat:47.716231, lng:	13.90072 }},
-  ca: { zoom: 3, center: { lat: 56.130366, lng: -106.346771 }},
+  ca: { zoom: 3, center: { lat: 57.130366, lng: -99.346771 }},
   ch: { zoom: 7, center: { lat: 46.818188, lng: 8.227512 }},
   de: { zoom: 5, center: { lat: 51.165691, lng: 10.451526 }},
   es: { zoom: 5, center: { lat: 40.163667, lng:	-3.74922 }},
@@ -981,7 +984,28 @@ function centerMapToBounds(map, bounds, maxZoom) {
   }
 }
 
-function createMarker(latitude, longitude, address, name, instructions, accepting, open_accepted, markerOptions) {
+const translateEnumValue = (value) => {
+  const enumValue = ENUM_MAPPINGS[value.toLowerCase()];
+
+  if (enumValue) {
+    return $.i18n(enumValue.name);
+  }
+
+  return value;
+};
+
+const translateEnumList = (enumListString) => {
+  if (enumListString) {
+    // split on commas, unless the comma is in a parenthesis
+    return enumListString.split(/, (?![^(]*\))/).map((stringValue) => (
+      translateEnumValue(stringValue && stringValue.trim())
+    )).join(', ')
+  }
+
+  return enumListString;
+};
+
+function createMarker(latitude, longitude, orgType, address, name, instructions, accepting, open_accepted, markerOptions) {
   const location = { lat: latitude, lng: longitude };
   const options = Object.assign({
       position: location,
@@ -1010,17 +1034,27 @@ function createMarker(latitude, longitude, address, name, instructions, acceptin
       });
       mapLinkEl.appendChild(ctn(address));
 
-      const content = ce('div', null, [
-        ce('h5', null, ctn(name)),
+      const contentTags = [ce('h5', null, ctn(name))];
+
+      if (orgType.length) {
+        contentTags.push(
+          ce('div', 'label', ctn($.i18n('ftm-maps-marker-org-type-label'))),
+          ce('div', 'value', ctn(translateEnumValue(orgType)))
+        );
+      }
+
+      contentTags.push(
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
         ce('div', 'value', mapLinkEl),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
         linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
-        ce('div', 'value', ctn(accepting)),
+        ce('div', 'value', ctn(translateEnumList(accepting))),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
-        ce('div', 'value', ctn(open_accepted)),
-      ]);
+        ce('div', 'value', ctn(translateEnumValue(open_accepted)))
+      );
+
+      const content = ce('div', null, contentTags);
 
       marker.infowindow = new google.maps.InfoWindow({
         content: content
