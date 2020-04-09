@@ -11,8 +11,18 @@ app.set('view engine', 'handlebars');
 
 app.set('strict routing', true);
 
-// Force https
-app.use(secure);
+// Force https except for local development
+// express-force-https already excludes localhost but we also use local.findthemasks.com
+app.use(function(req, res, next) {
+  var schema = req.headers['x-forwarded-proto'];
+  var host = req.headers.host.split(':')[0];
+
+  if (schema === 'https' || (host === 'local.findthemasks.com') ) {
+    next();
+  } else {
+    secure(req, res, next);
+  }
+});
 
 app.use((req, res, next) => {
   res.set('Cache-Control', 'public, max-age=300');
