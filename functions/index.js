@@ -42,7 +42,7 @@ const COLUMNS = [
 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM',
 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'
 ];
-const WRITEBACK_SHEET = "'Form Responses 1'";
+const WRITEBACK_SHEET = "'Combined'";
 
 // The OAuth Callback Redirect.
 const FUNCTIONS_REDIRECT = `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com/oauthcallback`;
@@ -143,7 +143,6 @@ async function annotateGeocode(data, sheet_id, client) {
           to_write_back.push({row_num, lat_lng});
           return lat_lng;
         }).catch( e => {
-          console.error("wut");
           console.error(e);
           entry[latIndex] = 'N/A';
           entry[lngIndex] = 'N/A';
@@ -152,6 +151,7 @@ async function annotateGeocode(data, sheet_id, client) {
     }
   });
 
+  console.log("Got latLngs");
   await Promise.all(promises);
   // Attempt to write back now.
   if (to_write_back.length > 0) {
@@ -467,6 +467,46 @@ module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
 
   const [data, html_snippets] = await snapshotData(country);
   res.status(200).send(html_snippets);
+});
+
+async function updateSheetWithGeocodes(country) {
+  const client = await getAuthorizedClient();
+  let data = {}
+
+  console.log("Got client");
+  // Open relevant sheet
+  const sheets = google.sheets('v4');
+  const request = {
+    spreadsheetId: SHEETS[country],
+    range: 'Form Responses 1'
+  };
+  request.auth = client;
+
+  // Transition code as we rename the output sheet from
+  // Form Responses 1 to Combined.
+  let response = null;
+  try {
+    response = await sheets.spreadsheets.values.get(request);
+  } catch (err) {
+    request.range = 'Combined';
+    response = await sheets.spreadsheets.values.get(request);
+  }
+  console.log("Got sheet values");
+  // Find rows that have been approved but not geocoded.
+  // Call geocoder.
+  // Fill in cells with lat, lng
+  await annotateGeocode(response.data, SHEETS[country], client);
+}
+
+module.exports.geocode = functions.https.onRequest(async (req, res) => {
+  const country = req.path.split('/',2)[1] || 'us';
+  if (!(country in SHEETS)) {
+    res.status(400).send(`invalid country: ${country} for ${req.path}`);
+    return;
+  }
+
+  returnString = await updateSheetWithGeocodes(country);
+  res.status(200).send(returnString);
 });
 
 
