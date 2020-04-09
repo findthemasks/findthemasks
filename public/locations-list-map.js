@@ -332,11 +332,10 @@ function getFlatFilteredEntries(data, filters) {
 }
 
 function getCountryDataFilename(country) {
-  let countryDataFilename = 'data.json';
-  if (country !== 'us') {
-    countryDataFilename = `data-${ country }.json`;
-  }
-
+  // Always use country-specific data.json file
+  let countryDataFilename;
+  
+  countryDataFilename = `data-${ country }.json`;
   return countryDataFilename;
 }
 
