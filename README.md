@@ -19,7 +19,7 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 
 ## Reading our data to build your own frontend
 
-- Our data file updates every five minutes and can be read from findthemasks.com/data.json.
+- Our data file updates every five minutes and can be read from https://storage.googleapis.com/findthemasks.appspot.com/data.json.
 - If you read the json directly, you need to ignore entries without an 'x' in the first field. Otherwise, you may publish info hospitals asked to have taken down. Don't do it!
 - If this sounds like too much work, then please use our:
 

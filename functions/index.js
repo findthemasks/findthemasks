@@ -499,7 +499,7 @@ module.exports.geocode = functions.https.onRequest(async (req, res) => {
 data_static = null;
 
 async function get_live_data() {
-  const url = 'https://storage.googleapis.com/findthemasks.appspot.com/data.json';
+  const url = 'https://storage.googleapis.com/findthemasks.appspot.com/data-us.json';
   let resp = await request({url});
   console.log('Setting global variable `data_static` to the contents of ' + url);
   data_static = resp.data;

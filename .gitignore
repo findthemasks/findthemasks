@@ -72,5 +72,4 @@ node_modules/
 # Country data files
 data.json
 data-*.json
-!data-fr.json
 data-*.csv
