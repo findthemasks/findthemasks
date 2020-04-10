@@ -55,7 +55,7 @@ export const FILTER_ITEMS = {
     name: 'ftm-accept-item-caprs',
     isSet: false
   },
-  'Walkie-talkies/baby monitors': {
+  'walkie-talkies/baby monitors': {
     name: 'ftm-accept-item-walkie-talkies',
     isSet: false
   },
