@@ -327,7 +327,7 @@ function getFlatFilteredEntries(data, filters) {
       const city = cities[cityName];
 
       city.entries.sort(function (a, b) {
-          return a.name.localeCompare( b.name );
+        return a.name.localeCompare( b.name );
       }).forEach(function(entry) {
         if (filterAcceptKeys) {
           const acc = (entry.accepting || "").toLowerCase();
@@ -351,6 +351,10 @@ function getFlatFilteredEntries(data, filters) {
   return entries;
 }
 
+const getCountryDataUrl = (countryDataFilename) => {
+  return `https://storage.googleapis.com/findthemasks.appspot.com/${countryDataFilename}`
+};
+
 function getCountryDataFilename(country) {
   // Always use country-specific data.json file
   let countryDataFilename;
@@ -365,7 +369,7 @@ function loadOtherCountries() {
   for (const code of countryCodes) {
     if (code !== currentCountry) {
       $.getJSON(
-        `https://storage.googleapis.com/findthemasks.appspot.com/${ getCountryDataFilename(code) }`,
+        getCountryDataUrl(getCountryDataFilename(code)),
         (result) => {
           const otherData = countryData[code] = toDataByLocation(result);
 
@@ -459,7 +463,7 @@ $(function () {
     }
   };
 
-  $.getJSON(`https://storage.googleapis.com/findthemasks.appspot.com/${ getCountryDataFilename(currentCountry) }`, function (result) {
+  $.getJSON(getCountryDataUrl(getCountryDataFilename(code)), function (result) {
     if(window.i18nReady) {
       renderListings(result);
     } else {
@@ -471,9 +475,9 @@ $(function () {
 
   const footerHeight = 440;  // footer + navbar + small buffer
   $(window).scroll(function() {
-     if($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
-        renderNextListPage();
-     }
+    if($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
+      renderNextListPage();
+    }
   });
 });
 
@@ -784,7 +788,7 @@ function centerMapToMarkersNearUser() {
 
 /**
  * Fits map to bounds, expanding the bounds to include at least three markers as necessary.
-*/
+ */
 function fitMapToMarkersNearBounds(bounds) {
   // get center of bounding box and use it to sort markers by distance
   let center = bounds.getCenter();
@@ -793,7 +797,7 @@ function fitMapToMarkersNearBounds(bounds) {
 
   // extend bounds to fit closest three markers
   markersByDistance.forEach((marker) => {
-      bounds.extend(marker.position);
+    bounds.extend(marker.position);
   });
 
   if (!bounds.getNorthEast().equals(bounds.getSouthWest())) {
