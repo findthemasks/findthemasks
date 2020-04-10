@@ -39,7 +39,7 @@ Then you can open http://localhost:3000/ (or http://local.findthemasks.com:3000)
 
 ### `data.json`
 
-We are still working on a simple way for devs to swap in their own test spreadsheet for testing purposes ([Issue #185](https://github.com/r-pop/findthemasks/issues/185))
+We are still working on a simple way for devs to swap in their own test spreadsheet for testing purposes ([Issue #185](https://github.com/findthemasks/findthemasks/issues/185))
 
 First, run the npm install to populate the local `node_modules/` cache
 

@@ -11,7 +11,7 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 - new dev? please look at issues and comment on something to grab it!
     - Check out the [Getting Started](getting_started.md) doc
 - new data moderator? Join the slack and come to #data!
-- not either? The most useful contribution is identifying more drop off locations and plugging them into the form linked on the public website, so if you don't see an issue here that calls to you, please work on that! Advice on making calls is in [#131](https://github.com/r-pop/findthemasks/issues/131#issuecomment-602746963)
+- not either? The most useful contribution is identifying more drop off locations and plugging them into the form linked on the public website, so if you don't see an issue here that calls to you, please work on that! Advice on making calls is in [#131](https://github.com/findthemasks/findthemasks/issues/131#issuecomment-602746963)
 
 ## Current setup
 
