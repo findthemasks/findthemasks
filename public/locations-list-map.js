@@ -304,7 +304,7 @@ function multilineStringToNodes(input) {
   textNodes.forEach((e) => {
     returnedNodes.push(e);
     returnedNodes.push(document.createElement('br'));
-  })
+  });
   return returnedNodes.slice(0,-1);
 }
 
@@ -463,7 +463,7 @@ $(function () {
     }
   };
 
-  $.getJSON(getCountryDataUrl(getCountryDataFilename(code)), function (result) {
+  $.getJSON(getCountryDataUrl(getCountryDataFilename(currentCountry)), function (result) {
     if(window.i18nReady) {
       renderListings(result);
     } else {
