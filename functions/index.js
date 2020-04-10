@@ -107,6 +107,7 @@ async function annotateGeocode(data, sheet_id, client) {
 
   const approvedIndex = headers.findIndex( e => e === 'approved' );
   const addressIndex = headers.findIndex( e => e === 'address' );
+  const origAddressIndex = headers.findIndex( e => e === 'orig_address' );
   const latIndex = headers.findIndex( e => e === 'lat' );
   const lngIndex = headers.findIndex( e => e === 'lng' );
   const timestampIdx = headers.findIndex( e => e === 'timestamp' );
@@ -116,10 +117,11 @@ async function annotateGeocode(data, sheet_id, client) {
   // form response sheet.
   const latColumn = COLUMNS[latIndex];
   const lngColumn = COLUMNS[lngIndex];
-  console.log(`writing lat-long cols ${latColumn},${lngColumn}`);
+  const addressColumn = COLUMNS[addressIndex];
 
   const to_write_back = [];
   const promises = [];
+  // TODO(awong): Do we still need this rate limit?
   let num_lookups = 0;
   real_values.forEach( (entry, index) => {
     if (entry[approvedIndex] === "x") {
@@ -128,7 +130,9 @@ async function annotateGeocode(data, sheet_id, client) {
 
       // Check if entry's length is too short to possibly have a latitude, we need
       // to geocode.  If the value for lat is "", we also need to geocode.
-      if (num_lookups < 50 && ((entry.length < (latIndex + 1)) || (entry[latIndex] === ""))) {
+      //
+      // Similarly if the final address is missing, redo the canonicalization.
+      if (num_lookups < 50 && (entry[addressIndex] === "" || (entry.length < (latIndex + 1)) || (entry[latIndex] === ""))) {
 
         // Geolocation only allows 50qps. Overkilling it causes rejects. Artifically cap here.
         // TODO(awong): do some smarter throttle system.
@@ -137,13 +141,20 @@ async function annotateGeocode(data, sheet_id, client) {
         // Do geocoding and add lat/lng to data iff we don't already have a latLng for
         // the address *and* the address has been moderated.  (In this code block, all
         // data has already been moderated.)
-        const address = entry[addressIndex];
+        const address = entry[addressIndex] || entry[origAddressIndex];
 
-        promises.push(getLatLng(address, maps_client).then(lat_lng => {
-          entry[latIndex] = lat_lng.lat;
-          entry[lngIndex] = lat_lng.lng;
-          to_write_back.push({row_num, lat_lng});
-          return lat_lng;
+        promises.push(getLatLng(address, maps_client).then(geocode => {
+          if (entry[addressIndex]) {
+            // Do not overwrite if there is already an address listed.
+            console.log("Don't update address");
+            geocode.canonical_address = null;
+          } else {
+            entry[addressIndex] = geocode.canonical_address;
+          }
+          entry[latIndex] = geocode.location.lat;
+          entry[lngIndex] = geocode.location.lng;
+          to_write_back.push({row_num, geocode});
+          return info;
         }).catch( e => {
           console.error(e);
           entry[latIndex] = 'N/A';
@@ -153,7 +164,6 @@ async function annotateGeocode(data, sheet_id, client) {
     }
   });
 
-  console.log("Got latLngs");
   await Promise.all(promises);
   // Attempt to write back now.
   if (to_write_back.length > 0) {
@@ -168,17 +178,24 @@ async function annotateGeocode(data, sheet_id, client) {
     write_request.auth = client;
 
     to_write_back.forEach( e => {
-      console.log(`writing lat-long cols ${latColumn},${lngColumn} : ${JSON.stringify(e)}`);
+      console.log(`writing lat-long,address cols ${latColumn},${lngColumn},${addressColumn} : ${JSON.stringify(e)}`);
       // TODO(awong): Don't hardcode the columns. Make it more robust somehow.
       data.push({
         range: `${WRITEBACK_SHEET}!${latColumn}${e.row_num}`,
-        values: [ [e.lat_lng.lat] ]
+        values: [ [e.geocode.location.lat] ]
       });
 
       data.push({
         range: `${WRITEBACK_SHEET}!${lngColumn}${e.row_num}`,
-        values: [ [e.lat_lng.lng] ]
+        values: [ [e.geocode.location.lng] ]
       });
+
+      if (e.geocode.canonical_address) {
+        data.push({
+          range: `${WRITEBACK_SHEET}!${addressColumn}${e.row_num}`,
+          values: [ [e.geocode.canonical_address] ]
+        });
+      }
     });
     const write_response = await google.sheets('v4').spreadsheets.values.batchUpdate(write_request);
   }
@@ -343,7 +360,12 @@ async function getLatLng(address, client) {
   });
 
   if (response.data.results && response.data.results.length > 0) {
-    return response.data.results[0].geometry.location;
+    const result = response.data.results[0];
+    const retval = {
+      canonical_address: result.formatted_address,
+      location: result.geometry.location,
+    };
+    return retval;
   } else {
     console.error(response);
     throw new Error(response);
