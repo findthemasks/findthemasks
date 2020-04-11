@@ -1,79 +1,57 @@
 export const FILTER_ITEMS = {
   'n95s': {
-    name: 'ftm-accept-item-n95s',
-    isSet: false
+    name: 'ftm-accept-item-n95s'
   },
   'surgical masks': {
-    name: 'ftm-accept-item-surgical-masks',
-    isSet: false
+    name: 'ftm-accept-item-surgical-masks'
   },
   'homemade masks (specify type in other)': {
-    name: 'ftm-accept-item-homemade-masks',
-    isSet: false
+    name: 'ftm-accept-item-homemade-masks'
   },
   'face shields': {
-    name: 'ftm-accept-item-face-shields',
-    isSet: false
+    name: 'ftm-accept-item-face-shields'
   },
   'faceshields - 3d-printed or makerspace (specify type in other)': {
-    name: 'ftm-accept-item-face-shields-makerspace',
-    isSet: false
+    name: 'ftm-accept-item-face-shields-makerspace'
   },
   'disposable booties': {
-    name: 'ftm-accept-item-disposable-booties',
-    isSet: false
+    name: 'ftm-accept-item-disposable-booties'
   },
   'safety goggles': {
-    name: 'ftm-accept-item-goggles',
-    isSet: false
+    name: 'ftm-accept-item-goggles'
   },
   'gloves': {
-    name: 'ftm-accept-item-gloves',
-    isSet: false
+    name: 'ftm-accept-item-gloves'
   },
   'gowns': {
-    name: 'ftm-accept-item-gowns',
-    isSet: false
+    name: 'ftm-accept-item-gowns'
   },
   'coveralls/bunny suits': {
-    name: 'ftm-accept-item-coveralls-bunny-suits',
-    isSet: false
+    name: 'ftm-accept-item-coveralls-bunny-suits'
   },
   'hand sanitizer': {
-    name: 'ftm-accept-item-sanitizer',
-    isSet: false
+    name: 'ftm-accept-item-sanitizer'
   },
   'disinfecting wipes': {
-    name: 'ftm-accept-item-disinfecting-wipes',
-    isSet: false
+    name: 'ftm-accept-item-disinfecting-wipes'
   },
   'thermometers': {
-    name: 'ftm-accept-item-thermometers',
-    isSet: false
+    name: 'ftm-accept-item-thermometers'
   },
   'caprs': {
-    name: 'ftm-accept-item-caprs',
-    isSet: false
+    name: 'ftm-accept-item-caprs'
   },
   'walkie-talkies/baby monitors': {
-    name: 'ftm-accept-item-walkie-talkies',
-    isSet: false
+    name: 'ftm-accept-item-walkie-talkies'
   },
   'nasopharyngeal swabs': {
-    name: 'ftm-accept-item-nasopharyngeal-swabs',
-    isSet: false
+    name: 'ftm-accept-item-nasopharyngeal-swabs'
   },
-  // TODO(nburt): Europe uses certain country specific naming for accepted items, blacklist CA / US
-  //  until US uses merge config
   'ffp2 masks (n95) or ffp3': {
-    name: 'ftm-accept-item-europe-n95s',
-    isSet: false,
-    countryBlacklist: ['ca', 'us']
+    name: 'ftm-accept-item-europe-n95s'
   },
   'surgical masks (type ii, iir)': {
-    name: 'ftm-accept-item-europe-surgical-masks',
-    isSet: false,
-    countryBlacklist: ['ca', 'us']
+    name: 'ftm-accept-item-europe-surgical-masks'
   }
 };
 
