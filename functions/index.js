@@ -109,6 +109,8 @@ async function annotateGeocode(data, sheet_id, client) {
 
   const approvedIndex = headers.findIndex( e => e === 'approved' );
   const addressIndex = headers.findIndex( e => e === 'address' );
+  const stateIndex = headers.findIndex( e => e === 'state' );
+  const cityIndex = headers.findIndex( e => e === 'city' );
   const origAddressIndex = headers.findIndex( e => e === 'orig_address' );
   const latIndex = headers.findIndex( e => e === 'lat' );
   const lngIndex = headers.findIndex( e => e === 'lng' );
@@ -123,48 +125,54 @@ async function annotateGeocode(data, sheet_id, client) {
 
   const to_write_back = [];
   const promises = [];
-  // TODO(awong): Do we still need this rate limit?
-  let num_lookups = 0;
-  real_values.forEach( (entry, index) => {
-    if (entry[approvedIndex] === "x") {
-      // Row numbers start at 1.  First 2 rows are headers, so we need to add 2.
-      const row_num = index + 1 + 2;
+  const doGeocode = (address, entry, row_num, do_latlong) => {
+    return getLatLng(address, maps_client).then(geocode => {
+        if (entry[addressIndex]) {
+          // Do not overwrite if there is already an address listed.
+          geocode.canonical_address = null;
+        } else {
+          entry[addressIndex] = geocode.canonical_address;
+        }
 
-      // Check if entry's length is too short to possibly have a latitude, we need
-      // to geocode.  If the value for lat is "", we also need to geocode.
-      //
-      // Similarly if the final address is missing, redo the canonicalization.
-      if (num_lookups < 50 && (entry[addressIndex] === "" || (entry.length < (latIndex + 1)) || (entry[latIndex] === ""))) {
-
-        // Geolocation only allows 50qps. Overkilling it causes rejects. Artifically cap here.
-        // TODO(awong): do some smarter throttle system.
-        num_lookups = num_lookups + 1;
-
-        // Do geocoding and add lat/lng to data iff we don't already have a latLng for
-        // the address *and* the address has been moderated.  (In this code block, all
-        // data has already been moderated.)
-        const address = entry[addressIndex] || entry[origAddressIndex];
-
-        promises.push(getLatLng(address, maps_client).then(geocode => {
-          if (entry[addressIndex]) {
-            // Do not overwrite if there is already an address listed.
-            console.log("Don't update address");
-            geocode.canonical_address = null;
-          } else {
-            entry[addressIndex] = geocode.canonical_address;
-          }
+        if (do_latlong) {
           entry[latIndex] = geocode.location.lat;
           entry[lngIndex] = geocode.location.lng;
-          to_write_back.push({row_num, geocode});
-          return info;
-        }).catch( e => {
-          console.error(e);
-          entry[latIndex] = 'N/A';
-          entry[lngIndex] = 'N/A';
-        }));
-      }
+        } else {
+          geocode.location = null;
+        }
+        console.log("Writing ", geocode);
+        to_write_back.push({row_num, geocode});
+        return geocode;
+      }).catch( e => {
+        console.error(e);
+        entry[latIndex] = 'N/A';
+        entry[lngIndex] = 'N/A';
+      });
+  };
+
+  // TODO(awong): Do we still need this rate limit?
+  // Geolocation only allows 50qps. Overkilling it causes rejects. Artifically cap here.
+  let num_lookups = 0;
+  real_values.forEach( (entry, index) => {
+    const final_address = entry[addressIndex];
+    const needs_latlong = entry[approvedIndex] === "x";
+
+    // Row numbers start at 1.  First 2 rows are headers, so we need to add 2.
+    const row_num = index + 1 + 2;
+
+    // Check if entry's length is too short to possibly have a latitude, we need
+    // to geocode.  If the value for lat or lng is "", we also need to geocode.
+    const missing_lat_lng = (entry.length < (latIndex + 1)) || !entry[latIndex] || !entry[lngIndex];
+
+    if (!final_address || (needs_latlong && missing_lat_lng)) {
+    console.log("Doing soemthing");
+      const address = final_address || `${entry[origAddressIndex]}, ${entry[cityIndex]}, ${entry[stateIndex]}`;
+
+      // TODO(awong): do some smarter throttle system.
+      num_lookups = num_lookups + 1;
+      promises.push(doGeocode(address, entry, row_num, needs_latlong));
     }
-  });
+  } );
 
   await Promise.all(promises);
   // Attempt to write back now.
@@ -182,15 +190,17 @@ async function annotateGeocode(data, sheet_id, client) {
     to_write_back.forEach( e => {
       console.log(`writing lat-long,address cols ${latColumn},${lngColumn},${addressColumn} : ${JSON.stringify(e)}`);
       // TODO(awong): Don't hardcode the columns. Make it more robust somehow.
-      data.push({
-        range: `${WRITEBACK_SHEET}!${latColumn}${e.row_num}`,
-        values: [ [e.geocode.location.lat] ]
-      });
+      if (e.geocode.location) {
+        data.push({
+          range: `${WRITEBACK_SHEET}!${latColumn}${e.row_num}`,
+          values: [ [e.geocode.location.lat] ]
+        });
 
-      data.push({
-        range: `${WRITEBACK_SHEET}!${lngColumn}${e.row_num}`,
-        values: [ [e.geocode.location.lng] ]
-      });
+        data.push({
+          range: `${WRITEBACK_SHEET}!${lngColumn}${e.row_num}`,
+          values: [ [e.geocode.location.lng] ]
+        });
+      }
 
       if (e.geocode.canonical_address) {
         data.push({
@@ -213,10 +223,6 @@ async function getSpreadsheet(country, client) {
 
   let response = await sheets.spreadsheets.values.get(request);
   const data = response.data;
-
-  // Geocode annotation is being done via appscript right now.
-  // When reenabling, ensure the oauth scope is made read/write.
-  // await annotateGeocode(response.data, SHEETS[country], client);
 
   try {
     request.range = 'MergeConfig';
