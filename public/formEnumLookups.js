@@ -55,7 +55,7 @@ export const FILTER_ITEMS = {
     name: 'ftm-accept-item-caprs',
     isSet: false
   },
-  'Walkie-talkies/baby monitors': {
+  'walkie-talkies/baby monitors': {
     name: 'ftm-accept-item-walkie-talkies',
     isSet: false
   },
@@ -183,7 +183,7 @@ const ORG_TYPES = {
   'urgent care': {
     name: 'ftm-org-type-urgent-care'
   }
-}
+};
 
 export const ENUM_MAPPINGS = Object.assign({}, FILTER_ITEMS, ORG_TYPES, {
   'yes': {

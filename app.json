@@ -1,3 +1,7 @@
 {
-    "buildpacks": [{"url": "https://github.com/heroku/heroku-buildpack-static"}]
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
 }

@@ -304,7 +304,7 @@ function multilineStringToNodes(input) {
   textNodes.forEach((e) => {
     returnedNodes.push(e);
     returnedNodes.push(document.createElement('br'));
-  })
+  });
   return returnedNodes.slice(0,-1);
 }
 
@@ -327,7 +327,7 @@ function getFlatFilteredEntries(data, filters) {
       const city = cities[cityName];
 
       city.entries.sort(function (a, b) {
-          return a.name.localeCompare( b.name );
+        return a.name.localeCompare( b.name );
       }).forEach(function(entry) {
         if (filterAcceptKeys) {
           const acc = (entry.accepting || "").toLowerCase();
@@ -351,12 +351,15 @@ function getFlatFilteredEntries(data, filters) {
   return entries;
 }
 
-function getCountryDataFilename(country) {
-  let countryDataFilename = 'data.json';
-  if (country !== 'us') {
-    countryDataFilename = `data-${ country }.json`;
-  }
+const getCountryDataUrl = (countryDataFilename) => {
+  return `https://storage.googleapis.com/findthemasks.appspot.com/${countryDataFilename}`
+};
 
+function getCountryDataFilename(country) {
+  // Always use country-specific data.json file
+  let countryDataFilename;
+
+  countryDataFilename = `data-${ country }.json`;
   return countryDataFilename;
 }
 
@@ -366,7 +369,7 @@ function loadOtherCountries() {
   for (const code of countryCodes) {
     if (code !== currentCountry) {
       $.getJSON(
-        `https://findthemasks.com/${ getCountryDataFilename(code) }`,
+        getCountryDataUrl(getCountryDataFilename(code)),
         (result) => {
           const otherData = countryData[code] = toDataByLocation(result);
 
@@ -460,7 +463,7 @@ $(function () {
     }
   };
 
-  $.getJSON(`https://findthemasks.com/${ getCountryDataFilename(currentCountry) }`, function (result) {
+  $.getJSON(getCountryDataUrl(getCountryDataFilename(currentCountry)), function (result) {
     if(window.i18nReady) {
       renderListings(result);
     } else {
@@ -472,9 +475,9 @@ $(function () {
 
   const footerHeight = 440;  // footer + navbar + small buffer
   $(window).scroll(function() {
-     if($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
-        renderNextListPage();
-     }
+    if($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
+      renderNextListPage();
+    }
   });
 });
 
@@ -624,7 +627,7 @@ function loadMapScript(searchParams, data, filters) {
   const scriptTag = ce('script');
 
   // API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info.
-  const apiKey = 'AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s';
+  const apiKey = window.GOOGLE_MAPS_API_KEY || 'AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s';
   const languageRegion = getMapsLanguageRegion();
   const scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry,places&callback=initMap&key=${apiKey}&language=${languageRegion.language}&region=${languageRegion.region}`;
 
@@ -785,7 +788,7 @@ function centerMapToMarkersNearUser() {
 
 /**
  * Fits map to bounds, expanding the bounds to include at least three markers as necessary.
-*/
+ */
 function fitMapToMarkersNearBounds(bounds) {
   // get center of bounding box and use it to sort markers by distance
   let center = bounds.getCenter();
@@ -794,7 +797,7 @@ function fitMapToMarkersNearBounds(bounds) {
 
   // extend bounds to fit closest three markers
   markersByDistance.forEach((marker) => {
-      bounds.extend(marker.position);
+    bounds.extend(marker.position);
   });
 
   if (!bounds.getNorthEast().equals(bounds.getSouthWest())) {
