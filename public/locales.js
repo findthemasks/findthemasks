@@ -26,5 +26,9 @@ export default [
   {
     i18nString: 'ftm-spanish',
     localeCode: 'es'
+  },
+  {
+    i18nString: 'ftm-chinese-traditional',
+    localeCode: 'zh-TW'
   }
 ];

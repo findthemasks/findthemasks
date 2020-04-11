@@ -71,7 +71,7 @@ const generateBottomNav = () => {
     });
 
     sortedLocales.forEach((locale) => {
-      if (locale.localeCode === currentLocale.toLowerCase()) {
+      if (locale.localeCode.toLowerCase() === currentLocale.toLowerCase()) {
         localeDropdownLink.textContent = $.i18n(locale.i18nString);
       }
 
