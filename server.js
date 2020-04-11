@@ -42,7 +42,7 @@ router.get(['/give', '/give.html'], (req, res) => {
   res.render('give', {
     ogTitle: '#findthemasks | give',
     ogUrl: 'https://findthemasks.com/give',
-    ogDescription: 'America’s frontline healthcare workers are treating COVID-19 patients without adequate protective gear, risking their lives! We need to find the masks. All of these masks can save lives now if you get them into the hands of healthcare workers.',
+    ogDescription: 'America\'s frontline healthcare workers are treating COVID-19 patients without adequate protective gear, risking their lives! We need to find the masks. All of these masks can save lives now if you get them into the hands of healthcare workers.',
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
   });
 });
@@ -60,7 +60,21 @@ router.get(['/donation-form-bounce', '/donation-form-bounce.html'], (req, res) =
 });
 
 router.get(['/whoweare', '/whoweare.html'], (req, res) => {
-  res.render('whoweare', { layout: false });
+  res.render('whoweare', {
+    layout: 'static',
+    ogTitle: '#findthemasks | About Us',
+    ogUrl: 'https://findthemasks.com/whoweare',
+    ogDescription: 'America\'s frontline healthcare workers are treating COVID-19 patients without adequate protective gear, risking their lives! We need to find the masks. All of these masks can save lives now if you get them into the hands of healthcare workers.',
+  });
+});
+
+router.get('/privacy-policy', (req, res) => {
+  res.render('privacy-policy', {
+    layout: 'static',
+    ogTitle: '#findthemasks | Privacy Policy',
+    ogUrl: 'https://findthemasks.com/privacy-policy',
+    ogDescription: 'Find The Masks privacy policy',
+  })
 });
 
 router.get(['/404', '/404.html'], (req, res) => {
