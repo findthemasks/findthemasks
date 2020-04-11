@@ -1,0 +1,57 @@
+<body>
+<main class="content give">
+    <div class="languages-loading" style="position: fixed;top: 50%; left: 50%;">
+        <div class="spinner-border" role="status">
+          <span class="sr-only">Loading translations...</span>
+        </div>
+    </div>
+
+    <div class="translated-content">
+      <div class="container" style="padding-bottom: 40px;">
+        <div class="map-container" style="display: none;">
+
+          <div class="row" style="margin: 0px 0px 20px 0px;">
+            <div class="col-xl-4" style="padding: 0px">
+              <h3 style="white-space: nowrap"><span class="i18n" data-i18n="ftm-map-of-sites">Donation sites</span> <span id="map-stats"></span></h3>
+            </div>
+            <div class="col-xl-8" style="padding: 0px">
+              <div class="map-search-wrap">
+                <div class="search-input">
+                  <input style="" type="search" name="map-search" id="map-search" class="i18n" placeholder="Search by city, zip, or address" data-i18n="[placeholder]ftm-maps-search-placeholder">
+                  <!-- Icon credit to https://feathericons.com/  -->
+                  <img class="search-icon" src="images/icons/search.svg">
+                </div>
+                <!-- BETA: To enable search field, either change data-enable-search to "true" in #map below, or add hide-search=false/show-search=true to query string. -->
+                <div class="search-controls">
+                  <a href="javascript:;" class="map-action-link" id="use-location"><span class="i18n" data-i18n="ftm-maps-search-use-location">Use my location</span><span class="search-control-separator">|</span></a>
+
+                <a href="javascript:;" class="map-action-link" id="reset-map"><span class="i18n" data-i18n="ftm-maps-search-reset">Reset map</span></a></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="map" data-enable-search="true"></div>
+          <span style="padding-right: 5px;" class="i18n" data-i18n="ftm-add-donation-site-question">Made in collaboration with <a href="https://findthemasks.ca" target="_blank">findthemasks.ca</a>. Don't see your healthcare facility listed? Fill in our <a href="https://docs.google.com/forms/d/e/1FAIpQLSf5JAiAikzMEEw86eyjoRMH5AFlwaMrOmjjlr3vGcL5RrJt9A/viewform" target="_blank">Donation Request Form</a> to join the map!</span>
+          <span class="i18n" data-i18n="[html]ftm-add-donation-site-answer">
+            Please <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">
+            fill out this form</a>. We will review it as soon as possible.
+          </span>
+        </div>
+
+        <div class="locations-loading">
+          <div class="spinner-border" role="status"></div>
+          <div class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</div>
+        </div>
+
+        <div class="locations-container" style="display: none;">
+          <h3 style="padding: 30px 0px 5px 0px; margin: 0px;"><span class="i18n" data-i18n="ftm-list-of-sites">List of donation sites</span> <span id="list-stats"></span></h3>
+          <div class="filters-container" style="display: none;">
+            <form name="filters" class="filters-list"></form>
+          </div>
+
+          <div id="locations-list" class="locations-list"></div>
+        </div>
+      </div>
+    </div>
+</main>
+</body>

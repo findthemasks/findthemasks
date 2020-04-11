@@ -8,18 +8,38 @@ The goal of this document is get the site and backend working locally on your de
 
 ### Public Site
 
+#### Running locally
+
+Install `node >= 12.x.x` and `npm`: https://nodejs.org/en/download/.
+
+If you are on Linux or macOS you can install using either [n](https://github.com/tj/n) or [nvm](https://github.com/nvm-sh/nvm)
+
 From the root directory of this repo:
 
 ```
-$ npm install -g http-server
-$ http-server
+$ ./local_setup.sh
+$ npm run dev
 ```
 
-Then you can open http://localhost:8080/ (or http://local.findthemasks.com:8080) in your browser.  If everything is working you should be able to see the dynamically populated "List of Donation Sites"
+#### Running in docker
+
+Requirements:
+* docker
+* docker-compose
+
+Two very simple steps:
+1. Run `docker-compose build`
+2. Run `docker-compose up`
+
+This starts Find The Masks server in a docker container using nodemon and mounts this directory to the container.
+
+If you make any changes to the code and save them, nodemon automatically detects them and restarts node server that runs in the container. 
+
+Then you can open http://localhost:3000/ (or http://local.findthemasks.com:3000) in your browser.  If everything is working you should be able to see the dynamically populated "List of Donation Sites"
 
 ### `data.json`
 
-We are still working on a simple way for devs to swap in their own test spreadsheet for testing purposes ([Issue #185](https://github.com/r-pop/findthemasks/issues/185))
+We are still working on a simple way for devs to swap in their own test spreadsheet for testing purposes ([Issue #185](https://github.com/findthemasks/findthemasks/issues/185))
 
 First, run the npm install to populate the local `node_modules/` cache
 

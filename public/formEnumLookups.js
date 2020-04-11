@@ -183,7 +183,7 @@ const ORG_TYPES = {
   'urgent care': {
     name: 'ftm-org-type-urgent-care'
   }
-}
+};
 
 export const ENUM_MAPPINGS = Object.assign({}, FILTER_ITEMS, ORG_TYPES, {
   'yes': {

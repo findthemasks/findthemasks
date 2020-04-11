@@ -11,15 +11,15 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 - new dev? please look at issues and comment on something to grab it!
     - Check out the [Getting Started](getting_started.md) doc
 - new data moderator? Join the slack and come to #data!
-- not either? The most useful contribution is identifying more drop off locations and plugging them into the form linked on the public website, so if you don't see an issue here that calls to you, please work on that! Advice on making calls is in [#131](https://github.com/r-pop/findthemasks/issues/131#issuecomment-602746963)
+- not either? The most useful contribution is identifying more drop off locations and plugging them into the form linked on the public website, so if you don't see an issue here that calls to you, please work on that! Advice on making calls is in [#131](https://github.com/findthemasks/findthemasks/issues/131#issuecomment-602746963)
 
 ## Current setup
 
-- The website reads from a google sheet, generates a json blob, which is used to generate static HTML.
+- The website reads from a google sheet, generates a json blob, which is rendered by a Node server.
 
 ## Reading our data to build your own frontend
 
-- Our data file updates every five minutes and can be read from findthemasks.com/data.json.
+- Our data file updates every five minutes and can be read from https://storage.googleapis.com/findthemasks.appspot.com/data.json.
 - If you read the json directly, you need to ignore entries without an 'x' in the first field. Otherwise, you may publish info hospitals asked to have taken down. Don't do it!
 - If this sounds like too much work, then please use our:
 
@@ -33,7 +33,7 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 <iframe style="width: 100%; height: 800px; border: none;" src="https://findthemasks.com/give.html"></iframe>
 ```
 
-- We also support state specific data views, hiding the map, and hiding the filters through query params:
+- We also support state specific data views, hiding the map, hiding the filters through query params, and specifying locale:
 
 ```html
 ?state={CA/WA/NY/etc}
@@ -41,6 +41,7 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 ?hide-filters={true/false}
 ?hide-list={true/false} (also hides filters)
 ?hide-search={true/false} (beta)
+?locale={see available locales in dropdown at https://findthemasks.com}
 ```
 
 All boolean parameters default to false (unless they're in beta).
