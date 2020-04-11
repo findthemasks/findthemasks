@@ -14,7 +14,8 @@ const localesMap = {
   "pt": "i18n/pt-pt.json",
   "pt-PT": "i18n/pt-pt.json",
   "pl": "i18n/pl-pl.json",
-  "pl-PL": "i18n/pl-pl.json"
+  "pl-PL": "i18n/pl-pl.json",
+  "zh-TW": "i18n/zh-tw.json"
 };
 
 const getConfigForLocale = (locale) => {

@@ -71,7 +71,7 @@ const generateBottomNav = () => {
     });
 
     sortedLocales.forEach((locale) => {
-      if (locale.localeCode === currentLocale.toLowerCase()) {
+      if (locale.localeCode.toLowerCase() === currentLocale.toLowerCase()) {
         localeDropdownLink.textContent = $.i18n(locale.i18nString);
       }
 
@@ -965,7 +965,9 @@ const MAP_INITIAL_VIEW = {
   es: { zoom: 5, center: { lat: 40.163667, lng:	-3.74922 }},
   fr: { zoom: 5, center: { lat: 46.227638, lng: 2.213749 }},
   gb: { zoom: 5, center: { lat: 55.378051, lng: -3.435973 }},
+  in: { zoom: 5, center: { lat: 20.593684, lng: 78.96288 }},
   it: { zoom: 5, center: { lat: 41.87194, lng: 12.56738 }},
+  pl: { zoom: 5, center: { lat: 51.919438, lng: 19.145136 }},
   pt: { zoom: 6, center: { lat: 39.399872, lng: -8.224454 }},
   us: { zoom: 4, center: { lat: 37.09024, lng: -95.712891 }},
 };
