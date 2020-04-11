@@ -83,17 +83,28 @@ export default {
     },
     noDonationSitesNearMeI18nString: 'ftm-france-no-donation-sites-near-me'
   },
-  // gb: {
-  //   i18nString: 'ftm-united-kingdom',
-  //   countryCode: 'gb',
-  //   administrativeRegionI18nString: null,
-  //   donationSites: {
-  //     i18nString: 'ftm-united-kingdom-large-donations',
-  //     administrativeRegionLinks: null,
-  //     nationalLinks: null
-  //   },
-  //   noDonationSitesNearMeI18nString: 'ftm-united-kingdom-no-donation-sites-near-me'
-  // },
+  gb: {
+    i18nString: 'ftm-united-kingdom',
+    countryCode: 'gb',
+    administrativeRegionI18nString: 'ftm-administrative-region-region',
+    donationSites: {
+      i18nString: 'ftm-united-kingdom-large-donations',
+      administrativeRegionLinks: null,
+      nationalLinks: null
+    },
+    noDonationSitesNearMeI18nString: 'ftm-united-kingdom-no-donation-sites-near-me'
+  },
+  in: {
+    i18nString: 'ftm-india',
+    countryCode: 'in',
+    administrativeRegionI18nString: 'ftm-administrative-region-subdivision',
+    donationSites: {
+      i18nString: 'ftm-india-large-donations',
+      administrativeRegionLinks: null,
+      nationalLinks: null
+    },
+    noDonationSitesNearMeI18nString: 'ftm-india-no-donation-sites-near-me'
+  },
   it: {
     i18nString: 'ftm-italy',
     countryCode: 'it',
@@ -105,18 +116,17 @@ export default {
     },
     noDonationSitesNearMeI18nString: 'ftm-germany-no-donation-sites-near-me'
   },
-  // pl: {
-  //   i18nString: 'ftm-poland',
-  //   countryCode: 'pl',
-    // TODO(nburt): update to correct administrative region for poland
-    // administrativeRegionI18nString: 'ftm-administrative-region-state',
-    // donationSites: {
-    //   i18nString: 'ftm-poland-large-donations',
-    //   administrativeRegionLinks: null,
-    //   nationalLinks: null
-    // },
-    // noDonationSitesNearMeI18nString: 'ftm-poland-no-donation-sites-near-me'
-  // },
+  pl: {
+    i18nString: 'ftm-poland',
+    countryCode: 'pl',
+    administrativeRegionI18nString: 'ftm-administrative-region-state',
+    donationSites: {
+      i18nString: 'ftm-poland-large-donations',
+      administrativeRegionLinks: null,
+      nationalLinks: null
+    },
+    noDonationSitesNearMeI18nString: 'ftm-poland-no-donation-sites-near-me'
+  },
   pt: {
     i18nString: 'ftm-portugal',
     countryCode: 'pt',
