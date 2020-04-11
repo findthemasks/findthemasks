@@ -65,12 +65,12 @@ hr {margin-top: 1.7rem;}
   padding: 0 45px 90px 45px;
 }
 
-.social-media-icons {
+.social-media-icon {
   float:left;
   margin-right: 10px;
   width: 24px;
   height:24px;
-  margin-top: 20px;
+  margin-top: 0px;
 }
 
 
