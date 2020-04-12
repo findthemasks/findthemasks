@@ -177,5 +177,6 @@
   "ftm-thanks-companies" : "Un merci spécial aux entreprises suivantes:",
   "ftm-thanks-smartling" : "Smartling pour l'accès à leur plateforme de gestion de la traduction",
   "ftm-thanks-google" : "Crédits API Google for Maps",
-  "ftm-thanks-slack" : "Slack pour un compte Pro"
+  "ftm-thanks-slack" : "Slack pour un compte Pro",
+  "ftm-tweet-share-button" : "Trouvez l'endroit le plus proche pour donner des masques et autres EPI sur www.findthemasks.com"
 }
