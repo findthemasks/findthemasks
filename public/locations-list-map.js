@@ -122,39 +122,50 @@ const generateBottomNav = () => {
 
 // i18n must be loaded before filter items can be translated
 // config stores the i18n string and this function calls i18n with it
-const translatedFilterItems = (fieldTranslations) => {
+const translatedFilterItems = (filterItems) => {
   const translated = {};
 
-  let countryAcceptedItems;
-
-  if (fieldTranslations && fieldTranslations.accepting && Array.isArray(fieldTranslations.accepting.canonical)) {
-    countryAcceptedItems = fieldTranslations.accepting.canonical.map((item) => item.toLowerCase());
-  }
-
-  for (const [filterItemKey, filterItem] of Object.entries(FILTER_ITEMS)) {
-    // TODO(nburt): US does not use the merge config yet so countryAcceptedItems are blank
-    if (
-      !countryAcceptedItems
-      || countryAcceptedItems.includes(filterItemKey)
-    ) {
-      if (!Array.isArray(filterItem.countryBlacklist) || !filterItem.countryBlacklist.includes(currentCountry)) {
-        translated[filterItemKey] = {
-          name: $.i18n(filterItem.name),
-          isSet: filterItem.isSet
-        }
-      }
-    }
+  for (const [filterItemKey, filterItem] of Object.entries(filterItems)) {
+    translated[filterItemKey] = {
+      name: $.i18n(filterItem.name),
+      isSet: false
+    };
   }
 
   return translated;
 };
+
+// get list of possible values for `Accepted Items`
+// iterates through data to extract all unique "accepting" items
+// matches against whitelist FILTER_ITEMS (from formEnumLookups.js)
+// and returns the i18n keys from FILTER_ITEMS for accepting items that match
+//
+// NOTE: the incoming data structure is very brittle; if that changes at all, this will break
+const parseAcceptedItemsFromData = (data) => {
+  const acceptedItems = {};
+  Object.keys(data).forEach((state) => {
+    Object.keys(data[state].cities).forEach((city) => {
+      data[state].cities[city].entries.forEach((entry) => {
+        // split on commas except if comma is in parentheses
+        entry.accepting.split(/, (?![^(]*\))/).map(a => a.trim()).forEach((i) => {
+          const filterKey = i.toLowerCase();
+          if (FILTER_ITEMS.hasOwnProperty(filterKey) && !acceptedItems.hasOwnProperty(filterKey)) {
+            acceptedItems[filterKey] = FILTER_ITEMS[filterKey];
+          }
+        });
+      });
+    });
+  });
+
+  return acceptedItems;
+}
 
 // Builds the data structure for tracking which filters are set
 // If all values in a category are false, it's treated as no filter - all items are included
 // If one or more values in a category is true, the filter is set - only items matching the filter are included
 // If two or more values in a category are true, the filter is the union of those values
 // If multiple categories have set values, the result is the intersection of those categories
-function createFilters(data, fieldTranslations) {
+function createFilters(data) {
   const filters = {
     states: {}
   };
@@ -163,7 +174,8 @@ function createFilters(data, fieldTranslations) {
     filters.states[state] = { name: state, isSet: false };
   }
 
-  filters.acceptItems = translatedFilterItems(fieldTranslations);
+  const acceptedItems = parseAcceptedItemsFromData(data);
+  filters.acceptItems = translatedFilterItems(acceptedItems);
 
   return filters;
 }
@@ -400,7 +412,7 @@ $(function () {
     }
     // END BETA ONLY
 
-    const filters = createFilters(data, result.field_translations);
+    const filters = createFilters(data);
 
     // Update filters to match any ?state= params
     const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
