@@ -95,10 +95,14 @@ function sendDataJson(countryCode, res) {
     'Access-Control-Allow-Origin': '*',
   };
 
-  // Return memoized data.
-  res.writeHead(200, HEADERS);
-  res.write(cached_data[countryCode].data);
-  res.end();
+  if (countryCode in cached_data) {
+    // Return memoized data.
+    res.writeHead(200, HEADERS);
+    res.write(cached_data[countryCode].data);
+    res.end();
+  } else {
+    res.sendStatus(404);
+  }
 }
 
 app.use('/data(-:countryCode)?.json', (req, res) => {
@@ -122,12 +126,14 @@ app.use('/data(-:countryCode)?.json', (req, res) => {
   const data_req = https.request(options, data_res => {
     data_res.on('data', d => new_data += d);
     data_res.on('end', () => {
-      // Cache for 5 mins.
-      const new_expires_at = new Date(now.getTime() + (5 * 60 * 1000));
-      cached_data[countryCode] = {
-        expires_at: new_expires_at,
-        data: new_data,
-      };
+      if (data_res.statusCode === 200) {
+        // Cache for 5 mins.
+        const new_expires_at = new Date(now.getTime() + (5 * 60 * 1000));
+        cached_data[countryCode] = {
+          expires_at: new_expires_at,
+          data: new_data,
+        };
+      }
 
       sendDataJson(countryCode, res);
     });
