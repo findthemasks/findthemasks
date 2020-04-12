@@ -169,7 +169,8 @@ async function annotateGeocode(data, sheet_id, client) {
       const address = final_address || `${entry[origAddressIndex]}, ${entry[cityIndex]}, ${entry[stateIndex]}`;
 
       // TODO(awong): do some smarter throttle system.
-      num_lookups = num_lookups + 1;
+      num_lookups = num_lookups + 1
+      console.debug(`Calling geocoder for entry: ${entry} on row: ${row_num} and address: ${address} `);
       promises.push(doGeocode(address, entry, row_num, needs_latlong));
     }
   } );
