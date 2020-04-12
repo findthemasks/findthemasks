@@ -167,5 +167,6 @@
   "ftm-thanks-companies" : "以下の企業に特に感謝します。",
   "ftm-thanks-smartling" : "翻訳管理プラットフォームにアクセスするためのSmartling",
   "ftm-thanks-google" : "Google for Maps APIクレジット",
-  "ftm-thanks-slack" : "Slack for Proアカウント"
+  "ftm-thanks-slack" : "Slack for Proアカウント",
+  "ftm-tweet-share-button" : "www.findthemasks.comで、マスクやその他のPPEを寄付する最も近い場所を見つけてください"
 }

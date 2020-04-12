@@ -1,7 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-161442455-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-161442455-1');
+  </script>
+  <script>
+    //Allow the text that prefills the Twitter window to be translated
+    window.onload = function(){
+      var prefillText = $.i18n("ftm-tweet-share-button");
+      $('.twitter-share-button').attr('href','https://twitter.com/intent/tweet?text=' + prefillText);
+    }
+  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.fallbacks.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.language.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.messagestore.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.parser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.bidi.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify-element.min.js"></script>
+  <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
+  <script type="module" src="i18n.js"></script>
+  <script type="module" src="locations-list-map.js"></script>
+
+  <title>#Findthemasks</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700,display=swap" rel="stylesheet">
+  <meta name="description" content="Help #findthemasks for covid-19" />
+  <meta name="keywords" content="#findthemasks, masks, n95, coronavirus, covid-19" />
+  <link rel="apple-touch-icon" sizes="180x180" href="images/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/icons/favicon-16x16.png">
+  <link rel="manifest" href="site.webmanifest">
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+  <link rel="canonical" href="https://findthemasks.com/" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- START Open Graph Tags -->
+
+  <!-- English -->
+  <meta lang="en" property="og:title" content="#findthemasks"/>
+  <meta lang="en" property="og:url" content="https://findthemasks.com/"/>
+  <meta lang="en" property="og:description" content="Find where you can donate your masks or other personal protective equipment (PPE) in your local area."/>
+
+  <meta property="og:image" content="https://findthemasks.com/images/map.jpg"/>
+  <meta property="og:type" content="website"/>
+
+  <!-- END Open Graph Tags -->
+</head>
+
+<body>
+
 <div class="languages-loading" style="position: fixed;top: 50%; left: 50%;">
-        <div class="spinner-border" role="status">
-          <span class="sr-only">Loading translations...</span>
-        </div>
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading translations...</span>
+  </div>
+</div>
+<div class="translated-content">
+  <nav class="navbar fixed-bottom navbar-expand-lg navbar-light bg-light nav-drop-shadow">
+    <div>
+      <div class="social-media-icon">
+        <a class="fb-xfbml-parse-ignore" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.findthemasks.com%2F&amp;src=sdkpreparse','popup', 'width=600,height=800');return false;" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.findthemasks.com%2F&amp;src=sdkpreparse">
+          <img  src="images/facebook.svg" border="0" />
+        </a>
+      </div>
+      <div class="social-media-icon">
+        <a href="https://www.instagram.com/findthemasks/">
+          <img src="images/instagram.svg" border="0"  />
+        </a>
+      </div>
+      <div class="social-media-icon" >
+        <a class="twitter-share-button"
+           target="_blank"
+           href="">
+          <img src="images/twitter.svg" border="0"  />
+        </a>
+      </div>
+      <div class="social-media-icon">
+        <a target="_blank"
+           href="https://www.reddit.com/search?q=findthemasks">
+           <img src="images/reddit.svg" border="0"  />
+        </a>
+      </div>
     </div>
 
     <div class="translated-content">
@@ -140,12 +231,9 @@
         <div id="map" data-enable-search="true"></div>
       </div>
 
-      <div class="locations-container" style="display: none;">
-        <div class="filters-container" style="display: none;">
-          <form name="filters" class="filters-list"></form>
-        </div>
+</body>
+</html>
 
-        <div id="locations-list" class="locations-list"></div>
 
         <div class="footer">
           <div style="height:50px"></div>
