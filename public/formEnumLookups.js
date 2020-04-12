@@ -17,7 +17,7 @@ export const FILTER_ITEMS = {
   'face shields': {
     name: 'ftm-accept-item-face-shields'
   },
-  'face shields - 3d-printed or makerspace': {
+  'face shields - 3d-printed/makerspace': {
     name: 'ftm-accept-item-face-shields-makerspace'
   },
   'face shields - 3d-printed or makerspace (specify type in other)': {
