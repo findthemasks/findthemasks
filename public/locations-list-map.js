@@ -322,7 +322,7 @@ function getFlatFilteredEntries(data, filters) {
 }
 
 const getCountryDataUrl = (countryDataFilename) => {
-  return `https://storage.googleapis.com/findthemasks.appspot.com/${countryDataFilename}`
+  return `https://findthemasks.com/${countryDataFilename}`
 };
 
 function getCountryDataFilename(country) {
