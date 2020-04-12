@@ -12,12 +12,12 @@ app.set('view engine', 'handlebars');
 
 app.set('strict routing', true);
 
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   const schema = req.headers['x-forwarded-proto'];
   const host = req.headers.host.split(':')[0];
 
   if (schema === 'https' || host === 'local.findthemasks.com' || host === 'localhost' ) {
-    next();
+    return next();
   } else {
     res.redirect('https://' + req.headers.host + req.url);
   }
