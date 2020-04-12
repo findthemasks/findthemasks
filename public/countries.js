@@ -2,151 +2,61 @@ export default {
   at:  {
     i18nString: 'ftm-austria',
     countryCode: 'at',
-    administrativeRegionI18nString: 'ftm-administrative-region-bundesland',
-    donationSites: {
-      i18nString: 'ftm-austria-large-donations',
-      administrativeRegionLinks: null,
-      nationalLinks: null
-    },
-    noDonationSitesNearMeI18nString: 'ftm-austria-no-donation-sites-near-me'
+    administrativeRegionI18nString: 'ftm-administrative-region-bundesland'
   },
   ca: {
     i18nString: 'ftm-canada',
     countryCode: 'ca',
-    administrativeRegionI18nString: 'ftm-administrative-region-province',
-    donationSites: {
-      i18nString: 'ftm-canada-large-donations',
-      administrativeRegionLinks: [
-        {
-          labelI18nString: 'ftm-canada-province-british-columbia',
-          url: 'https://www.safecarebc.ca/operationprotect/'
-        },
-        {
-          labelI18nString: 'ftm-canada-province-ontario',
-          url: 'https://www.ontario.ca/page/how-your-organization-can-help-fight-coronavirus'
-        }
-      ],
-      nationalLinks: [
-        {
-          labelI18nString: 'ftm-canada-manufacturer-call',
-          url: 'https://www.canada.ca/en/services/business/maintaingrowimprovebusiness/manufacturers-needed.html'
-        },
-        {
-          labelI18nString: 'ftm-canada-supplier-call',
-          url: 'https://buyandsell.gc.ca/calling-all-suppliers-help-canada-combat-covid-19'
-        }
-      ]
-    },
-    noDonationSitesNearMeI18nString: 'ftm-canada-no-donation-sites-near-me'
+    administrativeRegionI18nString: 'ftm-administrative-region-province'
   },
   ch: {
     i18nString: 'ftm-switzerland',
     countryCode: 'ch',
-    administrativeRegionI18nString: 'ftm-administrative-region-canton',
-    donationSites: {
-      i18nString: 'ftm-switzerland-large-donations',
-      administrativeRegionLinks: null,
-      nationalLinks: null
-    },
-    noDonationSitesNearMeI18nString: 'ftm-switzerland-no-donation-sites-near-me'
+    administrativeRegionI18nString: 'ftm-administrative-region-canton'
   },
   de: {
     i18nString: 'ftm-germany',
     countryCode: 'de',
-    administrativeRegionI18nString: 'ftm-administrative-region-german-land',
-    donationSites: {
-      i18nString: 'ftm-germany-large-donations',
-      administrativeRegionLinks: null,
-      nationalLinks: null
-    },
-    noDonationSitesNearMeI18nString: 'ftm-germany-no-donation-sites-near-me'
+    administrativeRegionI18nString: 'ftm-administrative-region-german-land'
   },
   es: {
     i18nString: 'ftm-spain',
     countryCode: 'es',
-    administrativeRegionI18nString: 'ftm-administrative-region-province',
-    donationSites: {
-      i18nString: 'ftm-spain-large-donations',
-      administrativeRegionLinks: null,
-      nationalLinks: null
-    },
-    noDonationSitesNearMeI18nString: 'ftm-spain-no-donation-sites-near-me'
+    administrativeRegionI18nString: 'ftm-administrative-region-province'
   },
   fr: {
     i18nString: 'ftm-france',
     countryCode: 'fr',
-    administrativeRegionI18nString: 'ftm-administrative-region-department',
-    donationSites: {
-      i18nString: 'ftm-france-large-donations',
-      administrativeRegionLinks: null,
-      nationalLinks: null
-    },
-    noDonationSitesNearMeI18nString: 'ftm-france-no-donation-sites-near-me'
+    administrativeRegionI18nString: 'ftm-administrative-region-department'
   },
   gb: {
     i18nString: 'ftm-united-kingdom',
     countryCode: 'gb',
-    administrativeRegionI18nString: 'ftm-administrative-region-region',
-    donationSites: {
-      i18nString: 'ftm-united-kingdom-large-donations',
-      administrativeRegionLinks: null,
-      nationalLinks: null
-    },
-    noDonationSitesNearMeI18nString: 'ftm-united-kingdom-no-donation-sites-near-me'
+    administrativeRegionI18nString: 'ftm-administrative-region-region'
   },
   in: {
     i18nString: 'ftm-india',
     countryCode: 'in',
-    administrativeRegionI18nString: 'ftm-administrative-region-subdivision',
-    donationSites: {
-      i18nString: 'ftm-india-large-donations',
-      administrativeRegionLinks: null,
-      nationalLinks: null
-    },
-    noDonationSitesNearMeI18nString: 'ftm-india-no-donation-sites-near-me'
+    administrativeRegionI18nString: 'ftm-administrative-region-subdivision'
   },
   it: {
     i18nString: 'ftm-italy',
     countryCode: 'it',
-    administrativeRegionI18nString: 'ftm-administrative-region-region',
-    donationSites: {
-      i18nString: 'ftm-italy-large-donations',
-      administrativeRegionLinks: null,
-      nationalLinks: null
-    },
-    noDonationSitesNearMeI18nString: 'ftm-germany-no-donation-sites-near-me'
+    administrativeRegionI18nString: 'ftm-administrative-region-region'
   },
   pl: {
     i18nString: 'ftm-poland',
     countryCode: 'pl',
-    administrativeRegionI18nString: 'ftm-administrative-region-state',
-    donationSites: {
-      i18nString: 'ftm-poland-large-donations',
-      administrativeRegionLinks: null,
-      nationalLinks: null
-    },
-    noDonationSitesNearMeI18nString: 'ftm-poland-no-donation-sites-near-me'
+    administrativeRegionI18nString: 'ftm-administrative-region-state'
   },
   pt: {
     i18nString: 'ftm-portugal',
     countryCode: 'pt',
-    administrativeRegionI18nString: 'ftm-administrative-region-precinct',
-    donationSites: {
-      i18nString: 'ftm-poland-large-donations',
-      administrativeRegionLinks: null,
-      nationalLinks: null
-    },
-    noDonationSitesNearMeI18nString: 'ftm-poland-no-donation-sites-near-me'
+    administrativeRegionI18nString: 'ftm-administrative-region-precinct'
   },
   us: {
     i18nString: 'ftm-united-states',
     countryCode: 'us',
-    administrativeRegionI18nString: 'ftm-administrative-region-state',
-    donationSites: {
-      i18nString: 'ftm-united-states-large-donations',
-      administrativeRegionLinks: null,
-      nationalLinks: null
-    },
-    noDonationSitesNearMeI18nString: 'ftm-united-states-no-donation-sites-near-me'
+    administrativeRegionI18nString: 'ftm-administrative-region-state'
   }
 }

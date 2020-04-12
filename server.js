@@ -1,6 +1,10 @@
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
+const setCurrentCountry = require('./middleware/setCurrentCountry.js');
+const selectLargeDonationSitesPartialPath = require('./viewHelpers/selectLargeDonationSitesPartialPath');
 require('dotenv').config();
+const https = require('https');
+
 const app = new express();
 const router = express.Router();
 const port = process.env.PORT || 3000;
@@ -10,12 +14,14 @@ app.set('view engine', 'handlebars');
 
 app.set('strict routing', true);
 
-app.use(function(req, res, next) {
+app.use(setCurrentCountry);
+
+app.use((req, res, next) => {
   const schema = req.headers['x-forwarded-proto'];
   const host = req.headers.host.split(':')[0];
 
   if (schema === 'https' || host === 'local.findthemasks.com' || host === 'localhost' ) {
-    next();
+    return next();
   } else {
     res.redirect('https://' + req.headers.host + req.url);
   }
@@ -34,7 +40,8 @@ router.get(['/', '/index.html'], (req, res) => {
     ogTitle: '#findthemasks',
     ogUrl: 'https://findthemasks.com/',
     ogDescription: 'Find where you can donate your masks or other personal protective equipment (PPE) in your local area.',
-    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.currentCountry)
   });
 });
 
@@ -83,6 +90,67 @@ router.get(['/404', '/404.html'], (req, res) => {
 
 router.get('/:countryCode/donation-form', (req, res) => {
   res.redirect(`/${req.params.countryCode}/donation-form-bounce.html?locale=${req.query.locale}`);
+});
+
+const cached_data = {};
+
+function sendDataJson(countryCode, res) {
+  const HEADERS = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  };
+
+  if (countryCode in cached_data) {
+    // Return memoized data.
+    res.writeHead(200, HEADERS);
+    res.write(cached_data[countryCode].data);
+    res.end();
+  } else {
+    res.sendStatus(404);
+  }
+}
+
+app.use('/data(-:countryCode)?.json', (req, res) => {
+  const countryCode = req.params.countryCode || 'us';
+
+  const now = new Date();
+  if (countryCode in cached_data && cached_data[countryCode].expires_at > now) {
+    sendDataJson(countryCode, res);
+    return;
+  }
+
+  // Otherwise go fetch it.
+  const options = {
+    hostname: 'storage.googleapis.com',
+    port: 443,
+    path: `/findthemasks.appspot.com/data-${countryCode}.json`,
+    method: 'GET'
+  }
+
+  let new_data = '';
+  const data_req = https.request(options, data_res => {
+    data_res.on('data', d => new_data += d);
+    data_res.on('end', () => {
+      if (data_res.statusCode === 200) {
+        // Cache for 5 mins.
+        const new_expires_at = new Date(now.getTime() + (5 * 60 * 1000));
+        cached_data[countryCode] = {
+          expires_at: new_expires_at,
+          data: new_data,
+        };
+      }
+
+      sendDataJson(countryCode, res);
+    });
+  });
+
+  data_req.on('error', error => {
+    console.error(`unable to fetch data for ${countryCode}: ${error}. Sending stale data.`);
+    // Send stale data.
+    sendDataJson(countryCode, res);
+  });
+
+  data_req.end()
 });
 
 app.use('/', router);
