@@ -12,7 +12,7 @@ export const FILTER_ITEMS = {
     name: 'ftm-accept-item-homemade-masks'
   },
   'homemade masks (specify type in other)': {
-    name: 'ftm-accept-item-homemade-masks-specify-type'
+    name: 'ftm-accept-item-homemade-masks'
   },
   'face shields': {
     name: 'ftm-accept-item-face-shields'
@@ -21,7 +21,7 @@ export const FILTER_ITEMS = {
     name: 'ftm-accept-item-face-shields-makerspace'
   },
   'face shields - 3d-printed or makerspace (specify type in other)': {
-    name: 'ftm-accept-item-face-shields-makerspace-specify-type'
+    name: 'ftm-accept-item-face-shields-makerspace'
   },
   'disposable booties': {
     name: 'ftm-accept-item-disposable-booties'
