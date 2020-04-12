@@ -9,6 +9,13 @@
     gtag('js', new Date());
     gtag('config', 'UA-161442455-1');
   </script>
+  <script>
+    //Allow the text that prefills the Twitter window to be translated
+    window.onload = function(){
+      var prefillText = $.i18n("ftm-tweet-share-button");
+      $('.twitter-share-button').attr('href','https://twitter.com/intent/tweet?text=' + prefillText);
+    }
+  </script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.fallbacks.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.min.js"></script>
@@ -76,7 +83,7 @@
       <div class="social-media-icon" >
         <a class="twitter-share-button"
            target="_blank"
-           href="https://twitter.com/intent/tweet">
+           href="">
           <img src="images/twitter.svg" border="0"  />
         </a>
       </div>
