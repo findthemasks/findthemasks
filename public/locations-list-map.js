@@ -120,36 +120,6 @@ const generateBottomNav = () => {
   }
 };
 
-const addDonationSites = () => {
-  const countryConfig = countries[currentCountry.toLowerCase()];
-
-  const largeDonationElement = document.getElementById('large-donation-selector');
-  const noDonationsElement = document.getElementById('no-donations-selector');
-
-  if (largeDonationElement && noDonationsElement) {
-    const countryDonationSites = countryConfig.donationSites;
-
-    const administrativeRegionStringHtml = countryDonationSites.administrativeRegionLinks && countryDonationSites.administrativeRegionLinks.map((link) => (
-      `<a href="${link.url}" target='_blank' rel='noreferrer noopener'>${$.i18n(link.labelI18nString)}</a>`
-    )).join(', ');
-
-    const nationalLinksHtml = countryDonationSites.nationalLinks && countryDonationSites.nationalLinks.map((link) => (
-      `<a href="${link.url}" target='_blank' rel='noreferrer noopener'>${$.i18n(link.labelI18nString)}</a>`
-    )).join(', ');
-
-    largeDonationElement.innerHTML = $.i18n(countryDonationSites.i18nString, administrativeRegionStringHtml, nationalLinksHtml);
-    noDonationsElement.innerHTML = $.i18n(countryConfig.noDonationSitesNearMeI18nString);
-
-    $(largeDonationElement).find('a').click(function(e) {
-      sendEvent('largeDonation', 'click', $(this).attr('href'));
-    });
-
-    $(noDonationsElement).find('a').click(function(e) {
-      sendEvent('noDonation', 'click', $(this).attr('href'));
-    });
-  }
-};
-
 // i18n must be loaded before filter items can be translated
 // config stores the i18n string and this function calls i18n with it
 const translatedFilterItems = (fieldTranslations) => {
@@ -391,7 +361,6 @@ $(function () {
   // this should happen after the translations load
   $('html').on('i18n:ready', function () {
     generateBottomNav();
-    addDonationSites();
 
     $('.add-donation-site-form')
       .attr({href: `/${ currentCountry }/donation-form?locale=${$.i18n().locale}`})
