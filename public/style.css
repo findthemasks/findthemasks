@@ -187,6 +187,7 @@ h3.city {
   font-weight: 600;
   padding-bottom: 5px;
   margin: 0px;
+  padding-left: 0;
 }
 
 .locations-list p {
@@ -208,6 +209,10 @@ h3.city {
   letter-spacing: 1.1px;
   margin: 0.9rem 0 0 0;
   text-transform: uppercase;
+}
+
+.location > * {
+  padding-left: 2rem;
 }
 
 .donation-sites h1 {
