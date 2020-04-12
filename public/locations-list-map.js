@@ -176,7 +176,8 @@ const parseAcceptedItemsFromData = (data) => {
   Object.keys(data).forEach((state) => {
     Object.keys(data[state].cities).forEach((city) => {
       data[state].cities[city].entries.forEach((entry) => {
-        entry.accepting.split(',').map(a => a.trim()).forEach((i) => {
+        // split on commas except if comma is in parentheses
+        entry.accepting.split(/, (?![^(]*\))/).map(a => a.trim()).forEach((i) => {
           const filterKey = i.toLowerCase();
           if (FILTER_ITEMS.hasOwnProperty(filterKey) && !acceptedItems.hasOwnProperty(filterKey)) {
             acceptedItems[filterKey] = FILTER_ITEMS[filterKey];

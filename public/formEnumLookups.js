@@ -5,14 +5,23 @@ export const FILTER_ITEMS = {
   'surgical masks': {
     name: 'ftm-accept-item-surgical-masks'
   },
-  'homemade masks (specify type in other)': {
+  'handmade masks': {
+    name: 'ftm-accept-item-handmade-masks'
+  },
+  'homemade masks': {
     name: 'ftm-accept-item-homemade-masks'
+  },
+  'homemade masks (specify type in other)': {
+    name: 'ftm-accept-item-homemade-masks-specify-type'
   },
   'face shields': {
     name: 'ftm-accept-item-face-shields'
   },
-  'faceshields - 3d-printed or makerspace (specify type in other)': {
+  'face shields - 3d-printed or makerspace': {
     name: 'ftm-accept-item-face-shields-makerspace'
+  },
+  'face shields - 3d-printed or makerspace (specify type in other)': {
+    name: 'ftm-accept-item-face-shields-makerspace-specify-type'
   },
   'disposable booties': {
     name: 'ftm-accept-item-disposable-booties'
