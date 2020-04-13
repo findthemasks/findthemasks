@@ -972,10 +972,12 @@ function centerMapToBounds(map, bounds, maxZoom) {
 }
 
 const translateEnumValue = (value) => {
-  const enumValue = ENUM_MAPPINGS[value.toLowerCase()];
+  if (value) {
+    const enumValue = ENUM_MAPPINGS[value.toLowerCase()];
 
-  if (enumValue) {
-    return $.i18n(enumValue.name);
+    if (enumValue) {
+      return $.i18n(enumValue.name);
+    }
   }
 
   return value;
