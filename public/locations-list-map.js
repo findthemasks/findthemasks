@@ -513,7 +513,7 @@ function getEntryEl(entry) {
     entry.domElem = ce('div', 'location');
     ac(entry.domElem, ce('h4', null, ctn(entry.name)));
 
-    if (entry.org_type.length) {
+    if (entry.org_type && entry.org_type.length) {
       ac(entry.domElem, [
         ce('label', null, ctn($.i18n('ftm-org-type'))),
         ce('p', null, ctn(translateEnumValue(entry.org_type)))
@@ -1023,7 +1023,7 @@ function createMarker(latitude, longitude, orgType, address, name, instructions,
 
       const contentTags = [ce('h5', null, ctn(name))];
 
-      if (orgType.length) {
+      if (orgType && orgType.length) {
         contentTags.push(
           ce('div', 'label', ctn($.i18n('ftm-maps-marker-org-type-label'))),
           ce('div', 'value', ctn(translateEnumValue(orgType)))
