@@ -1092,11 +1092,11 @@ function updateStats($elem, count, states) {
  *
  * Result:  "1.000,2"
  */
-function number_format(number, decimal_places, dec_seperator, thou_seperator) {
+function number_format(number, decimal_places, dec_separator, thou_separator) {
   // Init defaults.
   if (typeof decimal_places === 'undefined') decimal_places = 0;
-  if (typeof dec_seperator === 'undefined') dec_seperator = '.';
-  if (typeof thou_seperator === 'undefined') thou_seperator = ',';
+  if (typeof dec_separator === 'undefined') dec_separator = '.';
+  if (typeof thou_separator === 'undefined') thou_separator = ',';
 
   number = Math.round(number * Math.pow(10, decimal_places)) / Math.pow(10, decimal_places);
   let e = number + '';
@@ -1114,16 +1114,21 @@ function number_format(number, decimal_places, dec_seperator, thou_seperator) {
     }
     f[1] = g;
   }
-  if (thou_seperator != '' && f[0].length > 3) {
+  if (thou_separator != '' && f[0].length > 3) {
     let h = f[0];
     f[0] = '';
     for (let j = 3; j < h.length; j += 3) {
       let i = h.slice(h.length - j, h.length - j + 3);
-      f[0] = thou_seperator + i + f[0] + '';
+      f[0] = thou_separator + i + f[0] + '';
     }
     let j = h.substr(0, (h.length % 3 == 0) ? 3 : (h.length % 3));
     f[0] = j + f[0];
   }
-  dec_seperator = (decimal_places <= 0) ? '' : dec_seperator;
-  return f[0] + dec_seperator + f[1];
+  dec_separator = (decimal_places <= 0) ? '' : dec_separator;
+  return f[0] + dec_separator + f[1];
+}
+
+window.onload = function(){
+  var prefillText = $.i18n("ftm-tweet-share-button");
+  $('.twitter-share-button').attr('href','https://twitter.com/intent/tweet?text=' + prefillText);
 }
