@@ -14,7 +14,8 @@
   "ftm-ack-data-sources" : "Этот сайт также содержит данные <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , проекта:",
   "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Заполните эту форму </button> </a>",
   "ftm-add-donation-site-header" : "Вам нужны СИЗ?",
-  "ftm-add-donation-site-question" : "Вы работаете в больнице или клинике и нуждаетесь в СИЗ? Хотите обновить или удалить информацию?",
+  "ftm-collaboration-with" : "Сделано в сотрудничестве с <a href=\".\" target=\"_blank\"> #findthemasks </a> .",
+  "ftm-add-donation-site-question" : "Хотите присоединиться к карте #findthemasks? Нужно обновить или удалить информацию?",
   "ftm-address" : "Адрес",
   "ftm-org-type" : "Тип организации",
   "ftm-anonymous-volunteers" : "и другие, которые являются анонимными",
@@ -55,10 +56,8 @@
   "ftm-accept-item-surgical-masks" : "Хирургические маски",
   "ftm-accept-item-handmade-masks" : "Маски ручной работы",
   "ftm-accept-item-homemade-masks" : "Домашние маски",
-  "ftm-accept-item-homemade-masks-specify-type" : "Домашние маски (указать тип в разделе Другое)",
   "ftm-accept-item-face-shields" : "Лицевые щитки",
   "ftm-accept-item-face-shields-makerspace" : "Лицевые щитки - 3D-печать или изготовление",
-  "ftm-accept-item-face-shields-makerspace-specify-type" : "Лицевые щиты - 3D-печать или изготовление (укажите тип в разделе Другое)",
   "ftm-accept-item-disposable-booties" : "Одноразовые пинетки",
   "ftm-accept-item-goggles" : "Защитные очки",
   "ftm-accept-item-gloves" : "перчатки",
@@ -167,5 +166,6 @@
   "ftm-thanks-companies" : "Особая благодарность следующим компаниям:",
   "ftm-thanks-smartling" : "Smartling для доступа к их платформе управления переводами",
   "ftm-thanks-google" : "Кредиты Google для Карт API",
-  "ftm-thanks-slack" : "Slack для Pro аккаунта"
+  "ftm-thanks-slack" : "Slack для Pro аккаунта",
+  "ftm-tweet-share-button" : "Найти ближайшее место для пожертвования масок и других СИЗ на www.findthemasks.com"
 }
