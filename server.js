@@ -1,6 +1,7 @@
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const setCurrentCountry = require('./middleware/setCurrentCountry.js');
+const selectMaskMatchPartialPath = require('./viewHelpers/selectMaskMatchPartialPath');
 const selectLargeDonationSitesPartialPath = require('./viewHelpers/selectLargeDonationSitesPartialPath');
 require('dotenv').config();
 const https = require('https');
@@ -41,6 +42,7 @@ router.get(['/', '/index.html'], (req, res) => {
     ogUrl: 'https://findthemasks.com/',
     ogDescription: 'Find where you can donate your masks or other personal protective equipment (PPE) in your local area.',
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.currentCountry),
     largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.currentCountry)
   });
 });
