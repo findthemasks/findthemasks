@@ -37,7 +37,7 @@ export default {
   in: {
     i18nString: 'ftm-india',
     countryCode: 'in',
-    administrativeRegionI18nString: 'ftm-administrative-region-subdivision'
+    administrativeRegionI18nString: 'ftm-administrative-region-state'
   },
   it: {
     i18nString: 'ftm-italy',
