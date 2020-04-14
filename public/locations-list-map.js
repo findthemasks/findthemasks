@@ -386,6 +386,9 @@ $(function () {
     $('.social-link').click(function(e) {
       sendEvent('socialLink', 'click', 'facebook');
     });
+
+    var prefillText = $.i18n("ftm-tweet-share-button");
+    $('.twitter-share-button').attr('href','https://twitter.com/intent/tweet?text=' + prefillText);
   });
 
   const renderListings = function (result) {
@@ -1126,9 +1129,4 @@ function number_format(number, decimal_places, dec_separator, thou_separator) {
   }
   dec_separator = (decimal_places <= 0) ? '' : dec_separator;
   return f[0] + dec_separator + f[1];
-}
-
-window.onload = function(){
-  var prefillText = $.i18n("ftm-tweet-share-button");
-  $('.twitter-share-button').attr('href','https://twitter.com/intent/tweet?text=' + prefillText);
 }
