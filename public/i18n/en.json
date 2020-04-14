@@ -1,4 +1,7 @@
 {
+  "smartling": {
+    "placeholder_format_custom": ["\\$\\d{1,}"]
+  },
   "@metadata": {
     "authors": [
       "Ian Baker",
