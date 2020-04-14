@@ -14,7 +14,8 @@
   "ftm-ack-data-sources" : "Ta strona zawiera również dane z <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , projektu:",
   "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Wypełnij ten formularz </button> </a>",
   "ftm-add-donation-site-header" : "Potrzebujesz ŚOI?",
-  "ftm-add-donation-site-question" : "Czy pracujesz w szpitalu lub klinice i potrzebujesz środków ochrony indywidualnej? Chcesz zaktualizować lub usunąć informacje?",
+  "ftm-collaboration-with" : "Wykonane we współpracy z <a href=\".\" target=\"_blank\"> #findthemasks </a> .",
+  "ftm-add-donation-site-question" : "Chcesz dołączyć do mapy #findthemasks? Chcesz zaktualizować lub usunąć informacje?",
   "ftm-address" : "Adres",
   "ftm-org-type" : "Typ Organizacji",
   "ftm-anonymous-volunteers" : "i inni, którzy są anonimowi",
@@ -55,10 +56,8 @@
   "ftm-accept-item-surgical-masks" : "Maski chirurgiczne",
   "ftm-accept-item-handmade-masks" : "Ręcznie robione maski",
   "ftm-accept-item-homemade-masks" : "Domowe Maski",
-  "ftm-accept-item-homemade-masks-specify-type" : "Domowe maski (podaj typ w Inne)",
   "ftm-accept-item-face-shields" : "Osłony twarzy",
   "ftm-accept-item-face-shields-makerspace" : "Osłony twarzy - drukowane w 3D lub makerspace",
-  "ftm-accept-item-face-shields-makerspace-specify-type" : "Osłony twarzy - drukowane w 3D lub w makerspace (podaj typ w Inne)",
   "ftm-accept-item-disposable-booties" : "Jednorazowe botki",
   "ftm-accept-item-goggles" : "Okulary ochronne",
   "ftm-accept-item-gloves" : "Rękawiczki",
@@ -167,5 +166,6 @@
   "ftm-thanks-companies" : "Specjalne podziękowania dla następujących firm:",
   "ftm-thanks-smartling" : "Smartling za dostęp do swojej platformy zarządzania tłumaczeniami",
   "ftm-thanks-google" : "Kredyty API Google for Maps",
-  "ftm-thanks-slack" : "Slack dla konta Pro"
+  "ftm-thanks-slack" : "Slack dla konta Pro",
+  "ftm-tweet-share-button" : "Znajdź najbliższe miejsce na przekazanie masek i innych środków ochrony osobistej na www.findthemasks.com"
 }
