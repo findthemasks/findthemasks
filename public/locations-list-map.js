@@ -380,14 +380,12 @@ $(function () {
         sendEvent('addDonationSite', 'click', $(this).attr('href'));
       });
 
-    // currently only have a Facebook link under .social-link
-    // if that changes, will need to accurately detect the event
-    // label from either href or text
-    $('.social-link').click(function(e) {
-      sendEvent('socialLink', 'click', 'facebook');
+    $('.social-media-icon').click(function(e) {
+      const socialType = $(this).data('socialType');
+      sendEvent('socialLink', 'click', socialType);
     });
 
-    var prefillText = $.i18n("ftm-tweet-share-button");
+    const prefillText = $.i18n("ftm-tweet-share-button");
     $('.twitter-share-button').attr('href','https://twitter.com/intent/tweet?text=' + prefillText);
   });
 
