@@ -447,15 +447,65 @@ h3.city {
 .nav-link {
   font-size: 0.9rem !important;
 }
-.navbar-nav {
-  flex-direction: row;
-}
 
 .navbar-nav .nav-item {
   margin-left: 20px;
 }
-.dropdown-menu {
-  position: absolute !important;
+
+.navbar.ftm {
+  background: #4169E1;
+}
+
+.navbar.ftm .nav-link,
+.navbar.ftm .btn {
+  font-size: 0.9rem;
+}
+
+.navbar.ftm .navbar-brand {
+  flex-direction: row;
+  font-size: inherit;
+  font-weight: 500;
+  padding: 0;
+  text-transform: uppercase;
+}
+
+.navbar.ftm .navbar-brand img {
+  height: 42px;
+  padding-right: 8px;
+}
+
+.navbar.ftm .navbar-brand .text {
+  display: inline-block;
+  padding: .5rem 0;
+}
+
+.navbar.ftm .navbar-nav .nav-item {
+  margin: 0 0.2rem;
+}
+
+.navbar.ftm .nav-item.show {
+  background: #3E54A1;
+}
+
+.navbar.ftm .dropdown-menu,
+.navbar.ftm .dropdown-item {
+  background: #3E54A1;
+  color: #fff;
+}
+
+.navbar.ftm .dropdown-item:hover {
+  background: #4169E1;
+}
+
+.navbar.ftm .btn-addplace {
+  color: #fff;
+  background: #EC416F;
+  white-space: nowrap;
+}
+
+.navbar.ftm .btn-addplace img {
+  height: 25px;
+  padding-right: 8px;
 }
 
 /* Mobile first: Desktop breakpoint overrides below */
