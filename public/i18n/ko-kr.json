@@ -14,7 +14,8 @@
   "ftm-ack-data-sources" : "이 사이트에는 다음의 프로젝트 인 <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> 데이터도 포함됩니다.",
   "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> 이 양식을 작성하십시오 </button> </a>",
   "ftm-add-donation-site-header" : "PPE가 필요하십니까?",
-  "ftm-add-donation-site-question" : "병원이나 클리닉에서 일하면서 PPE가 필요합니까? 정보를 업데이트하거나 제거 하시겠습니까?",
+  "ftm-collaboration-with" : "<a href=\".\" target=\"_blank\"> #findthemasks </a> 와 공동으로 제작되었습니다.",
+  "ftm-add-donation-site-question" : "#findthemasks지도에 가입하고 싶으십니까? 정보를 업데이트하거나 제거해야합니까?",
   "ftm-address" : "주소",
   "ftm-org-type" : "조직 유형",
   "ftm-anonymous-volunteers" : "익명 인 사람",
@@ -55,10 +56,8 @@
   "ftm-accept-item-surgical-masks" : "수술 용 마스크",
   "ftm-accept-item-handmade-masks" : "수제 마스크",
   "ftm-accept-item-homemade-masks" : "수제 마스크",
-  "ftm-accept-item-homemade-masks-specify-type" : "수제 마스크 (기타 유형 지정)",
   "ftm-accept-item-face-shields" : "안면 보호대",
   "ftm-accept-item-face-shields-makerspace" : "안면 보호대-3D 인쇄 또는 제작자 공간",
-  "ftm-accept-item-face-shields-makerspace-specify-type" : "페이스 실드-3D 인쇄 또는 제작 공간 (기타로 유형 지정)",
   "ftm-accept-item-disposable-booties" : "일회용 부티",
   "ftm-accept-item-goggles" : "안전 고글",
   "ftm-accept-item-gloves" : "장갑",
@@ -167,5 +166,6 @@
   "ftm-thanks-companies" : "다음 회사에 특별한 감사를드립니다 :",
   "ftm-thanks-smartling" : "번역 관리 플랫폼에 대한 액세스를위한 Smartling",
   "ftm-thanks-google" : "Google Maps API 크레딧",
-  "ftm-thanks-slack" : "프로 계정 여유"
+  "ftm-thanks-slack" : "프로 계정 여유",
+  "ftm-tweet-share-button" : "www.findthemasks.com에서 마스크 및 기타 PPE를 기증 할 수있는 가장 가까운 곳을 찾으십시오."
 }

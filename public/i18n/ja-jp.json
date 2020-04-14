@@ -14,7 +14,8 @@
   "ftm-ack-data-sources" : "このサイトには、次のプロジェクトによる<a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a>からのデータも含まれています。",
   "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'>このフォームに記入</button> </a>",
   "ftm-add-donation-site-header" : "PPEが必要ですか？",
-  "ftm-add-donation-site-question" : "病院や診療所で働いており、PPEが必要ですか？情報を更新または削除したいですか？",
+  "ftm-collaboration-with" : "<a href=\".\" target=\"_blank\"> #findthemasks </a>と共同で作成されました。",
+  "ftm-add-donation-site-question" : "#findthemasksマップに参加したいですか？情報を更新または削除する必要がありますか？",
   "ftm-address" : "住所",
   "ftm-org-type" : "組織タイプ",
   "ftm-anonymous-volunteers" : "匿名の人たち",
@@ -55,10 +56,8 @@
   "ftm-accept-item-surgical-masks" : "外科用マスク",
   "ftm-accept-item-handmade-masks" : "手作りマスク",
   "ftm-accept-item-homemade-masks" : "自家製マスク",
-  "ftm-accept-item-homemade-masks-specify-type" : "自家製マスク（その他のタイプを指定）",
   "ftm-accept-item-face-shields" : "フェイスシールド",
   "ftm-accept-item-face-shields-makerspace" : "フェイスシールド-3Dプリントまたはメーカースペース",
-  "ftm-accept-item-face-shields-makerspace-specify-type" : "フェイスシールド-3Dプリントまたはメーカースペース（その他でタイプを指定）",
   "ftm-accept-item-disposable-booties" : "使い捨てブーツ",
   "ftm-accept-item-goggles" : "安全ゴーグル",
   "ftm-accept-item-gloves" : "手袋",
@@ -167,5 +166,6 @@
   "ftm-thanks-companies" : "以下の企業に特に感謝します。",
   "ftm-thanks-smartling" : "翻訳管理プラットフォームにアクセスするためのSmartling",
   "ftm-thanks-google" : "Google for Maps APIクレジット",
-  "ftm-thanks-slack" : "Slack for Proアカウント"
+  "ftm-thanks-slack" : "Slack for Proアカウント",
+  "ftm-tweet-share-button" : "www.findthemasks.comで、マスクやその他のPPEを寄付する最も近い場所を見つけてください"
 }
