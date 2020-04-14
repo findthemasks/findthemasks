@@ -4,6 +4,7 @@ const setCurrentCountry = require('./middleware/setCurrentCountry.js');
 const selectLargeDonationSitesPartialPath = require('./viewHelpers/selectLargeDonationSitesPartialPath');
 require('dotenv').config();
 const https = require('https');
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const app = new express();
 const router = express.Router();
@@ -152,6 +153,14 @@ app.use('/data(-:countryCode)?.json', (req, res) => {
 
   data_req.end()
 });
+
+app.use('/data(-:countryCode)?.csv', createProxyMiddleware({
+  target: 'https://storage.googleapis.com',
+  pathRewrite: {
+    '^/': '/findthemasks.appspot.com/'
+  },
+  changeOrigin: true
+}));
 
 app.use('/', router);
 app.use('/:countryCode', router);
