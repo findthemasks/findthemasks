@@ -14,7 +14,8 @@
   "ftm-ack-data-sources" : "Ce site contient également des données de <a href=\"https://tinyurl.com/hospitals-needing-ppe\">https://tinyurl.com/hospitals-needing-ppe</a> un projet de",
   "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Remplissez ce formulaire </button> </a>",
   "ftm-add-donation-site-header" : "Avez-vous besoin d'EPI ?",
-  "ftm-add-donation-site-question" : "Vous travaillez dans un hôpital ou une clinique et avez besoin d'EPI? Vous souhaitez mettre à jour ou supprimer des informations?",
+  "ftm-collaboration-with" : "Fabriqué en collaboration avec <a href=\".\" target=\"_blank\"> #findthemasks </a> .",
+  "ftm-add-donation-site-question" : "Vous souhaitez rejoindre la carte #findthemasks? Besoin de mettre à jour ou de supprimer des informations?",
   "ftm-address" : "Adresse",
   "ftm-org-type" : "Type d'Organisation",
   "ftm-anonymous-volunteers" : "et d'autres qui sont anonymes",
@@ -55,10 +56,8 @@
   "ftm-accept-item-surgical-masks" : "Masques chirurgicaux",
   "ftm-accept-item-handmade-masks" : "Masques faits à la main",
   "ftm-accept-item-homemade-masks" : "Masques faits maison",
-  "ftm-accept-item-homemade-masks-specify-type" : "Masques faits maison (spécifiez le type dans Autre)",
   "ftm-accept-item-face-shields" : "Visières",
   "ftm-accept-item-face-shields-makerspace" : "Écrans faciaux - imprimés en 3D ou makerspace",
-  "ftm-accept-item-face-shields-makerspace-specify-type" : "Visières - imprimé 3D ou fait maison",
   "ftm-accept-item-disposable-booties" : "Surchaussures",
   "ftm-accept-item-goggles" : "Lunettes de protection",
   "ftm-accept-item-gloves" : "Gants à usage unique",
@@ -167,5 +166,6 @@
   "ftm-thanks-companies" : "Un merci spécial aux entreprises suivantes:",
   "ftm-thanks-smartling" : "Smartling pour l'accès à leur plateforme de gestion de la traduction",
   "ftm-thanks-google" : "Crédits API Google for Maps",
-  "ftm-thanks-slack" : "Slack pour un compte Pro"
+  "ftm-thanks-slack" : "Slack pour un compte Pro",
+  "ftm-tweet-share-button" : "Trouvez l'endroit le plus proche pour donner des masques et autres EPI sur www.findthemasks.com"
 }
