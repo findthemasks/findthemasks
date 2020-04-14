@@ -14,7 +14,8 @@
   "ftm-ack-data-sources" : "該站點還包含來自<a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a>數據，該數據來自：",
   "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'>填寫此表格</button> </a>",
   "ftm-add-donation-site-header" : "您需要個人防護裝備嗎？",
-  "ftm-add-donation-site-question" : "您在醫院或診所工作並且需要個人防護裝備嗎？是否要更新或刪除信息？",
+  "ftm-collaboration-with" : "與<a href=\".\" target=\"_blank\"> #findthemasks </a> 。",
+  "ftm-add-donation-site-question" : "想加入#findthemasks地圖嗎？需要更新或刪除信息嗎？",
   "ftm-address" : "地址",
   "ftm-org-type" : "組織類型",
   "ftm-anonymous-volunteers" : "和其他匿名者",
@@ -55,10 +56,8 @@
   "ftm-accept-item-surgical-masks" : "醫用外科口罩",
   "ftm-accept-item-handmade-masks" : "手工口罩",
   "ftm-accept-item-homemade-masks" : "自製口罩",
-  "ftm-accept-item-homemade-masks-specify-type" : "自製口罩（在“其他”中指定類型）",
   "ftm-accept-item-face-shields" : "面罩",
   "ftm-accept-item-face-shields-makerspace" : "面罩-3D打印或創客空間",
-  "ftm-accept-item-face-shields-makerspace-specify-type" : "面罩-3D打印或創客空間（在“其他”中指定類型）",
   "ftm-accept-item-disposable-booties" : "一次性贓物",
   "ftm-accept-item-goggles" : "護目鏡",
   "ftm-accept-item-gloves" : "手套",
@@ -167,5 +166,6 @@
   "ftm-thanks-companies" : "特別感謝以下公司：",
   "ftm-thanks-smartling" : "通過Smartling訪問其翻譯管理平台",
   "ftm-thanks-google" : "Google for Maps API積分",
-  "ftm-thanks-slack" : "專業版帳戶鬆弛"
+  "ftm-thanks-slack" : "專業版帳戶鬆弛",
+  "ftm-tweet-share-button" : "在www.findthemasks.com上找到捐贈口罩和其他個人防護裝備的最近地點"
 }
