@@ -14,7 +14,8 @@
   "ftm-ack-data-sources" : "Questo sito include anche dati da <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , un progetto di:",
   "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Compila questo modulo </button> </a>",
   "ftm-add-donation-site-header" : "Hai bisogno di DPI?",
-  "ftm-add-donation-site-question" : "Lavori in un ospedale o in una clinica e hai bisogno di DPI? Vuoi aggiornare o rimuovere informazioni?",
+  "ftm-collaboration-with" : "Realizzato in collaborazione con <a href=\".\" target=\"_blank\"> #findthemasks </a> .",
+  "ftm-add-donation-site-question" : "Vuoi unirti alla mappa #findthemasks? Devi aggiornare o rimuovere le informazioni?",
   "ftm-address" : "Indirizzo",
   "ftm-org-type" : "Tipo di Organizzazione",
   "ftm-anonymous-volunteers" : "e altri che sono anonimi",
@@ -55,10 +56,8 @@
   "ftm-accept-item-surgical-masks" : "Mascherine chirurgiche",
   "ftm-accept-item-handmade-masks" : "Maschere fatte a mano",
   "ftm-accept-item-homemade-masks" : "Maschere fatte in casa",
-  "ftm-accept-item-homemade-masks-specify-type" : "Maschere fatte in casa (specificare il tipo in Altro)",
   "ftm-accept-item-face-shields" : "Maschera facciale",
   "ftm-accept-item-face-shields-makerspace" : "Face Shields: stampato in 3D o makerpace",
-  "ftm-accept-item-face-shields-makerspace-specify-type" : "Face Shields - Stampato in 3D o makerpace (specificare il tipo in Altro)",
   "ftm-accept-item-disposable-booties" : "Stivaletti usa e getta",
   "ftm-accept-item-goggles" : "Occhiali/maschera di sicurezza",
   "ftm-accept-item-gloves" : "Guanti monouso",
@@ -167,5 +166,6 @@
   "ftm-thanks-companies" : "Un ringraziamento speciale alle seguenti aziende:",
   "ftm-thanks-smartling" : "Smartling per l'accesso alla loro piattaforma di gestione delle traduzioni",
   "ftm-thanks-google" : "Crediti API di Google per Maps",
-  "ftm-thanks-slack" : "Slack per un account Pro"
+  "ftm-thanks-slack" : "Slack per un account Pro",
+  "ftm-tweet-share-button" : "Trova il posto più vicino per donare maschere e altri DPI su www.findthemasks.com"
 }

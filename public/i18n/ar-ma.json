@@ -14,7 +14,8 @@
   "ftm-ack-data-sources" : "يتضمن هذا الموقع أيضًا بيانات من <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> ، مشروع من:",
   "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> أكمل هذا النموذج </button> </a>",
   "ftm-add-donation-site-header" : "هل تحتاج معدات الوقاية الشخصية؟",
-  "ftm-add-donation-site-question" : "هل تعمل في مستشفى أو عيادة وتحتاج إلى معدات الوقاية الشخصية؟ هل تريد تحديث المعلومات أو إزالتها؟",
+  "ftm-collaboration-with" : "صُنع بالتعاون مع <a href=\".\" target=\"_blank\"> #findthemasks </a> .",
+  "ftm-add-donation-site-question" : "هل تريد الانضمام إلى خريطة #findthemasks؟ هل تحتاج إلى تحديث المعلومات أو إزالتها؟",
   "ftm-address" : "عنوان",
   "ftm-org-type" : "نوع المنظمة",
   "ftm-anonymous-volunteers" : "وغيرهم مجهولين",
@@ -55,10 +56,8 @@
   "ftm-accept-item-surgical-masks" : "أقنعة جراحية",
   "ftm-accept-item-handmade-masks" : "أقنعة يدوية",
   "ftm-accept-item-homemade-masks" : "أقنعة محلية الصنع",
-  "ftm-accept-item-homemade-masks-specify-type" : "أقنعة منزلية الصنع (حدد النوع في غير ذلك)",
   "ftm-accept-item-face-shields" : "دروع الوجه",
   "ftm-accept-item-face-shields-makerspace" : "دروع الوجه - مطبوعة ثلاثية الأبعاد أو مساحة صناع",
-  "ftm-accept-item-face-shields-makerspace-specify-type" : "دروع الوجه - مطبوعة ثلاثية الأبعاد أو مساحة صناع (حدد النوع في أخرى)",
   "ftm-accept-item-disposable-booties" : "الجوارب المتاح",
   "ftm-accept-item-goggles" : "نظارات أمان",
   "ftm-accept-item-gloves" : "قفازات",
@@ -167,5 +166,6 @@
   "ftm-thanks-companies" : "شكر خاص للشركات التالية:",
   "ftm-thanks-smartling" : "Smartling للوصول إلى منصة إدارة الترجمة الخاصة بهم",
   "ftm-thanks-google" : "أرصدة Google for Maps API",
-  "ftm-thanks-slack" : "Slack لحساب Pro"
+  "ftm-thanks-slack" : "Slack لحساب Pro",
+  "ftm-tweet-share-button" : "اعثر على أقرب مكان للتبرع بالأقنعة ومعدات الوقاية الشخصية الأخرى على www.findthemasks.com"
 }

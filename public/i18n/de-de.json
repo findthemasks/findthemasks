@@ -14,7 +14,8 @@
   "ftm-ack-data-sources" : "Diese Site enthält auch Daten von <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , einem Projekt von:",
   "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Füllen Sie dieses Formular aus </button> </a>",
   "ftm-add-donation-site-header" : "Benötigen Sie PSA?",
-  "ftm-add-donation-site-question" : "Arbeiten Sie in einem Krankenhaus oder einer Klinik und benötigen PSA? Möchten Sie Informationen aktualisieren oder entfernen?",
+  "ftm-collaboration-with" : "In Zusammenarbeit mit <a href=\".\" target=\"_blank\"> #findthemasks </a> .",
+  "ftm-add-donation-site-question" : "Möchten Sie der # findthemasks-Karte beitreten? Müssen Sie Informationen aktualisieren oder entfernen?",
   "ftm-address" : "Adresse",
   "ftm-org-type" : "Organisationstyp",
   "ftm-anonymous-volunteers" : "und andere, die anonym sind",
@@ -55,10 +56,8 @@
   "ftm-accept-item-surgical-masks" : "Chirurgische Masken",
   "ftm-accept-item-handmade-masks" : "Handgemachte Masken",
   "ftm-accept-item-homemade-masks" : "Hausgemachte Masken",
-  "ftm-accept-item-homemade-masks-specify-type" : "Hausgemachte Masken (Typ in Andere angeben)",
   "ftm-accept-item-face-shields" : "Gesichtsschutz",
   "ftm-accept-item-face-shields-makerspace" : "Gesichtsschutz - 3D-gedruckt oder Makerspace",
-  "ftm-accept-item-face-shields-makerspace-specify-type" : "Gesichtsschutz - 3D-gedruckt oder Makerspace (Typ in Andere angeben)",
   "ftm-accept-item-disposable-booties" : "Einweg-Booties",
   "ftm-accept-item-goggles" : "Schutzbrillen",
   "ftm-accept-item-gloves" : "Einweghandschuhe",
@@ -167,5 +166,6 @@
   "ftm-thanks-companies" : "Ein besonderer Dank geht an folgende Unternehmen:",
   "ftm-thanks-smartling" : "Smartling für den Zugriff auf ihre Übersetzungsverwaltungsplattform",
   "ftm-thanks-google" : "API-Gutschriften für Google for Maps",
-  "ftm-thanks-slack" : "Locker für ein Pro-Konto"
+  "ftm-thanks-slack" : "Locker für ein Pro-Konto",
+  "ftm-tweet-share-button" : "Unter www.findthemasks.com finden Sie den nächstgelegenen Ort, an dem Sie Masken und andere PSA spenden können"
 }
