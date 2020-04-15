@@ -11,4 +11,3 @@ module.exports = (currentCountry) => {
     return 'countries/default/mask_match';
   }
 };
-
