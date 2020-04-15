@@ -508,6 +508,12 @@ h3.city {
   padding-right: 8px;
 }
 
+#countries-dropdown img,
+#countries-dropdown-selector img {
+  height: 24px;
+  padding-right: 8px;
+}
+
 /* Mobile first: Desktop breakpoint overrides below */
 
 @media (max-width: 1200px) {

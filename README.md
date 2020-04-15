@@ -224,3 +224,4 @@ There are a few important things to know about these scripts:
    [Twemoji](https://twemoji.twitter.com/). Twemoji graphics are licensed
    [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 - [Feather icon collection](https://github.com/feathericons/feather), licensed under [MIT License](https://github.com/feathericons/feather/blob/master/LICENSE).
+- [HatScripts circle flags collection](https://github.com/HatScripts/circle-flags), licensed under [MIT License](https://github.com/HatScripts/circle-flags/blob/master/LICENSE).

@@ -31,7 +31,7 @@
     </ul>
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link i18n" data-i18n="ftm-nav-about" href="#">About</a>
+        <a class="nav-link i18n" data-i18n="ftm-nav-about" href="javascript:;" onclick="window.location='whoweare.html'+window.location.search;">About</a>
       </li>
       <li class="nav-item active">
         <a class="nav-link i18n" data-i18n="ftm-nav-partners" href="#">Partners</a>
@@ -40,10 +40,10 @@
         <a class="nav-link i18n" data-i18n="ftm-nav-volunteer" href="#">Volunteer</a>
       </li>
       <li class="nav-item">
-        <button class="btn btn-addplace my-2 my-sm-0" type="button"><img src="images/add_place.svg" alt="" />Add a place</button>
+        <a href="#" class="add-donation-site-form">
+          <button class="btn btn-addplace my-2 my-sm-0" type="button"><img src="images/add_place.svg" alt="" /><span class="i18n" data-i18n="ftm-nav-addplace">Add a place</span></button>
+        </a>
       </li>
     </ul>
   </div>
 </nav>
-<!-- Spacer so content doesn't overlap nav
-<div style="height: 5rem">&nbsp;</div> -->

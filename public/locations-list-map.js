@@ -99,7 +99,9 @@ const generateBottomNav = () => {
       const country = countries[countryCode];
 
       if (country.countryCode === currentCountry.toLowerCase()) {
-        countryDropdownLink.textContent = $.i18n(country.i18nString);
+        const img = ce('img');
+        img.setAttribute('src', `images/circle-flags/${ country.countryCode }.svg`);
+        ac(countryDropdownLink, [img, ctn($.i18n(country.i18nString))]);
       }
 
       const element = document.createElement('a');
@@ -113,7 +115,10 @@ const generateBottomNav = () => {
         'href',
         currentUrl.href
       );
-      element.textContent = $.i18n(country.i18nString);
+
+      const img = ce('img');
+      img.setAttribute('src', `images/circle-flags/${ country.countryCode }.svg`);
+      ac(element, [img, ctn($.i18n(country.i18nString))]);
       element.addEventListener("click", () =>  sendEvent("i18n", 'set-country', country.countryCode));
       countryDropdownItems.appendChild(element);
     });
