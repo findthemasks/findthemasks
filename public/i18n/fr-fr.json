@@ -43,8 +43,6 @@
   "ftm-portuguese" : "Portugais",
   "ftm-polish" : "Polonais",
   "ftm-chinese-traditional" : "Chinois (Traditionnel)",
-  "ftm-have-you-donated-question" : "Avez-vous déjà effectué un don ?",
-  "ftm-have-you-donated-answer" : "Dites-nous comment vous avez aidé en publiant sur <a target='_blank' class='social-link' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <img class='fb-logo' src='images/fb.svg'/> findthemasks </a> .",
   "ftm-index-getmeppe-twitter-cta" : "Trouvez où vous pouvez donner vos masques et autres équipements de protection individuelle (EPI) dans votre région.",
   "ftm-index-need-find-masks" : "Nous devons trouver des masques.",
   "ftm-index-need-helpers" : "Nous devons aider les personnels soignants tout de suite.",
@@ -167,5 +165,9 @@
   "ftm-thanks-smartling" : "Smartling pour l'accès à leur plateforme de gestion de la traduction",
   "ftm-thanks-google" : "Crédits API Google for Maps",
   "ftm-thanks-slack" : "Slack pour un compte Pro",
-  "ftm-tweet-share-button" : "Trouvez l'endroit le plus proche pour donner des masques et autres EPI sur www.findthemasks.com"
+  "ftm-tweet-share-button" : "Trouvez l'endroit le plus proche pour donner des masques et autres EPI sur www.findthemasks.com",
+  "ftm-nav-about" : "À propos",
+  "ftm-nav-partners" : "Les partenaires",
+  "ftm-nav-volunteer" : "Bénévole",
+  "ftm-nav-addplace" : "Ajouter un lieu"
 }
