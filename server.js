@@ -2,6 +2,7 @@ const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const setCurrentCountry = require('./middleware/setCurrentCountry.js');
 const setBananaI18n = require('./middleware/setBananaI18n.js');
+const selectMaskMatchPartialPath = require('./viewHelpers/selectMaskMatchPartialPath');
 const selectLargeDonationSitesPartialPath = require('./viewHelpers/selectLargeDonationSitesPartialPath');
 require('dotenv').config();
 const https = require('https');
@@ -44,6 +45,7 @@ router.get(['/', '/index.html'], (req, res) => {
     ogUrl: 'https://findthemasks.com/',
     ogDescription: res.locals.banana.i18n('ftm-index-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.currentCountry),
     largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.currentCountry)
   });
 });
