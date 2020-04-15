@@ -48,13 +48,17 @@ const getConfigForLocale = (locale) => {
 };
 
 module.exports = (req, res, next) => {
-  const locale = req.query.locale || req.query.fb_locale || DEFAULT_LOCALE;
+  let locale = req.query.locale || req.query.fb_locale || DEFAULT_LOCALE;
+
+  // Normalize FB locale from fr_FR -> fr-FR
+  locale = locale.replace('_', '-');
 
   const config = getConfigForLocale(locale);
   const banana = new Banana(config.locale, {
     messages: config.messages
   });
 
+  res.locals.locale = locale;
   res.locals.banana = banana;
 
   next();

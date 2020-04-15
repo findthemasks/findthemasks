@@ -4,6 +4,7 @@ const setCurrentCountry = require('./middleware/setCurrentCountry.js');
 const setBananaI18n = require('./middleware/setBananaI18n.js');
 const selectMaskMatchPartialPath = require('./viewHelpers/selectMaskMatchPartialPath');
 const selectLargeDonationSitesPartialPath = require('./viewHelpers/selectLargeDonationSitesPartialPath');
+const formatFbLocale = require('./utils/formatFbLocale');
 require('dotenv').config();
 const https = require('https');
 const { createProxyMiddleware } = require('http-proxy-middleware');
@@ -41,6 +42,7 @@ router.use(express.static('public'));
 
 router.get(['/', '/index.html'], (req, res) => {
   res.render('index', {
+    ogLocale:  formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: 'https://findthemasks.com/',
     ogDescription: res.locals.banana.i18n('ftm-index-og-description'),
@@ -52,6 +54,7 @@ router.get(['/', '/index.html'], (req, res) => {
 
 router.get(['/give', '/give.html'], (req, res) => {
   res.render('give', {
+    ogLocale:  formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-give-og-title'),
     ogUrl: 'https://findthemasks.com/give',
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
@@ -74,6 +77,7 @@ router.get(['/donation-form-bounce', '/donation-form-bounce.html'], (req, res) =
 router.get(['/whoweare', '/whoweare.html'], (req, res) => {
   res.render('whoweare', {
     layout: 'static',
+    ogLocale:  formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-about-us-og-title'),
     ogUrl: 'https://findthemasks.com/whoweare',
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
@@ -83,6 +87,7 @@ router.get(['/whoweare', '/whoweare.html'], (req, res) => {
 router.get('/privacy-policy', (req, res) => {
   res.render('privacy-policy', {
     layout: 'static',
+    ogLocale:  formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-privacy-policy-og-title'),
     ogUrl: 'https://findthemasks.com/privacy-policy',
     ogDescription: res.locals.banana.i18n('ftm-privacy-policy-og-description'),
