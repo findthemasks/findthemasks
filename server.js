@@ -163,7 +163,10 @@ app.use('/data(-:countryCode)?.csv', createProxyMiddleware({
 }));
 
 app.use('/', router);
-app.use('/:countryCode', router);
+app.use(/\/[a-zA-Z]{2}/, router);
+app.use((req, res, next) => {
+  res.status(404).redirect('/');
+});
 
 app.listen(port, () => {
   console.log('Server listening on port ' + port);
