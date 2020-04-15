@@ -1,7 +1,4 @@
 {
-  "smartling" : {
-    "placeholder_format_custom" : ["\\$\\d{1,}"]
-  },
   "@metadata" : {
     "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
@@ -134,7 +131,7 @@
   "ftm-what-to-do-2" : "<b> Siga sus instrucciones </b> para saber lo que aceptan y cómo dejarlo.",
   "ftm-what-to-do-3" : "<b> Si está donando paquetes abiertos </b> , guárdalos en una bolsa Ziploc con una nota que indique si se han utilizado, si alguien en su hogar ha estado enfermo o viajó fuera del país, y la fecha de vencimiento si se conoce.",
   "ftm-what-to-do-header" : "Cómo donar EPP",
-  "ftm-volunteer-network" : "Nuestra red de voluntarios ha creado un mapa global con más de 1700 ubicaciones, tales como hospitales y clínicas, dónde puede donar sus máscaras, batas y otros EPP.",
+  "ftm-volunteer-network" : "Nuestra red de voluntarios ha creado un mapa global con más de 4000 ubicaciones, tales como hospitales y clínicas, dónde puede donar sus máscaras, batas y otros EPP.",
   "ftm-comments-questions" : "¿Tienes algún comentario o sugerencia no relacionada con la actualización de datos? ¿Quieres ayudar?",
   "ftm-contact-info" : "Envíenos un correo electrónico a contact@findthemasks.com o únase a nosotros en <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://github.com/findthemasks/findthemasks\"> nuestro Github </a> .",
   "ftm-who-we-are" : "quienes somos",
@@ -169,5 +166,12 @@
   "ftm-nav-about" : "Acerca de",
   "ftm-nav-partners" : "Socios",
   "ftm-nav-volunteer" : "Voluntario",
-  "ftm-nav-addplace" : "Agrega un lugar"
+  "ftm-nav-addplace" : "Agrega un lugar",
+  "ftm-index-og-title" : "#findthemasks",
+  "ftm-index-og-description" : "Encuentre dónde donar sus máscaras u otro equipo de protección personal (EPP) en su área local.",
+  "ftm-default-og-description" : "América ' s trabajadores sanitarios de primera línea están tratando COVID-19 pacientes sin equipo de protección adecuado, poniendo en riesgo sus vidas! Necesitamos encontrar las máscaras. Todas estas máscaras pueden salvar vidas ahora si las pone en manos de trabajadores de la salud.",
+  "ftm-give-og-title" : "#findthemasks | dar",
+  "ftm-about-us-og-title" : "#findthemasks | Sobre nosotros",
+  "ftm-privacy-policy-og-title" : "#findthemasks | Política de privacidad",
+  "ftm-privacy-policy-og-description" : "' Política de privacidad de Find The Masks '"
 }

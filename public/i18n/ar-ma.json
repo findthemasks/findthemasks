@@ -1,7 +1,4 @@
 {
-  "smartling" : {
-    "placeholder_format_custom" : ["\\$\\d{1,}"]
-  },
   "@metadata" : {
     "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
@@ -169,5 +166,12 @@
   "ftm-nav-about" : "حول",
   "ftm-nav-partners" : "شركاء",
   "ftm-nav-volunteer" : "تطوع",
-  "ftm-nav-addplace" : "أضف مكانًا"
+  "ftm-nav-addplace" : "أضف مكانًا",
+  "ftm-index-og-title" : "#findthemasks",
+  "ftm-index-og-description" : "اكتشف أين يمكنك التبرع بأقنعةك أو غيرها من معدات الحماية الشخصية (PPE) في منطقتك.",
+  "ftm-default-og-description" : "يعالج العاملون في مجال الرعاية الصحية في الخطوط الأمامية في أمريكا ' مرضى COVID-19 بدون معدات واقية مناسبة ، ويخاطرون بحياتهم! نحن بحاجة إلى العثور على الأقنعة. كل هذه الأقنعة يمكن أن تنقذ الأرواح الآن إذا وضعتها في أيدي العاملين في مجال الرعاية الصحية.",
+  "ftm-give-og-title" : "#findthemasks | يعطى",
+  "ftm-about-us-og-title" : "#findthemasks | معلومات عنا",
+  "ftm-privacy-policy-og-title" : "#findthemasks | سياسة خاصة",
+  "ftm-privacy-policy-og-description" : "' سياسة خصوصية Find The Masks '"
 }

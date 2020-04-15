@@ -1,7 +1,4 @@
 {
-  "smartling" : {
-    "placeholder_format_custom" : ["\\$\\d{1,}"]
-  },
   "@metadata" : {
     "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
@@ -134,7 +131,7 @@
   "ftm-what-to-do-2" : "<b> Segui le loro istruzioni </b> su cosa accettino e come recapitarlo.",
   "ftm-what-to-do-3" : "<b> Se stai donando pacchetti aperti </b> , inseriscili in un sacchetto a tenuta d’aria con una nota che indichi se sono stati utilizzati, se qualcuno nella tua famiglia è stato ammalato o ha viaggiato fuori dal paese e la data di scadenza, se nota.",
   "ftm-what-to-do-header" : "Come donare DPI",
-  "ftm-volunteer-network" : "La nostra rete di volontari ha creato una mappa globale di oltre 1700 sedi, come ospedali e cliniche, dove puoi donare maschere, tute protettive e altri DPI.",
+  "ftm-volunteer-network" : "La nostra rete di volontari ha creato una mappa globale di oltre 4000 sedi, come ospedali e cliniche, dove puoi donare maschere, tute protettive e altri DPI.",
   "ftm-comments-questions" : "Hai un commento o un suggerimento non correlato agli aggiornamenti dei dati? Voglio aiutare?",
   "ftm-contact-info" : "Scrivici a contact@findthemasks.com o unisciti a noi su <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://github.com/findthemasks/findthemasks\"> nostro Github </a> .",
   "ftm-who-we-are" : "chi siamo",
@@ -169,5 +166,12 @@
   "ftm-nav-about" : "Di",
   "ftm-nav-partners" : "Partner",
   "ftm-nav-volunteer" : "Volontario",
-  "ftm-nav-addplace" : "Aggiungi un luogo"
+  "ftm-nav-addplace" : "Aggiungi un luogo",
+  "ftm-index-og-title" : "#findthemasks",
+  "ftm-index-og-description" : "Scopri dove puoi donare le tue maschere o altri dispositivi di protezione individuale (DPI) nella tua zona.",
+  "ftm-default-og-description" : "Gli operatori sanitari in prima linea di America ' stanno curando i pazienti COVID-19 senza adeguati dispositivi di protezione, rischiando la vita! Dobbiamo trovare le maschere. Tutte queste maschere possono salvare vite umane ora se le prendi nelle mani degli operatori sanitari.",
+  "ftm-give-og-title" : "#findthemasks | dare",
+  "ftm-about-us-og-title" : "#findthemasks | Riguardo a noi",
+  "ftm-privacy-policy-og-title" : "#findthemasks | politica sulla riservatezza",
+  "ftm-privacy-policy-og-description" : "' Informativa sulla privacy di Find The Masks '"
 }

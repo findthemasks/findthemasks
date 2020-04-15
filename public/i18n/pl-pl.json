@@ -1,7 +1,4 @@
 {
-  "smartling" : {
-    "placeholder_format_custom" : ["\\$\\d{1,}"]
-  },
   "@metadata" : {
     "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
@@ -134,7 +131,7 @@
   "ftm-what-to-do-2" : "<b> Postępuj zgodnie z instrukcjami </b> aby dowiedzieć się, co akceptują i jak je podrzucić.",
   "ftm-what-to-do-3" : "<b> Jeśli przekazujesz otwarte paczki </b> , włóż je do torby ziploc z notatką informującą, czy zostały wykorzystane, czy ktoś w twoim domu był chory lub podróżował poza granicami kraju, oraz datę ważności, jeśli jest znana.",
   "ftm-what-to-do-header" : "Jak przekazać środki ochrony osobistej",
-  "ftm-volunteer-network" : "Nasza sieć wolontariuszy stworzyła globalną mapę ponad 1700 lokalizacji, takich jak szpitale i kliniki, w których możesz podarować swoje maski, fartuchy i inne środki ochrony indywidualnej.",
+  "ftm-volunteer-network" : "Nasza sieć wolontariuszy stworzyła globalną mapę ponad 4000 lokalizacji, takich jak szpitale i kliniki, w których możesz podarować swoje maski, fartuchy i inne środki ochrony indywidualnej.",
   "ftm-comments-questions" : "Masz komentarz lub sugestię niezwiązaną z aktualizacjami danych? Chcieć pomóc?",
   "ftm-contact-info" : "Napisz do nas na contact@findthemasks.com lub dołącz do nas na <a target=\"_blank\" rel=\"noreferrer noopener\" href=\"https://github.com/findthemasks/findthemasks\"> naszym Github </a> .",
   "ftm-who-we-are" : "kim jesteśmy",
@@ -169,5 +166,12 @@
   "ftm-nav-about" : "O",
   "ftm-nav-partners" : "Wzmacniacz",
   "ftm-nav-volunteer" : "Wolontariusz",
-  "ftm-nav-addplace" : "Dodaj miejsce"
+  "ftm-nav-addplace" : "Dodaj miejsce",
+  "ftm-index-og-title" : "#findthemasks",
+  "ftm-index-og-description" : "Dowiedz się, gdzie możesz przekazać swoje maski lub inny sprzęt ochrony osobistej (ŚOI) w Twojej okolicy.",
+  "ftm-default-og-description" : "Pracownicy pierwszej linii America ' leczą pacjentów z COVID-19 bez odpowiedniego sprzętu ochronnego, ryzykując życiem! Musimy znaleźć maski. Wszystkie te maski mogą teraz uratować życie, jeśli dostaniesz je w ręce pracowników służby zdrowia.",
+  "ftm-give-og-title" : "#findthemasks | dać",
+  "ftm-about-us-og-title" : "#findthemasks | O nas",
+  "ftm-privacy-policy-og-title" : "#findthemasks | Polityka prywatności",
+  "ftm-privacy-policy-og-description" : "' Zasady ochrony prywatności aplikacji Find The Masks '"
 }
