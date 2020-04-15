@@ -370,8 +370,6 @@ function loadOtherCountries() {
 
 $(function () {
   const url = new URL(window.location);
-  // display flag of country
-  $('#flag-image'). attr("src", "images/flags/" + currentCountry + ".svg");
 
   // this should happen after the translations load
   $('html').on('i18n:ready', function () {
