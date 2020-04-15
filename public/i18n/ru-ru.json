@@ -40,8 +40,6 @@
   "ftm-portuguese" : "португальский",
   "ftm-polish" : "польский",
   "ftm-chinese-traditional" : "Китайский традиционный)",
-  "ftm-have-you-donated-question" : "Вы уже пожертвовали?",
-  "ftm-have-you-donated-answer" : "Расскажите нам, как вы помогли, разместив на <a target='_blank' class='social-link' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <img class='fb-logo' src='images/fb.svg'/> findthemasks </a> .",
   "ftm-index-getmeppe-twitter-cta" : "Найдите, где вы можете пожертвовать свои маски или другие средства индивидуальной защиты (СИЗ) в вашем районе.",
   "ftm-index-need-find-masks" : "Нам нужно найти маски",
   "ftm-index-need-helpers" : "Пусть ' с помогают помощникам",
@@ -164,5 +162,12 @@
   "ftm-thanks-smartling" : "Smartling для доступа к их платформе управления переводами",
   "ftm-thanks-google" : "Кредиты Google для Карт API",
   "ftm-thanks-slack" : "Slack для Pro аккаунта",
-  "ftm-tweet-share-button" : "Найти ближайшее место для пожертвования масок и других СИЗ на www.findthemasks.com"
+  "ftm-tweet-share-button" : "Найти ближайшее место для пожертвования масок и других СИЗ на www.findthemasks.com",
+  "ftm-index-og-title" : "#findthemasks",
+  "ftm-index-og-description" : "Найдите, где вы можете пожертвовать свои маски или другие средства индивидуальной защиты (СИЗ) в вашем районе.",
+  "ftm-default-og-description" : "Америка ' сек работники фронтовой здравоохранения лечат COVID-19 пациентов без адекватной защитной одежды, рискуя своей жизнью! Нам нужно найти маски. Все эти маски могут спасти жизни сейчас, если вы попадете в руки работников здравоохранения.",
+  "ftm-give-og-title" : "#findthemasks | дать",
+  "ftm-about-us-og-title" : "#findthemasks | Насчет нас",
+  "ftm-privacy-policy-og-title" : "#findthemasks | политика конфиденциальности",
+  "ftm-privacy-policy-og-description" : "' Найти политику конфиденциальности Маски '"
 }
