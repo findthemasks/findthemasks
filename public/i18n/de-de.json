@@ -40,8 +40,6 @@
   "ftm-portuguese" : "Portugiesisch",
   "ftm-polish" : "Polieren",
   "ftm-chinese-traditional" : "Chinesische Tradition)",
-  "ftm-have-you-donated-question" : "Hast du schon gespendet?",
-  "ftm-have-you-donated-answer" : "Sagen Sie uns, wie Sie geholfen haben, indem Sie auf <a target='_blank' class='social-link' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <img class='fb-logo' src='images/fb.svg'/> findthemasks </a> gepostet haben.",
   "ftm-index-getmeppe-twitter-cta" : "Finden Sie heraus, wo Sie Ihre Masken oder andere persönliche Schutzausrüstung (PSA) in Ihrer Nähe spenden können.",
   "ftm-index-need-find-masks" : "Wir müssen die Masken finden",
   "ftm-index-need-helpers" : "Wir müssen den Helfenden helfen.",
@@ -164,5 +162,12 @@
   "ftm-thanks-smartling" : "Smartling für den Zugriff auf ihre Übersetzungsverwaltungsplattform",
   "ftm-thanks-google" : "API-Gutschriften für Google for Maps",
   "ftm-thanks-slack" : "Locker für ein Pro-Konto",
-  "ftm-tweet-share-button" : "Unter www.findthemasks.com finden Sie den nächstgelegenen Ort, an dem Sie Masken und andere PSA spenden können"
+  "ftm-tweet-share-button" : "Unter www.findthemasks.com finden Sie den nächstgelegenen Ort, an dem Sie Masken und andere PSA spenden können",
+  "ftm-index-og-title" : "#findthemasks",
+  "ftm-index-og-description" : "Finden Sie heraus, wo Sie Ihre Masken oder andere persönliche Schutzausrüstung (PSA) in Ihrer Nähe spenden können.",
+  "ftm-default-og-description" : "Die Mitarbeiter des Gesundheitswesens von America ' behandeln COVID-19-Patienten ohne angemessene Schutzausrüstung und riskieren ihr Leben! Wir müssen die Masken finden. Alle diese Masken können jetzt Leben retten, wenn Sie sie in die Hände von Mitarbeitern des Gesundheitswesens geben.",
+  "ftm-give-og-title" : "#findthemasks | geben",
+  "ftm-about-us-og-title" : "#findthemasks | Über uns",
+  "ftm-privacy-policy-og-title" : "#findthemasks | Datenschutz-Bestimmungen",
+  "ftm-privacy-policy-og-description" : "' Datenschutzrichtlinie von Find The Masks '"
 }
