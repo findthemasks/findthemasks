@@ -6,7 +6,7 @@ export const DEFAULT_LOCALE = 'en';
 // fallback to en if no locale detected is handled there
 export const getCurrentLocaleParam = (defaultLocale = null) => {
   const searchParams = new URLSearchParams((new URL(window.location)).search);
-  return searchParams.get('locale') || defaultLocale;
+  return searchParams.get('locale') || searchParams.get('fb_locale') || defaultLocale;
 };
 
 export const getMapsLanguageRegion = () => {

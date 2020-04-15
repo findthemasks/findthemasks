@@ -1,7 +1,4 @@
 {
-  "smartling" : {
-    "placeholder_format_custom" : ["\\$\\d{1,}"]
-  },
   "@metadata" : {
     "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
@@ -43,8 +40,6 @@
   "ftm-portuguese" : "포르투갈 인",
   "ftm-polish" : "광택",
   "ftm-chinese-traditional" : "중국 전통)",
-  "ftm-have-you-donated-question" : "이미 기부 했습니까?",
-  "ftm-have-you-donated-answer" : "<a target='_blank' class='social-link' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <img class='fb-logo' src='images/fb.svg'/> findthemasks </a> 에 게시하여 도움을 주신 방법을 알려주십시오.",
   "ftm-index-getmeppe-twitter-cta" : "해당 지역의 마스크 또는 기타 개인 보호 장비 (PPE)를 기증 할 수있는 곳을 찾으십시오.",
   "ftm-index-need-find-masks" : "마스크를 찾아야 해요",
   "ftm-index-need-helpers" : "하자 ' S는 헬퍼 도움",
@@ -167,5 +162,12 @@
   "ftm-thanks-smartling" : "번역 관리 플랫폼에 대한 액세스를위한 Smartling",
   "ftm-thanks-google" : "Google Maps API 크레딧",
   "ftm-thanks-slack" : "프로 계정 여유",
-  "ftm-tweet-share-button" : "www.findthemasks.com에서 마스크 및 기타 PPE를 기증 할 수있는 가장 가까운 곳을 찾으십시오."
+  "ftm-tweet-share-button" : "www.findthemasks.com에서 마스크 및 기타 PPE를 기증 할 수있는 가장 가까운 곳을 찾으십시오.",
+  "ftm-index-og-title" : "#findthemasks",
+  "ftm-index-og-description" : "해당 지역의 마스크 또는 기타 개인 보호 장비 (PPE)를 기증 할 수있는 곳을 찾으십시오.",
+  "ftm-default-og-description" : "America ' s 최전선 의료진은 적절한 보호 장비없이 COVID-19 환자를 치료하여 생명을 위협하고 있습니다! 마스크를 찾아야합니다. 이러한 마스크는 모두 의료 종사자의 손에 들어가면 생명을 구할 수 있습니다.",
+  "ftm-give-og-title" : "#findthemasks | 주기",
+  "ftm-about-us-og-title" : "#findthemasks | 회사 소개",
+  "ftm-privacy-policy-og-title" : "#findthemasks | 개인 정보 정책",
+  "ftm-privacy-policy-og-description" : "' 마스크 개인 정보 보호 정책 찾기 '"
 }
