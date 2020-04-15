@@ -1,7 +1,4 @@
 {
-  "smartling" : {
-    "placeholder_format_custom" : ["\\$\\d{1,}"]
-  },
   "@metadata" : {
     "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
@@ -43,8 +40,6 @@
   "ftm-portuguese" : "葡萄牙語",
   "ftm-polish" : "波蘭文",
   "ftm-chinese-traditional" : "中國傳統的）",
-  "ftm-have-you-donated-question" : "您已經捐贈了嗎？",
-  "ftm-have-you-donated-answer" : "告訴我們您的幫助，方法是在<a target='_blank' class='social-link' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <img class='fb-logo' src='images/fb.svg'/>上發布findthemasks </a> 。",
   "ftm-index-getmeppe-twitter-cta" : "在當地找到可以捐贈口罩或其他個人防護設備（PPE）的地方。",
   "ftm-index-need-find-masks" : "我們需要找到口罩",
   "ftm-index-need-helpers" : "讓我們幫助一直在幫助我們的人",
@@ -167,5 +162,12 @@
   "ftm-thanks-smartling" : "通過Smartling訪問其翻譯管理平台",
   "ftm-thanks-google" : "Google for Maps API積分",
   "ftm-thanks-slack" : "專業版帳戶鬆弛",
-  "ftm-tweet-share-button" : "在www.findthemasks.com上找到捐贈口罩和其他個人防護裝備的最近地點"
+  "ftm-tweet-share-button" : "在www.findthemasks.com上找到捐贈口罩和其他個人防護裝備的最近地點",
+  "ftm-index-og-title" : "#findthemasks",
+  "ftm-index-og-description" : "在當地找到可以捐贈口罩或其他個人防護設備（PPE）的地方。",
+  "ftm-default-og-description" : "America ' s前線醫護人員正在治療沒有足夠防護裝備的COVID-19患者，冒著生命危險！我們需要找到口罩。如果將這些口罩交給醫護人員的手中，所有這些口罩現在都可以挽救生命。",
+  "ftm-give-og-title" : "#findthemasks |給",
+  "ftm-about-us-og-title" : "#findthemasks |關於我們",
+  "ftm-privacy-policy-og-title" : "#findthemasks |隱私政策",
+  "ftm-privacy-policy-og-description" : "'查找面具的隱私策略'"
 }
