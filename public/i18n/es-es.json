@@ -43,8 +43,6 @@
   "ftm-portuguese" : "Portugués",
   "ftm-polish" : "Polaco",
   "ftm-chinese-traditional" : "Chino tradicional)",
-  "ftm-have-you-donated-question" : "¿Ya has donado?",
-  "ftm-have-you-donated-answer" : "Cuéntanos cómo ayudaste publicandolo en <a target='_blank' class='social-link' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <img class='fb-logo' src='images/fb.svg'/> Findthemasks </a> .",
   "ftm-index-getmeppe-twitter-cta" : "Encuentre dónde donar sus máscaras u otro equipo de protección personal (EPP) en su área local.",
   "ftm-index-need-find-masks" : "Necesitamos encontrar las mascaras",
   "ftm-index-need-helpers" : "Ayudemos a los que ayudan",
@@ -167,5 +165,9 @@
   "ftm-thanks-smartling" : "Smartling para acceder a su plataforma de gestión de traducción",
   "ftm-thanks-google" : "Créditos de la API de Google for Maps",
   "ftm-thanks-slack" : "Slack para una cuenta Pro",
-  "ftm-tweet-share-button" : "Encuentre el lugar más cercano para donar máscaras y otros EPP en www.findthemasks.com"
+  "ftm-tweet-share-button" : "Encuentre el lugar más cercano para donar máscaras y otros EPP en www.findthemasks.com",
+  "ftm-nav-about" : "Acerca de",
+  "ftm-nav-partners" : "Socios",
+  "ftm-nav-volunteer" : "Voluntario",
+  "ftm-nav-addplace" : "Agrega un lugar"
 }

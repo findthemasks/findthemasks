@@ -43,8 +43,6 @@
   "ftm-portuguese" : "पुर्तगाली",
   "ftm-polish" : "पोलिश",
   "ftm-chinese-traditional" : "चीनी पारंपरिक)",
-  "ftm-have-you-donated-question" : "क्या आपने पहले ही दान कर दिया है?",
-  "ftm-have-you-donated-answer" : "हमें बताएं कि आपने <a target='_blank' class='social-link' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <img class='fb-logo' src='images/fb.svg'/> </a> पर पोस्ट करके कैसे मदद की।",
   "ftm-index-getmeppe-twitter-cta" : "पता लगाएं कि आप अपने स्थानीय क्षेत्र में अपने मास्क या अन्य व्यक्तिगत सुरक्षा उपकरण (पीपीई) कहां दान कर सकते हैं।",
   "ftm-index-need-find-masks" : "हमें मास्क खोजने की जरूरत है",
   "ftm-index-need-helpers" : "चलो ' रों सहायकों मदद",
@@ -167,5 +165,9 @@
   "ftm-thanks-smartling" : "उनके अनुवाद प्रबंधन मंच तक पहुंच के लिए स्मार्टलिंग",
   "ftm-thanks-google" : "मैप्स एपीआई क्रेडिट के लिए Google",
   "ftm-thanks-slack" : "एक प्रो खाते के लिए सुस्त",
-  "ftm-tweet-share-button" : "Www.findthemasks.com पर मास्क और अन्य पीपीई दान करने के लिए निकटतम स्थान का पता लगाएं"
+  "ftm-tweet-share-button" : "Www.findthemasks.com पर मास्क और अन्य पीपीई दान करने के लिए निकटतम स्थान का पता लगाएं",
+  "ftm-nav-about" : "के बारे में",
+  "ftm-nav-partners" : "भागीदारों",
+  "ftm-nav-volunteer" : "स्वयंसेवक",
+  "ftm-nav-addplace" : "एक जगह जोड़ें"
 }

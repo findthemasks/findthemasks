@@ -43,8 +43,6 @@
   "ftm-portuguese" : "葡萄牙語",
   "ftm-polish" : "波蘭文",
   "ftm-chinese-traditional" : "中國傳統的）",
-  "ftm-have-you-donated-question" : "您已經捐贈了嗎？",
-  "ftm-have-you-donated-answer" : "告訴我們您的幫助，方法是在<a target='_blank' class='social-link' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <img class='fb-logo' src='images/fb.svg'/>上發布findthemasks </a> 。",
   "ftm-index-getmeppe-twitter-cta" : "在當地找到可以捐贈口罩或其他個人防護設備（PPE）的地方。",
   "ftm-index-need-find-masks" : "我們需要找到口罩",
   "ftm-index-need-helpers" : "讓我們幫助一直在幫助我們的人",
@@ -167,5 +165,9 @@
   "ftm-thanks-smartling" : "通過Smartling訪問其翻譯管理平台",
   "ftm-thanks-google" : "Google for Maps API積分",
   "ftm-thanks-slack" : "專業版帳戶鬆弛",
-  "ftm-tweet-share-button" : "在www.findthemasks.com上找到捐贈口罩和其他個人防護裝備的最近地點"
+  "ftm-tweet-share-button" : "在www.findthemasks.com上找到捐贈口罩和其他個人防護裝備的最近地點",
+  "ftm-nav-about" : "關於",
+  "ftm-nav-partners" : "夥伴",
+  "ftm-nav-volunteer" : "志願者",
+  "ftm-nav-addplace" : "新增地點"
 }

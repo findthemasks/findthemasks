@@ -43,8 +43,6 @@
   "ftm-portuguese" : "포르투갈 인",
   "ftm-polish" : "광택",
   "ftm-chinese-traditional" : "중국 전통)",
-  "ftm-have-you-donated-question" : "이미 기부 했습니까?",
-  "ftm-have-you-donated-answer" : "<a target='_blank' class='social-link' rel='noreferrer noopener' href='https://www.facebook.com/findthemasks'> <img class='fb-logo' src='images/fb.svg'/> findthemasks </a> 에 게시하여 도움을 주신 방법을 알려주십시오.",
   "ftm-index-getmeppe-twitter-cta" : "해당 지역의 마스크 또는 기타 개인 보호 장비 (PPE)를 기증 할 수있는 곳을 찾으십시오.",
   "ftm-index-need-find-masks" : "마스크를 찾아야 해요",
   "ftm-index-need-helpers" : "하자 ' S는 헬퍼 도움",
@@ -167,5 +165,9 @@
   "ftm-thanks-smartling" : "번역 관리 플랫폼에 대한 액세스를위한 Smartling",
   "ftm-thanks-google" : "Google Maps API 크레딧",
   "ftm-thanks-slack" : "프로 계정 여유",
-  "ftm-tweet-share-button" : "www.findthemasks.com에서 마스크 및 기타 PPE를 기증 할 수있는 가장 가까운 곳을 찾으십시오."
+  "ftm-tweet-share-button" : "www.findthemasks.com에서 마스크 및 기타 PPE를 기증 할 수있는 가장 가까운 곳을 찾으십시오.",
+  "ftm-nav-about" : "약",
+  "ftm-nav-partners" : "파트너",
+  "ftm-nav-volunteer" : "지원자",
+  "ftm-nav-addplace" : "장소 추가"
 }
