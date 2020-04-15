@@ -68,3 +68,5 @@ node_modules/
 # IDE specific
 .idea/
 *~
+
+.DS_Store

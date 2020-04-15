@@ -76,6 +76,11 @@ hr {margin-top: 1.7rem;}
   margin-top: 0px;
 }
 
+.social-media-icons .icon {
+  width: 24px;
+  height: 24px;
+}
+
 .member-of {
   font-style: italic;
   font-size: 13px;
@@ -439,18 +444,6 @@ h3.city {
   height: 21px;
 }
 
-.nav-drop-shadow {
-  background-color: white;
-  box-shadow: 0 -2px 15px rgba(0,0,0,0.09);
-}
-.nav-link {
-  font-size: 0.9rem !important;
-}
-
-.navbar-nav .nav-item {
-  margin-left: 20px;
-}
-
 .navbar.ftm {
   background: #4169E1;
 }
@@ -468,8 +461,9 @@ h3.city {
   text-transform: uppercase;
 }
 
-.navbar.ftm .navbar-brand img {
+.navbar.ftm .navbar-brand .icon {
   height: 42px;
+  width: 42px;
   padding-right: 8px;
 }
 
@@ -479,7 +473,11 @@ h3.city {
 }
 
 .navbar.ftm .navbar-nav .nav-item {
-  margin: 0 0.2rem;
+  margin: 0 .2rem;
+}
+
+.navbar.ftm .navbar-nav .nav-link {
+  padding: .5rem;
 }
 
 .navbar.ftm .nav-item.show {
@@ -502,15 +500,21 @@ h3.city {
   white-space: nowrap;
 }
 
-.navbar.ftm .btn-addplace img {
+.navbar.ftm .btn-addplace .icon {
+  display: inline-block;
+  vertical-align: middle;
   height: 25px;
+  width: 25px;
   padding-right: 8px;
 }
 
-#countries-dropdown img,
-#countries-dropdown-selector img {
+#countries-dropdown .icon,
+#countries-dropdown-selector .icon {
+  display: inline-block;
+  vertical-align: middle;
   height: 24px;
-  padding-right: 8px;
+  width: 24px;
+  margin-right: 8px;
 }
 
 /* Mobile first: Desktop breakpoint overrides below */
