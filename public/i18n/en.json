@@ -1,7 +1,4 @@
 {
-  "smartling": {
-    "placeholder_format_custom": ["\\$\\d{1,}"]
-  },
   "@metadata": {
     "authors": [
       "Ian Baker",
@@ -168,5 +165,12 @@
   "ftm-thanks-smartling": "Smartling for access to their Translation Managment Platform",
   "ftm-thanks-google": "Google for Maps API credits",
   "ftm-thanks-slack": "Slack for a Pro account",
-  "ftm-tweet-share-button": "Find the closest place to donate masks and other PPE at www.findthemasks.com"
+  "ftm-tweet-share-button": "Find the closest place to donate masks and other PPE at www.findthemasks.com",
+  "ftm-index-og-title": "#findthemasks",
+  "ftm-index-og-description": "Find where you can donate your masks or other personal protective equipment (PPE) in your local area.",
+  "ftm-default-og-description": "America's frontline healthcare workers are treating COVID-19 patients without adequate protective gear, risking their lives! We need to find the masks. All of these masks can save lives now if you get them into the hands of healthcare workers.",
+  "ftm-give-og-title": "#findthemasks | give",
+  "ftm-about-us-og-title": "#findthemasks | About Us",
+  "ftm-privacy-policy-og-title": "#findthemasks | Privacy Policy",
+  "ftm-privacy-policy-og-description": "'Find The Masks privacy policy'"
 }
