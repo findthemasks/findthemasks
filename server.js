@@ -1,6 +1,7 @@
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const setCurrentCountry = require('./middleware/setCurrentCountry.js');
+const setBananaI18n = require('./middleware/setBananaI18n.js');
 const selectMaskMatchPartialPath = require('./viewHelpers/selectMaskMatchPartialPath');
 const selectLargeDonationSitesPartialPath = require('./viewHelpers/selectLargeDonationSitesPartialPath');
 require('dotenv').config();
@@ -17,6 +18,7 @@ app.set('view engine', 'handlebars');
 app.set('strict routing', true);
 
 app.use(setCurrentCountry);
+app.use(setBananaI18n);
 
 app.use((req, res, next) => {
   const schema = req.headers['x-forwarded-proto'];
@@ -39,9 +41,9 @@ router.use(express.static('public'));
 
 router.get(['/', '/index.html'], (req, res) => {
   res.render('index', {
-    ogTitle: '#findthemasks',
+    ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: 'https://findthemasks.com/',
-    ogDescription: 'Find where you can donate your masks or other personal protective equipment (PPE) in your local area.',
+    ogDescription: res.locals.banana.i18n('ftm-index-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.currentCountry),
     largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.currentCountry)
@@ -50,9 +52,9 @@ router.get(['/', '/index.html'], (req, res) => {
 
 router.get(['/give', '/give.html'], (req, res) => {
   res.render('give', {
-    ogTitle: '#findthemasks | give',
+    ogTitle: res.locals.banana.i18n('ftm-give-og-title'),
     ogUrl: 'https://findthemasks.com/give',
-    ogDescription: 'America\'s frontline healthcare workers are treating COVID-19 patients without adequate protective gear, risking their lives! We need to find the masks. All of these masks can save lives now if you get them into the hands of healthcare workers.',
+    ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
   });
 });
@@ -72,18 +74,18 @@ router.get(['/donation-form-bounce', '/donation-form-bounce.html'], (req, res) =
 router.get(['/whoweare', '/whoweare.html'], (req, res) => {
   res.render('whoweare', {
     layout: 'static',
-    ogTitle: '#findthemasks | About Us',
+    ogTitle: res.locals.banana.i18n('ftm-about-us-og-title'),
     ogUrl: 'https://findthemasks.com/whoweare',
-    ogDescription: 'America\'s frontline healthcare workers are treating COVID-19 patients without adequate protective gear, risking their lives! We need to find the masks. All of these masks can save lives now if you get them into the hands of healthcare workers.',
+    ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
   });
 });
 
 router.get('/privacy-policy', (req, res) => {
   res.render('privacy-policy', {
     layout: 'static',
-    ogTitle: '#findthemasks | Privacy Policy',
+    ogTitle: res.locals.banana.i18n('ftm-privacy-policy-og-title'),
     ogUrl: 'https://findthemasks.com/privacy-policy',
-    ogDescription: 'Find The Masks privacy policy',
+    ogDescription: res.locals.banana.i18n('ftm-privacy-policy-og-description'),
   })
 });
 
@@ -165,7 +167,10 @@ app.use('/data(-:countryCode)?.csv', createProxyMiddleware({
 }));
 
 app.use('/', router);
-app.use('/:countryCode', router);
+app.use(/\/[a-zA-Z]{2}/, router);
+app.use((req, res, next) => {
+  res.status(404).redirect('/');
+});
 
 app.listen(port, () => {
   console.log('Server listening on port ' + port);

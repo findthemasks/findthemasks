@@ -1,7 +1,4 @@
 {
-  "smartling" : {
-    "placeholder_format_custom" : ["\\$\\d{1,}"]
-  },
   "@metadata" : {
     "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
@@ -167,5 +164,12 @@
   "ftm-thanks-smartling" : "Smartling za dostęp do swojej platformy zarządzania tłumaczeniami",
   "ftm-thanks-google" : "Kredyty API Google for Maps",
   "ftm-thanks-slack" : "Slack dla konta Pro",
-  "ftm-tweet-share-button" : "Znajdź najbliższe miejsce na przekazanie masek i innych środków ochrony osobistej na www.findthemasks.com"
+  "ftm-tweet-share-button" : "Znajdź najbliższe miejsce na przekazanie masek i innych środków ochrony osobistej na www.findthemasks.com",
+  "ftm-index-og-title" : "#findthemasks",
+  "ftm-index-og-description" : "Dowiedz się, gdzie możesz przekazać swoje maski lub inny sprzęt ochrony osobistej (ŚOI) w Twojej okolicy.",
+  "ftm-default-og-description" : "Pracownicy pierwszej linii America ' leczą pacjentów z COVID-19 bez odpowiedniego sprzętu ochronnego, ryzykując życiem! Musimy znaleźć maski. Wszystkie te maski mogą teraz uratować życie, jeśli dostaniesz je w ręce pracowników służby zdrowia.",
+  "ftm-give-og-title" : "#findthemasks | dać",
+  "ftm-about-us-og-title" : "#findthemasks | O nas",
+  "ftm-privacy-policy-og-title" : "#findthemasks | Polityka prywatności",
+  "ftm-privacy-policy-og-description" : "' Zasady ochrony prywatności aplikacji Find The Masks '"
 }

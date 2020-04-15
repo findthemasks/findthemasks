@@ -1,7 +1,4 @@
 {
-  "smartling" : {
-    "placeholder_format_custom" : ["\\$\\d{1,}"]
-  },
   "@metadata" : {
     "authors" : ["Ian Baker", "Many Others"],
     "last-updated" : "2020-03-27",
@@ -167,5 +164,12 @@
   "ftm-thanks-smartling" : "Smartling pour l'accès à leur plateforme de gestion de la traduction",
   "ftm-thanks-google" : "Crédits API Google for Maps",
   "ftm-thanks-slack" : "Slack pour un compte Pro",
-  "ftm-tweet-share-button" : "Trouvez l'endroit le plus proche pour donner des masques et autres EPI sur www.findthemasks.com"
+  "ftm-tweet-share-button" : "Trouvez l'endroit le plus proche pour donner des masques et autres EPI sur www.findthemasks.com",
+  "ftm-index-og-title" : "#findthemasks",
+  "ftm-index-og-description" : "Trouvez où vous pouvez donner vos masques et autres équipements de protection individuelle (EPI) dans votre région.",
+  "ftm-default-og-description" : "Amérique ' travailleurs de la santé de première ligne sont le traitement de Covid-19 patients sans équipement de protection adéquat, au risque de leur vie! Nous devons trouver les masques. Tous ces masques peuvent maintenant sauver des vies si vous les remettez entre les mains de professionnels de la santé.",
+  "ftm-give-og-title" : "#findthemasks | donner",
+  "ftm-about-us-og-title" : "#findthemasks | À propos de nous",
+  "ftm-privacy-policy-og-title" : "#findthemasks | Politique de confidentialité",
+  "ftm-privacy-policy-og-description" : "' Politique de confidentialité de Find The Masks '"
 }
