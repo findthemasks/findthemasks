@@ -44,7 +44,7 @@ router.get(['/', '/index.html'], (req, res) => {
   res.render('index', {
     ogLocale:  formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
-    ogUrl: 'https://findthemasks.com/',
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-index-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.currentCountry),
@@ -56,7 +56,7 @@ router.get(['/give', '/give.html'], (req, res) => {
   res.render('give', {
     ogLocale:  formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-give-og-title'),
-    ogUrl: 'https://findthemasks.com/give',
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
   });
@@ -79,7 +79,7 @@ router.get(['/whoweare', '/whoweare.html'], (req, res) => {
     layout: 'static',
     ogLocale:  formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-about-us-og-title'),
-    ogUrl: 'https://findthemasks.com/whoweare',
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
   });
 });
@@ -89,7 +89,7 @@ router.get('/privacy-policy', (req, res) => {
     layout: 'static',
     ogLocale:  formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-privacy-policy-og-title'),
-    ogUrl: 'https://findthemasks.com/privacy-policy',
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-privacy-policy-og-description'),
   })
 });
