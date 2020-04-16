@@ -680,6 +680,15 @@ function initMapSearch(data, filters) {
     searchEl, { types: ['geocode'] }
   );
 
+  // initialize map search with query param `q` if it's set
+  const url = new URL(window.location.href);
+  const searchParams = new URLSearchParams(url.search);
+  const q = searchParams.get('q');
+  if (q && q.length) {
+    $search.val(q);
+    attemptGeocode(q);
+  }
+
   // Avoid paying for data that you don't need by restricting the set of place fields that are returned to just the
   // address components.
   autocomplete.setFields(['geometry']);
@@ -698,22 +707,9 @@ function initMapSearch(data, filters) {
         console.warn('Location data not found in place geometry (place.geometry.location).')
       }
     } else {
-      console.warn('No geometry found, attempting geocode...');
       sendEvent("map","search", $search.val());
-
-      // Attempt a geocode of the direct user input instead.
-      const geocoder = new google.maps.Geocoder();
-      const searchText = $search.val();
-      geocoder.geocode({ address: searchText }, (results, status) => {
-        // Ensure we got a valid response with an array of at least one result.
-        if (status === 'OK' && Array.isArray(results) && results.length > 0) {
-          let viewport = results[0].geometry.viewport;
-          fitMapToMarkersNearBounds(viewport);
-        } else {
-          console.warn('Geocode failed: ' + status);
-          sendEvent("map","geocode-fail", $search.val());
-        }
-      });
+      console.warn('No geometry found, attempting geocode...');
+      attemptGeocode($search.val());
     }
   });
 
@@ -729,6 +725,21 @@ function initMapSearch(data, filters) {
     resetMap(data, filters);
     $search.val('');
     sendEvent("map","reset","default-location");
+  });
+}
+
+function attemptGeocode(searchText) {
+  // Attempt a geocode of the direct user input instead.
+  const geocoder = new google.maps.Geocoder();
+  geocoder.geocode({ address: searchText }, (results, status) => {
+    // Ensure we got a valid response with an array of at least one result.
+    if (status === 'OK' && Array.isArray(results) && results.length > 0) {
+      let viewport = results[0].geometry.viewport;
+      fitMapToMarkersNearBounds(viewport);
+    } else {
+      console.warn('Geocode failed: ' + status);
+      sendEvent("map","geocode-fail", searchText);
+    }
   });
 }
 
