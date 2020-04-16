@@ -960,9 +960,31 @@ const MAP_INITIAL_VIEW = {
   us: { zoom: 4, center: { lat: 37.09024, lng: -95.712891 }},
 };
 
+function getMapInitialView() {
+  const url = new URL(window.location.href);
+  const searchParams = new URLSearchParams(url.search);
+  const coords = searchParams.get('coords');
+  // default zoom is pretty tight because if you're passing latlng
+  // you are probably trying to center on a pretty specific location
+  const zoom = parseFloat(searchParams.get('zoom')) || 11;
+  if (coords && coords.length) {
+    const latlng = coords.split(',').map(coord => parseFloat(coord));
+    return {
+      zoom: zoom,
+      center: {
+        lat: latlng[0],
+        lng: latlng[1]
+      }
+    };
+  } else {
+    return MAP_INITIAL_VIEW[getCountry()];
+  }
+}
+
+
 function centerMapToBounds(map, bounds, maxZoom) {
   if (bounds.isEmpty()) {
-    const params = MAP_INITIAL_VIEW[getCountry()];
+    const params = getMapInitialView();
     // Default view if no specific bounds
     map.setCenter(params.center);
     map.setZoom(params.zoom);
