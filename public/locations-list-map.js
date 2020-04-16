@@ -99,7 +99,8 @@ const generateBottomNav = () => {
       const country = countries[countryCode];
 
       if (country.countryCode === currentCountry.toLowerCase()) {
-        countryDropdownLink.textContent = $.i18n(country.i18nString);
+        const img = ce('div', `icon icon-cf_${country.countryCode}`);
+        ac(countryDropdownLink, [img, ctn($.i18n(country.i18nString))]);
       }
 
       const element = document.createElement('a');
@@ -113,7 +114,9 @@ const generateBottomNav = () => {
         'href',
         currentUrl.href
       );
-      element.textContent = $.i18n(country.i18nString);
+
+      const img = ce('div', `icon icon-cf_${country.countryCode}`);
+      ac(element, [img, ctn($.i18n(country.i18nString))]);
       element.addEventListener("click", () =>  sendEvent("i18n", 'set-country', country.countryCode));
       countryDropdownItems.appendChild(element);
     });
@@ -367,8 +370,6 @@ function loadOtherCountries() {
 
 $(function () {
   const url = new URL(window.location);
-  // display flag of country
-  $('#flag-image'). attr("src", "images/flags/" + currentCountry + ".svg");
 
   // this should happen after the translations load
   $('html').on('i18n:ready', function () {
@@ -455,7 +456,7 @@ $(function () {
     }
   });
 
-  const footerHeight = 440;  // footer + navbar + small buffer
+  const footerHeight = 40;  // small buffer near bottom of window
   $(window).scroll(function() {
     if($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
       renderNextListPage();

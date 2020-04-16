@@ -21,7 +21,6 @@ body {
 
 .translated-content {
   display: none; /* hidden until translations load */
-  padding-bottom: 70px; /* pad against bottom nav */
 }
 
 .heading-container {
@@ -59,10 +58,14 @@ h2 {
 
 hr {margin-top: 1.7rem;}
 
-.footer {
-  background: #eee;
-  margin: 50px auto 0 auto;
-  padding: 0 45px 90px 45px;
+.social-media-icons {
+  margin-top: 1rem;
+}
+
+.social-media-icons:after {
+  clear: both;
+  content: "";
+  display: table;
 }
 
 .social-media-icon {
@@ -73,21 +76,16 @@ hr {margin-top: 1.7rem;}
   margin-top: 0px;
 }
 
+.social-media-icons .icon {
+  width: 24px;
+  height: 24px;
+}
+
 .member-of {
   font-style: italic;
   font-size: 13px;
   margin-bottom: 10px;
 
-}
-
-.flag-wrapper {
-   margin-top: -30px;
-   margin-bottom: 5px;
-   margin-left: 90px;
-}
-
-#flag-image {
-  width: 40px;
 }
 
 .subhead {
@@ -436,22 +434,77 @@ h3.city {
   height: 21px;
 }
 
-.nav-drop-shadow {
-  background-color: white;
-  box-shadow: 0 -2px 15px rgba(0,0,0,0.09);
-}
-.nav-link {
-  font-size: 0.9rem !important;
-}
-.navbar-nav {
-  flex-direction: row;
+.navbar.ftm {
+  background: #4169E1;
 }
 
-.navbar-nav .nav-item {
-  margin-left: 20px;
+.navbar.ftm .nav-link,
+.navbar.ftm .btn {
+  font-size: 0.9rem;
 }
-.dropdown-menu {
-  position: absolute !important;
+
+.navbar.ftm .navbar-brand {
+  flex-direction: row;
+  font-size: inherit;
+  font-weight: 500;
+  padding: 0;
+  text-transform: uppercase;
+}
+
+.navbar.ftm .navbar-brand .icon {
+  height: 42px;
+  width: 42px;
+  padding-right: 8px;
+}
+
+.navbar.ftm .navbar-brand .text {
+  display: inline-block;
+  padding: .5rem 0;
+}
+
+.navbar.ftm .navbar-nav .nav-item {
+  margin: 0 .2rem;
+}
+
+.navbar.ftm .navbar-nav .nav-link {
+  padding: .5rem;
+}
+
+.navbar.ftm .nav-item.show {
+  background: #3E54A1;
+}
+
+.navbar.ftm .dropdown-menu,
+.navbar.ftm .dropdown-item {
+  background: #3E54A1;
+  color: #fff;
+}
+
+.navbar.ftm .dropdown-item:hover {
+  background: #4169E1;
+}
+
+.navbar.ftm .btn-addplace {
+  color: #fff;
+  background: #EC416F;
+  white-space: nowrap;
+}
+
+.navbar.ftm .btn-addplace .icon {
+  display: inline-block;
+  vertical-align: middle;
+  height: 25px;
+  width: 25px;
+  padding-right: 8px;
+}
+
+#countries-dropdown .icon,
+#countries-dropdown-selector .icon {
+  display: inline-block;
+  vertical-align: middle;
+  height: 24px;
+  width: 24px;
+  margin-right: 8px;
 }
 
 /* Mobile first: Desktop breakpoint overrides below */
@@ -523,11 +576,6 @@ h3.city {
   .locations-list {
     padding-left: 15px;
     padding-right: 15px;
-  }
-
-  .footer {
-    padding-left: 20px;
-    padding-right: 20px;
   }
 
   .nav-link {
