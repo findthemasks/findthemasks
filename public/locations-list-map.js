@@ -407,11 +407,6 @@ $(function () {
     if (searchParams.get('hide-search') !== null) {
       showMapSearch = searchParams.get('hide-search') !== 'true';
     }
-    // BETA ONLY: Temporarily allow a "show-search" parameter. Delete this once we're enabling by default to confirm with convention established above.
-    if (searchParams.get('show-search') !== null) {
-      showMapSearch = searchParams.get('show-search') === 'true';
-    }
-    // END BETA ONLY
 
     const filters = createFilters(data);
 
