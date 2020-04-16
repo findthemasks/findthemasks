@@ -456,7 +456,7 @@ $(function () {
     }
   });
 
-  const footerHeight = 440;  // footer + navbar + small buffer
+  const footerHeight = 40;  // small buffer near bottom of window
   $(window).scroll(function() {
     if($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
       renderNextListPage();

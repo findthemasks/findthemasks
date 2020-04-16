@@ -58,14 +58,14 @@ h2 {
 
 hr {margin-top: 1.7rem;}
 
-.footer {
-  background: #eee;
-  margin: 50px auto 0 auto;
-  padding: 0 45px 90px 45px;
-}
-
 .social-media-icons {
   margin-top: 1rem;
+}
+
+.social-media-icons:after {
+  clear: both;
+  content: "";
+  display: table;
 }
 
 .social-media-icon {
@@ -576,11 +576,6 @@ h3.city {
   .locations-list {
     padding-left: 15px;
     padding-right: 15px;
-  }
-
-  .footer {
-    padding-left: 20px;
-    padding-right: 20px;
   }
 
   .nav-link {

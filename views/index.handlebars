@@ -59,8 +59,23 @@
     </ol>
     {{> (lookup . 'maskMatchPartialPath') }}
     {{> (lookup . 'largeDonationSitesPartialPath') }}
+
+    <div class="question i18n" data-i18n="ftm-comments-questions">Got a comment or suggestion not related to data
+      updates? Want to help?</div>
+    <p class="i18n" data-i18n="[html]ftm-contact-info">
+      Email us at contact@findthemasks.com or join us on <a target="_blank" rel="noreferrer noopener"
+        href="https://github.com/findthemasks/findthemasks">our Github</a>.
+    </p>
+
+    <p>
+      <span class="i18n" data-i18n="[html]ftm-made-with-love">made with &lt;3 in Seattle</span>
+      (<a href="javascript:;" onclick="window.location='whoweare.html'+window.location.search;" class="end i18n"
+      data-i18n="ftm-who-we-are">who we are</a>)
+    </p>
+
+    {{> social_icons }}
     <hr />
-  </div>
+</div>
 
   <div class="donation-map-title">
     <h2 class="i18n" data-i18n="ftm-map-of-sites">Donation Sites</h2>
@@ -106,26 +121,5 @@
     </div>
 
     <div id="locations-list" class="locations-list"></div>
-
-    <div class="footer">
-      <div style="height:50px"></div>
-      <div class="question i18n" data-i18n="ftm-add-donation-site-question">Do you work in a hospital or clinic and need
-        PPE? Want to update or remove information?</div>
-      <p class="i18n" data-i18n="[html]ftm-add-donation-site-answer">Please <a
-          href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">fill
-          out this form</a>. We will review it as soon as possible.</p>
-      <div class="question i18n" data-i18n="ftm-comments-questions">Got a comment or suggestion not related to data
-        updates? Want to help?</div>
-      <p class="i18n" data-i18n="[html]ftm-contact-info">
-        Email us at contact@findthemasks.com or join us on <a target="_blank" rel="noreferrer noopener"
-          href="https://github.com/findthemasks/findthemasks">our Github</a>.
-      </p>
-
-      <p class="i18n" data-i18n="[html]ftm-made-with-love">made with &lt;3 in Seattle</p>
-      <a href="javascript:;" onclick="window.location='whoweare.html'+window.location.search;" class="end i18n"
-        data-i18n="ftm-who-we-are">who we are</a>
-
-      {{> social_icons }}
-    </div>
   </div>
 </div>
