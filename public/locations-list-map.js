@@ -371,6 +371,10 @@ function loadOtherCountries() {
 $(function () {
   const url = new URL(window.location);
 
+  $(".add-donation-site-form").click(function() {
+    sendEvent('addDonationSite', 'click', 'top-nav');
+  });
+
   // this should happen after the translations load
   $('html').on('i18n:ready', function () {
     generateBottomNav();
@@ -378,7 +382,7 @@ $(function () {
     $('.add-donation-site-form')
       .attr({href: `/${ currentCountry }/donation-form?locale=${$.i18n().locale}`})
       .click(function(e) {
-        sendEvent('addDonationSite', 'click', $(this).attr('href'));
+        sendEvent('addDonationSite', 'click', 'div-within-page');
       });
 
     $('.social-media-icon').click(function(e) {
