@@ -708,7 +708,6 @@ function initMapSearch(data, filters) {
       }
     } else {
       sendEvent("map","search", $search.val());
-      console.warn('No geometry found, attempting geocode...');
       attemptGeocode($search.val());
     }
   });
@@ -967,18 +966,26 @@ function getMapInitialView() {
   // default zoom is pretty tight because if you're passing latlng
   // you are probably trying to center on a pretty specific location
   const zoom = parseFloat(searchParams.get('zoom')) || 11;
-  if (coords && coords.length) {
+  if (coords) {
     const latlng = coords.split(',').map(coord => parseFloat(coord));
-    return {
-      zoom: zoom,
-      center: {
-        lat: latlng[0],
-        lng: latlng[1]
+    if ( // validate lat lng
+        latlng.length === 2 &&
+        latlng[0] >= -85 &&
+        latlng[0] <= 85 &&
+        latlng[1] >= -180 &&
+        latlng[1] <= 180
+      ) {
+      return {
+        zoom: zoom,
+        center: {
+          lat: latlng[0],
+          lng: latlng[1]
+        }
       }
     };
-  } else {
-    return MAP_INITIAL_VIEW[getCountry()];
   }
+  return MAP_INITIAL_VIEW[getCountry()];
+
 }
 
 
