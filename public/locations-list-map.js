@@ -408,11 +408,6 @@ $(function () {
     if (searchParams.get('hide-search') !== null) {
       showMapSearch = searchParams.get('hide-search') !== 'true';
     }
-    // BETA ONLY: Temporarily allow a "show-search" parameter. Delete this once we're enabling by default to confirm with convention established above.
-    if (searchParams.get('show-search') !== null) {
-      showMapSearch = searchParams.get('show-search') === 'true';
-    }
-    // END BETA ONLY
 
     const filters = createFilters(data);
 
@@ -686,6 +681,15 @@ function initMapSearch(data, filters) {
     searchEl, { types: ['geocode'] }
   );
 
+  // initialize map search with query param `q` if it's set
+  const url = new URL(window.location.href);
+  const searchParams = new URLSearchParams(url.search);
+  const q = searchParams.get('q');
+  if (q) {
+    $search.val(q);
+    attemptGeocode(q);
+  }
+
   // Avoid paying for data that you don't need by restricting the set of place fields that are returned to just the
   // address components.
   autocomplete.setFields(['geometry']);
@@ -701,25 +705,10 @@ function initMapSearch(data, filters) {
         fitMapToMarkersNearBounds(viewport);
       } else {
         sendEvent("map","autocomplete-fail", $search.val());
-        console.warn('Location data not found in place geometry (place.geometry.location).')
       }
     } else {
-      console.warn('No geometry found, attempting geocode...');
       sendEvent("map","search", $search.val());
-
-      // Attempt a geocode of the direct user input instead.
-      const geocoder = new google.maps.Geocoder();
-      const searchText = $search.val();
-      geocoder.geocode({ address: searchText }, (results, status) => {
-        // Ensure we got a valid response with an array of at least one result.
-        if (status === 'OK' && Array.isArray(results) && results.length > 0) {
-          let viewport = results[0].geometry.viewport;
-          fitMapToMarkersNearBounds(viewport);
-        } else {
-          console.warn('Geocode failed: ' + status);
-          sendEvent("map","geocode-fail", $search.val());
-        }
-      });
+      attemptGeocode($search.val());
     }
   });
 
@@ -735,6 +724,20 @@ function initMapSearch(data, filters) {
     resetMap(data, filters);
     $search.val('');
     sendEvent("map","reset","default-location");
+  });
+}
+
+function attemptGeocode(searchText) {
+  // Attempt a geocode of the direct user input instead.
+  const geocoder = new google.maps.Geocoder();
+  geocoder.geocode({ address: searchText }, (results, status) => {
+    // Ensure we got a valid response with an array of at least one result.
+    if (status === 'OK' && Array.isArray(results) && results.length > 0) {
+      let viewport = results[0].geometry.viewport;
+      fitMapToMarkersNearBounds(viewport);
+    } else {
+      sendEvent("map","geocode-fail", searchText);
+    }
   });
 }
 
@@ -955,9 +958,39 @@ const MAP_INITIAL_VIEW = {
   us: { zoom: 4, center: { lat: 37.09024, lng: -95.712891 }},
 };
 
+function getMapInitialView() {
+  const url = new URL(window.location.href);
+  const searchParams = new URLSearchParams(url.search);
+  const coords = searchParams.get('coords');
+  // default zoom is pretty tight because if you're passing latlng
+  // you are probably trying to center on a pretty specific location
+  const zoom = parseFloat(searchParams.get('zoom')) || 11;
+  if (coords) {
+    const latlng = coords.split(',').map(coord => parseFloat(coord));
+    if ( // validate lat lng
+        latlng.length === 2 &&
+        latlng[0] >= -85 &&
+        latlng[0] <= 85 &&
+        latlng[1] >= -180 &&
+        latlng[1] <= 180
+      ) {
+      return {
+        zoom: zoom,
+        center: {
+          lat: latlng[0],
+          lng: latlng[1]
+        }
+      }
+    };
+  }
+  return MAP_INITIAL_VIEW[getCountry()];
+
+}
+
+
 function centerMapToBounds(map, bounds, maxZoom) {
   if (bounds.isEmpty()) {
-    const params = MAP_INITIAL_VIEW[getCountry()];
+    const params = getMapInitialView();
     // Default view if no specific bounds
     map.setCenter(params.center);
     map.setZoom(params.zoom);

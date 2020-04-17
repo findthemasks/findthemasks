@@ -33,7 +33,7 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 <iframe style="width: 100%; height: 800px; border: none;" src="https://findthemasks.com/give.html"></iframe>
 ```
 
-- We also support state specific data views, hiding the map, hiding the filters through query params, and specifying locale:
+- We also support state specific data views, hiding the map, hiding the filters through query params, initializing on specific locations, and specifying locale:
 
 ```html
 ?state={CA/WA/NY/etc}
@@ -42,6 +42,8 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 ?hide-list={true/false} (also hides filters)
 ?hide-search={true/false} (beta)
 ?locale={see available locales in dropdown at https://findthemasks.com}
+?q={map search term: '100 Fake Road, Kansas, MO'}
+?coords={lat,lng}&zoom=12 // zoom only works in concert with coords
 ```
 
 All boolean parameters default to false (unless they're in beta).
