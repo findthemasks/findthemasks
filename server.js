@@ -54,6 +54,7 @@ router.get(['/', '/index.html'], (req, res) => {
 
 router.get(['/give', '/give.html'], (req, res) => {
   res.render('give', {
+    layout: 'give',
     ogLocale:  formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-give-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,

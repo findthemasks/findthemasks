@@ -7,119 +7,62 @@
 <div class="translated-content">
   {{> top_nav }}
 
-  <div class="content-container">
-    <h2 class="i18n" data-i18n="ftm-index-getmeppe-twitter-cta">
-      Find where you can donate your masks or other personal protective equipment (PPE) in your local area.
-    </h2>
+  <div class="row flex-column-reverse flex-lg-row">
+    <div class="md-12 col-lg-6 p-0">
+      <div class="bg-dark-blue text-light p-4">
+        <h4 class="mt-0">
+          Let's get our PPE into the hands of those who need it!
+        </h4>
 
-    <p class="i18n" data-i18n="ftm-index-where-to-find-ppe">
-      Maybe you bought N95 masks a few weeks ago or already have some in your house. Right now
-      healthcare workers are running dangerously low on PPE like masks, hospital gowns, booties, and
-      face shields to protect them while they risk their lives to save others.
-    </p>
-    <p class="i18n" data-i18n="[html]ftm-index-protect-with-donations">
-      By donating, you protect <em>everybody</em>: doctors, nurses, hospital staff, patients, and the
-      general public.
-    </p>
-    <p class="i18n" data-i18n="[html]ftm-index-types-of-ppe">
-      If you know construction workers, vets, scientists, or dentists, please share this link with
-      them.
-    </p>
+        <p>
+          Search for a requester near you. Not sure how to give? Read our FAQ.
+        </p>
 
-    <div class="need-ppe">
-      <h2 class="i18n" data-i18n="ftm-add-donation-site-header">Do you need PPE?</h2>
-      <div class="i18n" data-i18n="ftm-add-donation-site-question">
-        <p>Do you work in a hospital or
-          clinic and need PPE? Want to update or remove information?</p>
-      </div>
-      <div class="i18n" data-i18n="[html]ftm-add-donation-site-answer">
-        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgCpK5coPVFC6rJrE7ZhimiZuDoEaL6fo6gYqxsN_FIpJZhg/viewform">
-          <button type="button" class="btn btn-primary">Complete this form</button>
-        </a>
-      </div>
-    </div>
-
-    <h2 class="i18n" data-i18n="ftm-what-to-do-header">How to Donate PPE</h2>
-    <p class="i18n" data-i18n="ftm-volunteer-network">
-      Our network of volunteers has created a global map of over 1700+ locations, like hospitals and
-      clinics, where you can donate your masks, gowns, and other PPE.
-    </p>
-    <ol>
-      <li class="i18n" data-i18n="[html]ftm-what-to-do-1"><b>Use our map</b> below to find a hospital
-        or health center near you accepting donations.
-      </li>
-      <li class="i18n" data-i18n="[html]ftm-what-to-do-2"><b>Follow their instructions</b> for what
-        they accept and how to drop it off.
-      </li>
-      <li class="i18n" data-i18n="[html]ftm-what-to-do-3"><b>If you are donating opened packages</b>,
-        please put them in a ziploc bag with a note saying whether they have been used, whether anyone
-        in your household has been sick or travelled outside the country, and the expiration date if
-        known.
-      </li>
-    </ol>
-    {{> (lookup . 'maskMatchPartialPath') }}
-    {{> (lookup . 'largeDonationSitesPartialPath') }}
-
-    <div class="question i18n" data-i18n="ftm-comments-questions">Got a comment or suggestion not related to data
-      updates? Want to help?</div>
-    <p class="i18n" data-i18n="[html]ftm-contact-info">
-      Email us at contact@findthemasks.com or join us on <a target="_blank" rel="noreferrer noopener"
-        href="https://github.com/findthemasks/findthemasks">our Github</a>.
-    </p>
-
-    <p>
-      <span class="i18n" data-i18n="[html]ftm-made-with-love">made with &lt;3 in Seattle</span>
-      (<a href="javascript:;" onclick="window.location='whoweare.html'+window.location.search;" class="end i18n"
-      data-i18n="ftm-who-we-are">who we are</a>)
-    </p>
-
-    {{> social_icons }}
-    <hr />
-</div>
-
-  <div class="donation-map-title">
-    <h2 class="i18n" data-i18n="ftm-map-of-sites">Donation Sites</h2>
-    <span id="list-stats"></span>
-  </div>
-
-  <div class="locations-loading">
-    <img src="images/icons/loader.svg" alt="" class="load-spinner"> <span class="i18n"
-      data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
-  </div>
-
-  <div class="map-container" style="display: none;">
-    <div class="row" style="margin: 30px 0px 20px 0px;">
-      <div class="offset-xs-1 col-xs-10 offset-lg-2 col-lg-8">
-        <div class="map-search-wrap">
-          <div class="search-input">
-            <input type="search" name="map-search" id="map-search" class="i18n"
-              placeholder="Search by city, zip, or address" data-i18n="[placeholder]ftm-maps-search-placeholder">
-            <!-- Icon credit to https://feathericons.com/  -->
-            <img class="search-icon" src="images/icons/search.svg">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text bg-white border-0 search-icon-wrap">
+              <img class="search-icon" src="images/icons/search.svg">
+            </span>
           </div>
-          <!-- BETA: To enable search field, either change data-enable-search to "true" in #map below, or add hide-search=false/show-search=true to query string. -->
-          <div class="search-controls">
-            <a href="javascript:;" class="map-action-link" id="use-location">
-              <span class="i18n" data-i18n="ftm-maps-search-use-location">Use my location</span>
-              <span class="search-control-separator">|</span>
-            </a>
-
-            <a href="javascript:;" class="map-action-link" id="reset-map">
-              <span class="i18n" data-i18n="ftm-maps-search-reset">Reset map</span>
-            </a>
+          <input type="search" name="map-search" id="map-search" class="i18n form-control border-0"
+                 placeholder="Search by city, zip, or address"
+                 data-i18n="[placeholder]ftm-maps-search-placeholder">
+          <div class="input-group-append">
+            <span class="input-group-text bg-white border-0 p-2">
+              <a href="javascript:;" class="map-action-link" id="use-location">
+                <span class="i18n" data-i18n="ftm-maps-search-use-location">Use my location</span>
+              </a>
+            </span>
           </div>
         </div>
       </div>
+
+      <div class="container">
+        <a href="javascript:;" class="map-action-link" id="reset-map">
+          <span class="i18n" data-i18n="ftm-maps-search-reset">Reset map</span>
+        </a>
+
+        <div class="donation-map-title">
+          <h2 class="i18n" data-i18n="ftm-map-of-sites">Donation Sites</h2>
+          <span id="list-stats"></span>
+        </div>
+
+        <div class="locations-loading">
+          <img src="images/icons/loader.svg" alt="" class="load-spinner"> <span class="i18n"
+                                                                                data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
+        </div>
+
+        <div class="locations-container" style="display: none;">
+          <div class="filters-container" style="display: none;">
+            <form name="filters" class="filters-list"></form>
+          </div>
+
+          <div id="locations-list" class="locations-list"></div>
+        </div>
+      </div>
     </div>
-
-    <div id="map" data-enable-search="true"></div>
-  </div>
-
-  <div class="locations-container" style="display: none;">
-    <div class="filters-container" style="display: none;">
-      <form name="filters" class="filters-list"></form>
+    <div class="md-12 col-lg-6 p-0">
+      <div id="map"></div>
     </div>
-
-    <div id="locations-list" class="locations-list"></div>
-  </div>
+  </div
 </div>

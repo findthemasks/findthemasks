@@ -42,7 +42,7 @@ const primaryMarkerOptions = {
 };
 
 // Configuration defined in query string. Initialized in jQuery DOM ready function.
-let showMapSearch = false; // BETA FEATURE: Default to false.
+let showMapSearch = true; // BETA FEATURE: Default to false.
 
 // Keep track of the previous info windows user has clicked so we can close them.
 let openInfoWindows = [];
@@ -397,13 +397,7 @@ $(function () {
     const showFilters = showList && searchParams.get('hide-filters') !== 'true';
     const showMap = searchParams.get('hide-map') !== 'true';
 
-    // BETA: Default initialized at module level scope (see above). Initialize search field, first check #map for default
-    // config. Override with query string. Currently disabled by default because it's still in beta.
-    // First pull map config (if "data-enable-search" attrib defined).
     const $map = $('#map');
-    if ($map.data('enable-search') !== undefined) {
-      showMapSearch = $map.data('enable-search');
-    }
     // Second, allow an override from ?hide-search=[bool].
     if (searchParams.get('hide-search') !== null) {
       showMapSearch = searchParams.get('hide-search') !== 'true';
