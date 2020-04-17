@@ -419,6 +419,7 @@ $(function () {
 
     if (showMap) {
       loadMapScript(searchParams, data, filters);
+      $map.show();
     }
 
     $('.locations-loading').hide();
