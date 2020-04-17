@@ -684,7 +684,7 @@ function initMapSearch(data, filters) {
   const url = new URL(window.location.href);
   const searchParams = new URLSearchParams(url.search);
   const q = searchParams.get('q');
-  if (q && q.length) {
+  if (q) {
     $search.val(q);
     attemptGeocode(q);
   }
@@ -704,7 +704,6 @@ function initMapSearch(data, filters) {
         fitMapToMarkersNearBounds(viewport);
       } else {
         sendEvent("map","autocomplete-fail", $search.val());
-        console.warn('Location data not found in place geometry (place.geometry.location).')
       }
     } else {
       sendEvent("map","search", $search.val());
@@ -736,7 +735,6 @@ function attemptGeocode(searchText) {
       let viewport = results[0].geometry.viewport;
       fitMapToMarkersNearBounds(viewport);
     } else {
-      console.warn('Geocode failed: ' + status);
       sendEvent("map","geocode-fail", searchText);
     }
   });
