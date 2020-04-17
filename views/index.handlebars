@@ -62,16 +62,8 @@
 
     <div class="question i18n" data-i18n="ftm-comments-questions">Got a comment or suggestion not related to data
       updates? Want to help?</div>
-    <p class="i18n" data-i18n="[html]ftm-contact-info">
-      Email us at contact@findthemasks.com or join us on <a target="_blank" rel="noreferrer noopener"
-        href="https://github.com/findthemasks/findthemasks">our Github</a>.
-    </p>
 
-    <p>
-      <span class="i18n" data-i18n="[html]ftm-made-with-love">made with &lt;3 in Seattle</span>
-      (<a href="javascript:;" onclick="window.location='whoweare.html'+window.location.search;" class="end i18n"
-      data-i18n="ftm-who-we-are">who we are</a>)
-    </p>
+    {{> (lookup . 'localizeContactInfo') }}
 
     {{> social_icons }}
     <hr />
