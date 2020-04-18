@@ -9,7 +9,7 @@
   "ftm-accepting" : "Aceptando",
   "ftm-accepts-open-boxes" : "Se acepta cajas / bolsas abiertas",
   "ftm-ack-data-sources" : "Este sitio también incluye datos de <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , un proyecto de:",
-  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Complete este formulario </button> </a>",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form' target='_blank'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Complete este formulario </button> </a>",
   "ftm-add-donation-site-header" : "¿Necesita EPP ( equipo de protección personal)?",
   "ftm-collaboration-with" : "Hecho en colaboración con <a href=\".\" target=\"_blank\"> #findthemasks </a> .",
   "ftm-add-donation-site-question" : "¿Quieres unirte al mapa #findthemasks? ¿Necesita actualizar o eliminar información?",
