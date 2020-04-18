@@ -9,7 +9,7 @@
   "ftm-accepting" : "Akzeptieren",
   "ftm-accepts-open-boxes" : "Akzeptanz von bereits geöffneten Verpackungen oder Kartons",
   "ftm-ack-data-sources" : "Diese Site enthält auch Daten von <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , einem Projekt von:",
-  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Füllen Sie dieses Formular aus </button> </a>",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form' target='_blank'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Füllen Sie dieses Formular aus </button> </a>",
   "ftm-add-donation-site-header" : "Benötigen Sie PSA?",
   "ftm-collaboration-with" : "In Zusammenarbeit mit <a href=\".\" target=\"_blank\"> #findthemasks </a> .",
   "ftm-add-donation-site-question" : "Möchten Sie der # findthemasks-Karte beitreten? Müssen Sie Informationen aktualisieren oder entfernen?",
