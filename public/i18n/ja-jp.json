@@ -9,7 +9,7 @@
   "ftm-accepting" : "受け入れる",
   "ftm-accepts-open-boxes" : "開いたボックス/バッグを受け入れます",
   "ftm-ack-data-sources" : "このサイトには、次のプロジェクトによる<a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a>からのデータも含まれています。",
-  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'>このフォームに記入</button> </a>",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form' target='_blank'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'>このフォームに記入</button> </a>",
   "ftm-add-donation-site-header" : "PPEが必要ですか？",
   "ftm-collaboration-with" : "<a href=\".\" target=\"_blank\"> #findthemasks </a>と共同で作成されました。",
   "ftm-add-donation-site-question" : "#findthemasksマップに参加したいですか？情報を更新または削除する必要がありますか？",

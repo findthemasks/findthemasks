@@ -9,7 +9,7 @@
   "ftm-accepting" : "接受：",
   "ftm-accepts-open-boxes" : "接受打開的盒子/袋子",
   "ftm-ack-data-sources" : "該站點還包含來自<a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a>數據，該數據來自：",
-  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'>填寫此表格</button> </a>",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form' target='_blank'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'>填寫此表格</button> </a>",
   "ftm-add-donation-site-header" : "您需要個人防護裝備嗎？",
   "ftm-collaboration-with" : "與<a href=\".\" target=\"_blank\"> #findthemasks </a> 。",
   "ftm-add-donation-site-question" : "想加入#findthemasks地圖嗎？需要更新或刪除信息嗎？",
