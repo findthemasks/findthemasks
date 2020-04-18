@@ -7,76 +7,73 @@
 <div class="translated-content">
   {{> top_nav }}
 
-  <div class="row no-gutters">
-    <div class="col">
-      <div class="bg-dark-blue text-light p-4">
-        <h4 class="mt-0">
-          Let's get our PPE into the hands of those who need it!
-        </h4>
+  <div class="row flex-column-reverse flex-lg-row no-gutters">
+    <div class="col-12 col-lg-6">
+      <div>
+        <div class="bg-dark-blue text-light p-4">
+          <h4 class="mt-0">
+            Let's get our PPE into the hands of those who need it!
+          </h4>
 
-        <p>
-          Search for a requester near you. Not sure how to give? Read our FAQ.
-        </p>
+          <p>
+            Search for a requester near you. Not sure how to give? Read our FAQ.
+          </p>
 
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
             <span class="input-group-text bg-white border-0 search-icon-wrap">
               <img class="search-icon" src="images/icons/search.svg">
             </span>
-          </div>
-          <input type="search" name="map-search" id="map-search" class="i18n form-control border-0"
-                 placeholder="Search by city, zip, or address"
-                 data-i18n="[placeholder]ftm-maps-search-placeholder">
-          <div class="input-group-append">
+            </div>
+            <input type="search" name="map-search" id="map-search"
+                   class="i18n form-control border-0"
+                   placeholder="Search by city, zip, or address"
+                   data-i18n="[placeholder]ftm-maps-search-placeholder">
+            <div class="input-group-append">
             <span class="input-group-text bg-white border-0 p-2">
               <a href="javascript:;" class="map-action-link" id="use-location">
                 <span class="i18n" data-i18n="ftm-maps-search-use-location">Use my location</span>
               </a>
             </span>
-          </div>
-        </div>
-      </div>
-
-      <div class="container">
-        <div class="row no-gutters mb-0 mt-2 mx-2">
-          <div class="col">
-            <div class="d-flex align-items-center locations-list-header pt-2 pb-3">
-              <div class="flex-grow-1">
-                <img src="images/icons/requester_pin.svg" alt="" class="mr-1">
-                <span id="list-stats">
-              </span>
-              </div>
-              <div class="d-flex justify-content-end flex-grow-1">
-                <a href="javascript:;" class="map-action-link" id="reset-map">
-                  <span class="i18n" data-i18n="ftm-maps-search-reset">Reset map & list</span>
-                </a>
-              </div>
             </div>
           </div>
         </div>
 
-        <div class="locations-loading text-center">
-          <img src="images/icons/loader.svg" alt="loading" class="load-spinner"> <span class="i18n"
-                                                                                       data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
-        </div>
-
-        <div class="locations-container row no-gutters m-2" style="display: none;">
-          <!--          <div class="filters-container" style="display: none;">-->
-          <!--            <form name="filters" class="filters-list"></form>-->
-          <!--          </div>-->
-
-          <div id="locations-list" class="locations-list"></div>
+        <div class="d-flex align-items-center locations-list-header px-2 pt-2 pb-3 mb-0 mt-2 mx-2">
+          <div class="flex-grow-1">
+            <img src="images/icons/requester_pin.svg" alt="" class="mr-1">
+            <span id="list-stats">
+              </span>
+          </div>
+          <div class="d-flex justify-content-end flex-grow-1">
+            <a href="javascript:;" class="map-action-link" id="reset-map">
+              <span class="i18n" data-i18n="ftm-maps-search-reset">Reset map & list</span>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="col">
+
       <div class="locations-loading text-center">
         <img src="images/icons/loader.svg" alt="loading" class="load-spinner"> <span class="i18n"
                                                                                      data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
       </div>
+
+      <div class="locations-container row no-gutters px-2 m-2" style="display: none;">
+        <!--          <div class="filters-container" style="display: none;">-->
+        <!--            <form name="filters" class="filters-list"></form>-->
+        <!--          </div>-->
+
+        <div id="locations-list" class="locations-list col"></div>
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
       <div class="map-container">
+        <div class="locations-loading text-center">
+          <img src="images/icons/loader.svg" alt="loading" class="load-spinner"> <span class="i18n"
+                                                                                       data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
+        </div>
         <div id="map"></div>
       </div>
     </div>
-  </div
+  </div>
 </div>

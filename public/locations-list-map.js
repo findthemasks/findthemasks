@@ -532,8 +532,8 @@ function getEntryEl(entry) {
       const ppeNeededContainer = ce('div', 'row');
 
       ac(ppeNeededContainer, [
-        ce('label', 'col-2 font-weight-bold', ctn($.i18n('ftm-ppe-needed'))),
-        ce('p', 'col-10', ctn(translateEnumList(entry.accepting)))
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-ppe-needed'))),
+        ce('p', 'col-12 col-md-9', ctn(translateEnumList(entry.accepting)))
       ]);
 
       ac(entry.domElem, ppeNeededContainer);
@@ -543,8 +543,8 @@ function getEntryEl(entry) {
       const openPackagesContainer = ce('div', 'row');
 
       ac(openPackagesContainer, [
-        ce('label', 'col-2 font-weight-bold', ctn($.i18n('ftm-open-packages'))),
-        ce('p', 'col-10', ctn(translateEnumValue(entry.open_box)))
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-open-packages'))),
+        ce('p', 'col-12 col-md-9', ctn(translateEnumValue(entry.open_box)))
       ]);
 
       ac(entry.domElem, openPackagesContainer);
@@ -554,8 +554,8 @@ function getEntryEl(entry) {
       const instructionsContainer = ce('div', 'row');
 
       ac(instructionsContainer, [
-        ce('label', 'col-2 font-weight-bold', ctn($.i18n('ftm-instructions'))),
-        linkifyElement(ce('p', 'col-10', multilineStringToNodes(entry.instructions)))
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-instructions'))),
+        linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(entry.instructions)))
       ]);
 
       ac(entry.domElem, instructionsContainer);

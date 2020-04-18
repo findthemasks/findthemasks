@@ -18,6 +18,10 @@ a {
   color: #4169E1;
 }
 
+.linkified {
+  word-break: break-word;
+}
+
 .text-pink {
   color: #EC416F;
 }
@@ -231,9 +235,9 @@ h3.city {
 }
 
 .map-container {
-  position: fixed;
+  position: relative;
   height: calc(100vh - 58px);
-  width: 50%;
+  width: 100%;
 }
 
 #map {
@@ -423,6 +427,14 @@ h3.city {
 
 /* Mobile first: Desktop breakpoint overrides below */
 
+@media (min-width: 1200px) {
+  .map-container {
+    position: fixed;
+    height: calc(100vh - 58px);
+    width: 50%;
+  }
+}
+
 @media (max-width: 1200px) {
   .search-input {
     margin: 0px;
@@ -485,11 +497,6 @@ h3.city {
 
   .filters-container {
     margin: 0 15px;
-  }
-
-  .locations-list {
-    padding-left: 15px;
-    padding-right: 15px;
   }
 
   .nav-link {
