@@ -418,8 +418,8 @@ $(function () {
     updateFilters(filters);
 
     if (showMap) {
-      loadMapScript(searchParams, data, filters);
       $map.show();
+      loadMapScript(searchParams, data, filters);
     }
 
     $('.locations-loading').hide();

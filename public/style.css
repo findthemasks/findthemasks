@@ -38,6 +38,14 @@ a {
   color: white;
 }
 
+.search-filter-container {
+  position: sticky;
+  top: 58px;
+  overflow: hidden;
+  z-index: 1;
+  background: white;
+}
+
 .logo {
   height: 120px;
   margin-bottom: 15px;
