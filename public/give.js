@@ -42,7 +42,7 @@ const primaryMarkerOptions = {
 };
 
 // Configuration defined in query string. Initialized in jQuery DOM ready function.
-let showMapSearch = true; // BETA FEATURE: Default to false.
+let showMapSearch = false; // BETA FEATURE: Default to false.
 
 // Keep track of the previous info windows user has clicked so we can close them.
 let openInfoWindows = [];
@@ -397,7 +397,13 @@ $(function () {
     const showFilters = showList && searchParams.get('hide-filters') !== 'true';
     const showMap = searchParams.get('hide-map') !== 'true';
 
+    // BETA: Default initialized at module level scope (see above). Initialize search field, first check #map for default
+    // config. Override with query string. Currently disabled by default because it's still in beta.
+    // First pull map config (if "data-enable-search" attrib defined).
     const $map = $('#map');
+    if ($map.data('enable-search') !== undefined) {
+      showMapSearch = $map.data('enable-search');
+    }
     // Second, allow an override from ?hide-search=[bool].
     if (searchParams.get('hide-search') !== null) {
       showMapSearch = searchParams.get('hide-search') !== 'true';
@@ -419,7 +425,6 @@ $(function () {
 
     if (showMap) {
       loadMapScript(searchParams, data, filters);
-      $map.show();
     }
 
     $('.locations-loading').hide();
@@ -471,6 +476,19 @@ function renderNextListPage() {
   const children = [];
 
   locationsListEntries.slice(renderLocation, renderLocation + 40).forEach(function (entry) {
+    // Add city/state headers
+    if (renderLocation == 0) {
+      children.push(getStateEl(entry), getCityEl(entry));
+    } else {
+      const lastEntry = locationsListEntries[renderLocation - 1];
+      if (entry.stateName != lastEntry.stateName) {
+        children.push(getStateEl(entry));
+      }
+      if (entry.cityName != lastEntry.cityName) {
+        children.push(getCityEl(entry));
+      }
+    }
+
     children.push(getEntryEl(entry));
     renderLocation += 1;
   });
@@ -489,7 +507,7 @@ function googleMapsUri(address) {
 
 function getEntryEl(entry) {
   if (!entry.domElem) {
-    entry.domElem = ce('div', 'location pb-2');
+    entry.domElem = ce('div', 'location');
     ac(entry.domElem, ce('h4', null, ctn(entry.name)));
 
     if (entry.org_type && entry.org_type.length) {
@@ -546,6 +564,14 @@ function getEntryEl(entry) {
   }
 
   return entry.domElem; // TODO: generate this here.
+}
+
+function getStateEl(entry) {
+  return ce('h2', 'state', ctn(entry.state));
+}
+
+function getCityEl(entry) {
+  return ce('h3', 'city', ctn(entry.city));
 }
 
 function onFilterChange(data, prefix, key, filters) {
@@ -942,12 +968,12 @@ function getMapInitialView() {
   if (coords) {
     const latlng = coords.split(',').map(coord => parseFloat(coord));
     if ( // validate lat lng
-        latlng.length === 2 &&
-        latlng[0] >= -85 &&
-        latlng[0] <= 85 &&
-        latlng[1] >= -180 &&
-        latlng[1] <= 180
-      ) {
+      latlng.length === 2 &&
+      latlng[0] >= -85 &&
+      latlng[0] <= 85 &&
+      latlng[1] >= -180 &&
+      latlng[1] <= 180
+    ) {
       return {
         zoom: zoom,
         center: {
@@ -1070,11 +1096,25 @@ function createMarker(latitude, longitude, orgType, address, name, instructions,
  *
  * @param   $elem   jQuery selector for the stats element
  * @param   count   The number for render
+ * @param   states  The states that this applies to (array of abbreviated state strings).
  */
-function updateStats($elem, count) {
-  const prettyMarkerCount = number_format(count, 0);
+function updateStats($elem, count, states) {
+  let statsHtml = '',
+    prettyMarkerCount = number_format(count, 0);
 
-  $elem.html($.i18n('ftm-requesters-count', prettyMarkerCount));
+  // Default to no states.
+  statsHtml = `(${prettyMarkerCount})`;
+
+  if (typeof states === 'undefined') states = [];
+  if (states.length > 0) {
+    let statesFormatted = states.join(', ');
+    statsHtml = `in ${statesFormatted} ` + statsHtml;
+  }
+
+  // If we're at zero, just clear it out for now.
+  if (count === 0) statsHtml = '';
+
+  $elem.html(statsHtml);
 }
 
 /**

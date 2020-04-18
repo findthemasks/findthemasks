@@ -12,6 +12,8 @@
   "ftm-accepting": "Accepting",
   "ftm-accepts-open-boxes": "Accepts Opened Boxes/bags",
   "ftm-ack-data-sources": "This site also includes data from <a href=\"https://tinyurl.com/hospitals-needing-ppe\">https://tinyurl.com/hospitals-needing-ppe</a>, a project by:",
+  "ftm-add-donation-site-question": "Want to join the #findthemasks map? Need to update or remove info?",
+  "ftm-add-donation-site-answer": "<a class='add-donation-site-form'><button style='margin-top:20px;' type='button' class='btn-sm btn-primary'>Complete this form</button></a>",
   "ftm-collaboration-with": "Made in collaboration with <a href=\".\" target=\"_blank\">#findthemasks</a>.",
   "ftm-address": "Address",
   "ftm-org-type": "Organization Type",
@@ -77,7 +79,7 @@
   "ftm-maps-marker-instructions-label": "Instructions:",
   "ftm-maps-marker-open-packages-label": "Open Packages?:",
   "ftm-maps-search-placeholder": "Search by city, zip, or address",
-  "ftm-maps-search-reset": "Reset map",
+  "ftm-maps-search-reset": "Reset map & list",
   "ftm-maps-search-use-location": "Use my location",
   "ftm-open-packages": "Accepts opened packages?",
   "ftm-org-type-addiction-facility": "Addiction Facility",
@@ -156,11 +158,13 @@
   "ftm-nav-partners": "Partners",
   "ftm-nav-volunteer": "Volunteer",
   "ftm-nav-addplace": "I need PPE",
+  "ftm-nav-share": "Share",
   "ftm-index-og-title": "#findthemasks",
   "ftm-index-og-description": "Find where you can donate your masks or other personal protective equipment (PPE) in your local area.",
   "ftm-default-og-description": "America's frontline healthcare workers are treating COVID-19 patients without adequate protective gear, risking their lives! We need to find the masks. All of these masks can save lives now if you get them into the hands of healthcare workers.",
   "ftm-give-og-title": "#findthemasks | give",
   "ftm-about-us-og-title": "#findthemasks | About Us",
   "ftm-privacy-policy-og-title": "#findthemasks | Privacy Policy",
-  "ftm-privacy-policy-og-description": "'Find The Masks privacy policy'"
+  "ftm-privacy-policy-og-description": "'Find The Masks privacy policy'",
+  "ftm-requesters-count": "$1 requesters"
 }
