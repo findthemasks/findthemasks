@@ -14,10 +14,6 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-a {
-  text-decoration: underline;
-}
-
 .bg-dark-blue {
   background: #3E54A1;
 }
