@@ -489,17 +489,18 @@ function googleMapsUri(address) {
 
 function getEntryEl(entry) {
   if (!entry.domElem) {
-    entry.domElem = ce('div', 'location pb-2');
-    ac(entry.domElem, ce('h4', null, ctn(entry.name)));
+    entry.domElem = ce('div', 'location py-3');
+    const header = ce('div', 'd-flex');
+    const headerHospitalInfo = ce('div', 'flex-grow-1');
+    const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
+    ac(headerHospitalInfo, ce('h5', null, ctn(entry.name)));
 
     if (entry.org_type && entry.org_type.length) {
-      ac(entry.domElem, [
-        ce('label', null, ctn($.i18n('ftm-org-type'))),
+      ac(headerOrgType, [
         ce('p', null, ctn(translateEnumValue(entry.org_type)))
       ]);
     }
 
-    ac(entry.domElem, ce('label', null, ctn($.i18n('ftm-address'))));
     const addr = entry.address.trim().split('\n');
 
     if (addr.length) {
@@ -520,28 +521,44 @@ function getEntryEl(entry) {
         ]);
       }
 
-      ac(entry.domElem, para);
+      ac(headerHospitalInfo, para);
     }
 
-    if (entry.instructions) {
-      ac(entry.domElem, [
-        ce('label', null, ctn($.i18n('ftm-instructions'))),
-        linkifyElement(ce('p', null, multilineStringToNodes(entry.instructions)))
-      ]);
-    }
+    ac(header, headerHospitalInfo);
+    ac(header, headerOrgType);
+    ac(entry.domElem, header);
 
     if (entry.accepting) {
-      ac(entry.domElem, [
-        ce('label', null, ctn($.i18n('ftm-accepting'))),
-        ce('p', null, ctn(translateEnumList(entry.accepting)))
+      const ppeNeededContainer = ce('div', 'row');
+
+      ac(ppeNeededContainer, [
+        ce('label', 'col-2 font-weight-bold', ctn($.i18n('ftm-ppe-needed'))),
+        ce('p', 'col-10', ctn(translateEnumList(entry.accepting)))
       ]);
+
+      ac(entry.domElem, ppeNeededContainer);
     }
 
     if (entry.open_box) {
-      ac(entry.domElem, [
-        ce('label', null, ctn($.i18n('ftm-open-packages'))),
-        ce('p', null, ctn(translateEnumValue(entry.open_box)))
+      const openPackagesContainer = ce('div', 'row');
+
+      ac(openPackagesContainer, [
+        ce('label', 'col-2 font-weight-bold', ctn($.i18n('ftm-open-packages'))),
+        ce('p', 'col-10', ctn(translateEnumValue(entry.open_box)))
       ]);
+
+      ac(entry.domElem, openPackagesContainer);
+    }
+
+    if (entry.instructions) {
+      const instructionsContainer = ce('div', 'row');
+
+      ac(instructionsContainer, [
+        ce('label', 'col-2 font-weight-bold', ctn($.i18n('ftm-instructions'))),
+        linkifyElement(ce('p', 'col-10', multilineStringToNodes(entry.instructions)))
+      ]);
+
+      ac(entry.domElem, instructionsContainer);
     }
   }
 

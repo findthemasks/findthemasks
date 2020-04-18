@@ -14,6 +14,14 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+a {
+  color: #4169E1;
+}
+
+.text-pink {
+  color: #EC416F;
+}
+
 .bg-dark-blue {
   background: #3E54A1;
 }
