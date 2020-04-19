@@ -5,6 +5,8 @@
     "locale" : "en",
     "message-documentation" : "qqq"
   },
+  "ftm-ppe-cta" : "¡Deje que ' s ponga nuestro PPE en manos de quienes lo necesitan!",
+  "ftm-requester-near-me" : "Busque un solicitante cerca de usted. ¿No estás seguro de cómo dar? Lee nuestras preguntas frecuentes.",
   "ftm-accepted-items" : "Filtrar por artículos aceptados",
   "ftm-accepting" : "Aceptando",
   "ftm-ppe-needed" : "PPE necesario",
