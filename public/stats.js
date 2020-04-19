@@ -1,6 +1,6 @@
 import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
-import getCountry from './getCountry.js';
+import {getCountry} from './getCountry.js';
 
 document.addEventListener("DOMContentLoaded", function() {
   const currentCountry = getCountry();

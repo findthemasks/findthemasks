@@ -1,4 +1,4 @@
-import getCountry from './getCountry.js';
+import {getCountry} from './getCountry.js';
 
 export const DEFAULT_LOCALE = 'en';
 
