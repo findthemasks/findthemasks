@@ -566,12 +566,7 @@ function getEntryEl(entry) {
         sendEvent('listView', 'clickAddress', address);
       });
       ac(para, link);
-      for (const line of addr) {
-        ac(link, [
-          ctn(line),
-          ce('br')
-        ]);
-      }
+      ac(link, ctn(address));
 
       ac(headerHospitalInfo, para);
     }
@@ -1096,7 +1091,7 @@ function createMarker(latitude, longitude, orgType, address, name, instructions,
       mapLinkEl.addEventListener('click', () => {
         sendEvent('map', 'clickAddress', oneLineAddress);
       });
-      mapLinkEl.appendChild(ctn(address));
+      mapLinkEl.appendChild(ctn(oneLineAddress));
 
       const contentTags = [ce('h5', null, ctn(name))];
 
