@@ -5,6 +5,8 @@
     "locale" : "en",
     "message-documentation" : "qqq"
   },
+  "ftm-ppe-cta" : "讓'讓我們的PPE交到需要它的人手中！",
+  "ftm-requester-near-me" : "搜索您附近的請求者。不確定如何給予？閱讀我們的常見問題解答。",
   "ftm-accepted-items" : "按接受項目篩選",
   "ftm-accepting" : "接受：",
   "ftm-ppe-needed" : "需要個人防護裝備",
