@@ -5,6 +5,8 @@
     "locale" : "en",
     "message-documentation" : "qqq"
   },
+  "ftm-ppe-cta" : "Lascia che ' s porti il nostro DPI nelle mani di chi ne ha bisogno!",
+  "ftm-requester-near-me" : "Cerca un richiedente vicino a te. Non sei sicuro di come dare? Leggi le nostre FAQ.",
   "ftm-accepted-items" : "Filtra per Articoli accettati",
   "ftm-accepting" : "Accettare",
   "ftm-ppe-needed" : "DPI necessari",
