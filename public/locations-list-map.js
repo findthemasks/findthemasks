@@ -863,7 +863,7 @@ function getMarkersByDistanceFrom(latitude, longitude, n=3) {
 function getMarkers(data, appliedFilters, bounds, markerOptions) {
   const filterAcceptKeys = appliedFilters.acceptItems && Object.keys(appliedFilters.acceptItems);
   const filterOrgTypeKeys = appliedFilters.orgTypes && Object.keys(appliedFilters.orgTypes);
-
+  const hasStateFilter = !!appliedFilters.states;
 
   const inFiltersMarkers = [];
   const outOfFiltersMarkers = [];
@@ -871,7 +871,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
   for (const stateName of Object.keys(data)) {
     const inStateFilter = appliedFilters.states && appliedFilters.states[stateName];
 
-    const hasFilters = filterAcceptKeys || filterOrgTypeKeys || inStateFilter;
+    const hasFilters = !!filterAcceptKeys || !!filterOrgTypeKeys || hasStateFilter;
 
     const state = data[stateName];
     const cities = state.cities;
@@ -909,7 +909,8 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
         }
 
         const inSecondaryFilter = inAcceptFilter && inOrgTypeFilter;
-        const filteredEntry = !inStateFilter || secondaryFiltersApplied;
+        // state or secondary filter applied
+        const filteredEntry = (hasStateFilter && !inStateFilter) || secondaryFiltersApplied;
 
         let marker = entry.marker;
 
