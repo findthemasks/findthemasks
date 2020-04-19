@@ -2,6 +2,7 @@ const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const setCurrentCountry = require('./middleware/setCurrentCountry.js');
 const setBananaI18n = require('./middleware/setBananaI18n.js');
+const localizeContactInfo = require('./viewHelpers/localizeContactInfo.js');
 const selectMaskMatchPartialPath = require('./viewHelpers/selectMaskMatchPartialPath');
 const selectLargeDonationSitesPartialPath = require('./viewHelpers/selectLargeDonationSitesPartialPath');
 const formatFbLocale = require('./utils/formatFbLocale');
@@ -48,7 +49,8 @@ router.get(['/', '/index.html'], (req, res) => {
     ogDescription: res.locals.banana.i18n('ftm-index-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.currentCountry),
-    largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.currentCountry)
+    largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.currentCountry),
+    localizeContactInfo: localizeContactInfo(res.locals.currentCountry)
   });
 });
 

@@ -6,14 +6,14 @@ if (hostname === "localhost" || hostname === "127.0.0.1" || hostname === "local.
 } else {
   environment = 'production'
 }
-const airbrake = new airbrakeJs.Client({
-  projectId: 266956,
-  projectKey: '2c966fe44a092a4dfe2abeb19c9e112d',
-  environment: environment
-});
 
 // automatic alerting only on production
 if (environment === 'production') {
+  const airbrake = new airbrakeJs.Client({
+    projectId: 266956,
+    projectKey: '2c966fe44a092a4dfe2abeb19c9e112d',
+    environment: environment
+  });
   try {
     // This will throw if the document has no head tag
     document.head.insertBefore(document.createElement("style"), null);
