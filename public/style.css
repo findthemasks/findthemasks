@@ -406,7 +406,7 @@ h3.city {
   white-space: nowrap;
 }
 
-.navbar.ftm .btn-addplace .icon {
+.navbar.ftm .btn-addplace .icon, .icon-requester-pin.icon {
   display: inline-block;
   vertical-align: middle;
   height: 25px;
