@@ -942,7 +942,10 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
         if (marker) {
           if (hasFilters && !filteredEntry) {
             inFiltersMarkers.push(marker);
-            bounds && bounds.extend(marker.position);
+
+            if (hasStateFilter) {
+              bounds && bounds.extend(marker.position);
+            }
           } else {
             outOfFiltersMarkers.push(marker);
           }
