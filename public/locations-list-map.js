@@ -155,7 +155,11 @@ const parseFiltersFromData = (data) => {
         entry.accepting.split(/, (?![^(]*\))/).map(a => a.trim()).forEach((i) => {
           const filterKey = i.toLowerCase();
           if (FILTER_ITEMS.hasOwnProperty(filterKey) && !acceptedItems.hasOwnProperty(filterKey)) {
-            acceptedItems[filterKey] = FILTER_ITEMS[filterKey];
+            acceptedItems[filterKey] = Object.assign(
+              {},
+              FILTER_ITEMS[filterKey],
+              { value: filterKey }
+            );
           }
         });
 
@@ -163,7 +167,11 @@ const parseFiltersFromData = (data) => {
           const orgTypeKey = entry.org_type.toLowerCase();
 
           if (ORG_TYPES.hasOwnProperty(orgTypeKey) && !orgTypes.hasOwnProperty(orgTypeKey)) {
-            orgTypes[orgTypeKey] = ORG_TYPES[orgTypeKey];
+            orgTypes[orgTypeKey] = Object.assign(
+              {},
+              ORG_TYPES[orgTypeKey],
+              { value: orgTypeKey }
+            );
           }
         }
       });
@@ -227,89 +235,53 @@ function sendEvent(category, action, label) {
 };
 
 function createFilterElements(data, filters) {
-  const filterElements = [];
-
-  function createFilter(filter, key, value, prefix) {
-    const filterContainer = ce('div');
-    const input = ce('input');
-    input.type = 'checkbox';
-    input.id = `${ prefix }-${ key }`;
-    input.value = key;
-    input.addEventListener('change', () => onFilterChange(data, prefix, key, filters));
-    filterContainer.appendChild(input);
-    const label = ce('label', null, ctn(value));
-    label.id = `${ prefix }-${ key }-label`;
-    label.htmlFor = input.id;
-    label.addEventListener("click", () =>  sendEvent("filters", `${ prefix }`, key));
-    filterContainer.appendChild(label);
-
-    if (filter.isSet) {
-      input.checked = true;
-      label.classList.add('selected');
-    }
-
-    filter.input = input;
-    filter.label = label;
-
-    return filterContainer;
-  }
-
-  filterElements.push(ce('h4', null, ctn($.i18n('ftm-administrative-region-filter', $.i18n(countries[currentCountry].administrativeRegionI18nString)))));
-  for (const state of Object.keys(filters.states).sort()) {
-    const stateFilter = filters.states[state];
-    filterElements.push(createFilter(stateFilter, state, stateFilter.name, 'states'));
-  }
-
   const selectedAcceptedItems = [];
   const acceptedItems = [];
 
   for (const item of Object.keys(filters.acceptItems)) {
     const itemFilter = filters.acceptItems[item];
     acceptedItems.push({
-      value: itemFilter.name,
-      text: itemFilter.name
+      value: itemFilter.value,
+      text: itemFilter.name,
+      selected: itemFilter.isSet
     });
-
-    if (itemFilter.isSet) {
-      selectedAcceptedItems.push(itemOption.name);
-    }
   }
 
-  new Selectr('#ppe-needed-select', {
+  const ppeNeededSelect = new Selectr('#ppe-needed-select', {
     customClass: 'ftm-select',
     data: acceptedItems,
-    selectedValues: selectedAcceptedItems,
     multiple: true,
     searchable: false,
     placeholder: $.i18n('ftm-ppe-needed')
   });
 
-  const selectedFacilityTypes = [];
+  ppeNeededSelect.on('selectr.select', (option) => {
+    onFilterChange(data, 'acceptItems', option.idx, true, filters);
+    sendEvent('filters', 'acceptItems', option.value);
+  });
+
+  ppeNeededSelect.on('selectr.deselect', (option) => {
+    onFilterChange(data, 'acceptItems', option.idx, false, filters);
+  });
+
   const facilityTypes = [];
 
   for (const item of Object.keys(filters.orgTypes)) {
-    debugger;
     const orgType = filters.orgTypes[item];
     facilityTypes.push({
-      value: orgType.name,
-      text: orgType.name
+      value: orgType.value,
+      text: orgType.name,
+      selected: orgType.isSet
     });
-
-    if (orgType.isSet) {
-      selectedFacilityTypes.push(itemOption.name);
-    }
   }
 
   new Selectr('#facility-type-select', {
     customClass: 'ftm-select',
     data: facilityTypes,
-    selectedValues: selectedFacilityTypes,
     multiple: true,
     searchable: false,
     placeholder: $.i18n('ftm-facility-type')
   });
-
-  return filterElements;
 }
 
 // Wrapper for Node.appendChild.
@@ -485,7 +457,7 @@ $(function () {
       $('.locations-container').show();
 
       if (showFilters) {
-        ac(document.getElementsByClassName('filters-list')[0], createFilterElements(data, filters));
+        createFilterElements(data, filters);
         $(".filters-container").show();
       }
 
@@ -622,18 +594,15 @@ function getEntryEl(entry) {
   return entry.domElem; // TODO: generate this here.
 }
 
-function onFilterChange(data, prefix, key, filters) {
-  const filter = filters[prefix] && filters[prefix][key];
-
+function onFilterChange(data, prefix, idx, selected, filters) {
+  const filter = filters[prefix] && filters[prefix][Object.keys(filters[prefix])[idx]];
   if (!filter) {
     return;
   }
 
-  if (filter.input.checked) {
-    filter.label.classList.add('selected');
+  if (selected) {
     filter.isSet = true;
   } else {
-    filter.label.classList.remove('selected');
     filter.isSet = false;
   }
 
