@@ -224,6 +224,13 @@ function updateFilters(filters) {
       applied.acceptItems[item] = true;
     }
   }
+
+  for (const orgType of Object.keys(filters.orgTypes)) {
+    if (filters.orgTypes[orgType].isSet) {
+      applied.orgTypes = applied.orgTypes || {};
+      applied.orgTypes[orgType] = true;
+    }
+  }
 }
 
 // Sends event to gtag for analytics
@@ -235,7 +242,6 @@ function sendEvent(category, action, label) {
 };
 
 function createFilterElements(data, filters) {
-  const selectedAcceptedItems = [];
   const acceptedItems = [];
 
   for (const item of Object.keys(filters.acceptItems)) {
@@ -275,12 +281,21 @@ function createFilterElements(data, filters) {
     });
   }
 
-  new Selectr('#facility-type-select', {
+  const facilityTypeSelect = new Selectr('#facility-type-select', {
     customClass: 'ftm-select',
     data: facilityTypes,
     multiple: true,
     searchable: false,
     placeholder: $.i18n('ftm-facility-type')
+  });
+
+  facilityTypeSelect.on('selectr.select', (option) => {
+    onFilterChange(data, 'orgTypes', option.idx, true, filters);
+    sendEvent('filters', 'orgTypes', option.value);
+  });
+
+  facilityTypeSelect.on('selectr.deselect', (option) => {
+    onFilterChange(data, 'orgTypes', option.idx, false, filters);
   });
 }
 
@@ -328,6 +343,7 @@ function getFlatFilteredEntries(data, filters) {
   const entries = [];
   const applied = filters.applied || {};
   const filterAcceptKeys = applied.acceptItems && Object.keys(applied.acceptItems);
+  const filterOrgTypeKeys = applied.orgTypes && Object.keys(applied.orgTypes);
   let listCount = 0; // TODO: hacky, see note below.
 
   for (const stateName of Object.keys(data).sort()) {
@@ -346,6 +362,13 @@ function getFlatFilteredEntries(data, filters) {
         if (filterAcceptKeys) {
           const acc = (entry.accepting || "").toLowerCase();
           if (!filterAcceptKeys.some(s => acc.includes(s))) {
+            return;
+          }
+        }
+
+        if (filterOrgTypeKeys) {
+          const acc = (entry.org_type || "").toLowerCase();
+          if (!filterOrgTypeKeys.some(s => acc === s)) {
             return;
           }
         }
