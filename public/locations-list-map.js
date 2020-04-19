@@ -194,9 +194,9 @@ function createFilters(data) {
     states: {}
   };
 
-  // for (const state of Object.keys(data)) {
-  //   filters.states[state] = { name: state, isSet: false };
-  // }
+  for (const state of Object.keys(data)) {
+    filters.states[state] = { name: state, isSet: false };
+  }
 
   const dataFilters = parseFiltersFromData(data);
   filters.acceptItems = translatedFilterItems(dataFilters.acceptedItems);
@@ -412,7 +412,7 @@ function loadOtherCountries() {
 
           // opacity value matches what's in css for the .secondarycluster class -
           // can set a css class for the clusters, but not for individual pins.
-          otherMarkers.push(...getMarkers(otherData, {}, null, secondaryMarkerOptions).outofstate);
+          otherMarkers.push(...getMarkers(otherData, {}, null, secondaryMarkerOptions).outOfFilters);
           updateClusters(null, secondaryCluster);
         }
       );
@@ -862,11 +862,17 @@ function getMarkersByDistanceFrom(latitude, longitude, n=3) {
 
 function getMarkers(data, appliedFilters, bounds, markerOptions) {
   const filterAcceptKeys = appliedFilters.acceptItems && Object.keys(appliedFilters.acceptItems);
-  const inStateMarkers = [];
-  const outOfStateMarkers = [];
+  const filterOrgTypeKeys = appliedFilters.orgTypes && Object.keys(appliedFilters.orgTypes);
+
+
+  const inFiltersMarkers = [];
+  const outOfFiltersMarkers = [];
 
   for (const stateName of Object.keys(data)) {
     const inStateFilter = appliedFilters.states && appliedFilters.states[stateName];
+
+    const hasFilters = filterAcceptKeys || filterOrgTypeKeys || inStateFilter;
+
     const state = data[stateName];
     const cities = state.cities;
 
@@ -874,37 +880,69 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
       const city = cities[cityName];
 
       for (const entry of city.entries) {
+        // filter out if not in state and state filter is applied
+        // filter out if not in accept and accept filter is not applied
+        // filter out if not in org type and org type filter is not applied]
+
+        // add marker to primary if filters exist && marker matches
+        // else add markers to secondary
+
+        let secondaryFiltersApplied = false;
+
         let inAcceptFilter = true;
         if (filterAcceptKeys) {
           const acc = (entry.accepting || "").toLowerCase();
           if (!filterAcceptKeys.some(s => acc.includes(s))) {
             inAcceptFilter = false;
+            secondaryFiltersApplied = true;
           }
         }
+
+        let inOrgTypeFilter = true;
+
+        if (filterOrgTypeKeys) {
+          const orgTypeKey = (entry.org_type || "").toLowerCase();
+          if (!filterOrgTypeKeys.includes(orgTypeKey)) {
+            inOrgTypeFilter = false;
+            secondaryFiltersApplied = true;
+          }
+        }
+
+        const filteredEntry = inStateFilter || secondaryFiltersApplied;
 
         let marker = entry.marker;
 
         if (marker) {
-          if (!inAcceptFilter) {
+          if (!(inAcceptFilter && inOrgTypeFilter)) {
             marker.setMap(null);
             marker = null;
           }
-        } else if (inAcceptFilter) {
+        } else if (inAcceptFilter && inOrgTypeFilter) {
           const lat = Number(entry.lat);
           const lng = Number(entry.lng);
 
           // Guard against non-geocoded entries. Assuming no location exactly on the equator or prime meridian
           if (lat && lng) {
-            marker = entry.marker = createMarker(lat, lng, entry.org_type, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box, markerOptions);
+            marker = entry.marker = createMarker(
+              lat,
+              lng,
+              entry.org_type,
+              entry.address,
+              entry.name,
+              entry.instructions,
+              entry.accepting,
+              entry.open_box,
+              markerOptions
+            );
           }
         }
 
         if (marker) {
-          if (inStateFilter) {
-            inStateMarkers.push(marker);
+          if (hasFilters && !filteredEntry) {
+            inFiltersMarkers.push(marker);
             bounds && bounds.extend(marker.position);
           } else {
-            outOfStateMarkers.push(marker);
+            outOfFiltersMarkers.push(marker);
           }
         }
       }
@@ -912,8 +950,8 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
   }
 
   return {
-    instate: inStateMarkers,
-    outofstate: outOfStateMarkers
+    inFilters: inFiltersMarkers,
+    outOfFilters: outOfFiltersMarkers
   };
 }
 
@@ -927,15 +965,15 @@ function showMarkers(data, filters) {
 
   const bounds = new google.maps.LatLngBounds();
   const applied = filters.applied || {};
-  const hasFilters = applied.states || applied.acceptItems;
+  const hasFilters = applied.states || applied.acceptItems || applied.orgTypes;
 
   const markers = getMarkers(data, applied, hasFilters && bounds);
 
-  if (applied.states) {
-    primaryMarkers = markers.instate;
-    secondaryMarkers = markers.outofstate;
+  if (applied.states || applied.acceptItems || applied.orgTypes) {
+    primaryMarkers = markers.inFilters;
+    secondaryMarkers = markers.outOfFilters;
   } else {
-    primaryMarkers = markers.outofstate;
+    primaryMarkers = markers.outOfFilters;
     secondaryMarkers = [];
   }
 
@@ -953,7 +991,7 @@ function showMarkers(data, filters) {
   updateClusters(primaryCluster, secondaryCluster);
 
   let $mapStats = $('#map-stats');
-  updateStats($mapStats, markers.instate.length + markers.outofstate.length);
+  updateStats($mapStats, markers.inFilters.length + markers.outOfFilters.length);
 
   // HACK. On some browsers, the markercluster freaks out if it gets a bunch of new markers
   // immediately followed by a map view change. Making the view change async works around
