@@ -5,6 +5,8 @@
     "locale" : "en",
     "message-documentation" : "qqq"
   },
+  "ftm-ppe-cta" : "Laissez ' s mettre notre EPI entre les mains de ceux qui en ont besoin!",
+  "ftm-requester-near-me" : "Recherchez un demandeur près de chez vous. Vous ne savez pas comment donner? Lisez notre FAQ.",
   "ftm-accepted-items" : "Articles acceptés",
   "ftm-accepting" : "Accepte",
   "ftm-ppe-needed" : "EPI nécessaire",
