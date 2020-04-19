@@ -908,16 +908,17 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
           }
         }
 
-        const filteredEntry = inStateFilter || secondaryFiltersApplied;
+        const inSecondaryFilter = inAcceptFilter && inOrgTypeFilter;
+        const filteredEntry = !inStateFilter || secondaryFiltersApplied;
 
         let marker = entry.marker;
 
         if (marker) {
-          if (!(inAcceptFilter && inOrgTypeFilter)) {
+          if (!inSecondaryFilter) {
             marker.setMap(null);
             marker = null;
           }
-        } else if (inAcceptFilter && inOrgTypeFilter) {
+        } else if (inSecondaryFilter) {
           const lat = Number(entry.lat);
           const lng = Number(entry.lng);
 
