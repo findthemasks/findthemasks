@@ -64,7 +64,7 @@ export const FILTER_ITEMS = {
   }
 };
 
-const ORG_TYPES = {
+export const ORG_TYPES = {
   'addiction facility': {
     name: 'ftm-org-type-addiction-facility'
   },

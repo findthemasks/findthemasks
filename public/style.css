@@ -41,7 +41,6 @@ a {
 .search-filter-container {
   position: sticky;
   top: 58px;
-  overflow: hidden;
   z-index: 1;
   background: white;
 }
@@ -197,15 +196,6 @@ h3.city {
 .filters-list div {
   display: inline-block;
   margin: 0 3px 3px 0;
-}
-
-.filters-container {
-  margin: 0 30px;
-}
-
-/* On the give page, filters and list take full width of their containers */
-.give .filters-container {
-  margin: 0;
 }
 
 .filters-list h4 {

@@ -2,7 +2,7 @@ import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
 import locales from './locales.js';
 import getCountry from './getCountry.js';
-import { FILTER_ITEMS, ENUM_MAPPINGS } from './formEnumLookups.js';
+import { FILTER_ITEMS, ORG_TYPES, ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getMapsLanguageRegion, getCurrentLocaleParam, DEFAULT_LOCALE } from  './i18nUtils.js';
 
 
@@ -144,8 +144,10 @@ const translatedFilterItems = (filterItems) => {
 // and returns the i18n keys from FILTER_ITEMS for accepting items that match
 //
 // NOTE: the incoming data structure is very brittle; if that changes at all, this will break
-const parseAcceptedItemsFromData = (data) => {
+const parseFiltersFromData = (data) => {
   const acceptedItems = {};
+  const orgTypes = {};
+
   Object.keys(data).forEach((state) => {
     Object.keys(data[state].cities).forEach((city) => {
       data[state].cities[city].entries.forEach((entry) => {
@@ -156,12 +158,23 @@ const parseAcceptedItemsFromData = (data) => {
             acceptedItems[filterKey] = FILTER_ITEMS[filterKey];
           }
         });
+
+        if (entry.org_type) {
+          const orgTypeKey = entry.org_type.toLowerCase();
+
+          if (ORG_TYPES.hasOwnProperty(orgTypeKey) && !orgTypes.hasOwnProperty(orgTypeKey)) {
+            orgTypes[orgTypeKey] = ORG_TYPES[orgTypeKey];
+          }
+        }
       });
     });
   });
 
-  return acceptedItems;
-}
+  return {
+    acceptedItems: acceptedItems,
+    orgTypes: orgTypes
+  };
+};
 
 // Builds the data structure for tracking which filters are set
 // If all values in a category are false, it's treated as no filter - all items are included
@@ -173,12 +186,13 @@ function createFilters(data) {
     states: {}
   };
 
-  for (const state of Object.keys(data)) {
-    filters.states[state] = { name: state, isSet: false };
-  }
+  // for (const state of Object.keys(data)) {
+  //   filters.states[state] = { name: state, isSet: false };
+  // }
 
-  const acceptedItems = parseAcceptedItemsFromData(data);
-  filters.acceptItems = translatedFilterItems(acceptedItems);
+  const dataFilters = parseFiltersFromData(data);
+  filters.acceptItems = translatedFilterItems(dataFilters.acceptedItems);
+  filters.orgTypes = translatedFilterItems(dataFilters.orgTypes);
 
   return filters;
 }
@@ -246,11 +260,54 @@ function createFilterElements(data, filters) {
     filterElements.push(createFilter(stateFilter, state, stateFilter.name, 'states'));
   }
 
-  filterElements.push(ce('h4', null, ctn($.i18n('ftm-accepted-items'))));
+  const selectedAcceptedItems = [];
+  const acceptedItems = [];
+
   for (const item of Object.keys(filters.acceptItems)) {
     const itemFilter = filters.acceptItems[item];
-    filterElements.push(createFilter(itemFilter, item, itemFilter.name, 'acceptItems'));
+    acceptedItems.push({
+      value: itemFilter.name,
+      text: itemFilter.name
+    });
+
+    if (itemFilter.isSet) {
+      selectedAcceptedItems.push(itemOption.name);
+    }
   }
+
+  new Selectr('#ppe-needed-select', {
+    customClass: 'ftm-select',
+    data: acceptedItems,
+    selectedValues: selectedAcceptedItems,
+    multiple: true,
+    searchable: false,
+    placeholder: $.i18n('ftm-ppe-needed')
+  });
+
+  const selectedFacilityTypes = [];
+  const facilityTypes = [];
+
+  for (const item of Object.keys(filters.orgTypes)) {
+    debugger;
+    const orgType = filters.orgTypes[item];
+    facilityTypes.push({
+      value: orgType.name,
+      text: orgType.name
+    });
+
+    if (orgType.isSet) {
+      selectedFacilityTypes.push(itemOption.name);
+    }
+  }
+
+  new Selectr('#facility-type-select', {
+    customClass: 'ftm-select',
+    data: facilityTypes,
+    selectedValues: selectedFacilityTypes,
+    multiple: true,
+    searchable: false,
+    placeholder: $.i18n('ftm-facility-type')
+  });
 
   return filterElements;
 }
