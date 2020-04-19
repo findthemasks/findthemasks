@@ -281,22 +281,26 @@ function createFilterElements(data, filters) {
     });
   }
 
-  const facilityTypeSelect = new Selectr('#facility-type-select', {
-    customClass: 'ftm-select',
-    data: facilityTypes,
-    multiple: true,
-    searchable: false,
-    placeholder: $.i18n('ftm-facility-type')
-  });
+  if (facilityTypes.length > 0) {
+    const facilityTypeSelect = new Selectr('#facility-type-select', {
+      customClass: 'ftm-select',
+      data: facilityTypes,
+      multiple: true,
+      searchable: false,
+      placeholder: $.i18n('ftm-facility-type')
+    });
 
-  facilityTypeSelect.on('selectr.select', (option) => {
-    onFilterChange(data, 'orgTypes', option.idx, true, filters);
-    sendEvent('filters', 'orgTypes', option.value);
-  });
+    facilityTypeSelect.on('selectr.select', (option) => {
+      onFilterChange(data, 'orgTypes', option.idx, true, filters);
+      sendEvent('filters', 'orgTypes', option.value);
+    });
 
-  facilityTypeSelect.on('selectr.deselect', (option) => {
-    onFilterChange(data, 'orgTypes', option.idx, false, filters);
-  });
+    facilityTypeSelect.on('selectr.deselect', (option) => {
+      onFilterChange(data, 'orgTypes', option.idx, false, filters);
+    });
+  } else {
+    $('#facility-type-select').parent().remove();
+  }
 }
 
 // Wrapper for Node.appendChild.
