@@ -14,6 +14,10 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+.text-pink {
+  color: #EC416F;
+}
+
 .content-container {
   margin: 15px auto 40px auto;
   width: 60%;
@@ -194,14 +198,12 @@ h3.city {
 
 .locations-list p {
   font-size: 0.9rem;
-  margin: 0px;
   line-height: 1.5;
 }
 
 .location {
   padding-bottom: 20px;
   overflow-wrap: break-word;
-  margin-left: 15px;
 }
 
 .location label {
@@ -209,12 +211,7 @@ h3.city {
   font-size: 12px;
   font-weight: 300;
   letter-spacing: 1.1px;
-  margin: 0.9rem 0 0 0;
   text-transform: uppercase;
-}
-
-.location > * {
-  padding-left: 2rem;
 }
 
 .donation-sites h1 {
@@ -226,11 +223,6 @@ h3.city {
   margin: 0 3px 3px 0;
 }
 
-.locations-list {
-  padding: 0 30px 10px 30px;
-  margin-top: 20px;
-}
-
 .filters-container {
   margin: 0 30px;
 }
@@ -238,10 +230,6 @@ h3.city {
 /* On the give page, filters and list take full width of their containers */
 .give .filters-container {
   margin: 0;
-}
-
-.give .locations-list {
-  padding: 0 0 10px 0;
 }
 
 .filters-list h4 {
@@ -530,8 +518,7 @@ h3.city {
   h2.state {
     padding: 4px 10px;
   }
-  h3.city,
-  .location {
+  h3.city {
     margin-left: 10px;
   }
 }
@@ -571,11 +558,6 @@ h3.city {
 
   .filters-container {
     margin: 0 15px;
-  }
-
-  .locations-list {
-    padding-left: 15px;
-    padding-right: 15px;
   }
 
   .nav-link {
