@@ -373,6 +373,14 @@ function getFlatFilteredEntries(data, filters) {
           }
         }
 
+        if (entry.marker) {
+          const mapBounds = map.getBounds();
+
+          if (mapBounds && !mapBounds.contains(entry.marker.getPosition())) {
+            return;
+          }
+        }
+
         listCount++;
         entry.cityName = cityName;
         entry.stateName = stateName;
@@ -649,6 +657,8 @@ function loadMapScript(searchParams, data, filters) {
   document.head.appendChild(scriptTag);
 }
 
+let currentViewportCenter = {};
+
 /**
  * Sets up map on initial page load.
  *
@@ -684,6 +694,34 @@ function initMap(data, filters) {
   secondaryCluster.addListener('click', function(e) {
     sendEvent('map', 'click', 'secondaryCluster');
   });
+
+  google.maps.event.addListener(map, 'bounds_changed', () => {
+    const mapBounds = map.getBounds();
+
+    if (mapBounds && currentViewportCenter) {
+      const currentLat = mapBounds.getCenter().lat();
+      const currentLng = mapBounds.getCenter().lat();
+
+      if (currentLat !== currentViewportCenter.lat || currentLng !== currentViewportCenter.lng) {
+        refreshList(data, filters);
+      }
+
+      currentViewportCenter = {
+        lat: currentLat,
+        lng: currentLng
+      }
+    }
+  });
+
+  const mapBounds = map.getBounds();
+
+  if (mapBounds) {
+    const mapCenter = mapBounds.getCenter();
+    currentViewportCenter = {
+      lat: mapCenter.lat(),
+      lng: mapCenter.lng()
+    };
+  }
 
   showMarkers(data, filters);
 
