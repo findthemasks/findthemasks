@@ -532,7 +532,7 @@ function renderNextListPage() {
 }
 
 function getOneLineAddress(address) {
-  return address.trim().replace(/\n/g, " ");
+  return address.trim().replace(/\n/g, ", ");
 }
 
 function googleMapsUri(address) {
