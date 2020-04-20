@@ -386,6 +386,10 @@ h3.city {
   padding: .5rem;
 }
 
+.navbar.ftm .navbar-nav .home-link {
+  cursor: pointer;
+}
+
 .navbar.ftm .nav-item.show {
   background: #3E54A1;
 }
