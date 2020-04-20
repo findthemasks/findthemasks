@@ -1,8 +1,9 @@
 import countries from './countries.js';
 import locales from './locales.js';
-import {getCountry} from './getCountry.js';
-import { getMapsLanguageRegion, getCurrentLocaleParam, DEFAULT_LOCALE } from  './i18nUtils.js';
-import {ac, ce, ctn} from './utils.js';
+import { getCountry } from './getCountry.js';
+import { getCurrentLocaleParam, DEFAULT_LOCALE } from './i18nUtils.js';
+import { ac, ce, ctn } from './utils.js';
+import sendEvent from './sendEvent.js';
 
 const currentCountry = getCountry();
 document.body.setAttribute("data-country", currentCountry);
@@ -33,7 +34,7 @@ const generateTopNav = () => {
       currentUrl.searchParams.set('locale', locale.localeCode);
       element.setAttribute('href', currentUrl.href);
       element.textContent = $.i18n(locale.i18nString);
-      element.addEventListener("click", () =>  sendEvent("i18n", 'set-locale', locale.localeCode));
+      element.addEventListener("click", () => sendEvent("i18n", 'set-locale', locale.localeCode));
       localeDropdownItems.appendChild(element);
     });
 
@@ -69,7 +70,7 @@ const generateTopNav = () => {
 
       const img = ce('div', `icon icon-cf_${country.countryCode}`);
       ac(element, [img, ctn($.i18n(country.i18nString))]);
-      element.addEventListener("click", () =>  sendEvent("i18n", 'set-country', country.countryCode));
+      element.addEventListener("click", () => sendEvent("i18n", 'set-country', country.countryCode));
       countryDropdownItems.appendChild(element);
     });
   }

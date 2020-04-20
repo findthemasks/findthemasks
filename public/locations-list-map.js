@@ -5,6 +5,7 @@ import {getCountry} from './getCountry.js';
 import { FILTER_ITEMS, ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getMapsLanguageRegion, getCurrentLocaleParam, DEFAULT_LOCALE } from  './i18nUtils.js';
 import {ac, ce, ctn} from './utils.js';
+import sendEvent from './sendEvent.js';
 
 
 /******************************************
@@ -136,14 +137,6 @@ function updateFilters(filters) {
     }
   }
 }
-
-// Sends event to gtag for analytics
-function sendEvent(category, action, label) {
-  gtag('event', action, {
-    'event_category': category,
-    'event_label': label
-  });
-};
 
 function createFilterElements(data, filters) {
   const filterElements = [];
