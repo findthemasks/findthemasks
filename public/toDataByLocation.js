@@ -3,9 +3,13 @@ export default function toDataByLocation(data) {
   const approvedIndex = headers.findIndex( e => e === 'approved' );
   const stateIndex = headers.findIndex( e => e === 'state' );
   const cityIndex = headers.findIndex( e => e === 'city' );
+  const latIndex = headers.findIndex( e => e === 'lat' );
+  const lngIndex = headers.findIndex( e => e === 'lng' );
   const data_by_location = {};
 
-  const published_entries = data.values.slice(1).filter((entry) => entry[approvedIndex] === "x");
+  const published_entries = data
+    .values.slice(1)
+    .filter((entry) => entry[approvedIndex] === "x" && entry[latIndex] && entry[lngIndex]);
 
   published_entries.forEach( entry => {
     const state = entry[stateIndex].trim().toUpperCase();

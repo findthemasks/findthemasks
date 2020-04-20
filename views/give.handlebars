@@ -38,16 +38,31 @@
           </span>
         </div>
 
-        <div class="locations-loading">
+        <div class="locations-loading text-center">
           <div class="spinner-border" role="status"></div>
           <div class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</div>
         </div>
 
+        <div class="filters-container mt-2 text-dark" style="display: none;">
+          <div class="row">
+            <div class="col">
+              <h3>Filters</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <select id="facility-type-select">
+              </select>
+            </div>
+            <div class="col">
+              <select id="ppe-needed-select">
+              </select>
+            </div>
+          </div>
+        </div>
+
         <div class="locations-container" style="display: none;">
           <h3 style="padding: 30px 0px 5px 0px; margin: 0px;"><span class="i18n" data-i18n="ftm-list-of-sites">List of donation sites</span> <span id="list-stats"></span></h3>
-          <div class="filters-container" style="display: none;">
-            <form name="filters" class="filters-list"></form>
-          </div>
 
           <div id="locations-list" class="locations-list"></div>
         </div>

@@ -1,10 +1,9 @@
 import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
-import locales from './locales.js';
-import {getCountry} from './getCountry.js';
-import { FILTER_ITEMS, ENUM_MAPPINGS } from './formEnumLookups.js';
-import { getMapsLanguageRegion, getCurrentLocaleParam, DEFAULT_LOCALE } from  './i18nUtils.js';
-import {ac, ce, ctn} from './utils.js';
+import { FILTER_ITEMS, ORG_TYPES, ENUM_MAPPINGS } from './formEnumLookups.js';
+import { getCountry } from './getCountry.js';
+import { getMapsLanguageRegion } from './i18nUtils.js';
+import { ac, ce, ctn } from './utils.js';
 import sendEvent from './sendEvent.js';
 
 
@@ -44,7 +43,7 @@ const primaryMarkerOptions = {
 };
 
 // Configuration defined in query string. Initialized in jQuery DOM ready function.
-let showMapSearch = false; // BETA FEATURE: Default to false.
+let showMapSearch = true; // BETA FEATURE: Default to false.
 
 // Keep track of the previous info windows user has clicked so we can close them.
 let openInfoWindows = [];
@@ -78,8 +77,10 @@ const translatedFilterItems = (filterItems) => {
 // and returns the i18n keys from FILTER_ITEMS for accepting items that match
 //
 // NOTE: the incoming data structure is very brittle; if that changes at all, this will break
-const parseAcceptedItemsFromData = (data) => {
+const parseFiltersFromData = (data) => {
   const acceptedItems = {};
+  const orgTypes = {};
+
   Object.keys(data).forEach((state) => {
     Object.keys(data[state].cities).forEach((city) => {
       data[state].cities[city].entries.forEach((entry) => {
@@ -87,15 +88,34 @@ const parseAcceptedItemsFromData = (data) => {
         entry.accepting.split(/, (?![^(]*\))/).map(a => a.trim()).forEach((i) => {
           const filterKey = i.toLowerCase();
           if (FILTER_ITEMS.hasOwnProperty(filterKey) && !acceptedItems.hasOwnProperty(filterKey)) {
-            acceptedItems[filterKey] = FILTER_ITEMS[filterKey];
+            acceptedItems[filterKey] = Object.assign(
+              {},
+              FILTER_ITEMS[filterKey],
+              { value: filterKey }
+            );
           }
         });
+
+        if (entry.org_type) {
+          const orgTypeKey = entry.org_type.toLowerCase();
+
+          if (ORG_TYPES.hasOwnProperty(orgTypeKey) && !orgTypes.hasOwnProperty(orgTypeKey)) {
+            orgTypes[orgTypeKey] = Object.assign(
+              {},
+              ORG_TYPES[orgTypeKey],
+              { value: orgTypeKey }
+            );
+          }
+        }
       });
     });
   });
 
-  return acceptedItems;
-}
+  return {
+    acceptedItems: acceptedItems,
+    orgTypes: orgTypes
+  };
+};
 
 // Builds the data structure for tracking which filters are set
 // If all values in a category are false, it's treated as no filter - all items are included
@@ -111,8 +131,9 @@ function createFilters(data) {
     filters.states[state] = { name: state, isSet: false };
   }
 
-  const acceptedItems = parseAcceptedItemsFromData(data);
-  filters.acceptItems = translatedFilterItems(acceptedItems);
+  const dataFilters = parseFiltersFromData(data);
+  filters.acceptItems = translatedFilterItems(dataFilters.acceptedItems);
+  filters.orgTypes = translatedFilterItems(dataFilters.orgTypes);
 
   return filters;
 }
@@ -136,49 +157,75 @@ function updateFilters(filters) {
       applied.acceptItems[item] = true;
     }
   }
+
+  for (const orgType of Object.keys(filters.orgTypes)) {
+    if (filters.orgTypes[orgType].isSet) {
+      applied.orgTypes = applied.orgTypes || {};
+      applied.orgTypes[orgType] = true;
+    }
+  }
 }
 
 function createFilterElements(data, filters) {
-  const filterElements = [];
+  const acceptedItems = [];
 
-  function createFilter(filter, key, value, prefix) {
-    const filterContainer = ce('div');
-    const input = ce('input');
-    input.type = 'checkbox';
-    input.id = `${ prefix }-${ key }`;
-    input.value = key;
-    input.addEventListener('change', () => onFilterChange(data, prefix, key, filters));
-    filterContainer.appendChild(input);
-    const label = ce('label', null, ctn(value));
-    label.id = `${ prefix }-${ key }-label`;
-    label.htmlFor = input.id;
-    label.addEventListener("click", () =>  sendEvent("filters", `${ prefix }`, key));
-    filterContainer.appendChild(label);
-
-    if (filter.isSet) {
-      input.checked = true;
-      label.classList.add('selected');
-    }
-
-    filter.input = input;
-    filter.label = label;
-
-    return filterContainer;
-  }
-
-  filterElements.push(ce('h4', null, ctn($.i18n('ftm-administrative-region-filter', $.i18n(countries[currentCountry].administrativeRegionI18nString)))));
-  for (const state of Object.keys(filters.states).sort()) {
-    const stateFilter = filters.states[state];
-    filterElements.push(createFilter(stateFilter, state, stateFilter.name, 'states'));
-  }
-
-  filterElements.push(ce('h4', null, ctn($.i18n('ftm-accepted-items'))));
   for (const item of Object.keys(filters.acceptItems)) {
     const itemFilter = filters.acceptItems[item];
-    filterElements.push(createFilter(itemFilter, item, itemFilter.name, 'acceptItems'));
+    acceptedItems.push({
+      value: itemFilter.value,
+      text: itemFilter.name,
+      selected: itemFilter.isSet
+    });
   }
 
-  return filterElements;
+  const ppeNeededSelect = new Selectr('#ppe-needed-select', {
+    customClass: 'ftm-select',
+    data: acceptedItems,
+    multiple: true,
+    searchable: false,
+    placeholder: $.i18n('ftm-ppe-needed')
+  });
+
+  ppeNeededSelect.on('selectr.select', (option) => {
+    onFilterChange(data, 'acceptItems', option.idx, true, filters);
+    sendEvent('filters', 'acceptItems', option.value);
+  });
+
+  ppeNeededSelect.on('selectr.deselect', (option) => {
+    onFilterChange(data, 'acceptItems', option.idx, false, filters);
+  });
+
+  const facilityTypes = [];
+
+  for (const item of Object.keys(filters.orgTypes)) {
+    const orgType = filters.orgTypes[item];
+    facilityTypes.push({
+      value: orgType.value,
+      text: orgType.name,
+      selected: orgType.isSet
+    });
+  }
+
+  if (facilityTypes.length > 0) {
+    const facilityTypeSelect = new Selectr('#facility-type-select', {
+      customClass: 'ftm-select',
+      data: facilityTypes,
+      multiple: true,
+      searchable: false,
+      placeholder: $.i18n('ftm-facility-type')
+    });
+
+    facilityTypeSelect.on('selectr.select', (option) => {
+      onFilterChange(data, 'orgTypes', option.idx, true, filters);
+      sendEvent('filters', 'orgTypes', option.value);
+    });
+
+    facilityTypeSelect.on('selectr.deselect', (option) => {
+      onFilterChange(data, 'orgTypes', option.idx, false, filters);
+    });
+  } else {
+    $('#facility-type-select').parent().remove();
+  }
 }
 
 // Turns a string with embedded \n characters into an Array of text nodes separated by <br>
@@ -198,6 +245,7 @@ function getFlatFilteredEntries(data, filters) {
   const entries = [];
   const applied = filters.applied || {};
   const filterAcceptKeys = applied.acceptItems && Object.keys(applied.acceptItems);
+  const filterOrgTypeKeys = applied.orgTypes && Object.keys(applied.orgTypes);
   let listCount = 0; // TODO: hacky, see note below.
 
   for (const stateName of Object.keys(data).sort()) {
@@ -216,6 +264,21 @@ function getFlatFilteredEntries(data, filters) {
         if (filterAcceptKeys) {
           const acc = (entry.accepting || "").toLowerCase();
           if (!filterAcceptKeys.some(s => acc.includes(s))) {
+            return;
+          }
+        }
+
+        if (filterOrgTypeKeys) {
+          const acc = (entry.org_type || "").toLowerCase();
+          if (!filterOrgTypeKeys.some(s => acc === s)) {
+            return;
+          }
+        }
+
+        if (entry.marker) {
+          const mapBounds = map.getBounds();
+
+          if (mapBounds && !mapBounds.contains(entry.marker.getPosition())) {
             return;
           }
         }
@@ -259,7 +322,7 @@ function loadOtherCountries() {
 
           // opacity value matches what's in css for the .secondarycluster class -
           // can set a css class for the clusters, but not for individual pins.
-          otherMarkers.push(...getMarkers(otherData, {}, null, secondaryMarkerOptions).outofstate);
+          otherMarkers.push(...getMarkers(otherData, {}, null, secondaryMarkerOptions).outOfFilters);
           updateClusters(null, secondaryCluster);
         }
       );
@@ -270,23 +333,6 @@ function loadOtherCountries() {
 $(function () {
   const url = new URL(window.location);
 
-  // this should happen after the translations load
-  $('html').on('i18n:ready', function () {
-    $('.add-donation-site-form')
-      .attr({href: `/${ currentCountry }/donation-form?locale=${$.i18n().locale}`})
-      .click(function(e) {
-        sendEvent('addDonationSite', 'click', $(this).attr('href'));
-      });
-
-    $('.social-media-icon').click(function(e) {
-      const socialType = $(this).data('socialType');
-      sendEvent('socialLink', 'click', socialType);
-    });
-
-    const prefillText = $.i18n("ftm-tweet-share-button");
-    $('.twitter-share-button').attr('href','https://twitter.com/intent/tweet?text=' + prefillText);
-  });
-
   const renderListings = function (result) {
     const data = countryData[currentCountry] = toDataByLocation(result);
     const searchParams = new URLSearchParams(url.search);
@@ -294,13 +340,7 @@ $(function () {
     const showFilters = showList && searchParams.get('hide-filters') !== 'true';
     const showMap = searchParams.get('hide-map') !== 'true';
 
-    // BETA: Default initialized at module level scope (see above). Initialize search field, first check #map for default
-    // config. Override with query string. Currently disabled by default because it's still in beta.
-    // First pull map config (if "data-enable-search" attrib defined).
     const $map = $('#map');
-    if ($map.data('enable-search') !== undefined) {
-      showMapSearch = $map.data('enable-search');
-    }
     // Second, allow an override from ?hide-search=[bool].
     if (searchParams.get('hide-search') !== null) {
       showMapSearch = searchParams.get('hide-search') !== 'true';
@@ -321,6 +361,7 @@ $(function () {
     updateFilters(filters);
 
     if (showMap) {
+      $map.show();
       loadMapScript(searchParams, data, filters);
     }
 
@@ -330,7 +371,7 @@ $(function () {
       $('.locations-container').show();
 
       if (showFilters) {
-        ac(document.getElementsByClassName('filters-list')[0], createFilterElements(data, filters));
+        createFilterElements(data, filters);
         $(".filters-container").show();
       }
 
@@ -373,19 +414,6 @@ function renderNextListPage() {
   const children = [];
 
   locationsListEntries.slice(renderLocation, renderLocation + 40).forEach(function (entry) {
-    // Add city/state headers
-    if (renderLocation == 0) {
-      children.push(getStateEl(entry), getCityEl(entry));
-    } else {
-      const lastEntry = locationsListEntries[renderLocation - 1];
-      if (entry.stateName != lastEntry.stateName) {
-        children.push(getStateEl(entry));
-      }
-      if (entry.cityName != lastEntry.cityName) {
-        children.push(getCityEl(entry));
-      }
-    }
-
     children.push(getEntryEl(entry));
     renderLocation += 1;
   });
@@ -395,7 +423,7 @@ function renderNextListPage() {
 }
 
 function getOneLineAddress(address) {
-  return address.trim().replace(/\n/g, " ");
+  return address.trim().replace(/\n/g, ", ");
 }
 
 function googleMapsUri(address) {
@@ -404,17 +432,18 @@ function googleMapsUri(address) {
 
 function getEntryEl(entry) {
   if (!entry.domElem) {
-    entry.domElem = ce('div', 'location');
-    ac(entry.domElem, ce('h4', null, ctn(entry.name)));
+    entry.domElem = ce('div', 'location py-3');
+    const header = ce('div', 'd-flex');
+    const headerHospitalInfo = ce('div', 'flex-grow-1');
+    const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
+    ac(headerHospitalInfo, ce('h5', null, ctn(entry.name)));
 
     if (entry.org_type && entry.org_type.length) {
-      ac(entry.domElem, [
-        ce('label', null, ctn($.i18n('ftm-org-type'))),
+      ac(headerOrgType, [
         ce('p', null, ctn(translateEnumValue(entry.org_type)))
       ]);
     }
 
-    ac(entry.domElem, ce('label', null, ctn($.i18n('ftm-address'))));
     const addr = entry.address.trim().split('\n');
 
     if (addr.length) {
@@ -428,67 +457,67 @@ function getEntryEl(entry) {
         sendEvent('listView', 'clickAddress', address);
       });
       ac(para, link);
-      for (const line of addr) {
-        ac(link, [
-          ctn(line),
-          ce('br')
-        ]);
-      }
+      ac(link, ctn(address));
 
-      ac(entry.domElem, para);
+      ac(headerHospitalInfo, para);
     }
 
-    if (entry.instructions) {
-      ac(entry.domElem, [
-        ce('label', null, ctn($.i18n('ftm-instructions'))),
-        linkifyElement(ce('p', null, multilineStringToNodes(entry.instructions)))
-      ]);
-    }
+    ac(header, headerHospitalInfo);
+    ac(header, headerOrgType);
+    ac(entry.domElem, header);
 
     if (entry.accepting) {
-      ac(entry.domElem, [
-        ce('label', null, ctn($.i18n('ftm-accepting'))),
-        ce('p', null, ctn(translateEnumList(entry.accepting)))
+      const ppeNeededContainer = ce('div', 'row');
+
+      ac(ppeNeededContainer, [
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-ppe-needed'))),
+        ce('p', 'col-12 col-md-9', ctn(translateEnumList(entry.accepting)))
       ]);
+
+      ac(entry.domElem, ppeNeededContainer);
     }
 
     if (entry.open_box) {
-      ac(entry.domElem, [
-        ce('label', null, ctn($.i18n('ftm-open-packages'))),
-        ce('p', null, ctn(translateEnumValue(entry.open_box)))
+      const openPackagesContainer = ce('div', 'row');
+
+      ac(openPackagesContainer, [
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-open-packages'))),
+        ce('p', 'col-12 col-md-9', ctn(translateEnumValue(entry.open_box)))
       ]);
+
+      ac(entry.domElem, openPackagesContainer);
+    }
+
+    if (entry.instructions) {
+      const instructionsContainer = ce('div', 'row');
+
+      ac(instructionsContainer, [
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-instructions'))),
+        linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(entry.instructions)))
+      ]);
+
+      ac(entry.domElem, instructionsContainer);
     }
   }
 
   return entry.domElem; // TODO: generate this here.
 }
 
-function getStateEl(entry) {
-  return ce('h2', 'state', ctn(entry.state));
-}
-
-function getCityEl(entry) {
-  return ce('h3', 'city', ctn(entry.city));
-}
-
-function onFilterChange(data, prefix, key, filters) {
-  const filter = filters[prefix] && filters[prefix][key];
-
+function onFilterChange(data, prefix, idx, selected, filters) {
+  const filter = filters[prefix] && filters[prefix][Object.keys(filters[prefix])[idx]];
   if (!filter) {
     return;
   }
 
-  if (filter.input.checked) {
-    filter.label.classList.add('selected');
+  if (selected) {
     filter.isSet = true;
   } else {
-    filter.label.classList.remove('selected');
     filter.isSet = false;
   }
 
   updateFilters(filters);
   refreshList(data, filters);
-  showMarkers(data, filters);
+  showMarkers(data, filters, false);
 };
 
 // Lazy-loads the Google maps script once we know we need it. Sets up
@@ -510,6 +539,8 @@ function loadMapScript(searchParams, data, filters) {
   scriptTag.setAttribute('defer', '');
   document.head.appendChild(scriptTag);
 }
+
+let currentViewportCenter = {};
 
 /**
  * Sets up map on initial page load.
@@ -546,6 +577,34 @@ function initMap(data, filters) {
   secondaryCluster.addListener('click', function(e) {
     sendEvent('map', 'click', 'secondaryCluster');
   });
+
+  google.maps.event.addListener(map, 'bounds_changed', () => {
+    const mapBounds = map.getBounds();
+
+    if (mapBounds && currentViewportCenter) {
+      const currentLat = mapBounds.getCenter().lat();
+      const currentLng = mapBounds.getCenter().lng();
+
+      if (currentLat !== currentViewportCenter.lat || currentLng !== currentViewportCenter.lng) {
+        refreshList(data, filters);
+      }
+
+      currentViewportCenter = {
+        lat: currentLat,
+        lng: currentLng
+      }
+    }
+  });
+
+  const mapBounds = map.getBounds();
+
+  if (mapBounds) {
+    const mapCenter = mapBounds.getCenter();
+    currentViewportCenter = {
+      lat: mapCenter.lat(),
+      lng: mapCenter.lng()
+    };
+  }
 
   showMarkers(data, filters);
 
@@ -724,11 +783,17 @@ function getMarkersByDistanceFrom(latitude, longitude, n=3) {
 
 function getMarkers(data, appliedFilters, bounds, markerOptions) {
   const filterAcceptKeys = appliedFilters.acceptItems && Object.keys(appliedFilters.acceptItems);
-  const inStateMarkers = [];
-  const outOfStateMarkers = [];
+  const filterOrgTypeKeys = appliedFilters.orgTypes && Object.keys(appliedFilters.orgTypes);
+  const hasStateFilter = !!appliedFilters.states;
+
+  const inFiltersMarkers = [];
+  const outOfFiltersMarkers = [];
 
   for (const stateName of Object.keys(data)) {
     const inStateFilter = appliedFilters.states && appliedFilters.states[stateName];
+
+    const hasFilters = !!filterAcceptKeys || !!filterOrgTypeKeys || hasStateFilter;
+
     const state = data[stateName];
     const cities = state.cities;
 
@@ -736,37 +801,74 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
       const city = cities[cityName];
 
       for (const entry of city.entries) {
+        // filter out if not in state and state filter is applied
+        // filter out if not in accept and accept filter is not applied
+        // filter out if not in org type and org type filter is not applied]
+
+        // add marker to primary if filters exist && marker matches
+        // else add markers to secondary
+
+        let secondaryFiltersApplied = false;
+
         let inAcceptFilter = true;
         if (filterAcceptKeys) {
           const acc = (entry.accepting || "").toLowerCase();
           if (!filterAcceptKeys.some(s => acc.includes(s))) {
             inAcceptFilter = false;
+            secondaryFiltersApplied = true;
           }
         }
+
+        let inOrgTypeFilter = true;
+
+        if (filterOrgTypeKeys) {
+          const orgTypeKey = (entry.org_type || "").toLowerCase();
+          if (!filterOrgTypeKeys.includes(orgTypeKey)) {
+            inOrgTypeFilter = false;
+            secondaryFiltersApplied = true;
+          }
+        }
+
+        const inSecondaryFilter = inAcceptFilter && inOrgTypeFilter;
+        // state or secondary filter applied
+        const filteredEntry = (hasStateFilter && !inStateFilter) || secondaryFiltersApplied;
 
         let marker = entry.marker;
 
         if (marker) {
-          if (!inAcceptFilter) {
+          if (!inSecondaryFilter) {
             marker.setMap(null);
             marker = null;
           }
-        } else if (inAcceptFilter) {
+        } else if (inSecondaryFilter) {
           const lat = Number(entry.lat);
           const lng = Number(entry.lng);
 
           // Guard against non-geocoded entries. Assuming no location exactly on the equator or prime meridian
           if (lat && lng) {
-            marker = entry.marker = createMarker(lat, lng, entry.org_type, entry.address, entry.name, entry.instructions, entry.accepting, entry.open_box, markerOptions);
+            marker = entry.marker = createMarker(
+              lat,
+              lng,
+              entry.org_type,
+              entry.address,
+              entry.name,
+              entry.instructions,
+              entry.accepting,
+              entry.open_box,
+              markerOptions
+            );
           }
         }
 
         if (marker) {
-          if (inStateFilter) {
-            inStateMarkers.push(marker);
-            bounds && bounds.extend(marker.position);
+          if (hasFilters && !filteredEntry) {
+            inFiltersMarkers.push(marker);
+
+            if (hasStateFilter) {
+              bounds && bounds.extend(marker.position);
+            }
           } else {
-            outOfStateMarkers.push(marker);
+            outOfFiltersMarkers.push(marker);
           }
         }
       }
@@ -774,30 +876,30 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
   }
 
   return {
-    instate: inStateMarkers,
-    outofstate: outOfStateMarkers
+    inFilters: inFiltersMarkers,
+    outOfFilters: outOfFiltersMarkers
   };
 }
 
 /**
  * Changes the markers currently rendered on the map based strictly on . This will reset the 'markers' module variable as well.
  */
-function showMarkers(data, filters) {
+function showMarkers(data, filters, recenterMap=true) {
   if (!map || !primaryCluster) {
     return;
   }
 
   const bounds = new google.maps.LatLngBounds();
   const applied = filters.applied || {};
-  const hasFilters = applied.states || applied.acceptItems;
+  const hasFilters = applied.states || applied.acceptItems || applied.orgTypes;
 
   const markers = getMarkers(data, applied, hasFilters && bounds);
 
-  if (applied.states) {
-    primaryMarkers = markers.instate;
-    secondaryMarkers = markers.outofstate;
+  if (applied.states || applied.acceptItems || applied.orgTypes) {
+    primaryMarkers = markers.inFilters;
+    secondaryMarkers = markers.outOfFilters;
   } else {
-    primaryMarkers = markers.outofstate;
+    primaryMarkers = markers.outOfFilters;
     secondaryMarkers = [];
   }
 
@@ -815,14 +917,16 @@ function showMarkers(data, filters) {
   updateClusters(primaryCluster, secondaryCluster);
 
   let $mapStats = $('#map-stats');
-  updateStats($mapStats, markers.instate.length + markers.outofstate.length);
+  updateStats($mapStats, markers.inFilters.length + markers.outOfFilters.length);
 
   // HACK. On some browsers, the markercluster freaks out if it gets a bunch of new markers
   // immediately followed by a map view change. Making the view change async works around
   // this bug.
-  setTimeout(() => {
-    centerMapToBounds(map, bounds, 9);
-  }, 0);
+  if (recenterMap) {
+    setTimeout(() => {
+      centerMapToBounds(map, bounds, 9);
+    }, 0);
+  }
 }
 
 // Updates one or both clusters with the latest batch of markers
@@ -953,7 +1057,7 @@ function createMarker(latitude, longitude, orgType, address, name, instructions,
       mapLinkEl.addEventListener('click', () => {
         sendEvent('map', 'clickAddress', oneLineAddress);
       });
-      mapLinkEl.appendChild(ctn(address));
+      mapLinkEl.appendChild(ctn(oneLineAddress));
 
       const contentTags = [ce('h5', null, ctn(name))];
 
@@ -993,25 +1097,11 @@ function createMarker(latitude, longitude, orgType, address, name, instructions,
  *
  * @param   $elem   jQuery selector for the stats element
  * @param   count   The number for render
- * @param   states  The states that this applies to (array of abbreviated state strings).
  */
-function updateStats($elem, count, states) {
-  let statsHtml = '',
-    prettyMarkerCount = number_format(count, 0);
+function updateStats($elem, count) {
+  const prettyMarkerCount = number_format(count, 0);
 
-  // Default to no states.
-  statsHtml = `(${prettyMarkerCount})`;
-
-  if (typeof states === 'undefined') states = [];
-  if (states.length > 0) {
-    let statesFormatted = states.join(', ');
-    statsHtml = `in ${statesFormatted} ` + statsHtml;
-  }
-
-  // If we're at zero, just clear it out for now.
-  if (count === 0) statsHtml = '';
-
-  $elem.html(statsHtml);
+  $elem.html($.i18n('ftm-requesters-count', prettyMarkerCount));
 }
 
 /**

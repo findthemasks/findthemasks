@@ -14,35 +14,28 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-a {
-  color: #4169E1;
-}
-
-.linkified {
-  word-break: break-word;
-}
-
 .text-pink {
   color: #EC416F;
 }
 
-.bg-dark-blue {
-  background: #3E54A1;
+.content-container {
+  margin: 15px auto 40px auto;
+  width: 60%;
 }
 
 .translated-content {
   display: none; /* hidden until translations load */
 }
 
-.heading-container a {
+.heading-container {
+  background: royalblue;
   color: white;
+  padding: 30px 0 20px 0;
+  text-align: center;
 }
 
-.search-filter-container {
-  position: sticky;
-  top: 58px;
-  z-index: 1;
-  background: white;
+.heading-container a {
+  color: white;
 }
 
 .logo {
@@ -54,6 +47,20 @@ a {
   height: 1em;
   margin-bottom: 4px;
 }
+
+h1 {
+  font-weight: 800;
+}
+
+h2 {
+  color: #333;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 30px 0 20px 0;
+  text-align: center;
+}
+
+hr {margin-top: 1.7rem;}
 
 .social-media-icons {
   margin-top: 1rem;
@@ -181,12 +188,30 @@ h3.city {
   text-transform: uppercase;
 }
 
-.locations-list-header {
-  border-bottom: 1px solid #D4D4D4;
+.locations-list h4 {
+  font-size: 18px;
+  font-weight: 600;
+  padding-bottom: 5px;
+  margin: 0px;
+  padding-left: 0;
+}
+
+.locations-list p {
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 .location {
-  border-bottom: 1px solid #D4D4D4;
+  padding-bottom: 20px;
+  overflow-wrap: break-word;
+}
+
+.location label {
+  color: #444;
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
 }
 
 .donation-sites h1 {
@@ -196,6 +221,15 @@ h3.city {
 .filters-list div {
   display: inline-block;
   margin: 0 3px 3px 0;
+}
+
+.filters-container {
+  margin: 0 30px;
+}
+
+/* On the give page, filters and list take full width of their containers */
+.give .filters-container {
+  margin: 0;
 }
 
 .filters-list h4 {
@@ -233,14 +267,12 @@ h3.city {
 }
 
 .map-container {
-  position: relative;
-  height: calc(100vh - 58px);
-  width: 100%;
+  padding: 30px 0 5px 0;
 }
 
 #map {
+  height: 400px;
   width: 100%;
-  height: 100%;
 }
 
 #map .label {
@@ -254,7 +286,8 @@ h3.city {
 #map .value {
   font-weight: 400
 }
-#map-stats {
+
+#map-stats, #list-stats {
   color: #333;
   font-size: 22px;
   font-weight: 300;
@@ -315,14 +348,16 @@ h3.city {
   * MAP SEARCH STYLES *
   *********************/
 
-.search-icon-wrap {
-  width: 1.8rem;
+/* What actually varies with breakpoints */
+.map-search-wrap {
+  display: flex;
+  margin-top: 20px;
+  position: relative;
+  width: 100%;
 }
 
-#map-search.form-control:focus {
-  border-color: inherit;
-  -webkit-box-shadow: none;
-  box-shadow: none;
+.map-search-wrap:first-child {
+  margin-top: 0;
 }
 
 .search-icon {
@@ -333,6 +368,43 @@ h3.city {
   position: absolute;
   top: 1; /* ... see height below... */
   width: 17px;
+}
+
+#map-search {
+  border: 1px solid #ccc;
+  height: 2.3rem;
+}
+
+#map-search {
+  outline-color: #000;
+}
+
+#map-search {
+  border-radius: 3px;
+  line-height: 2.3rem;
+  margin-bottom: 5px;
+  outline: none;
+  padding: 0.4rem 0.8rem 0.4rem 35px;
+  width: 100%;
+}
+
+.search-input {
+  display: flex;
+  margin: 0px 15px 0px 20px;
+  position: relative;
+  width: 100%;
+  width:100%;
+}
+
+.search-controls {
+  display: flex;
+  padding-top: 7px;
+}
+
+.search-control-separator {
+  padding: 0px 8px;
+  color: #ccc;
+  font-size: 14px;
 }
 
 .map-action-link {
@@ -386,10 +458,6 @@ h3.city {
   padding: .5rem;
 }
 
-.navbar.ftm .navbar-nav .home-link {
-  cursor: pointer;
-}
-
 .navbar.ftm .nav-item.show {
   background: #3E54A1;
 }
@@ -410,7 +478,7 @@ h3.city {
   white-space: nowrap;
 }
 
-.navbar.ftm .btn-addplace .icon, .icon-requester-pin.icon {
+.navbar.ftm .btn-addplace .icon {
   display: inline-block;
   vertical-align: middle;
   height: 25px;
@@ -429,15 +497,7 @@ h3.city {
 
 /* Mobile first: Desktop breakpoint overrides below */
 
-@media (min-width: 992px) {
-  .map-container {
-    position: fixed;
-    height: calc(100vh - 58px);
-    width: 50%;
-  }
-}
-
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
   .search-input {
     margin: 0px;
     margin-right: 15px;
@@ -458,8 +518,7 @@ h3.city {
   h2.state {
     padding: 4px 10px;
   }
-  h3.city,
-  .location {
+  h3.city {
     margin-left: 10px;
   }
 }
@@ -497,6 +556,10 @@ h3.city {
     text-align: center;
   }
 
+  .filters-container {
+    margin: 0 15px;
+  }
+
   .nav-link {
     font-size: 0.7rem;
   }
@@ -522,4 +585,3 @@ h3.city {
     margin-bottom: 10px;
   }
 }
-

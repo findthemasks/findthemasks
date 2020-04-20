@@ -34,7 +34,11 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  res.set('Cache-Control', 'public, max-age=300');
+  if(process.env.NODE_ENV === "produce") {
+    res.set('Cache-Control', 'public, max-age=300');
+  } else {
+    res.set('Cache-Control', 'no-cache');
+  }
   next();
 });
 
@@ -48,49 +52,34 @@ router.get(['/', '/index.html'], (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-index-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.currentCountry),
-    largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.currentCountry),
     localizeContactInfo: localizeContactInfo(res.locals.currentCountry)
   });
-});
-
-router.get('/volunteer', (req, res) => {
-  res.render('volunteer', {
-    ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
-    ogUrl: `http://${req.hostname}${req.originalUrl}`,
-    ogDescription: res.locals.banana.i18n('ftm-default-og-description')
-  });
-});
-
-router.get(['/give', '/give.html'], (req, res) => {
-  res.render('give', {
-    ogLocale:  formatFbLocale(res.locals.locale),
-    ogTitle: res.locals.banana.i18n('ftm-give-og-title'),
-    ogUrl: `http://${req.hostname}${req.originalUrl}`,
-    ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
-    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
-  });
-});
-
-router.get(['/stats', '/stats.html'], (req, res) => {
-  res.render('stats', { layout: false });
-});
-
-router.get(['/request', '/request.html'], (req, res) => {
-  res.render('request', { layout: false });
 });
 
 router.get(['/donation-form-bounce', '/donation-form-bounce.html'], (req, res) => {
   res.render('donation-form-bounce', { layout: false });
 });
 
-router.get(['/whoweare', '/whoweare.html'], (req, res) => {
-  res.render('whoweare', {
+router.get('/faq', (req, res) => {
+  res.render('faq', {
     layout: 'static',
-    ogLocale:  formatFbLocale(res.locals.locale),
-    ogTitle: res.locals.banana.i18n('ftm-about-us-og-title'),
+    ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
+    largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.currentCountry),
+
+    maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.currentCountry)
+  });
+});
+
+router.get(['/give', '/give.html'], (req, res) => {
+  res.render('give', {
+    layout: 'give',
+    ogLocale:  formatFbLocale(res.locals.locale),
+    ogTitle: res.locals.banana.i18n('ftm-give-og-title'),
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
   });
 });
 
@@ -102,6 +91,33 @@ router.get('/privacy-policy', (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-privacy-policy-og-description'),
   })
+});
+
+router.get(['/request', '/request.html'], (req, res) => {
+  res.render('request', { layout: false });
+});
+
+router.get(['/stats', '/stats.html'], (req, res) => {
+  res.render('stats', { layout: false });
+});
+
+router.get('/volunteer', (req, res) => {
+  res.render('volunteer', {
+    layout: 'static',
+    ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: res.locals.banana.i18n('ftm-default-og-description')
+  });
+});
+
+router.get(['/whoweare', '/whoweare.html'], (req, res) => {
+  res.render('whoweare', {
+    layout: 'static',
+    ogLocale:  formatFbLocale(res.locals.locale),
+    ogTitle: res.locals.banana.i18n('ftm-about-us-og-title'),
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
+  });
 });
 
 router.get(['/404', '/404.html'], (req, res) => {
