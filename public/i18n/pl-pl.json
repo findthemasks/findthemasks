@@ -202,7 +202,7 @@
   "ftm-faq-how-decide-location-answer-3" : "Po ' już znaleźć kilka branże, wybrać taki, który będzie zgodny z wartościami i wielkości darowizny. Istnieje wiele różnych witryn, które wymagają środków ochrony indywidualnej, a ostatecznie wybór należy do Ciebie. Pomożesz chronić naszych pracowników opieki zdrowotnej na pierwszej linii, bez względu na to, który wybierzesz!",
   "ftm-faq-how-to-help" : "Jak jeszcze mogę pomóc?",
   "ftm-faq-how-to-help-answer-1" : "Chcielibyśmy, abyś pomógł nam udostępnić nasz projekt w mediach społecznościowych i sieciach! Udostępnianie naszej strony pomaga nowym dostawcom opieki zdrowotnej nas znaleźć i pomaga naszym dostawcom opieki zdrowotnej nawiązać kontakt z większą liczbą potencjalnych dostawców środków ochrony osobistej!",
-  "ftm-faq-how-to-help-answer-2" : "Dołącz do naszego niesamowitego zespołu wolontariuszy w <a href=\"https://findthemasks.com/volunteer\"> tutaj </a>",
+  "ftm-faq-how-to-help-answer-2" : "Dołącz do naszego niesamowitego zespołu wolontariuszy w <a href=\"/volunteer\"> tutaj </a> .",
   "ftm-faq-makerspace-header" : "Często zadawane pytania dotyczące społeczności Makerspace",
   "ftm-faq-makerspace-how-to-help" : "Wykonuję ręcznie robione maski, osłony twarzy z nadrukiem 3D lub należę do społeczności twórców! Jak mogę pomóc?",
   "ftm-faq-makerspace-how-to-help-answer-1" : "Po pierwsze niesamowite! Dziękujemy za poświęcenie czasu na wykonanie nowych dostaw środków ochrony osobistej!",
@@ -220,7 +220,7 @@
   "ftm-faq-remove-information-answer-2" : "Po sprawdzeniu przez nasz zespół ds. Danych, twój pin na stronie internetowej zostanie wyszarzony, a wiadomość z podziękowaniami publiczności i przekierowaniem ich do pobliskich pinów, które reprezentują wciąż aktywne strony z żądaniami PPE. Czekamy na Twoją prośbę o usunięcie; nasz cel #findthemasks nie jest potrzebny!",
   "ftm-faq-my-data" : "Co stanie się z moimi danymi? Kto jest właścicielem danych, które przesyłam?",
   "ftm-faq-my-data-answer-1" : "Gromadzimy informacje, które nam przekazujesz, wypełniając formularz wniosku o ŚOI. Informacje dotyczące witryn odbiorców środków ochrony indywidualnej zostaną opublikowane na naszej publicznej stronie internetowej, aby każdy mógł je zobaczyć i z nich korzystać. Prosimy również o podanie adresu e-mail i numeru telefonu, których nie ujawniamy publicznie, abyśmy mogli skontaktować się z użytkownikiem w razie potrzeby opracowania postu, uzyskania opinii lub prośby o współpracę. Możemy przetwarzać Twoje dane lub udostępniać dane osobowe dostawcom, konsultantom lub innym zewnętrznym dostawcom usług.",
-  "ftm-faq-my-data-answer-2" : "Aby uzyskać więcej informacji, zapoznaj się z naszą <a href=\"https://findthemasks.com/privacy-policy\"> Polityką prywatności </a>",
+  "ftm-faq-my-data-answer-2" : "Aby uzyskać więcej informacji, zapoznaj się z naszą <a href=\"https://findthemasks.com/privacy-policy\"> Polityką prywatności </a> .",
   "ftm-faq-listing-not-shown" : "I przedstawiła listę ale hasn ' t pokazał się jeszcze. Co powinienem zrobić?",
   "ftm-faq-listing-not-shown-answer" : "Jeśli minęły mniej niż 4 godziny, trzymaj się mocno! Czasami otrzymujemy wzrost liczby żądań, a nasi moderatorzy danych mogą pracować z zaległościami. Jeśli minęło więcej niż 12 godzin, napisz <a href=\"mailto:contact@findthemasks.com\"> contact@findthemasks.com </a> ."
 }

@@ -202,7 +202,7 @@
   "ftm-faq-how-decide-location-answer-3" : "一旦你'已經找到了幾個可能的位置，選擇一個對齊與你的價值觀和捐贈規模。有各種各樣的站點需要PPE，最終，選擇權在您自己。無論您選擇哪種方式，您都將幫助保護我們的一線醫療人員！",
   "ftm-faq-how-to-help" : "我還能提供什麼幫助？",
   "ftm-faq-how-to-help-answer-1" : "如果您能幫助我們在社交媒體上和您的網絡中共享我們的項目，我們將非常高興！共享我們的網站有助於新的醫療保健提供者找到我們，並幫助我們的醫療保健提供者與更多潛在的PPE貢獻者聯繫！",
-  "ftm-faq-how-to-help-answer-2" : "在這裡<a href=\"https://findthemasks.com/volunteer\">加入我們驚人的志願者團隊</a>",
+  "ftm-faq-how-to-help-answer-2" : "加入我們的驚人的志願者團隊在<a href=\"/volunteer\">這裡</a> 。",
   "ftm-faq-makerspace-header" : "Makerspace社區常見問題解答",
   "ftm-faq-makerspace-how-to-help" : "我製作手工口罩，3D打印面罩，或者是makerspace社區的一部分！有什麼可以幫忙的嗎？",
   "ftm-faq-makerspace-how-to-help-answer-1" : "首先，太神奇了！感謝您抽出寶貴的時間製作新的PPE耗材！",
@@ -220,7 +220,7 @@
   "ftm-faq-remove-information-answer-2" : "經過我們數據小組的檢查後，您在網站上的圖釘將顯示為灰色，並顯示一條消息，感謝公眾，並將其重定向到代表仍處於活動狀態的PPE請求站點的附近圖釘。我們期待您的移除要求；我們不需要#findthemasks！",
   "ftm-faq-my-data" : "我的數據怎麼辦？誰擁有我提交的數據？",
   "ftm-faq-my-data-answer-1" : "當您填寫我們的PPE請求表時，我們將收集您提供給我們的信息。有關PPE接收者站點的信息將發佈在我們的公共網站上，任何人都可以查看和使用。我們還要求提供我們不公開的電子郵件和電話號碼，以便在需要詳細說明帖子，尋求反饋或要求合作時可以與用戶聯繫。我們可能會處理您的數據或與供應商，顧問或其他第三方服務提供商共享個人信息。",
-  "ftm-faq-my-data-answer-2" : "有關更多信息，請參見我們的<a href=\"https://findthemasks.com/privacy-policy\">隱私政策</a>",
+  "ftm-faq-my-data-answer-2" : "有關更多信息，請參見我們的<a href=\"https://findthemasks.com/privacy-policy\">隱私政策</a> 。",
   "ftm-faq-listing-not-shown" : "我提交了清單，但還沒有顯示'噸。我該怎麼辦？",
   "ftm-faq-listing-not-shown-answer" : "如果少於4個小時，請緊緊抓住！有時我們會收到大量請求，而我們的數據主持人可能正在處理積壓的工作。如果已經超過12小時，請發送電子郵件至<a href=\"mailto:contact@findthemasks.com\"> contact@findthemasks.com </a> 。"
 }

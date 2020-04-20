@@ -202,7 +202,7 @@
   "ftm-faq-how-decide-location-answer-3" : "Sobald Sie ' habe ein paar mögliche Fundstellen gefunden, wählen Sie eine, ausrichtet mit Ihren Werten und Spende Größe. Es gibt eine Vielzahl von Websites, die PSA benötigen, und letztendlich haben Sie die Wahl. Sie werden dazu beitragen, unsere Mitarbeiter im Gesundheitswesen an vorderster Front zu schützen, egal für welche Sie sich entscheiden!",
   "ftm-faq-how-to-help" : "Wie kann ich sonst noch helfen?",
   "ftm-faq-how-to-help-answer-1" : "Wir würden uns freuen, wenn Sie uns helfen würden, unser Projekt in sozialen Medien und in Ihren Netzwerken zu teilen! Das Teilen unserer Website hilft neuen Gesundheitsdienstleistern, uns zu finden, und es hilft unseren Gesundheitsdienstleistern, sich mit mehr potenziellen PSA-Beitragenden zu verbinden!",
-  "ftm-faq-how-to-help-answer-2" : "Treten Sie unserem großartigen Team von Freiwilligen bei <a href=\"https://findthemasks.com/volunteer\"> hier </a>",
+  "ftm-faq-how-to-help-answer-2" : "Treten Sie unserem großartigen Team von Freiwilligen bei <a href=\"/volunteer\"> hier </a> .",
   "ftm-faq-makerspace-header" : "FAQs zur Makerspace-Community",
   "ftm-faq-makerspace-how-to-help" : "Ich mache handgemachte Masken, 3D-gedruckte Gesichtsschutzschilde oder bin Teil einer Makerspace-Community! Wie kann ich helfen?",
   "ftm-faq-makerspace-how-to-help-answer-1" : "Zuallererst erstaunlich! Vielen Dank, dass Sie sich die Zeit genommen haben, neue PSA-Artikel herzustellen!",
@@ -220,7 +220,7 @@
   "ftm-faq-remove-information-answer-2" : "Nach einer Überprüfung durch unser Datenteam wird Ihre PIN auf der Website mit einer Nachricht ausgegraut, die der Öffentlichkeit dankt und sie zu Pins in der Nähe weiterleitet, die noch aktive PSA-Anforderungsseiten darstellen. Wir freuen uns auf Ihre Anfrage zur Entfernung; Unser Ziel bei #findthemasks ist es nicht zu brauchen!",
   "ftm-faq-my-data" : "Was passiert mit meinen Daten? Wem gehören die von mir eingereichten Daten?",
   "ftm-faq-my-data-answer-1" : "Wir erfassen die Informationen, die Sie uns beim Ausfüllen unseres PSA-Antragsformulars zur Verfügung stellen. Die Informationen zu Websites von PSA-Empfängern werden auf unserer öffentlichen Website veröffentlicht, damit jeder sie sehen und verwenden kann. Wir fordern außerdem eine E-Mail und eine Telefonnummer an, die wir nicht öffentlich bekannt geben, damit wir den Benutzer kontaktieren können, falls wir den Beitrag ausarbeiten, Feedback einholen oder eine Zusammenarbeit anfordern müssen. Wir können Ihre Daten verarbeiten oder personenbezogene Daten an Anbieter, Berater oder andere Drittanbieter weitergeben.",
-  "ftm-faq-my-data-answer-2" : "Weitere Informationen finden Sie in unserer <a href=\"https://findthemasks.com/privacy-policy\"> Datenschutzrichtlinie </a>",
+  "ftm-faq-my-data-answer-2" : "Weitere Informationen finden Sie in unserer <a href=\"https://findthemasks.com/privacy-policy\"> Datenschutzrichtlinie </a> .",
   "ftm-faq-listing-not-shown" : "Ich legte eine Liste , aber es hasn ' t noch angezeigt. Was soll ich machen?",
   "ftm-faq-listing-not-shown-answer" : "Wenn es weniger als 4 Stunden waren, hängen Sie fest! Manchmal kommt es zu Anfragen, und unsere Datenmoderatoren arbeiten möglicherweise an dem Rückstand. Wenn es länger als 12 Stunden her ist, senden Sie eine E-Mail an <a href=\"mailto:contact@findthemasks.com\"> contact@findthemasks.com </a> ."
 }
