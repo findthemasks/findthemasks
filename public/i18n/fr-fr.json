@@ -202,7 +202,7 @@
   "ftm-faq-how-decide-location-answer-3" : "Une fois que vous ' avez trouvé quelques sites possibles, choisir un qui soit aligné avec vos valeurs et de la taille du don. Il existe une grande variété de sites qui ont besoin d'EPI et, finalement, le choix vous appartient. Vous contribuerez à protéger nos travailleurs de la santé de première ligne, quel que soit votre choix!",
   "ftm-faq-how-to-help" : "Comment puis-je aider autrement?",
   "ftm-faq-how-to-help-answer-1" : "Nous serions ravis que vous nous aidiez à partager notre projet sur les réseaux sociaux et au sein de vos réseaux! Le partage de notre site aide les nouveaux fournisseurs de soins de santé à nous trouver, et il aide nos fournisseurs de soins de santé à se connecter avec plus de contributeurs potentiels d'EPI!",
-  "ftm-faq-how-to-help-answer-2" : "Rejoignez notre incroyable équipe de bénévoles à <a href=\"https://findthemasks.com/volunteer\"> ici </a>",
+  "ftm-faq-how-to-help-answer-2" : "Rejoignez notre incroyable équipe de bénévoles au <a href=\"/volunteer\"> ici </a> .",
   "ftm-faq-makerspace-header" : "FAQ de la communauté Makerspace",
   "ftm-faq-makerspace-how-to-help" : "Je fabrique des masques faits à la main, des écrans faciaux imprimés en 3D ou je fais partie d'une communauté makerspace! Comment puis-je aider?",
   "ftm-faq-makerspace-how-to-help-answer-1" : "Tout d'abord, incroyable! Merci d'avoir pris le temps de faire de nouvelles fournitures d'EPI!",
@@ -220,7 +220,7 @@
   "ftm-faq-remove-information-answer-2" : "Après une vérification par notre équipe de données, votre épingle sur le site Web sera grisée avec un message remerciant le public et le redirigeant vers les épingles à proximité qui représentent des sites de demande d'EPI encore actifs. Nous nous réjouissons de votre demande de suppression; notre objectif à #findthemasks n'est pas nécessaire!",
   "ftm-faq-my-data" : "Qu'advient-il de mes données? À qui appartiennent les données que je soumets?",
   "ftm-faq-my-data-answer-1" : "Nous collectons les informations que vous nous fournissez lorsque vous remplissez notre formulaire de demande d'EPI. Les informations concernant les sites destinataires des EPI seront publiées sur notre site Web public pour que quiconque puisse les voir et les utiliser. Nous demandons également un e-mail et un numéro de téléphone que nous ne divulguons pas publiquement, afin que nous puissions contacter l'utilisateur au cas où nous aurions besoin d'élaborer le message, de solliciter des commentaires ou de demander une collaboration. Nous pouvons traiter vos données ou partager des informations personnelles avec des fournisseurs, des consultants ou d'autres prestataires de services tiers.",
-  "ftm-faq-my-data-answer-2" : "Pour plus d'informations, veuillez consulter notre <a href=\"https://findthemasks.com/privacy-policy\"> Politique de confidentialité </a>",
+  "ftm-faq-my-data-answer-2" : "Pour plus d'informations, veuillez consulter notre <a href=\"https://findthemasks.com/privacy-policy\"> Politique de confidentialité </a> .",
   "ftm-faq-listing-not-shown" : "Je soumettais une liste mais il HASN ' t montré encore. Que devrais-je faire?",
   "ftm-faq-listing-not-shown-answer" : "Si cela fait moins de 4 heures, accrochez-vous bien! Nous recevons parfois des flambées de demandes, et nos modérateurs de données peuvent travailler à travers l'arriéré. Si cela fait plus de 12 heures, envoyez un e-mail à <a href=\"mailto:contact@findthemasks.com\"> contact@findthemasks.com </a> ."
 }
