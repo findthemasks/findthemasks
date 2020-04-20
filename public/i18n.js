@@ -1,4 +1,5 @@
 import { DEFAULT_LOCALE, getCurrentLocaleParam } from './i18nUtils.js';
+import internationalizeLinks from './internationalizeLinks.js';
 
 const localesMap = {
   "en": "i18n/en.json",
@@ -59,6 +60,7 @@ $(function () {
     // then, remove spinner and show page content
     $('.i18n').i18n();
     window.i18nReady = true;
+    internationalizeLinks();
     $('html').trigger('i18n:ready');
     $('.translated-content').css({ display: 'block' });
     $('.languages-loading').css({ display: 'none' });

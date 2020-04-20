@@ -333,23 +333,6 @@ function loadOtherCountries() {
 $(function () {
   const url = new URL(window.location);
 
-  // this should happen after the translations load
-  $('html').on('i18n:ready', function () {
-    $('.add-donation-site-form')
-      .attr({href: `/${ currentCountry }/donation-form?locale=${$.i18n().locale}`})
-      .click(function(e) {
-        sendEvent('addDonationSite', 'click', $(this).attr('href'));
-      });
-
-    $('.social-media-icon').click(function(e) {
-      const socialType = $(this).data('socialType');
-      sendEvent('socialLink', 'click', socialType);
-    });
-
-    const prefillText = $.i18n("ftm-tweet-share-button");
-    $('.twitter-share-button').attr('href','https://twitter.com/intent/tweet?text=' + prefillText);
-  });
-
   const renderListings = function (result) {
     const data = countryData[currentCountry] = toDataByLocation(result);
     const searchParams = new URLSearchParams(url.search);
