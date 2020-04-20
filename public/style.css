@@ -425,7 +425,7 @@ h3.city {
 
 /* Mobile first: Desktop breakpoint overrides below */
 
-@media (min-width: 1200px) {
+@media (min-width: 992px) {
   .map-container {
     position: fixed;
     height: calc(100vh - 58px);
@@ -433,7 +433,7 @@ h3.city {
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 992px) {
   .search-input {
     margin: 0px;
     margin-right: 15px;
