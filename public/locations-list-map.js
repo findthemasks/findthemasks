@@ -946,7 +946,7 @@ function updateClusters(primaryCluster, secondaryCluster) {
 // Source for country center points: https://developers.google.com/public-data/docs/canonical/countries_csv
 const MAP_INITIAL_VIEW = {
   at: { zoom: 6, center: { lat:47.716231, lng:	13.90072 }},
-  ca: { zoom: 3, center: { lat: 57.130366, lng: -99.346771 }},
+  ca: { zoom: 4, center: { lat: 57.130366, lng: -99.346771 }},
   ch: { zoom: 7, center: { lat: 46.818188, lng: 8.227512 }},
   de: { zoom: 5, center: { lat: 51.165691, lng: 10.451526 }},
   es: { zoom: 5, center: { lat: 40.163667, lng:	-3.74922 }},
