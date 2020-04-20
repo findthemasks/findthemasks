@@ -56,6 +56,7 @@ router.get(['/', '/index.html'], (req, res) => {
 
 router.get('/volunteer', (req, res) => {
   res.render('volunteer', {
+    layout: 'static',
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description')
