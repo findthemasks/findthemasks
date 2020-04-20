@@ -9,7 +9,7 @@
     "message-documentation": "qqq"
   },
   "ftm-ppe-cta": "Let's get our PPE into the hands of those who need it!",
-  "ftm-requester-near-me": "Search for a requester near you. Not sure how to give? Read our FAQ.",
+  "ftm-requester-near-me": "Search for a requester near you. Not sure how to give? <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\">Read our FAQ</a>.",
   "ftm-accepted-items": "Filter by Accepted Items",
   "ftm-accepting": "Accepting",
   "ftm-ppe-needed": "PPE needed",
@@ -171,6 +171,7 @@
   "ftm-nav-volunteer": "Volunteer",
   "ftm-nav-addplace": "I need PPE",
   "ftm-nav-share": "Share",
+  "ftm-nav-faq": "FAQ",
   "ftm-index-og-title": "#findthemasks",
   "ftm-index-og-description": "Find where you can donate your masks or other personal protective equipment (PPE) in your local area.",
   "ftm-default-og-description": "America's frontline healthcare workers are treating COVID-19 patients without adequate protective gear, risking their lives! We need to find the masks. All of these masks can save lives now if you get them into the hands of healthcare workers.",
