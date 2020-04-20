@@ -202,7 +202,7 @@
   "ftm-faq-how-decide-location-answer-3" : "Una vez que ' he encontrado algunos sitios posibles, elegir uno que se alinea con sus valores y tamaño de la donación. Hay una gran variedad de sitios que necesitan EPP y, en última instancia, la elección es suya. ¡Ayudará a proteger a nuestros trabajadores de atención médica de primera línea sin importar cuál elija!",
   "ftm-faq-how-to-help" : "¿De qué otra manera puedo ayudar?",
   "ftm-faq-how-to-help-answer-1" : "¡Nos encantaría que nos ayudaras a compartir nuestro proyecto en las redes sociales y dentro de tus redes! ¡Compartir nuestro sitio ayuda a los nuevos proveedores de atención médica a encontrarnos, y ayuda a nuestros proveedores de atención médica a conectarse con más contribuyentes potenciales de EPP!",
-  "ftm-faq-how-to-help-answer-2" : "Únete a nuestro increíble equipo de voluntarios en <a href=\"https://findthemasks.com/volunteer\"> aquí </a>",
+  "ftm-faq-how-to-help-answer-2" : "Únase a nuestro increíble equipo de voluntarios en <a href=\"/volunteer\"> aquí </a> .",
   "ftm-faq-makerspace-header" : "Preguntas frecuentes de la comunidad Makerspace",
   "ftm-faq-makerspace-how-to-help" : "¡Hago máscaras hechas a mano, protectores faciales impresos en 3D, o soy parte de una comunidad de makerpacepace! ¿Cómo puedo ayudar?",
   "ftm-faq-makerspace-how-to-help-answer-1" : "En primer lugar, ¡increíble! ¡Gracias por tomarse el tiempo para hacer nuevos suministros de PPE!",
@@ -220,7 +220,7 @@
   "ftm-faq-remove-information-answer-2" : "Después de una verificación por parte de nuestro equipo de datos, su pin en el sitio web aparecerá atenuado con un mensaje agradeciendo al público y redirigiéndolos a los pines cercanos que representan sitios de solicitud de PPE aún activos. Esperamos su solicitud de eliminación; ¡Nuestro objetivo en #findthemasks no es necesario!",
   "ftm-faq-my-data" : "¿Qué pasa con mis datos? ¿A quién pertenecen los datos que envío?",
   "ftm-faq-my-data-answer-1" : "Recopilamos la información que nos proporciona cuando completa nuestro formulario de solicitud de PPE. La información sobre los sitios receptores de PPE se publicará en nuestro sitio web público para que cualquiera pueda verla y utilizarla. También solicitamos un correo electrónico y un número de teléfono que no divulgamos públicamente, para que podamos contactar al usuario en caso de que necesitemos elaborar la publicación, buscar comentarios o solicitar una colaboración. Podemos procesar sus datos o compartir información personal con proveedores, consultores u otros proveedores de servicios externos.",
-  "ftm-faq-my-data-answer-2" : "Para obtener más información, consulte nuestra <a href=\"https://findthemasks.com/privacy-policy\"> Política de privacidad </a>",
+  "ftm-faq-my-data-answer-2" : "Para obtener más información, consulte nuestra <a href=\"https://findthemasks.com/privacy-policy\"> Política de privacidad </a> .",
   "ftm-faq-listing-not-shown" : "Envié un listado pero todavía no se ha mostrado ' t. ¿Qué tengo que hacer?",
   "ftm-faq-listing-not-shown-answer" : "Si han pasado menos de 4 horas, ¡agárrate fuerte! A veces recibimos aumentos repentinos de solicitudes, y nuestros moderadores de datos pueden estar trabajando a través del trabajo atrasado. Si han pasado más de 12 horas, envíe </a> correo electrónico a <a href=\"mailto:contact@findthemasks.com\"> contact@findthemasks.com </a> ."
 }
