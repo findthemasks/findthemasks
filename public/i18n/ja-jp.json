@@ -6,7 +6,7 @@
     "message-documentation" : "qqq"
   },
   "ftm-ppe-cta" : "してみましょう' sがそれを必要とする人々の手に私達のPPEを入手！",
-  "ftm-requester-near-me" : "お近くの依頼者を検索してください。与える方法がわからない？よくある質問をご覧ください。",
+  "ftm-requester-near-me" : "お近くの依頼者を検索してください。与える方法がわからない？ <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> FAQ </a>をお読みください。",
   "ftm-accepted-items" : "承認済みアイテムでフィルター",
   "ftm-accepting" : "受け入れる",
   "ftm-ppe-needed" : "PPEが必要",
@@ -168,6 +168,7 @@
   "ftm-nav-volunteer" : "ボランティア",
   "ftm-nav-addplace" : "PPEが必要",
   "ftm-nav-share" : "シェア",
+  "ftm-nav-faq" : "よくある質問",
   "ftm-index-og-title" : "#findthemasks",
   "ftm-index-og-description" : "お住まいの地域でマスクやその他の個人用保護具（PPE）を寄付できる場所を見つけてください。",
   "ftm-default-og-description" : "アメリカ'の最前線の医療従事者は、適切な防護具なしでCOVID-19患者を治療しており、命を危険にさらしています！マスクを見つける必要があります。これらのマスクはすべて、医療従事者の手に渡れば、今や命を救うことができます。",

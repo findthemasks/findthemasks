@@ -6,7 +6,7 @@
     "message-documentation" : "qqq"
   },
   "ftm-ppe-cta" : "讓'讓我們的PPE交到需要它的人手中！",
-  "ftm-requester-near-me" : "搜索您附近的請求者。不確定如何給予？閱讀我們的常見問題解答。",
+  "ftm-requester-near-me" : "搜索您附近的請求者。不確定如何給予？ <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\">閱讀我們的常見問題解答</a> 。",
   "ftm-accepted-items" : "按接受項目篩選",
   "ftm-accepting" : "接受：",
   "ftm-ppe-needed" : "需要個人防護裝備",
@@ -168,6 +168,7 @@
   "ftm-nav-volunteer" : "志願者",
   "ftm-nav-addplace" : "我需要個人防護裝備",
   "ftm-nav-share" : "分享",
+  "ftm-nav-faq" : "常問問題",
   "ftm-index-og-title" : "#findthemasks",
   "ftm-index-og-description" : "在當地找到可以捐贈口罩或其他個人防護設備（PPE）的地方。",
   "ftm-default-og-description" : "America ' s前線醫護人員正在治療沒有足夠防護裝備的COVID-19患者，冒著生命危險！我們需要找到口罩。如果將這些口罩交給醫護人員的手中，所有這些口罩現在都可以挽救生命。",

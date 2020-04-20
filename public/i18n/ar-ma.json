@@ -6,7 +6,7 @@
     "message-documentation" : "qqq"
   },
   "ftm-ppe-cta" : "دعونا ' الصورة الحصول على PPE لدينا في أيدي أولئك الذين في حاجة إليها!",
-  "ftm-requester-near-me" : "ابحث عن طالب قريب منك. لست متأكدا كيف تعطي؟ اقرأ الأسئلة الشائعة.",
+  "ftm-requester-near-me" : "ابحث عن طالب قريب منك. لست متأكدا كيف تعطي؟ <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> اقرأ الأسئلة الشائعة </a> .",
   "ftm-accepted-items" : "تصفية حسب العناصر المقبولة",
   "ftm-accepting" : "قبول",
   "ftm-ppe-needed" : "معدات الحماية الشخصية اللازمة",
@@ -168,6 +168,7 @@
   "ftm-nav-volunteer" : "تطوع",
   "ftm-nav-addplace" : "أنا بحاجة إلى معدات الوقاية الشخصية",
   "ftm-nav-share" : "شارك",
+  "ftm-nav-faq" : "التعليمات",
   "ftm-index-og-title" : "#findthemasks",
   "ftm-index-og-description" : "اكتشف أين يمكنك التبرع بأقنعةك أو غيرها من معدات الحماية الشخصية (PPE) في منطقتك.",
   "ftm-default-og-description" : "يعالج العاملون في مجال الرعاية الصحية في الخطوط الأمامية في أمريكا ' مرضى COVID-19 بدون معدات واقية مناسبة ، ويخاطرون بحياتهم! نحن بحاجة إلى العثور على الأقنعة. كل هذه الأقنعة يمكن أن تنقذ الأرواح الآن إذا وضعتها في أيدي العاملين في مجال الرعاية الصحية.",

@@ -6,7 +6,7 @@
     "message-documentation" : "qqq"
   },
   "ftm-ppe-cta" : "Vamos ' s obter o nosso EPI nas mãos de quem precisa!",
-  "ftm-requester-near-me" : "Procure um solicitante perto de você. Não sabe como dar? Leia o nosso FAQ.",
+  "ftm-requester-near-me" : "Procure um solicitante perto de você. Não sabe como dar? <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> Leia nossa FAQ </a> .",
   "ftm-accepted-items" : "Filtrar por itens aceitos",
   "ftm-accepting" : "Aceitando",
   "ftm-ppe-needed" : "EPI necessário",
@@ -168,6 +168,7 @@
   "ftm-nav-volunteer" : "Voluntário",
   "ftm-nav-addplace" : "Eu preciso de EPI",
   "ftm-nav-share" : "Compartilhar",
+  "ftm-nav-faq" : "Perguntas frequentes",
   "ftm-index-og-title" : "#findthemasks",
   "ftm-index-og-description" : "Descubra onde você pode doar suas máscaras ou outro equipamento de proteção individual (EPI) na sua região.",
   "ftm-default-og-description" : "Os profissionais de saúde da linha de frente da América ' estão tratando pacientes com COVID-19 sem equipamento de proteção adequado, arriscando suas vidas! Precisamos encontrar as máscaras. Todas essas máscaras podem salvar vidas agora se você as colocar nas mãos dos profissionais de saúde.",

@@ -6,7 +6,7 @@
     "message-documentation" : "qqq"
   },
   "ftm-ppe-cta" : "Niech ' s dostanie nasze środki ochrony indywidualnej w ręce tych, którzy ich potrzebują!",
-  "ftm-requester-near-me" : "Wyszukaj żądającego w pobliżu. Nie wiesz, jak dać? Przeczytaj nasze FAQ.",
+  "ftm-requester-near-me" : "Wyszukaj żądającego w pobliżu. Nie wiesz, jak dać? <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> Przeczytaj nasze FAQ </a> .",
   "ftm-accepted-items" : "Filtruj według elementów zaakceptowanych",
   "ftm-accepting" : "Akceptując",
   "ftm-ppe-needed" : "Potrzebne środki ochrony osobistej",
@@ -168,6 +168,7 @@
   "ftm-nav-volunteer" : "Wolontariusz",
   "ftm-nav-addplace" : "Potrzebuję środków ochrony osobistej",
   "ftm-nav-share" : "Dzielić",
+  "ftm-nav-faq" : "FAQ",
   "ftm-index-og-title" : "#findthemasks",
   "ftm-index-og-description" : "Dowiedz się, gdzie możesz przekazać swoje maski lub inny sprzęt ochrony osobistej (ŚOI) w Twojej okolicy.",
   "ftm-default-og-description" : "Pracownicy pierwszej linii America ' leczą pacjentów z COVID-19 bez odpowiedniego sprzętu ochronnego, ryzykując życiem! Musimy znaleźć maski. Wszystkie te maski mogą teraz uratować życie, jeśli dostaniesz je w ręce pracowników służby zdrowia.",

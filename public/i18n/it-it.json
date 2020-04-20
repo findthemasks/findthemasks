@@ -6,7 +6,7 @@
     "message-documentation" : "qqq"
   },
   "ftm-ppe-cta" : "Lascia che ' s porti il nostro DPI nelle mani di chi ne ha bisogno!",
-  "ftm-requester-near-me" : "Cerca un richiedente vicino a te. Non sei sicuro di come dare? Leggi le nostre FAQ.",
+  "ftm-requester-near-me" : "Cerca un richiedente vicino a te. Non sei sicuro di come dare? <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> Leggi le nostre FAQ </a> .",
   "ftm-accepted-items" : "Filtra per Articoli accettati",
   "ftm-accepting" : "Accettare",
   "ftm-ppe-needed" : "DPI necessari",
@@ -168,6 +168,7 @@
   "ftm-nav-volunteer" : "Volontario",
   "ftm-nav-addplace" : "Ho bisogno di DPI",
   "ftm-nav-share" : "Condividere",
+  "ftm-nav-faq" : "FAQ",
   "ftm-index-og-title" : "#findthemasks",
   "ftm-index-og-description" : "Scopri dove puoi donare le tue maschere o altri dispositivi di protezione individuale (DPI) nella tua zona.",
   "ftm-default-og-description" : "Gli operatori sanitari in prima linea di America ' stanno curando i pazienti COVID-19 senza adeguati dispositivi di protezione, rischiando la vita! Dobbiamo trovare le maschere. Tutte queste maschere possono salvare vite umane ora se le prendi nelle mani degli operatori sanitari.",

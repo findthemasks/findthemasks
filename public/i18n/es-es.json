@@ -6,7 +6,7 @@
     "message-documentation" : "qqq"
   },
   "ftm-ppe-cta" : "¡Deje que ' s ponga nuestro PPE en manos de quienes lo necesitan!",
-  "ftm-requester-near-me" : "Busque un solicitante cerca de usted. ¿No estás seguro de cómo dar? Lee nuestras preguntas frecuentes.",
+  "ftm-requester-near-me" : "Busque un solicitante cerca de usted. ¿No estás seguro de cómo dar? <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> Lea nuestras preguntas frecuentes </a> .",
   "ftm-accepted-items" : "Filtrar por artículos aceptados",
   "ftm-accepting" : "Aceptando",
   "ftm-ppe-needed" : "PPE necesario",
@@ -168,6 +168,7 @@
   "ftm-nav-volunteer" : "Voluntario",
   "ftm-nav-addplace" : "Necesito EPP",
   "ftm-nav-share" : "Compartir",
+  "ftm-nav-faq" : "Preguntas más frecuentes",
   "ftm-index-og-title" : "#findthemasks",
   "ftm-index-og-description" : "Encuentre dónde donar sus máscaras u otro equipo de protección personal (EPP) en su área local.",
   "ftm-default-og-description" : "América ' s trabajadores sanitarios de primera línea están tratando COVID-19 pacientes sin equipo de protección adecuado, poniendo en riesgo sus vidas! Necesitamos encontrar las máscaras. Todas estas máscaras pueden salvar vidas ahora si las pone en manos de trabajadores de la salud.",

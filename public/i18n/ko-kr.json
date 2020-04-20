@@ -6,7 +6,7 @@
     "message-documentation" : "qqq"
   },
   "ftm-ppe-cta" : "하자 ' 의 그것을 필요로하는 사람들의 손에 우리의 PPE를 얻을!",
-  "ftm-requester-near-me" : "근처에있는 요청자를 검색하십시오. 주는 방법을 잘 모르십니까? FAQ를 읽으십시오.",
+  "ftm-requester-near-me" : "근처에있는 요청자를 검색하십시오. 주는 방법을 잘 모르십니까? <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> FAQ를 읽으십시오 </a> .",
   "ftm-accepted-items" : "허용 된 품목별로 필터링",
   "ftm-accepting" : "수락",
   "ftm-ppe-needed" : "필요한 PPE",
@@ -168,6 +168,7 @@
   "ftm-nav-volunteer" : "지원자",
   "ftm-nav-addplace" : "나는 PPE가 필요하다",
   "ftm-nav-share" : "공유",
+  "ftm-nav-faq" : "자주하는 질문",
   "ftm-index-og-title" : "#findthemasks",
   "ftm-index-og-description" : "해당 지역의 마스크 또는 기타 개인 보호 장비 (PPE)를 기증 할 수있는 곳을 찾으십시오.",
   "ftm-default-og-description" : "America ' s 최전선 의료진은 적절한 보호 장비없이 COVID-19 환자를 치료하여 생명을 위협하고 있습니다! 마스크를 찾아야합니다. 이러한 마스크는 모두 의료 종사자의 손에 들어가면 생명을 구할 수 있습니다.",

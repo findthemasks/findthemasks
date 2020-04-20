@@ -6,7 +6,7 @@
     "message-documentation" : "qqq"
   },
   "ftm-ppe-cta" : "Laissez ' s mettre notre EPI entre les mains de ceux qui en ont besoin!",
-  "ftm-requester-near-me" : "Recherchez un demandeur près de chez vous. Vous ne savez pas comment donner? Lisez notre FAQ.",
+  "ftm-requester-near-me" : "Recherchez un demandeur près de chez vous. Vous ne savez pas comment donner? <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> Lisez notre FAQ </a> .",
   "ftm-accepted-items" : "Articles acceptés",
   "ftm-accepting" : "Accepte",
   "ftm-ppe-needed" : "EPI nécessaire",
@@ -168,6 +168,7 @@
   "ftm-nav-volunteer" : "Bénévole",
   "ftm-nav-addplace" : "J'ai besoin d'EPI",
   "ftm-nav-share" : "Partager",
+  "ftm-nav-faq" : "FAQ",
   "ftm-index-og-title" : "#findthemasks",
   "ftm-index-og-description" : "Trouvez où vous pouvez donner vos masques et autres équipements de protection individuelle (EPI) dans votre région.",
   "ftm-default-og-description" : "Amérique ' travailleurs de la santé de première ligne sont le traitement de Covid-19 patients sans équipement de protection adéquat, au risque de leur vie! Nous devons trouver les masques. Tous ces masques peuvent maintenant sauver des vies si vous les remettez entre les mains de professionnels de la santé.",
