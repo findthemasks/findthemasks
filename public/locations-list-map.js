@@ -517,7 +517,7 @@ function onFilterChange(data, prefix, idx, selected, filters) {
 
   updateFilters(filters);
   refreshList(data, filters);
-  showMarkers(data, filters);
+  showMarkers(data, filters, false);
 };
 
 // Lazy-loads the Google maps script once we know we need it. Sets up
@@ -884,7 +884,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
 /**
  * Changes the markers currently rendered on the map based strictly on . This will reset the 'markers' module variable as well.
  */
-function showMarkers(data, filters) {
+function showMarkers(data, filters, recenterMap=true) {
   if (!map || !primaryCluster) {
     return;
   }
@@ -922,9 +922,11 @@ function showMarkers(data, filters) {
   // HACK. On some browsers, the markercluster freaks out if it gets a bunch of new markers
   // immediately followed by a map view change. Making the view change async works around
   // this bug.
-  setTimeout(() => {
-    centerMapToBounds(map, bounds, 9);
-  }, 0);
+  if (recenterMap) {
+    setTimeout(() => {
+      centerMapToBounds(map, bounds, 9);
+    }, 0);
+  }
 }
 
 // Updates one or both clusters with the latest batch of markers
