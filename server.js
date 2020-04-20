@@ -34,7 +34,11 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  res.set('Cache-Control', 'public, max-age=300');
+  if(process.env.NODE_ENV === "produce") { 
+    res.set('Cache-Control', 'public, max-age=300');
+  } else {
+    res.set('Cache-Control', 'no-cache');
+  }
   next();
 });
 
@@ -54,8 +58,12 @@ router.get(['/', '/index.html'], (req, res) => {
   });
 });
 
-router.get('/volunteer', (req, res) => {
-  res.render('volunteer', {
+router.get(['/donation-form-bounce', '/donation-form-bounce.html'], (req, res) => {
+  res.render('donation-form-bounce', { layout: false });
+});
+
+router.get('/faq', (req, res) => {
+  res.render('faq', {
     layout: 'static',
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
@@ -74,16 +82,31 @@ router.get(['/give', '/give.html'], (req, res) => {
   });
 });
 
-router.get(['/stats', '/stats.html'], (req, res) => {
-  res.render('stats', { layout: false });
+router.get('/privacy-policy', (req, res) => {
+  res.render('privacy-policy', {
+    layout: 'static',
+    ogLocale:  formatFbLocale(res.locals.locale),
+    ogTitle: res.locals.banana.i18n('ftm-privacy-policy-og-title'),
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: res.locals.banana.i18n('ftm-privacy-policy-og-description'),
+  })
 });
 
 router.get(['/request', '/request.html'], (req, res) => {
   res.render('request', { layout: false });
 });
 
-router.get(['/donation-form-bounce', '/donation-form-bounce.html'], (req, res) => {
-  res.render('donation-form-bounce', { layout: false });
+router.get(['/stats', '/stats.html'], (req, res) => {
+  res.render('stats', { layout: false });
+});
+
+router.get('/volunteer', (req, res) => {
+  res.render('volunteer', {
+    layout: 'static',
+    ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: res.locals.banana.i18n('ftm-default-og-description')
+  });
 });
 
 router.get(['/whoweare', '/whoweare.html'], (req, res) => {
@@ -94,16 +117,6 @@ router.get(['/whoweare', '/whoweare.html'], (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
   });
-});
-
-router.get('/privacy-policy', (req, res) => {
-  res.render('privacy-policy', {
-    layout: 'static',
-    ogLocale:  formatFbLocale(res.locals.locale),
-    ogTitle: res.locals.banana.i18n('ftm-privacy-policy-og-title'),
-    ogUrl: `http://${req.hostname}${req.originalUrl}`,
-    ogDescription: res.locals.banana.i18n('ftm-privacy-policy-og-description'),
-  })
 });
 
 router.get(['/404', '/404.html'], (req, res) => {
