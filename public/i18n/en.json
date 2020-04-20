@@ -205,7 +205,7 @@
   "ftm-faq-how-decide-location-answer-3": "Once you've found a few possible sites, choose one that aligns with your values and donation size. There are a wide variety of sites that need PPE, and ultimately, the choice is yours. You will be helping protect our frontline healthcare workers no matter which you choose!",
   "ftm-faq-how-to-help": "How else can I help?",
   "ftm-faq-how-to-help-answer-1": "We would love it if you helped us share our project on social media and within your networks! Sharing our site helps new healthcare providers find us, and it helps our healthcare providers connect with more potential PPE contributors!",
-  "ftm-faq-how-to-help-answer-2": "Join our amazing team of volunteers at <a href=\"https://findthemasks.com/volunteer\">here</a>",
+  "ftm-faq-how-to-help-answer-2": "Join our amazing team of volunteers at <a href=\"/volunteer\">here</a>.",
   "ftm-faq-makerspace-header": "Makerspace Community FAQs",
   "ftm-faq-makerspace-how-to-help": "I make handmade masks, 3D-print face shields, or am part of a makerspace community! How can I help?",
   "ftm-faq-makerspace-how-to-help-answer-1": "First of all, amazing! Thank you for taking the time to make new PPE supplies!",
@@ -223,7 +223,7 @@
   "ftm-faq-remove-information-answer-2": "After a check by our data team, your pin on the website will be greyed out with a message thanking the public and redirecting them to nearby pins that represent still-active PPE request sites. We look forward to your removal request; our aim at #findthemasks is not to be needed!",
   "ftm-faq-my-data": "What happens to my data? Who owns the data that I submit?",
   "ftm-faq-my-data-answer-1": "We collect the information that you provide to us when you fill out our PPE request form. The information regarding PPE recipient sites will be published on our public website for anyone to see and use. We also request an email and a phone number that we do not disclose publicly, so that we may contact the user in case we need to elaborate the post, seek feedback or request a collaboration. We may process your data or share personal information with vendors, consultants, or other third-party service providers.",
-  "ftm-faq-my-data-answer-2": "For more information, please see our<a href=\"https://findthemasks.com/privacy-policy\">Privacy Policy</a>",
+  "ftm-faq-my-data-answer-2": "For more information, please see our <a href=\"https://findthemasks.com/privacy-policy\">Privacy Policy</a>.",
   "ftm-faq-listing-not-shown": "I submitted a listing but it hasn't shown up yet. What should I do?",
   "ftm-faq-listing-not-shown-answer": "If it has been less than 4 hours, hang tight! We sometimes get surges of requests, and our data moderators may be working through the backlog. If it has been more than 12 hours, email <a href=\"mailto:contact@findthemasks.com\">contact@findthemasks.com</a>."
 }
