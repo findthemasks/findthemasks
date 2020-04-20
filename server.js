@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  if(process.env.NODE_ENV === "produce") { 
+  if(process.env.NODE_ENV === "produce") {
     res.set('Cache-Control', 'public, max-age=300');
   } else {
     res.set('Cache-Control', 'no-cache');
@@ -52,8 +52,6 @@ router.get(['/', '/index.html'], (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-index-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.currentCountry),
-    largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.currentCountry),
     localizeContactInfo: localizeContactInfo(res.locals.currentCountry)
   });
 });
@@ -67,7 +65,10 @@ router.get('/faq', (req, res) => {
     layout: 'static',
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
-    ogDescription: res.locals.banana.i18n('ftm-default-og-description')
+    ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
+    largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.currentCountry),
+
+    maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.currentCountry)
   });
 });
 
