@@ -583,7 +583,7 @@ function initMap(data, filters) {
 
     if (mapBounds && currentViewportCenter) {
       const currentLat = mapBounds.getCenter().lat();
-      const currentLng = mapBounds.getCenter().lat();
+      const currentLng = mapBounds.getCenter().lng();
 
       if (currentLat !== currentViewportCenter.lat || currentLng !== currentViewportCenter.lng) {
         refreshList(data, filters);
