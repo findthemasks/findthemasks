@@ -9,6 +9,7 @@ const formatFbLocale = require('./utils/formatFbLocale');
 require('dotenv').config();
 const https = require('https');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+const herokuVersion = process.env.HEROKU_RELEASE_VERSION;
 
 const app = new express();
 const router = express.Router();
@@ -47,6 +48,7 @@ router.use(express.static('public'));
 
 router.get(['/', '/index.html'], (req, res) => {
   res.render('index', {
+    version: herokuVersion,
     ogLocale:  formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
@@ -62,18 +64,19 @@ router.get(['/donation-form-bounce', '/donation-form-bounce.html'], (req, res) =
 
 router.get('/faq', (req, res) => {
   res.render('faq', {
+    version: herokuVersion,
     layout: 'static',
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.currentCountry),
-
     maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.currentCountry)
   });
 });
 
 router.get(['/give', '/give.html'], (req, res) => {
   res.render('give', {
+    version: herokuVersion,
     layout: 'give',
     ogLocale:  formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-give-og-title'),
@@ -85,6 +88,7 @@ router.get(['/give', '/give.html'], (req, res) => {
 
 router.get('/privacy-policy', (req, res) => {
   res.render('privacy-policy', {
+    version: herokuVersion,
     layout: 'static',
     ogLocale:  formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-privacy-policy-og-title'),
@@ -94,11 +98,17 @@ router.get('/privacy-policy', (req, res) => {
 });
 
 router.get(['/request', '/request.html'], (req, res) => {
-  res.render('request', { layout: false });
+  res.render('request', {
+    layout: false,
+    version: herokuVersion
+  });
 });
 
 router.get(['/stats', '/stats.html'], (req, res) => {
-  res.render('stats', { layout: false });
+  res.render('stats', {
+    layout: false,
+    version: herokuVersion
+  });
 });
 
 router.get('/volunteer', (req, res) => {
@@ -106,7 +116,8 @@ router.get('/volunteer', (req, res) => {
     layout: 'static',
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
-    ogDescription: res.locals.banana.i18n('ftm-default-og-description')
+    ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
+    version: herokuVersion
   });
 });
 
@@ -117,6 +128,7 @@ router.get(['/whoweare', '/whoweare.html'], (req, res) => {
     ogTitle: res.locals.banana.i18n('ftm-about-us-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
+    version: herokuVersion
   });
 });
 
