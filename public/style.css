@@ -526,6 +526,6 @@ h3.city {
 Data-blog hackery
 ****************/
 
-div.figure{margin-left: auto; margin-right:auto;}
+div.figure{width: 100%; margin-left: auto; margin-right:auto;}
 div.caption {text-indent:-2em; margin-left:3em; margin-right:1em; text-align:left;}
 
