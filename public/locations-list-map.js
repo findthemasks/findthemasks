@@ -293,7 +293,10 @@ function getFlatFilteredEntries(data, filters) {
 
   // TODO: This is hacky since technically this function should ONLY be responsible for generating HTML snippets,
   //  not updating stats; however this is the quickest method for updating filter stats as well.
-  updateStats($('#list-stats'), listCount);
+  if (map) {
+    // if the map hasn't loaded yet, don't update requester count - otherwise it'll flash once the map uploads (depending on zoom level)
+    updateStats($('#list-stats'), listCount);
+  }
 
   return entries;
 }
