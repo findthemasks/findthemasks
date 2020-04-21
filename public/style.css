@@ -19,8 +19,13 @@ h1, h2, h3, h4, h5 {
   font-weight: 600;
 }
 
+p a {
+  text-decoration: underline;
+}
+
 a {
   color: #4169E1;
+  font-weight: 600;
 }
 
 .linkified {
