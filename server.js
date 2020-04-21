@@ -110,7 +110,7 @@ router.get('/volunteer', (req, res) => {
   });
 });
 
-router.get('/datablog', (req, res) => {
+router.get('/datablog/2020-04-20-Insights', (req, res) => {
   res.render('datablog', {
     layout: 'static',
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
