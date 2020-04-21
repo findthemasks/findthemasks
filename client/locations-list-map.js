@@ -6,6 +6,9 @@ import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn } from './utils.js';
 import sendEvent from './sendEvent.js';
 
+// Allow for hot-reloading of CSS in development.
+require ('../sass/style.css')
+
 
 /******************************************
  * MODULE VARS AVAILABLE TO ALL FUNCTIONS *

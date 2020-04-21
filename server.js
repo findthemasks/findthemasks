@@ -23,6 +23,18 @@ app.set('strict routing', true);
 app.use(setCurrentCountry);
 app.use(setBananaI18n);
 
+// Install the webpack-dev-middleware for all the hot-reload goodness in dev.
+if (process.env.NODE_ENV !== 'production') {
+  const webpack = require('webpack');
+  const middleware = require('webpack-dev-middleware');
+  const webpackConfig = require('./webpack-hot.config.js');
+  const compiler = webpack(webpackConfig);
+  app.use(middleware(compiler, {
+    publicPath: webpackConfig.output.publicPath
+  }));
+  app.use(require("webpack-hot-middleware")(compiler));
+}
+
 app.use((req, res, next) => {
   const schema = req.headers['x-forwarded-proto'];
   const host = req.headers.host.split(':')[0];
