@@ -375,6 +375,7 @@ h3.city {
 
 .navbar.ftm {
   background: #4169E1;
+  padding: 0 .75rem;
 }
 
 .navbar.ftm .nav-link,
@@ -382,8 +383,15 @@ h3.city {
   font-size: 0.9rem;
 }
 
+.navbar.ftm .nav-item {
+  display: flex;
+  min-height: 100%;
+  align-items: center;
+}
+
 .navbar.ftm .navbar-brand {
   flex-direction: row;
+  align-items: center;
   font-size: inherit;
   font-weight: 700;
   padding: 0;
@@ -398,29 +406,43 @@ h3.city {
 
 .navbar.ftm .navbar-brand .text {
   display: inline-block;
-  padding: .5rem 0;
-}
-
-.navbar.ftm .navbar-nav .nav-item {
-  margin: 0 .2rem;
+  font-weight: 700;
 }
 
 .navbar.ftm .navbar-nav .nav-link {
-  padding: .5rem;
+  padding: 1rem;
+  font-weight: 600;
+}
+
+.navbar.ftm .navbar-nav .nav-link:hover {
+  background: rgba(255, 255, 255, .1);
 }
 
 .navbar.ftm .navbar-nav .home-link {
   cursor: pointer;
 }
 
-.navbar.ftm .nav-item.show {
-  background: #3E54A1;
+.navbar.ftm .nav-item.show,
+.navbar.ftm .nav-item.show .nav-link:hover {
+  background: #3F5CBB;
+}
+
+.navbar.ftm .dropdown-menu {
+  border: none;
+  border-radius: 0;
+  margin-top: 0;
 }
 
 .navbar.ftm .dropdown-menu,
 .navbar.ftm .dropdown-item {
-  background: #3E54A1;
+  background: #3F5CBB;
   color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.navbar.ftm .dropdown-item {
+  padding: .4rem 1rem;
 }
 
 .navbar.ftm .dropdown-item:hover {
@@ -431,23 +453,34 @@ h3.city {
   color: #fff;
   background: #EC416F;
   white-space: nowrap;
+  font-weight: 600;
+  margin-left: 1rem;
+}
+
+.navbar.ftm .btn-addplace:hover {
+  background: #F84E7C;
 }
 
 .navbar.ftm .btn-addplace .icon, .icon-requester-pin.icon {
   display: inline-block;
   vertical-align: middle;
-  height: 25px;
-  width: 25px;
-  padding-right: 8px;
+  height: 18px;
+  width: 18px;
+  margin-right: 6px;
+  position: relative;
+  top: -2px;
 }
 
 #countries-dropdown .icon,
 #countries-dropdown-selector .icon {
   display: inline-block;
   vertical-align: middle;
-  height: 24px;
-  width: 24px;
+  height: 18px;
+  width: 18px;
   margin-right: 8px;
+  position: relative;
+  top: -1px;
+  background-size: cover;
 }
 
 /* Mobile first: Desktop breakpoint overrides below */
