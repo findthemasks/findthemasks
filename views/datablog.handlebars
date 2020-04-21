@@ -1,0 +1,323 @@
+<div class="translated-content">
+  {{> top_nav }}
+
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col">
+	<head><title>Insights from FindTheMasks-US Data</title> 
+	<style>
+	body{
+		font-family:sans-serif;
+	} 
+	</style>
+	</head><body>
+	   <div class="maketitle">
+									  
+
+									  
+
+	<center>
+	<h1>Insights from FindTheMasks-US Data</h1>
+	</center>
+	<center>
+	<div class="author" ><span>
+	FindTheMasks Team (data@findthemasks.com)</span></div><br />
+	<b>C. Alzona</b>,
+	S. Ashlock,
+	<b>C. Bartram</b>,
+	I. Baker,
+	S. Bhadra,
+	<b>L. Bolling</b>,
+	N. Burt,
+	<b>Z. Cariaso</b>,
+	<b>C. Chang</b>,
+	J. Chion,
+	<b>L. Cho</b>,
+	M. Cohen,
+	<b>M. Collins</b>,
+	<b>S. Crayne</b>,
+	<b>J. Chubak</b>,
+	V. Dalal,
+	<b>L. Dela Paz</b>,
+	<b>J. Detwiler</b>,
+	V. Dzhabarov,
+	<b>D. Gaughan</b>,
+	<b>E. Mandala</b>,
+	<b>M. Faeldog</b>,
+	<b>S. Fenton</b>,
+	<b>M. Ferris</b>,
+	<b>G. Gupta</b>,
+	<b>C. Hagedorn</b>,
+	<b>R. Hubbard</b>,
+	<b>Jaclyn</b>,
+	<b>J. Hardie</b>,
+	<b>E. Hirao</b>,
+	<b>B. Iritani</b>,
+	P. Jayaram,
+	<b>A. Katherine</b>,
+	<b>S. Kar</b>,
+	S. Kelleher,
+	B. Kriss,
+	<b>A. Lainoff</b>,
+	E. Lee,
+	<b>J. Lee</b>,
+	<b>C. Liou</b>,
+	<b>J. Milner</b>,
+	P. Nelson,
+	<b>S. Nelson</b>,
+	J. Noordhoek,
+	<b>N. Orndorff</b>,
+	<b>K. Parola </b>,
+	<b>N. Pitaro</b>,
+	J. Popkin,
+	R. Popkin,
+	E. Przemieniecki,
+	<b>F. Querdasi</b>,
+	<b>S. Van Rafelghem</b>,
+	<b>T. Ramirez</b>,
+	M. Robin,
+	G. Roche,
+	<b>R. Rodrigues</b>,
+	<b>S. Rodriguez</b>,
+	J. Roesch,
+	C. Sadowski,
+	<b>A. Saurin</b>,
+	M. Scharlock,
+	S. Sekhri,
+	<b>S. Semilla</b>,
+	<b>J. Sencil</b>,
+	R. Shah,
+	<b>D. Sharps</b>,
+	E. Shaw,
+	K. Sitaram,
+	I. Smith,
+	K. Spitznagel,
+	<b>M. Turner</b>,
+	D. Tuzlak,
+	<b>G. Tyler</b>,
+	<b>G. Wallace</b>,
+	<b>P. Wartko</b>,
+	<b>C. Wiseman</b>,
+	A. Wong,
+	Y. Wong,
+	<b>L. Yang</b>,
+	T. Ye,
+	and
+	<b>B. Zhou</b>  (bold are data-moderators or analysis specialists)
+	</center>
+	<br><br>
+	<div class="date" >
+	<center><span>April 20, 2020</span></center></div>
+	<p>Since March 19, FindTheMasks.com has aggregated and curated drop-off
+	information for Personal Protective Equipment (PPE) for healthcare workers across
+	the United States and around the world (
+	<a href="https://findthemasks.ca" >Canada</a>, the 
+	<a href="https://findthemasks.com/fr/" >EU</a>, 
+	<a href="https://findthemasks.com/ch/" >Switzerland</a>, 
+	and <a href="https://findthemasks.com/in/" >India</a>).
+	This work is in partnership with many groups, including <a 
+	href="https://www.projectn95.org/" >ProjectN95</a> and
+	<a href="https://getusppe.org/" >GetUsPPE.org</a>.
+	 Our mission is to provide up-to-date maps of PPE need. Our curated
+	US data are freely available in <a href=http://findthemasks.com/data-us.json>json</a> and <a href=https://findthemasks.com/data-us.csv>CSV</a> formats, with similar files for
+	other countries.
+	</p>
+	<p>This is a quick look at our 3,800+ entry United States dataset. We want to share
+	some simple inferences we have made so far. This document is for both the curious
+	reader and those analysts who use our data.</p>
+
+	<h2>FindTheMasks Data</h2>
+	<p>Each time a potential recipient fills in our 
+	<a href="https://findthemasks.com/us/donation-form?locale=en-US" >form</a>, their information appears as a new
+	row in our database. Human moderators 
+	<a href="https://github.com/findthemasks/findthemasks/wiki/Data-Quality-Procedure" >check it</a> 
+	for clarity and accuracy. We remove duplicate entries and update or take-down entries at the request
+	of recipients. This process favors speed and accuracy in merging entries
+	over maintaining the provenance of individual entries. We store original
+	copies of form-entry data, but the analysis presented today uses our curated
+	dataset.</p>
+
+	<p> There are systematic uncertainties and biases that may affect conclusions
+	one might draw from these data. The mix of organizations that submit to us
+	has changed and diversified over time. What began with phone-calls to
+	hospitals now sees requests from public health organizations, some of the
+	finest research hospitals in the country, home healthcare organizations,
+	travel nurses, emergency medical services, clinics in jails, funeral homes,
+	services that wash the linen from hospitals with COVID-19 patients, and
+	beyond.
+									  
+
+									  
+	<p>   <hr class="figure"><div class="figure" 
+	>
+									  
+
+									  
+	<p class="noindent" > 
+	<img src="images/approvedPlot.png" 
+	alt="Plot of approved entries over time. Hundreds per day from March 24-April 8, tens/day until April 13, ~20/day afterward">
+	<br /> 
+	<div class="caption" 
+	><span class="id">Figure&#x00A0;1:  </span><span  
+	class="content">FindTheMasks  entries  over  time.  Explosive  growth  in  the  first
+	few  days  forced  us  to  adapt  and  grow  our  team  to  handle  the  traffic.
+	New-submission traffic dropped sharply on April 8, when a partner redirected
+	submission  traffic  to  a  non-public  repository  to  better  faciliate  supply-side
+	matching. The partner added a link to FTM on their intake page on April 13,
+	restoring some traffic.</span></div>
+									  
+
+									  
+	</div><hr class="endfigure">
+
+	<p>
+	As FindTheMasks lists many non-hospital institutions (outpatient clinics, senior
+	care, home-care, skilled nursing facilities, mental health centers, homes for the
+	disabled, and more), it is important to understand our changing mix of hospital and
+	non-hospital institutions.
+	</p>
+
+	<hr class="figure"><div class="figure">
+
+	<p class="noindent" > <img src="images/orgType.png" 
+	alt="Plot of the hospital-fraction of FTM data. Fluctuates around 35% until April 8. Newer entries may be lower."  
+	>
+	<br /> <div class="caption" 
+	><span class="id">Figure&#x00A0;2:  </span><span  
+	class="content">In  the  earliest  days,  our  recipients  were  primarily  hospitals.  On
+	March 25, we began asking recipients to categorize their organization, plotted
+	above. As our traffic flow changes, and hospitals secure supply chains for PPE,
+	we expect to see even more non-hospital entries. Days with fewer than ten new
+	entries are excluded from our analysis.</span></div><!--tex4ht:label?: x1-1002r2 -->
+									  
+
+									  
+	<p class="indent" >   </div><hr class="endfigure">
+
+	   <h2>How are America&#8217;s PPE needs changing over time?</h2>
+	   <h3>PPE Needs</h3>
+	<p>
+	As the number of entries each day we receive varies greatly, it is hard to see trends
+	in the daily counts of PPE requests alone. Instead, we plot the percentage of
+	institutions that request each kind of PPE each day. Remember that only
+	institutions/health-care workers that need PPE have submitted donation requests to
+	us. If an institution is fully-stocked, we won&#8217;t see them. That said, <b>only 51 of the
+	~5,000 contacts we have received were removal requests</b>, most of the
+	excess beyond 3,800 have been updates and duplicate entries to entries
+	already present in our database. From our perspective, we believe it is a fair
+	assumption that most healthcare institutions in the United States are starved for
+	PPE.
+	</p>
+	<p> When you see in the plots below a &#8220;small&#8221; number like 25% for 3-D-printed face
+	shields, it means that one in four of our recipients <b>wants</b> homemade masks.
+	Multiplied by our 3,800 recipients, that&#8217;s about a thousand institutions. Odds are
+	very good that you can find someone near you, whether they are on our
+	list or not, who will be intensely grateful for every kind of PPE you might
+	have.
+	</p>
+
+	<p>For experts: The errorbars in these plots are computed using <a href="https://en.wikipedia.org/wiki/Population_proportion" >population-proportion</a> uncertainties ( z<sup>*</sup>in the Wikipedia notation).
+	</p>
+
+
+	<p class="indent" >   <hr class="figure"><div class="figure">
+									  
+	<!--l. 113--><p class="noindent" > <img 
+	src="images/needs.png" alt="Plots expressed needs for FTM recipients. N95=90%, Surgical Masks=80%, Homemade masks = 20-40%, Gloves = 60%, Gowns=80%. Hand Sanitizer = 70%, Wipes = 70%, Thermometers = 40%, Booties = 40%, Face Shield = 70%, 3D/maker shields = 30%">
+	<br /> <div class="caption" 
+	><span class="id">Figure&#x00A0;3:  </span><span  
+	class="content">FindTheMasks  recipient&#8217;s  PPE  needs  over  time.  Some  of  these
+	trends are likely to be due to our changing mix of recipient-types. There are
+	subtle trends in these data, but the overarching message is that the PPE needs
+	of institutions making PPE requests are almost unchanged over time. <b>There is still a huge PPE shortage.</b>
+	<p>
+	In the last week, we have seen an increase in the proportion of institutions
+	requesting home-made masks, sanitizer, wipes, and gloves. There are weak
+	downward trends in requests for N95 masks and surgical masks. We do not yet
+	know if this is due to a change in our institutional mix or statistical fluctuation.
+	We do not believe it is because demand for N95s has been substantially addressed.
+	</p>
+	</span></div>
+									  
+
+									  
+	<p class="indent" >   </div><hr class="endfigure">
+	   <h3>Significant Shortages</h3>
+	<p>
+		In the needs plotted above, our recipients express all of the many things they need.
+	In many cases there are shortages of most PPE, so they select most of the checkboxes on the form.
+	On March 25, we began asking our recipients to tell us, in free text, about their most
+	significant shortages. These data are not found in our public releases, as we have
+	promised to keep them private. Nevertheless, we can tell you about them in
+	aggregate.
+	</p>
+	<p class="indent" >   <hr class="figure"><div class="figure" 
+	>
+									  
+	<p class="noindent" > <img src="images/shortages.png" 
+	alt="Plots of PPE Shortages. Most extreme are N95, masks, and gowns " >
+	<br /> <div class="caption" 
+	><span class="id">Figure&#x00A0;4:   </span><span  
+	class="content">The   most-significant   shortages   expressed   by   FindTheMasks
+	recipients.  In  addition  to  masks,  gowns/coveralls/bunny-suits  are  in  short
+	supply in about 40% of our recipient&#8217;s institutions.</span></div>
+									  
+
+									  
+	<p class="indent" >   </div><hr class="endfigure">
+	<p>
+	The story at hand is a simple one: our healthcare workers need PPE of all kinds.
+	The most-desperate needs among our recipients are N95 masks, masks of all kinds,
+	and gowns. Some recipients are completely out of at least one of the above and are
+	treating patients without protection.
+	</p>
+	   <h2>How can you help?</h2>
+	   <h3>If you have PPE to donate</h3>
+	<p>Visit <a href="https://findthemasks.com/" >https://findthemasks.com/</a> 
+	and find an institution that can use your help! Our
+	map and helpful filters can help you find an institution in need quickly. If you
+	have more than a few hundred items of PPE, please contact our partners at
+	<a href="https://www.projectn95.org/" >projectN95.org</a> and 
+	<a href="https://getusppe.org/" >getusppe.org</a>.
+	</p>
+
+	   <h3>If you need PPE</h3>
+	<p>
+	Please fill in our <a href="https://findthemasks.com/us/donation-form?locale=en-US" >form</a>!
+	We&#8217;ll add you to the map as quickly as we can. Institutions
+	should register with our partners at <a href="https://www.projectn95.org/" >projectN95.org</a>
+	and <a href="https://getusppe.org/" >getusppe.org</a>, too.
+	</p>
+
+	   <h3>Share #findthemasks</h3>
+	<p>
+	Share this post, or findthemasks.com, using #findthemasks! If you donate PPE or
+	receive PPE from a findthemasks donor, please post to social media with the
+	hashtag #findthemasksdonation so that we can better understand how donations are
+	flowing to recipients.
+	</p>
+	<p>
+	Thank you so much for your support. If you have PPE, there are thousands of
+	institutions that need it. Right now.
+	</p>
+
+	   <h2>Support</h2>
+	<p>
+	We are very grateful for pro-level support from Smartling, Google Maps, and Slack.
+	Jotform, Airtable, and SmartyStreets have made contributions to improvements that
+	are under development.
+	</p>
+	<p>   We could not have done any of this work without volunteer support from a 
+	<a href="https://findthemasks.com/whoweare.html" >team of
+	80+ volunteers</a> who have contributed time and lost a lot of sleep to make
+	FindTheMasks a reality.
+	</p>                                                                  
+	<p>
+	Our hearts are with those on the front lines. There are thousands more
+	volunteers like us doing our very best to help you.  
+	</p>
+	</body>
+      </div>
+    </div>
+  </div>
+</div>
