@@ -1,7 +1,7 @@
 import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
 import { FILTER_ITEMS, ORG_TYPES, ENUM_MAPPINGS } from './formEnumLookups.js';
-import { getCountry } from './getCountry.js';
+import { getCountry, getFirstPathPart, isCountryPath } from './getCountry.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn } from './utils.js';
 import sendEvent from './sendEvent.js';
@@ -90,7 +90,7 @@ const parseFiltersFromData = (data) => {
         // split on commas except if comma is in parentheses
         entry.accepting.split(/, (?![^(]*\))/).map(a => a.trim()).forEach((i) => {
           const filterKey = i.toLowerCase();
-          if (FILTER_ITEMS.hasOwnProperty(filterKey) && !acceptedItems.hasOwnProperty(filterKey)) {
+          if (Object.prototype.hasOwnProperty.call(FILTER_ITEMS, filterKey) && !Object.prototype.hasOwnProperty.call(acceptedItems, filterKey)) {
             acceptedItems[filterKey] = Object.assign(
               {},
               FILTER_ITEMS[filterKey],
@@ -102,7 +102,7 @@ const parseFiltersFromData = (data) => {
         if (entry.org_type) {
           const orgTypeKey = entry.org_type.toLowerCase();
 
-          if (ORG_TYPES.hasOwnProperty(orgTypeKey) && !orgTypes.hasOwnProperty(orgTypeKey)) {
+          if (Object.prototype.hasOwnProperty.call(ORG_TYPES, orgTypeKey) && !Object.prototype.hasOwnProperty.call(orgTypes, orgTypeKey)) {
             orgTypes[orgTypeKey] = Object.assign(
               {},
               ORG_TYPES[orgTypeKey],
@@ -261,9 +261,9 @@ function getFlatFilteredEntries(data, filters) {
     for (const cityName of Object.keys(cities).sort()) {
       const city = cities[cityName];
 
-      city.entries.sort(function (a, b) {
+      city.entries.sort((a, b) => {
         return a.name.localeCompare( b.name );
-      }).forEach(function(entry) {
+      }).forEach((entry) => {
         if (filterAcceptKeys) {
           const acc = (entry.accepting || "").toLowerCase();
           if (!filterAcceptKeys.some(s => acc.includes(s))) {
@@ -304,9 +304,9 @@ function getFlatFilteredEntries(data, filters) {
   return entries;
 }
 
-const getCountryDataUrl = (countryDataFilename) => {
-  return `https://findthemasks.com/${countryDataFilename}`
-};
+function getDataJsonUrl(filename) {
+  return `/${filename}`
+}
 
 function getCountryDataFilename(country) {
   // Always use country-specific data.json file
@@ -316,31 +316,54 @@ function getCountryDataFilename(country) {
   return countryDataFilename;
 }
 
+// Loads data file from url and assigns into object given by dataToStore
+function loadDataFile(url, dataToStore) {
+  $.getJSON(
+    url,
+    (result) => {
+      Object.assign(dataToStore, toDataByLocation(result));
+
+      // opacity value matches what's in css for the .secondarycluster class -
+      // can set a css class for the clusters, but not for individual pins.
+      otherMarkers.push(...getMarkers(dataToStore, {}, null, secondaryMarkerOptions).outOfFilters);
+      updateClusters(null, secondaryCluster);
+    }
+  );
+}
+
 function loadOtherCountries() {
   const countryCodes = Object.keys(countries);
 
   for (const code of countryCodes) {
     if (code !== currentCountry) {
-      $.getJSON(
-        getCountryDataUrl(getCountryDataFilename(code)),
-        (result) => {
-          const otherData = countryData[code] = toDataByLocation(result);
-
-          // opacity value matches what's in css for the .secondarycluster class -
-          // can set a css class for the clusters, but not for individual pins.
-          otherMarkers.push(...getMarkers(otherData, {}, null, secondaryMarkerOptions).outOfFilters);
-          updateClusters(null, secondaryCluster);
-        }
-      );
+      countryData[code] = {};
+      loadDataFile(getDataJsonUrl(getCountryDataFilename(code)), countryData[code]);
     }
   }
 }
 
-$(function () {
+$(() => {
   const url = new URL(window.location);
 
+  // HACK: Assign into data via Object.assign() below to handle both
+  // country and maker data.
+  let data;
+  let dataUrl;
+  const firstPathPart = getFirstPathPart();
+  if (isCountryPath()) {
+    data = countryData[currentCountry] = {};
+    dataUrl = getDataJsonUrl(getCountryDataFilename(currentCountry));
+  } else if (firstPathPart === 'makers') {
+    data = {};
+    dataUrl = getDataJsonUrl('data-makers.json');
+  } else {
+    console.error("invalid path");
+    window.location.replace("/");
+    return;
+  }
+
   const renderListings = function (result) {
-    const data = countryData[currentCountry] = toDataByLocation(result);
+    Object.assign(data, toDataByLocation(result));
     const searchParams = new URLSearchParams(url.search);
     const showList = searchParams.get('hide-list') !== 'true';
     const showFilters = showList && searchParams.get('hide-filters') !== 'true';
@@ -385,18 +408,18 @@ $(function () {
     }
   };
 
-  $.getJSON(getCountryDataUrl(getCountryDataFilename(currentCountry)), function (result) {
+  $.getJSON(dataUrl, (result) => {
     if(window.i18nReady) {
       renderListings(result);
     } else {
-      $('html').on('i18n:ready', function() {
+      $('html').on('i18n:ready', () => {
         renderListings(result);
       });
     }
   });
 
   const footerHeight = 40;  // small buffer near bottom of window
-  $(window).scroll(function() {
+  $(window).scroll(() => {
     if($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
       renderNextListPage();
     }
@@ -419,7 +442,7 @@ function renderNextListPage() {
   let renderLocation = lastLocationRendered + 1;
   const children = [];
 
-  locationsListEntries.slice(renderLocation, renderLocation + 40).forEach(function (entry) {
+  locationsListEntries.slice(renderLocation, renderLocation + 40).forEach((entry) => {
     children.push(getEntryEl(entry));
     renderLocation += 1;
   });
@@ -459,7 +482,7 @@ function getEntryEl(entry) {
       const address = getOneLineAddress(entry.address);
       link.href =  googleMapsUri(address);
       link.target = '_blank';
-      $link.click(function() {
+      $link.click(() => {
         sendEvent('listView', 'clickAddress', address);
       });
       ac(para, link);
@@ -524,7 +547,7 @@ function onFilterChange(data, prefix, idx, selected, filters) {
   updateFilters(filters);
   refreshList(data, filters);
   showMarkers(data, filters, false);
-};
+}
 
 // Lazy-loads the Google maps script once we know we need it. Sets up
 // a global initMap callback on the window object so the gmap script
@@ -565,22 +588,22 @@ function initMap(data, filters) {
   map = new google.maps.Map(element);
   secondaryCluster = new MarkerClusterer(map, [], {
     clusterClass: 'secondarycluster',
-    imagePath: 'images/markercluster/m',
+    imagePath: '/images/markercluster/m',
     minimumClusterSize: 5,
     zIndex: 1,
   });
   primaryCluster = new MarkerClusterer(map, [],
     {
-      imagePath: 'images/markercluster/m',
+      imagePath: '/images/markercluster/m',
       minimumClusterSize: 5,
       zIndex: 2
     });
 
-  primaryCluster.addListener('click', function(e) {
+  primaryCluster.addListener('click', (e) => {
     sendEvent('map', 'click', 'primaryCluster');
   });
 
-  secondaryCluster.addListener('click', function(e) {
+  secondaryCluster.addListener('click', (e) => {
     sendEvent('map', 'click', 'secondaryCluster');
   });
 
@@ -617,7 +640,9 @@ function initMap(data, filters) {
   // Initialize autosuggest/search field above the map.
   initMapSearch(data, filters);
 
-  loadOtherCountries();
+  if (isCountryPath()) {
+    loadOtherCountries();
+  }
 }
 
 /**********************************
@@ -724,6 +749,7 @@ function centerMapToMarkersNearUser() {
 
       fitMapToMarkersNearBounds(bounds);
     }, (err) => {
+      console.error(err);
       // Hide the "User my location" link since we know that will not work.
       $('#use-location').hide();
 
@@ -790,7 +816,7 @@ function getMarkersByDistanceFrom(latitude, longitude, n=3) {
 function getMarkers(data, appliedFilters, bounds, markerOptions) {
   const filterAcceptKeys = appliedFilters.acceptItems && Object.keys(appliedFilters.acceptItems);
   const filterOrgTypeKeys = appliedFilters.orgTypes && Object.keys(appliedFilters.orgTypes);
-  const hasStateFilter = !!appliedFilters.states;
+  const hasStateFilter = Boolean(appliedFilters.states);
 
   const inFiltersMarkers = [];
   const outOfFiltersMarkers = [];
@@ -798,7 +824,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
   for (const stateName of Object.keys(data)) {
     const inStateFilter = appliedFilters.states && appliedFilters.states[stateName];
 
-    const hasFilters = !!filterAcceptKeys || !!filterOrgTypeKeys || hasStateFilter;
+    const hasFilters = Boolean(filterAcceptKeys) || Boolean(filterOrgTypeKeys) || hasStateFilter;
 
     const state = data[stateName];
     const cities = state.cities;
@@ -988,7 +1014,7 @@ function getMapInitialView() {
           lng: latlng[1]
         }
       }
-    };
+    }
   }
   return MAP_INITIAL_VIEW[getCountry()];
 
@@ -1055,16 +1081,6 @@ function createMarker(latitude, longitude, orgType, address, name, instructions,
     if (!marker.infowindow) {
       // Text to go into InfoWindow
 
-      // setup google maps link
-      const mapLinkEl = ce('a','map-link');
-      const oneLineAddress = getOneLineAddress(address);
-      mapLinkEl.href = googleMapsUri(oneLineAddress);
-      mapLinkEl.target = '_blank';
-      mapLinkEl.addEventListener('click', () => {
-        sendEvent('map', 'clickAddress', oneLineAddress);
-      });
-      mapLinkEl.appendChild(ctn(oneLineAddress));
-
       const contentTags = [ce('h5', null, ctn(name))];
 
       if (orgType && orgType.length) {
@@ -1074,16 +1090,39 @@ function createMarker(latitude, longitude, orgType, address, name, instructions,
         );
       }
 
-      contentTags.push(
-        ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
-        ce('div', 'value', mapLinkEl),
-        ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
-        linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))),
-        ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
-        ce('div', 'value', ctn(translateEnumList(accepting))),
-        ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
-        ce('div', 'value', ctn(translateEnumValue(open_accepted)))
-      );
+      if (address) {
+        // setup google maps link
+        const mapLinkEl = ce('a','map-link');
+        const oneLineAddress = getOneLineAddress(address);
+        mapLinkEl.href = googleMapsUri(oneLineAddress);
+        mapLinkEl.target = '_blank';
+        mapLinkEl.addEventListener('click', () => {
+          sendEvent('map', 'clickAddress', oneLineAddress);
+        });
+        mapLinkEl.appendChild(ctn(oneLineAddress));
+
+        contentTags.push(
+          ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
+          ce('div', 'value', mapLinkEl));
+      }
+
+      if (instructions) {
+        contentTags.push(
+          ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
+          linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))));
+      }
+
+      if (accepting) {
+        contentTags.push(
+          ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
+          ce('div', 'value', ctn(translateEnumList(accepting))));
+      }
+
+      if (open_accepted) {
+        contentTags.push(
+          ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
+          ce('div', 'value', ctn(translateEnumValue(open_accepted))));
+      }
 
       const content = ce('div', null, contentTags);
 
@@ -1127,7 +1166,7 @@ function number_format(number, decimal_places, dec_separator, thou_separator) {
   if (typeof thou_separator === 'undefined') thou_separator = ',';
 
   number = Math.round(number * Math.pow(10, decimal_places)) / Math.pow(10, decimal_places);
-  let e = number + '';
+  let e = String(number);
   let f = e.split('.');
   if (!f[0]) {
     f[0] = '0';
@@ -1142,14 +1181,14 @@ function number_format(number, decimal_places, dec_separator, thou_separator) {
     }
     f[1] = g;
   }
-  if (thou_separator != '' && f[0].length > 3) {
+  if (thou_separator !== '' && f[0].length > 3) {
     let h = f[0];
     f[0] = '';
     for (let j = 3; j < h.length; j += 3) {
       let i = h.slice(h.length - j, h.length - j + 3);
-      f[0] = thou_separator + i + f[0] + '';
+      f[0] = String(thou_separator + i + f[0]);
     }
-    let j = h.substr(0, (h.length % 3 == 0) ? 3 : (h.length % 3));
+    let j = h.substr(0, (h.length % 3 === 0) ? 3 : (h.length % 3));
     f[0] = j + f[0];
   }
   dec_separator = (decimal_places <= 0) ? '' : dec_separator;
