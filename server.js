@@ -136,6 +136,7 @@ router.get('/volunteer', (req, res) => {
 router.get('/blog/2020-04-21-data-insights', (req, res) => {
   res.render('blog/2020_04_21_data_insights', {
     layout: 'static',
+    title: 'Insights from FindTheMasks-US Data',
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description')

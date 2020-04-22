@@ -13,7 +13,11 @@
     gtag('js', new Date());
     gtag('config', 'UA-161442455-1', { 'anonymize_ip': true });
   </script>
-  <title>#Findthemasks</title>
+  {{#if title}}
+    <title>{{title}}</title>
+  {{else}}
+    <title>#Findthemasks</title>
+  {{/if}}
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/images/icons.data.svg.css">
