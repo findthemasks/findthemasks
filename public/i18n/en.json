@@ -220,5 +220,9 @@
   "ftm-faq-my-data-answer-1": "We collect the information that you provide to us when you fill out our PPE request form. The information regarding PPE recipient sites will be published on our public website for anyone to see and use. We also request an email and a phone number that we do not disclose publicly, so that we may contact the user in case we need to elaborate the post, seek feedback or request a collaboration. We may process your data or share personal information with vendors, consultants, or other third-party service providers.",
   "ftm-faq-my-data-answer-2": "For more information, please see our <a href=\"https://findthemasks.com/privacy-policy\">Privacy Policy</a>.",
   "ftm-faq-listing-not-shown": "I submitted a listing but it hasn't shown up yet. What should I do?",
-  "ftm-faq-listing-not-shown-answer": "If it has been less than 4 hours, hang tight! We sometimes get surges of requests, and our data moderators may be working through the backlog. If it has been more than 12 hours, email <a href=\"mailto:contact@findthemasks.com\">contact@findthemasks.com</a>."
+  "ftm-faq-listing-not-shown-answer": "If it has been less than 4 hours, hang tight! We sometimes get surges of requests, and our data moderators may be working through the backlog. If it has been more than 12 hours, email <a href=\"mailto:contact@findthemasks.com\">contact@findthemasks.com</a>.",
+  "ftm-makers-og-title": "#findthemasks - Maker Map",
+  "ftm-makers-og-description": "Find where makerspaces are creating personal protective equipment (PPE) in your local area.",
+  "ftm-makers-cta": "Make PPE and get it into the hands of those who need it!",
+  "ftm-makers-near-me": "Search for a Makerspace near you. They can help distribute things you've made or find you the supplies you need."
 }
