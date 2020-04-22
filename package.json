@@ -6,6 +6,10 @@
   "engines": {
     "node": ">= 12.x.x"
   },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/findthemasks/findthemasks.git"
+  },
   "scripts": {
     "build": "npm run webpack",
     "dev": "NODE_ENV='development' nodemon --ignore 'client/' server.js",
@@ -31,6 +35,8 @@
     "eslint": "^6.8.0",
     "eslint-config": "^0.3.0",
     "eslint-plugin-promise": "^4.2.1",
+    "fibers": "^4.0.2",
+    "lodash.template": ">=4.5.0",
     "mini-css-extract-plugin": "^0.9.0",
     "mocha": "^7.1.1",
     "node-sass": "^4.13.1",
