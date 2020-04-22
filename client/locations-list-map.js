@@ -810,7 +810,6 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
       const entriesByAddress = city.entries.reduce((acc, curr) => {
         const latlong = `${curr.lat} ${curr.lng}`;
         if (latlong in acc) {
-          console.log(`double at ${latlong}`)
           acc[latlong].push(curr);
         } else {
           acc[latlong] = [curr];
