@@ -213,14 +213,13 @@
   "ftm-faq-ppe-recipients-header" : "PPE 수신자를위한 FAQ",
   "ftm-faq-request-processing-length" : "요청을 처리하는 데 시간이 얼마나 걸립니까?",
   "ftm-faq-request-processing-length-answer" : "PPE 요청 양식을 제출 한 후, 우리의 자원 봉사자 데이터 팀은 귀하의 요청을 맵과 디렉토리에 게시하기 전에 모든 제출 내용을 확인합니다. 경우에 따라 제출 후 몇 분 정도 빨리 발생할 수 있습니다. 업체 정보가 게시 되려면 평균 2 시간 정도 걸립니다.",
-  "ftm-faq-update-information" : "PPE 요청에서 정보 (필요한 항목, 지침 등)를 업데이트하고 싶습니다. 어떻게해야합니까?",
-  "ftm-faq-update-information-answer" : "원래 제출 후 Google 설문지는 제출 양식에 표시된 이메일로 영수증을 자동 생성합니다. 이 이메일 주소는 공개되지 않지만 이메일 영수증에는 클릭하여 PPE 요청 정보를 편집 할 수있는 링크가 포함됩니다. 받은 편지함에서 Google 설문지 영수증을 찾아서 반복하여 요청을 수정하십시오. 데이터 중재자가 몇 시간 내에 편집 내용을 확인합니다.",
-  "ftm-faq-remove-information" : "PPE 수신자 목록에서 제거하고 싶습니다",
-  "ftm-faq-remove-information-answer-1" : "PPE 요구 사항이 충족되면 Google 설문지 이메일 영수증을 통해 알려주세요. 요청시 \" 요청 사이트 제거 \" 표시하고 \" 지침 \" 필드에 귀하의 요구가 충족되었다고 알려주십시오.",
-  "ftm-faq-remove-information-answer-2" : "데이터 팀에서 확인한 후, 웹 사이트의 핀은 대중에게 감사하고 여전히 활성화 된 PPE 요청 사이트를 나타내는 근처 핀으로 리디렉션되는 메시지와 함께 회색으로 표시됩니다. 귀하의 삭제 요청을 기다리겠습니다. #findthemasks에 대한 우리의 목표는 필요하지 않습니다!",
   "ftm-faq-my-data" : "내 데이터는 어떻게 되나요? 제출 한 데이터는 누가 소유합니까?",
   "ftm-faq-my-data-answer-1" : "PPE 요청 양식을 작성할 때 귀하가 제공 한 정보를 수집합니다. PPE 수신자 사이트에 관한 정보는 누구나보고 사용할 수 있도록 공개 웹 사이트에 게시됩니다. 또한 공개하지 않은 전자 메일과 전화 번호를 요청하여 게시물을 정교화하거나 피드백을 요청하거나 공동 작업을 요청해야하는 경우 사용자에게 연락 할 수 있습니다. 당사는 귀하의 데이터를 처리하거나 공급 업체, 컨설턴트 또는 기타 타사 서비스 제공 업체와 개인 정보를 공유 할 수 있습니다.",
   "ftm-faq-my-data-answer-2" : "자세한 내용은 당사의 <a href=\"https://findthemasks.com/privacy-policy\"> 개인 정보 보호 정책 </a> 참조하십시오.",
   "ftm-faq-listing-not-shown" : "나는 목록을 제출하지만 hasn ' t는 아직 표시. 어떻게해야합니까?",
-  "ftm-faq-listing-not-shown-answer" : "4 시간이 채 걸리지 않으면 꽉 조이십시오! 때때로 요청이 급증하고 데이터 중재자가 백 로그를 통해 작업하고있을 수 있습니다. 12 시간을 초과 한 경우 <a href=\"mailto:contact@findthemasks.com\"> contact@findthemasks.com으로 이메일을 보내십시오 </a> ."
+  "ftm-faq-listing-not-shown-answer" : "4 시간이 채 걸리지 않으면 꽉 조이십시오! 때때로 요청이 급증하고 데이터 중재자가 백 로그를 통해 작업하고있을 수 있습니다. 12 시간을 초과 한 경우 <a href=\"mailto:contact@findthemasks.com\"> contact@findthemasks.com으로 이메일을 보내십시오 </a> .",
+  "ftm-makers-og-title" : "#findthemasks-메이커 맵",
+  "ftm-makers-og-description" : "메이커 스페이스가 해당 지역의 개인 보호 장비 (PPE)를 만드는 곳을 찾으십시오.",
+  "ftm-makers-cta" : "PPE를 만들어 그것을 필요로하는 사람들의 손에 넣으십시오!",
+  "ftm-makers-near-me" : "가까운 메이커 스페이스를 검색하십시오. 그들은 당신이 일 배포하는 데 도움이 ' 만든 적이 또는 당신이 필요로하는 물품을 찾을 수 있습니다."
 }
