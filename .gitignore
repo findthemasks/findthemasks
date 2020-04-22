@@ -43,6 +43,9 @@ bower_components
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
 
+# The generated webpack files.
+public/generated
+
 # Dependency directories
 node_modules/
 
