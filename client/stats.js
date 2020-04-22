@@ -1,10 +1,23 @@
 import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
-import {getCountry} from './getCountry.js';
+import { getCountry } from './getCountry.js';
+
+const currentCountry = getCountry();
+
+const renderStats = (totalCount, totalCities, stateCounts) => {
+  const statsHtml = [];
+
+  statsHtml.push(`<p><strong>${$.i18n('ftm-total-donation-sites-count')}</strong> ${totalCount}</p>`);
+  statsHtml.push(`<p><strong>${$.i18n('ftm-total-donation-sites-cities-count')}</strong> ${totalCities}</p>`);
+  statsHtml.push(`<p><strong>${$.i18n('ftm-administrative-region-donation-sites', $.i18n(countries[currentCountry].administrativeRegionI18nString))}</strong></p>`);
+  for (const state of Object.keys(stateCounts)) {
+    statsHtml.push(`<div>${state}: ${stateCounts[state]}</div>`);
+  }
+
+  $('.stats-container').html(statsHtml);
+};
 
 document.addEventListener("DOMContentLoaded", () => {
-  const currentCountry = getCountry();
-
   const url = new URL(window.location);
   const directories = url.pathname.split("/");
 
@@ -37,15 +50,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    const statsHtml = [];
-
-    statsHtml.push(`<p><strong>${$.i18n('ftm-total-donation-sites-count')}</strong> ${totalCount}</p>`);
-    statsHtml.push(`<p><strong>${$.i18n('ftm-total-donation-sites-cities-count')}</strong> ${totalCities}</p>`);
-    statsHtml.push(`<p><strong>${$.i18n('ftm-administrative-region-donation-sites', $.i18n(countries[currentCountry].administrativeRegionI18nString))}</strong></p>`);
-    for (const state of Object.keys(stateCounts)) {
-      statsHtml.push(`<div>${state}: ${stateCounts[state]}</div>`);
+    if (window.i18nReady) {
+      renderStats(totalCount, totalCities, stateCounts);
+    } else {
+      $('html').on('i18n:ready', () => {
+        renderStats(totalCount, totalCities, stateCounts);
+      });
     }
-
-    $('.stats-container').html(statsHtml);
   });
 });
