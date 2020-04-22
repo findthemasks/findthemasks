@@ -421,7 +421,8 @@ h3.city {
   font-size: 0.9rem;
 }
 
-.navbar.ftm .nav-item {
+.navbar.ftm .navbar-brand,
+.navbar.ftm .add-donation-site-form {
   display: flex;
   min-height: 100%;
   align-items: center;
@@ -434,6 +435,11 @@ h3.city {
   font-weight: 700;
   padding: 0;
   text-transform: uppercase;
+  height: 54px;
+}
+
+.navbar.ftm .navbar-toggler {
+  border: 0;
 }
 
 .navbar.ftm .navbar-brand .icon {
@@ -493,13 +499,16 @@ h3.city {
   white-space: nowrap;
   font-weight: 600;
   margin-left: 1rem;
+  padding-left: 1rem;
+  padding-right: 1.4rem;
 }
 
 .navbar.ftm .btn-addplace:hover {
   background: #F84E7C;
 }
 
-.navbar.ftm .btn-addplace .icon, .icon-requester-pin.icon {
+.navbar.ftm .btn-addplace .icon,
+.icon-requester-pin.icon {
   display: inline-block;
   vertical-align: middle;
   height: 18px;
@@ -507,6 +516,8 @@ h3.city {
   margin-right: 6px;
   position: relative;
   top: -2px;
+  background-size: contain;
+  background-position: center;
 }
 
 #countries-dropdown .icon,
@@ -538,6 +549,32 @@ h3.city {
   }
   .map-search-wrap {
     padding-top: 4px;
+  }
+
+  .navbar.ftm {
+    padding: 0;
+  }
+
+  .navbar.ftm .navbar-brand {
+    margin-left: .5rem;
+  }
+
+  .navbar.ftm .navbar-nav .nav-link {
+    text-align: center;
+    padding: .75rem;
+  }
+
+  .navbar.ftm .dropdown-item {
+    text-align: center;
+  }
+
+  .navbar.ftm .add-donation-site-form {
+    padding: 0 1rem .5rem 1rem;
+  }
+
+  .navbar.ftm .btn-addplace {
+    width: 100%;
+    margin: 0;
   }
 }
 
