@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const expressHandlebars = require('express-handlebars');
 const setCurrentCountry = require('./middleware/setCurrentCountry.js');
 const setBananaI18n = require('./middleware/setBananaI18n.js');
@@ -56,7 +57,6 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static('public'));
-router.use(express.static('public'));
 
 router.get(['/', '/index.html'], (req, res) => {
   res.render('index', {
@@ -130,6 +130,16 @@ router.get('/volunteer', (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     version: herokuVersion
+  });
+});
+
+router.get('/blog/2020-04-21-data-insights', (req, res) => {
+  res.render('blog/2020_04_21_data_insights', {
+    layout: 'static',
+    title: 'Insights from FindTheMasks-US Data',
+    ogTitle: 'Insights from FindTheMasks-US Data',
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: res.locals.banana.i18n('ftm-default-og-description')
   });
 });
 

@@ -565,13 +565,13 @@ function initMap(data, filters) {
   map = new google.maps.Map(element);
   secondaryCluster = new MarkerClusterer(map, [], {
     clusterClass: 'secondarycluster',
-    imagePath: 'images/markercluster/m',
+    imagePath: '/images/markercluster/m',
     minimumClusterSize: 5,
     zIndex: 1,
   });
   primaryCluster = new MarkerClusterer(map, [],
     {
-      imagePath: 'images/markercluster/m',
+      imagePath: '/images/markercluster/m',
       minimumClusterSize: 5,
       zIndex: 2
     });

@@ -73,7 +73,11 @@
       const url = new URL(window.location);
       const directories = url.pathname.split("/");
       if (directories.length > 2) {
-        return directories[1];
+        const potentialCountry = directories[1].toLowerCase();
+
+        if (DONATION_FORMS_BY_COUNTRY[potentialCountry]) {
+          return potentialCountry;
+        }
       }
 
       return 'us';
