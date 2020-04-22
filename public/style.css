@@ -6,13 +6,14 @@ html {
 body {
   background: #fff;
   box-sizing: border-box;
-  color: #222;
+  color: #333;
   font: normal normal normal 1rem/1.65 'Open Sans', 'Helvetica', sans-serif;
   height: 100%;
   margin: 0;
   padding: 0;
   text-rendering: optimizeLegibility;
   font-size: 14px;
+  line-height: 1.55;
 }
 
 h1, h2, h3, h4, h5 {
@@ -34,6 +35,7 @@ a {
 
 .text-pink {
   color: #EC416F;
+  font-weight: 600;
 }
 
 .bg-dark-blue {
@@ -66,6 +68,20 @@ a {
 
 .search-filter-container p {
   font-size: 16px;
+}
+
+.search-filter-container .input-group-text {
+  padding-right: .7rem !important;
+}
+
+.search-filter-container .form-control {
+  height: auto;
+  font-size: 14px;
+}
+
+/* even out the spacing between filters... */
+.filters-container > *:first-child {
+  padding-right: 0 !important;
 }
 
 .logo {
@@ -204,12 +220,34 @@ h3.city {
   text-transform: uppercase;
 }
 
+.locations-container {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 .locations-list-header {
+  padding: 0 !important;
+  margin: 0 !important;
   border-bottom: 1px solid #D4D4D4;
+}
+
+.locations-list-header > * {
+  padding: 1rem 2rem;
+  white-space: 
+}
+
+.locations-list-header #list-stats {
+  font-size: 16px;
+  font-weight: 600;
 }
 
 .location {
   border-bottom: 1px solid #D4D4D4;
+  padding: 1.5rem 2rem !important;
+}
+
+.location .font-weight-bold {
+  font-weight: 600 !important;
 }
 
 .donation-sites h1 {
@@ -514,9 +552,29 @@ h3.city {
   h2.state {
     padding: 4px 10px;
   }
-  h3.city,
-  .location {
+  h3.city {
     margin-left: 10px;
+  }
+
+  .search-filter-container .bg-dark-blue,
+  .locations-list-header > *,
+  .location
+   {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+
+  .search-filter-container .bg-dark-blue {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  .search-filter-container h4 {
+    font-size: 20px;
+  }
+
+  .search-filter-container p {
+    font-size: 15px;
   }
 }
 
@@ -579,3 +637,6 @@ h3.city {
   }
 }
 
+.selectr-selected {
+  border: none;
+}
