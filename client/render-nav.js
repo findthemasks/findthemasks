@@ -76,11 +76,11 @@ const generateTopNav = () => {
   }
 };
 
-$(function () {
+$(() => {
   const url = new URL(window.location);
 
   // this should happen after the translations load
-  $('html').on('i18n:ready', function () {
+  $('html').on('i18n:ready', () => {
     generateTopNav();
   });
 });

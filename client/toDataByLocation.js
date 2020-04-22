@@ -31,4 +31,4 @@ export default function toDataByLocation(data) {
   });
 
   return data_by_location;
-};
+}
