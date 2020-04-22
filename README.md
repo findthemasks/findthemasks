@@ -6,7 +6,7 @@ This repo hosts the code for findthemasks.com, which is also used to power the v
 
 ## New volunteer?
 
-Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp-p8~9oKuXtV_gn7wEBZGGoA>
+Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-dtgs1qck-imUSOaWBZmBMFgnwy5uVqw>
 
 - new dev? please look at issues and comment on something to grab it!
     - Check out the [Getting Started](getting_started.md) doc
@@ -19,8 +19,8 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 
 ## Reading our data to build your own frontend
 
-- Our data file updates every five minutes and can be read from https://storage.googleapis.com/findthemasks.appspot.com/data.json.
-- If you read the json directly, you need to ignore entries without an 'x' in the first field. Otherwise, you may publish info hospitals asked to have taken down. Don't do it!
+- Our curated data file updates every five minutes and can be read from https://findthemasks.com/data-us.json . Each country that we serve has its own country code, i.e. data-ca.json for Canada, data-fr.json for France, etc. 
+- Similarly, we also offer CSV output at http://findthemasks.com/data-us.csv , with similar country-code modifications for each country.
 - If this sounds like too much work, then please use our:
 
 ## Embeddable widget of donation sites
