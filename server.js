@@ -48,7 +48,7 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  if(process.env.NODE_ENV === "produce") {
+  if(process.env.NODE_ENV === "production") {
     res.set('Cache-Control', 'public, max-age=300');
   } else {
     res.set('Cache-Control', 'no-cache');
