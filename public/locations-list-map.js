@@ -800,6 +800,18 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
     for (const cityName of Object.keys(cities)) {
       const city = cities[cityName];
 
+      // Handle multiple entries at the same address. Example: 800 Commissioners Rd E London, ON N6A 5W9
+      const entriesByAddress = city.entries.reduce((acc, curr) => {
+        const latlong = `${curr.lat} ${curr.lng}`;
+        if (latlong in acc) {
+          console.log(`double at ${latlong}`)
+          acc[latlong].push(curr);
+        } else {
+          acc[latlong] = [curr];
+        }
+        return acc;
+      }, {})
+
       for (const entry of city.entries) {
         // filter out if not in state and state filter is applied
         // filter out if not in accept and accept filter is not applied
@@ -846,6 +858,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
 
           // Guard against non-geocoded entries. Assuming no location exactly on the equator or prime meridian
           if (lat && lng) {
+            const otherRequesters = entriesByAddress[`${lat} ${lng}`].filter(e => e.name !== entry.name);
             marker = entry.marker = createMarker(
               lat,
               lng,
@@ -855,7 +868,8 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
               entry.instructions,
               entry.accepting,
               entry.open_box,
-              markerOptions
+              markerOptions,
+              otherRequesters
             );
           }
         }
@@ -1030,12 +1044,25 @@ const translateEnumList = (enumListString) => {
   return enumListString;
 };
 
-function createMarker(latitude, longitude, orgType, address, name, instructions, accepting, open_accepted, markerOptions) {
+function createMapLink(address) {
+  // setup google maps link
+  const mapLinkEl = ce('a', 'map-link');
+  const oneLineAddress = getOneLineAddress(address);
+  mapLinkEl.href = googleMapsUri(oneLineAddress);
+  mapLinkEl.target = '_blank';
+  mapLinkEl.addEventListener('click', () => {
+    sendEvent('map', 'clickAddress', oneLineAddress);
+  });
+  mapLinkEl.appendChild(ctn(oneLineAddress));
+  return mapLinkEl;
+}
+
+function createMarker(latitude, longitude, orgType, address, name, instructions, accepting, open_accepted, markerOptions, otherRequesters) {
   const location = { lat: latitude, lng: longitude };
   const options = Object.assign({
-      position: location,
-      title: name
-    },
+    position: location,
+    title: name
+  },
     markerOptions || {}
   );
   const marker = new google.maps.Marker(options);
@@ -1048,17 +1075,6 @@ function createMarker(latitude, longitude, orgType, address, name, instructions,
 
     if (!marker.infowindow) {
       // Text to go into InfoWindow
-
-      // setup google maps link
-      const mapLinkEl = ce('a','map-link');
-      const oneLineAddress = getOneLineAddress(address);
-      mapLinkEl.href = googleMapsUri(oneLineAddress);
-      mapLinkEl.target = '_blank';
-      mapLinkEl.addEventListener('click', () => {
-        sendEvent('map', 'clickAddress', oneLineAddress);
-      });
-      mapLinkEl.appendChild(ctn(oneLineAddress));
-
       const contentTags = [ce('h5', null, ctn(name))];
 
       if (orgType && orgType.length) {
@@ -1070,7 +1086,7 @@ function createMarker(latitude, longitude, orgType, address, name, instructions,
 
       contentTags.push(
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
-        ce('div', 'value', mapLinkEl),
+        ce('div', 'value', createMapLink(address)),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
         linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))),
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
@@ -1078,6 +1094,29 @@ function createMarker(latitude, longitude, orgType, address, name, instructions,
         ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
         ce('div', 'value', ctn(translateEnumValue(open_accepted)))
       );
+
+      if (otherRequesters && otherRequesters.length > 0) {
+        otherRequesters.forEach(e => {
+          contentTags.push(ce('h5', 'separator', ctn(e.name)));
+          if (e.org_type && e.org_type.length) {
+            contentTags.push(
+              ce('div', 'label', ctn($.i18n('ftm-maps-marker-org-type-label'))),
+              ce('div', 'value', ctn(translateEnumValue(e.org_type)))
+            );
+          }
+
+          contentTags.push(
+            ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
+            ce('div', 'value', createMapLink(e.address)),
+            ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
+            linkifyElement(ce('div', 'value', multilineStringToNodes(e.instructions))),
+            ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
+            ce('div', 'value', ctn(translateEnumList(e.accepting))),
+            ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
+            ce('div', 'value', ctn(translateEnumValue(e.open_box)))
+          );
+        })
+      }
 
       const content = ce('div', null, contentTags);
 
