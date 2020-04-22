@@ -6,7 +6,10 @@
         "chrome": "60",
         "ie": "11"
       },
-      "modules" : false
+      "modules" : false,
+      "useBuiltIns": "usage",
+      "corejs": 3,
+      "shippedProposals": true
     }]
   ]
 }
