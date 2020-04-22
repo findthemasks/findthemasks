@@ -10,7 +10,7 @@ require('./i18n.js')
 require('./polyfills.js')
 
 // Allow for hot-reloading of CSS in development.
-require ('../sass/style.css')
+require('../sass/style.css')
 
 /******************************************
  * MODULE VARS AVAILABLE TO ALL FUNCTIONS *
@@ -241,7 +241,7 @@ function multilineStringToNodes(input) {
     returnedNodes.push(e);
     returnedNodes.push(document.createElement('br'));
   });
-  return returnedNodes.slice(0,-1);
+  return returnedNodes.slice(0, -1);
 }
 
 // Return filtered data, sorted by location, in a flat list
@@ -264,7 +264,7 @@ function getFlatFilteredEntries(data, filters) {
       const city = cities[cityName];
 
       city.entries.sort((a, b) => {
-        return a.name.localeCompare( b.name );
+        return a.name.localeCompare(b.name);
       }).forEach((entry) => {
         if (filterAcceptKeys) {
           const acc = (entry.accepting || "").toLowerCase();
@@ -314,7 +314,7 @@ function getCountryDataFilename(country) {
   // Always use country-specific data.json file
   let countryDataFilename;
 
-  countryDataFilename = `data-${ country }.json`;
+  countryDataFilename = `data-${country}.json`;
   return countryDataFilename;
 }
 
@@ -410,7 +410,7 @@ $(() => {
   };
 
   $.getJSON(dataUrl, (result) => {
-    if(window.i18nReady) {
+    if (window.i18nReady) {
       renderListings(result);
     } else {
       $('html').on('i18n:ready', () => {
@@ -421,7 +421,7 @@ $(() => {
 
   const footerHeight = 40;  // small buffer near bottom of window
   $(window).scroll(() => {
-    if($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
+    if ($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
       renderNextListPage();
     }
   });
@@ -481,7 +481,7 @@ function getEntryEl(entry) {
       const link = ce('a', 'map-link');
       const $link = $(link);
       const address = getOneLineAddress(entry.address);
-      link.href =  googleMapsUri(address);
+      link.href = googleMapsUri(address);
       link.target = '_blank';
       $link.click(() => {
         sendEvent('listView', 'clickAddress', address);
@@ -686,15 +686,15 @@ function initMapSearch(data, filters) {
     let place = autocomplete.getPlace();
     if (place.geometry) {
       // Get the location object that we can map.setCenter() on
-      sendEvent("map","autocomplete", $search.val());
+      sendEvent("map", "autocomplete", $search.val());
       let viewport = place.geometry.viewport;
       if (viewport) {
         fitMapToMarkersNearBounds(viewport);
       } else {
-        sendEvent("map","autocomplete-fail", $search.val());
+        sendEvent("map", "autocomplete-fail", $search.val());
       }
     } else {
-      sendEvent("map","search", $search.val());
+      sendEvent("map", "search", $search.val());
       attemptGeocode($search.val());
     }
   });
@@ -702,7 +702,7 @@ function initMapSearch(data, filters) {
   // Setup event listeners for map action links.
   $('#use-location').on('click', (e) => {
     e.preventDefault();
-    sendEvent("map","center","user-location");
+    sendEvent("map", "center", "user-location");
     centerMapToMarkersNearUser();
   });
 
@@ -710,7 +710,7 @@ function initMapSearch(data, filters) {
     e.preventDefault();
     resetMap(data, filters);
     $search.val('');
-    sendEvent("map","reset","default-location");
+    sendEvent("map", "reset", "default-location");
   });
 }
 
@@ -723,7 +723,7 @@ function attemptGeocode(searchText) {
       let viewport = results[0].geometry.viewport;
       fitMapToMarkersNearBounds(viewport);
     } else {
-      sendEvent("map","geocode-fail", searchText);
+      sendEvent("map", "geocode-fail", searchText);
     }
   });
 }
@@ -786,7 +786,7 @@ function fitMapToMarkersNearBounds(bounds) {
 /**
  * Returns a list of markers sorted by distance from an arbitrary set of lat/lng coords.
  */
-function getMarkersByDistanceFrom(latitude, longitude, n=3) {
+function getMarkersByDistanceFrom(latitude, longitude, n = 3) {
   const latlng = new google.maps.LatLng(latitude, longitude);
 
   const markerDistances = new Map();
@@ -804,7 +804,7 @@ function getMarkersByDistanceFrom(latitude, longitude, n=3) {
   }
 
   // order markerDistances by key (distance)
-  let distances = [...markerDistances.keys()].sort((a,b) => a -b);
+  let distances = [...markerDistances.keys()].sort((a, b) => a - b);
   // return array of markers in order of distance ascending
   return distances.slice(0, n).map((distance) => markerDistances.get(distance));
 }
@@ -831,6 +831,17 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
 
     for (const cityName of Object.keys(cities)) {
       const city = cities[cityName];
+
+      // Handle multiple entries at the same address. Example: 800 Commissioners Rd E London, ON N6A 5W9
+      const entriesByAddress = city.entries.reduce((acc, curr) => {
+        const latlong = `${curr.lat} ${curr.lng}`;
+        if (latlong in acc) {
+          acc[latlong].push(curr);
+        } else {
+          acc[latlong] = [curr];
+        }
+        return acc;
+      }, {})
 
       for (const entry of city.entries) {
         // filter out if not in state and state filter is applied
@@ -878,6 +889,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
 
           // Guard against non-geocoded entries. Assuming no location exactly on the equator or prime meridian
           if (lat && lng) {
+            const otherRequesters = entriesByAddress[`${lat} ${lng}`].filter(e => e.name !== entry.name);
             marker = entry.marker = createMarker(
               lat,
               lng,
@@ -887,7 +899,8 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
               entry.instructions,
               entry.accepting,
               entry.open_box,
-              markerOptions
+              markerOptions,
+              otherRequesters
             );
           }
         }
@@ -916,7 +929,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
 /**
  * Changes the markers currently rendered on the map based strictly on . This will reset the 'markers' module variable as well.
  */
-function showMarkers(data, filters, recenterMap=true) {
+function showMarkers(data, filters, recenterMap = true) {
   if (!map || !primaryCluster) {
     return;
   }
@@ -977,18 +990,18 @@ function updateClusters(primaryCluster, secondaryCluster) {
 
 // Source for country center points: https://developers.google.com/public-data/docs/canonical/countries_csv
 const MAP_INITIAL_VIEW = {
-  at: { zoom: 6, center: { lat:47.716231, lng:	13.90072 }},
-  ca: { zoom: 4, center: { lat: 57.130366, lng: -99.346771 }},
-  ch: { zoom: 7, center: { lat: 46.818188, lng: 8.227512 }},
-  de: { zoom: 5, center: { lat: 51.165691, lng: 10.451526 }},
-  es: { zoom: 5, center: { lat: 40.163667, lng:	-3.74922 }},
-  fr: { zoom: 5, center: { lat: 46.227638, lng: 2.213749 }},
-  gb: { zoom: 5, center: { lat: 55.378051, lng: -3.435973 }},
-  in: { zoom: 5, center: { lat: 20.593684, lng: 78.96288 }},
-  it: { zoom: 5, center: { lat: 41.87194, lng: 12.56738 }},
-  pl: { zoom: 5, center: { lat: 51.919438, lng: 19.145136 }},
-  pt: { zoom: 6, center: { lat: 39.399872, lng: -8.224454 }},
-  us: { zoom: 4, center: { lat: 37.09024, lng: -95.712891 }},
+  at: { zoom: 6, center: { lat: 47.716231, lng: 13.90072 } },
+  ca: { zoom: 4, center: { lat: 57.130366, lng: -99.346771 } },
+  ch: { zoom: 7, center: { lat: 46.818188, lng: 8.227512 } },
+  de: { zoom: 5, center: { lat: 51.165691, lng: 10.451526 } },
+  es: { zoom: 5, center: { lat: 40.163667, lng: -3.74922 } },
+  fr: { zoom: 5, center: { lat: 46.227638, lng: 2.213749 } },
+  gb: { zoom: 5, center: { lat: 55.378051, lng: -3.435973 } },
+  in: { zoom: 5, center: { lat: 20.593684, lng: 78.96288 } },
+  it: { zoom: 5, center: { lat: 41.87194, lng: 12.56738 } },
+  pl: { zoom: 5, center: { lat: 51.919438, lng: 19.145136 } },
+  pt: { zoom: 6, center: { lat: 39.399872, lng: -8.224454 } },
+  us: { zoom: 4, center: { lat: 37.09024, lng: -95.712891 } },
 };
 
 function getMapInitialView() {
@@ -1000,12 +1013,12 @@ function getMapInitialView() {
   if (coords) {
     const latlng = coords.split(',').map(coord => parseFloat(coord));
     if ( // validate lat lng
-        latlng.length === 2 &&
-        latlng[0] >= -85 &&
-        latlng[0] <= 85 &&
-        latlng[1] >= -180 &&
-        latlng[1] <= 180
-      ) {
+      latlng.length === 2 &&
+      latlng[0] >= -85 &&
+      latlng[0] <= 85 &&
+      latlng[1] >= -180 &&
+      latlng[1] <= 180
+    ) {
       return {
         zoom: zoom,
         center: {
@@ -1060,12 +1073,63 @@ const translateEnumList = (enumListString) => {
   return enumListString;
 };
 
-function createMarker(latitude, longitude, orgType, address, name, instructions, accepting, open_accepted, markerOptions) {
+function createMapLink(address) {
+  // setup google maps link
+  const mapLinkEl = ce('a', 'map-link');
+  const oneLineAddress = getOneLineAddress(address);
+  mapLinkEl.href = googleMapsUri(oneLineAddress);
+  mapLinkEl.target = '_blank';
+  mapLinkEl.addEventListener('click', () => {
+    sendEvent('map', 'clickAddress', oneLineAddress);
+  });
+  mapLinkEl.appendChild(ctn(oneLineAddress));
+  return mapLinkEl;
+}
+
+function addMarkerContent(orgType, address, name, instructions, accepting, open_accepted, separator) {
+  // Text to go into InfoWindow
+  const contentTags = separator ? [ce('h5', 'separator', ctn(name))] : [ce('h5', null, ctn(name))]
+
+  if (orgType && orgType.length) {
+    contentTags.push(
+      ce('div', 'label', ctn($.i18n('ftm-maps-marker-org-type-label'))),
+      ce('div', 'value', ctn(translateEnumValue(orgType)))
+    );
+  }
+
+  if (address) {
+    contentTags.push(
+      ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
+      ce('div', 'value', createMapLink(address)));
+  }
+
+  if (instructions) {
+    contentTags.push(
+      ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
+      linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))));
+  }
+
+  if (accepting) {
+    contentTags.push(
+      ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
+      ce('div', 'value', ctn(translateEnumList(accepting))));
+  }
+
+  if (open_accepted) {
+    contentTags.push(
+      ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
+      ce('div', 'value', ctn(translateEnumValue(open_accepted))));
+  }
+
+  return contentTags;
+}
+
+function createMarker(latitude, longitude, orgType, address, name, instructions, accepting, open_accepted, markerOptions, otherRequesters) {
   const location = { lat: latitude, lng: longitude };
   const options = Object.assign({
-      position: location,
-      title: name
-    },
+    position: location,
+    title: name
+  },
     markerOptions || {}
   );
   const marker = new google.maps.Marker(options);
@@ -1077,49 +1141,13 @@ function createMarker(latitude, longitude, orgType, address, name, instructions,
     openInfoWindows = [];
 
     if (!marker.infowindow) {
-      // Text to go into InfoWindow
+      const contentTags = [];
+      contentTags.push(...addMarkerContent(orgType, address, name, instructions, accepting, open_accepted, false));
 
-      const contentTags = [ce('h5', null, ctn(name))];
-
-      if (orgType && orgType.length) {
-        contentTags.push(
-          ce('div', 'label', ctn($.i18n('ftm-maps-marker-org-type-label'))),
-          ce('div', 'value', ctn(translateEnumValue(orgType)))
-        );
-      }
-
-      if (address) {
-        // setup google maps link
-        const mapLinkEl = ce('a','map-link');
-        const oneLineAddress = getOneLineAddress(address);
-        mapLinkEl.href = googleMapsUri(oneLineAddress);
-        mapLinkEl.target = '_blank';
-        mapLinkEl.addEventListener('click', () => {
-          sendEvent('map', 'clickAddress', oneLineAddress);
-        });
-        mapLinkEl.appendChild(ctn(oneLineAddress));
-
-        contentTags.push(
-          ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
-          ce('div', 'value', mapLinkEl));
-      }
-
-      if (instructions) {
-        contentTags.push(
-          ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
-          linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))));
-      }
-
-      if (accepting) {
-        contentTags.push(
-          ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
-          ce('div', 'value', ctn(translateEnumList(accepting))));
-      }
-
-      if (open_accepted) {
-        contentTags.push(
-          ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
-          ce('div', 'value', ctn(translateEnumValue(open_accepted))));
+      if (otherRequesters && otherRequesters.length > 0) {
+        otherRequesters.forEach(e => {
+          contentTags.push(...addMarkerContent(e.org_type, e.address, e.name, e.instructions, e.accepting, e.open_box, true));
+        })
       }
 
       const content = ce('div', null, contentTags);
