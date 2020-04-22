@@ -1,7 +1,7 @@
 import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
 import { FILTER_ITEMS, ORG_TYPES, ENUM_MAPPINGS } from './formEnumLookups.js';
-import { getCountry } from './getCountry.js';
+import { getCountry, getFirstPathPart, isCountryPath } from './getCountry.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn } from './utils.js';
 import sendEvent from './sendEvent.js';
@@ -304,9 +304,9 @@ function getFlatFilteredEntries(data, filters) {
   return entries;
 }
 
-const getCountryDataUrl = (countryDataFilename) => {
-  return `https://findthemasks.com/${countryDataFilename}`
-};
+function getDataJsonUrl(filename) {
+  return `/${filename}`
+}
 
 function getCountryDataFilename(country) {
   // Always use country-specific data.json file
@@ -316,22 +316,28 @@ function getCountryDataFilename(country) {
   return countryDataFilename;
 }
 
+// Loads data file from url and assigns into object given by dataToStore
+function loadDataFile(url, dataToStore) {
+  $.getJSON(
+    url,
+    (result) => {
+      Object.assign(dataToStore, toDataByLocation(result));
+
+      // opacity value matches what's in css for the .secondarycluster class -
+      // can set a css class for the clusters, but not for individual pins.
+      otherMarkers.push(...getMarkers(dataToStore, {}, null, secondaryMarkerOptions).outOfFilters);
+      updateClusters(null, secondaryCluster);
+    }
+  );
+}
+
 function loadOtherCountries() {
   const countryCodes = Object.keys(countries);
 
   for (const code of countryCodes) {
     if (code !== currentCountry) {
-      $.getJSON(
-        getCountryDataUrl(getCountryDataFilename(code)),
-        (result) => {
-          const otherData = countryData[code] = toDataByLocation(result);
-
-          // opacity value matches what's in css for the .secondarycluster class -
-          // can set a css class for the clusters, but not for individual pins.
-          otherMarkers.push(...getMarkers(otherData, {}, null, secondaryMarkerOptions).outOfFilters);
-          updateClusters(null, secondaryCluster);
-        }
-      );
+      countryData[code] = {};
+      loadDataFile(getDataJsonUrl(getCountryDataFilename(code)), countryData[code]);
     }
   }
 }
@@ -339,8 +345,25 @@ function loadOtherCountries() {
 $(function () {
   const url = new URL(window.location);
 
+  // HACK: Assign into data via Object.assign() below to handle both
+  // country and maker data.
+  let data;
+  let dataUrl;
+  const firstPathPart = getFirstPathPart();
+  if (isCountryPath()) {
+    data = countryData[currentCountry] = {};
+    dataUrl = getDataJsonUrl(getCountryDataFilename(currentCountry));
+  } else if (firstPathPart === 'makers') {
+    data = {};
+    dataUrl = getDataJsonUrl('data-makers.json');
+  } else {
+    console.error("invalid path");
+    window.location.replace("/");
+    return;
+  }
+
   const renderListings = function (result) {
-    const data = countryData[currentCountry] = toDataByLocation(result);
+    Object.assign(data, toDataByLocation(result));
     const searchParams = new URLSearchParams(url.search);
     const showList = searchParams.get('hide-list') !== 'true';
     const showFilters = showList && searchParams.get('hide-filters') !== 'true';
@@ -385,11 +408,11 @@ $(function () {
     }
   };
 
-  $.getJSON(getCountryDataUrl(getCountryDataFilename(currentCountry)), function (result) {
+  $.getJSON(dataUrl, (result) => {
     if(window.i18nReady) {
       renderListings(result);
     } else {
-      $('html').on('i18n:ready', function() {
+      $('html').on('i18n:ready', () => {
         renderListings(result);
       });
     }
@@ -617,7 +640,9 @@ function initMap(data, filters) {
   // Initialize autosuggest/search field above the map.
   initMapSearch(data, filters);
 
-  loadOtherCountries();
+  if (isCountryPath()) {
+    loadOtherCountries();
+  }
 }
 
 /**********************************
@@ -1055,16 +1080,6 @@ function createMarker(latitude, longitude, orgType, address, name, instructions,
     if (!marker.infowindow) {
       // Text to go into InfoWindow
 
-      // setup google maps link
-      const mapLinkEl = ce('a','map-link');
-      const oneLineAddress = getOneLineAddress(address);
-      mapLinkEl.href = googleMapsUri(oneLineAddress);
-      mapLinkEl.target = '_blank';
-      mapLinkEl.addEventListener('click', () => {
-        sendEvent('map', 'clickAddress', oneLineAddress);
-      });
-      mapLinkEl.appendChild(ctn(oneLineAddress));
-
       const contentTags = [ce('h5', null, ctn(name))];
 
       if (orgType && orgType.length) {
@@ -1074,16 +1089,39 @@ function createMarker(latitude, longitude, orgType, address, name, instructions,
         );
       }
 
-      contentTags.push(
-        ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
-        ce('div', 'value', mapLinkEl),
-        ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
-        linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))),
-        ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
-        ce('div', 'value', ctn(translateEnumList(accepting))),
-        ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
-        ce('div', 'value', ctn(translateEnumValue(open_accepted)))
-      );
+      if (address) {
+        // setup google maps link
+        const mapLinkEl = ce('a','map-link');
+        const oneLineAddress = getOneLineAddress(address);
+        mapLinkEl.href = googleMapsUri(oneLineAddress);
+        mapLinkEl.target = '_blank';
+        mapLinkEl.addEventListener('click', () => {
+          sendEvent('map', 'clickAddress', oneLineAddress);
+        });
+        mapLinkEl.appendChild(ctn(oneLineAddress));
+
+        contentTags.push(
+          ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
+          ce('div', 'value', mapLinkEl));
+      }
+
+      if (instructions) {
+        contentTags.push(
+          ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
+          linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))));
+      }
+
+      if (accepting) {
+        contentTags.push(
+          ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
+          ce('div', 'value', ctn(translateEnumList(accepting))));
+      }
+
+      if (open_accepted) {
+        contentTags.push(
+          ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
+          ce('div', 'value', ctn(translateEnumValue(open_accepted))));
+      }
 
       const content = ce('div', null, contentTags);
 

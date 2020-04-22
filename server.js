@@ -98,6 +98,18 @@ router.get(['/give', '/give.html'], (req, res) => {
   });
 });
 
+router.get(['/makers'], (req, res) => {
+  res.render('makers', {
+    version: herokuVersion,
+    ogLocale:  formatFbLocale(res.locals.locale),
+    ogTitle: res.locals.banana.i18n('ftm-makers-og-title'),
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: res.locals.banana.i18n('ftm-makers-og-description'),
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    localizeContactInfo: localizeContactInfo(res.locals.currentCountry)
+  });
+});
+
 router.get('/privacy-policy', (req, res) => {
   res.render('privacy-policy', {
     version: herokuVersion,
