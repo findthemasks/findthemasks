@@ -20,7 +20,7 @@ const localesMap = {
 };
 
 const getConfigForLocale = (locale) => {
-  if (!!locale) {
+  if (locale) {
     if (localesMap[locale]) {
       return {
         locale: locale,
@@ -54,7 +54,7 @@ const determineLocaleConfig = (detectedLocale) => {
   return getConfigForLocale(localeParam);
 };
 
-$(function () {
+$(() => {
   const init = function () {
     // translate static elements and initialize translations
     // then, remove spinner and show page content

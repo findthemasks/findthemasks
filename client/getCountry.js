@@ -1,15 +1,27 @@
 import countries from './countries.js';
 
-// TODO(ajwong): This is copied into donation-form-bounce.handlebars. Careful.
-export function getCountry() {
+export function getFirstPathPart() {
   const url = new URL(window.location);
   const directories = url.pathname.split("/");
-  if (directories.length > 2) {
-    const potentialCountry = directories[1].toLowerCase();
+  if (directories.length >= 2) {
+    return directories[1];
+  }
 
-    if (countries[potentialCountry]) {
-      return potentialCountry;
-    }
+  return '';
+}
+
+export function isCountryPath() {
+  if (getFirstPathPart() === 'makers') {
+    return false;
+  }
+  return true;
+}
+
+// TODO(ajwong): This is copied into donation-form-bounce.handlebars. Careful.
+export function getCountry() {
+  const first_path_part = getFirstPathPart();
+  if (countries[first_path_part.toLowerCase()]) {
+    return first_path_part;
   }
 
   return 'us';

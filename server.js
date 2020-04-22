@@ -48,7 +48,7 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  if(process.env.NODE_ENV === "produce") {
+  if(process.env.NODE_ENV === "production") {
     res.set('Cache-Control', 'public, max-age=300');
   } else {
     res.set('Cache-Control', 'no-cache');
@@ -95,6 +95,18 @@ router.get(['/give', '/give.html'], (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
+  });
+});
+
+router.get(['/makers'], (req, res) => {
+  res.render('makers', {
+    version: herokuVersion,
+    ogLocale:  formatFbLocale(res.locals.locale),
+    ogTitle: res.locals.banana.i18n('ftm-makers-og-title'),
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: res.locals.banana.i18n('ftm-makers-og-description'),
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    localizeContactInfo: localizeContactInfo(res.locals.currentCountry)
   });
 });
 

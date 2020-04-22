@@ -2,7 +2,7 @@ import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
 import {getCountry} from './getCountry.js';
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", () => {
   const currentCountry = getCountry();
 
   const url = new URL(window.location);
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function() {
     countryDataFilename = 'data.json';
   }
 
-  $.getJSON(`https://findthemasks.com/${countryDataFilename}`, function(result){
+  $.getJSON(`https://findthemasks.com/${countryDataFilename}`, (result) => {
     const locations = toDataByLocation(result);
 
     let totalCount = 0;

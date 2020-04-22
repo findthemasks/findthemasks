@@ -4,4 +4,4 @@ export default function sendEvent(category, action, label) {
     'event_category': category,
     'event_label': label
   });
-};
+}
