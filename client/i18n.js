@@ -2,21 +2,21 @@ import { DEFAULT_LOCALE, getCurrentLocaleParam } from './i18nUtils.js';
 import internationalizeLinks from './internationalizeLinks.js';
 
 const localesMap = {
-  "en": "i18n/en.json",
-  "en-US": "i18n/en.json",
-  "fr": "i18n/fr-fr.json",
-  "fr-FR": "i18n/fr-fr.json",
-  "de": "i18n/de-de.json",
-  "de-DE": "i18n/de-de.json",
-  "it": "i18n/it-it.json",
-  "it-IT": "i18n/it-it.json",
-  "es": "i18n/es-es.json",
-  "es-ES": "i18n/es-es.json",
-  "pt": "i18n/pt-pt.json",
-  "pt-PT": "i18n/pt-pt.json",
-  "pl": "i18n/pl-pl.json",
-  "pl-PL": "i18n/pl-pl.json",
-  "zh-TW": "i18n/zh-tw.json"
+  "en": "/i18n/en.json",
+  "en-US": "/i18n/en.json",
+  "fr": "/i18n/fr-fr.json",
+  "fr-FR": "/i18n/fr-fr.json",
+  "de": "/i18n/de-de.json",
+  "de-DE": "/i18n/de-de.json",
+  "it": "/i18n/it-it.json",
+  "it-IT": "/i18n/it-it.json",
+  "es": "/i18n/es-es.json",
+  "es-ES": "/i18n/es-es.json",
+  "pt": "/i18n/pt-pt.json",
+  "pt-PT": "/i18n/pt-pt.json",
+  "pl": "/i18n/pl-pl.json",
+  "pl-PL": "/i18n/pl-pl.json",
+  "zh-TW": "/i18n/zh-tw.json"
 };
 
 const getConfigForLocale = (locale) => {

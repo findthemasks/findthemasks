@@ -1,0 +1,12 @@
+{
+  // Javascript settings.
+  "presets": [
+    ["@babel/preset-env", {
+      "targets": {
+        "chrome": "60",
+        "ie": "11"
+      },
+      "modules" : false
+    }]
+  ]
+}

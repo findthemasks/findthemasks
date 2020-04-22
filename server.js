@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const expressHandlebars = require('express-handlebars');
 const setCurrentCountry = require('./middleware/setCurrentCountry.js');
 const setBananaI18n = require('./middleware/setBananaI18n.js');
@@ -9,6 +10,7 @@ const formatFbLocale = require('./utils/formatFbLocale');
 require('dotenv').config();
 const https = require('https');
 const { createProxyMiddleware } = require('http-proxy-middleware');
+const herokuVersion = process.env.HEROKU_RELEASE_VERSION;
 
 const app = new express();
 const router = express.Router();
@@ -21,6 +23,18 @@ app.set('strict routing', true);
 
 app.use(setCurrentCountry);
 app.use(setBananaI18n);
+
+// Install the webpack-dev-middleware for all the hot-reload goodness in dev.
+if (process.env.NODE_ENV !== 'production') {
+  const webpack = require('webpack');
+  const middleware = require('webpack-dev-middleware');
+  const webpackConfig = require('./webpack-hot.config.js');
+  const compiler = webpack(webpackConfig);
+  app.use(middleware(compiler, {
+    publicPath: webpackConfig.output.publicPath
+  }));
+  app.use(require("webpack-hot-middleware")(compiler));
+}
 
 app.use((req, res, next) => {
   const schema = req.headers['x-forwarded-proto'];
@@ -43,10 +57,10 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static('public'));
-router.use(express.static('public'));
 
 router.get(['/', '/index.html'], (req, res) => {
   res.render('index', {
+    version: herokuVersion,
     ogLocale:  formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
@@ -62,18 +76,19 @@ router.get(['/donation-form-bounce', '/donation-form-bounce.html'], (req, res) =
 
 router.get('/faq', (req, res) => {
   res.render('faq', {
+    version: herokuVersion,
     layout: 'static',
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.currentCountry),
-
     maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.currentCountry)
   });
 });
 
 router.get(['/give', '/give.html'], (req, res) => {
   res.render('give', {
+    version: herokuVersion,
     layout: 'give',
     ogLocale:  formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-give-og-title'),
@@ -85,6 +100,7 @@ router.get(['/give', '/give.html'], (req, res) => {
 
 router.get('/privacy-policy', (req, res) => {
   res.render('privacy-policy', {
+    version: herokuVersion,
     layout: 'static',
     ogLocale:  formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-privacy-policy-og-title'),
@@ -94,17 +110,34 @@ router.get('/privacy-policy', (req, res) => {
 });
 
 router.get(['/request', '/request.html'], (req, res) => {
-  res.render('request', { layout: false });
+  res.render('request', {
+    layout: false,
+    version: herokuVersion
+  });
 });
 
 router.get(['/stats', '/stats.html'], (req, res) => {
-  res.render('stats', { layout: false });
+  res.render('stats', {
+    layout: false,
+    version: herokuVersion
+  });
 });
 
 router.get('/volunteer', (req, res) => {
   res.render('volunteer', {
     layout: 'static',
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
+    version: herokuVersion
+  });
+});
+
+router.get('/blog/2020-04-21-data-insights', (req, res) => {
+  res.render('blog/2020_04_21_data_insights', {
+    layout: 'static',
+    title: 'Insights from FindTheMasks-US Data',
+    ogTitle: 'Insights from FindTheMasks-US Data',
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description')
   });
@@ -117,6 +150,7 @@ router.get(['/whoweare', '/whoweare.html'], (req, res) => {
     ogTitle: res.locals.banana.i18n('ftm-about-us-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
+    version: herokuVersion
   });
 });
 
