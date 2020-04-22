@@ -38,14 +38,25 @@ a {
   color: white;
 }
 
+.search-header-container {
+  padding: 0;
+}
+
+.search-subheader {
+  margin-bottom: 0px;
+}
+
+.search-filter-container {
+  z-index: 1;
+  padding: 0;
+}
+
 @media screen and ( min-width: 992px ) and ( min-height: 768px )
 {
   .search-filter-container {
     position: -webkit-sticky; /* Safari */  
     position: sticky;
     top: 58px;
-    z-index: 1;
-    background: white;
   }
 }
 
