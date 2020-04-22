@@ -123,5 +123,11 @@
 
     // Warn against nested then() or catch() statements
     "promise/no-nesting": 1
+  },
+  "settings": {
+    "polyfills": [
+      "Object.assign",
+      "Object.entries"
+    ]
   }
 }

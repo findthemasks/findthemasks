@@ -6,7 +6,8 @@ import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
 
-require ('./i18n.js')
+require('./i18n.js')
+require('./polyfills.js')
 
 // Allow for hot-reloading of CSS in development.
 require ('../sass/style.css')

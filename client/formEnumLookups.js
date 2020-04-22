@@ -1,3 +1,5 @@
+require('./polyfills.js')
+
 export const FILTER_ITEMS = {
   'n95s': {
     name: 'ftm-accept-item-n95s'

@@ -1,11 +1,12 @@
 import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
-import {getCountry} from './getCountry.js';
+import { getCountry } from './getCountry.js';
+import { FtmUrl } from './utils.js';
 
 document.addEventListener("DOMContentLoaded", () => {
   const currentCountry = getCountry();
 
-  const url = new URL(window.location);
+  const url = new FtmUrl(window.location);
   const directories = url.pathname.split("/");
 
   let countryDataFilename;

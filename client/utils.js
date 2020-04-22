@@ -64,5 +64,5 @@ export class FtmUrl {
 
   toString() {
     return `${ this.protocol }//${ this.host }${ this.pathname }${ getSearch(this.searchparams) }${ this.hash }`;
-  };
-};
+  }
+}

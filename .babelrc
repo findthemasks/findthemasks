@@ -7,9 +7,7 @@
         "ie": "11"
       },
       "modules" : false,
-      "useBuiltIns": "usage",
-      "corejs": 3,
-      "shippedProposals": true
+      "useBuiltIns": false
     }]
   ]
 }
