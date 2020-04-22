@@ -24,3 +24,45 @@ export function ce(elementName, className, child) {
 export function ctn(text) {
   return document.createTextNode(text);
 }
+
+const getSearch = (params) => {
+  let searches = [];
+
+  for (const key of Object.keys(params)) {
+    searches.push(`${ key }=${ params[key] || '' }`);
+  }
+
+  if (searches.length > 0) {
+    return `?${ searches.join('&') }`;
+  }
+
+  return '';
+};
+
+export class FtmUrl {
+  constructor(url) {
+    const parser = document.createElement('a');
+    parser.href = url && url.toString() || '';
+
+    const qs = parser.search.replace(/^\?/, '').split('&');
+    const searchparams = {};
+
+    for (const q of qs) {
+      const pair = q.split('=');
+      searchparams[pair[0]] = pair[1];
+    }
+
+    this.protocol = parser.protocol;
+    this.host = parser.host;
+    //this.hostname = parser.hostname;
+    //this.port = parser.port;
+    this.pathname = parser.pathname;
+    //this.search = parser.search;
+    this.searchparams = searchparams;
+    this.hash = parser.hash;
+  }
+
+  toString() {
+    return `${ this.protocol }//${ this.host }${ this.pathname }${ getSearch(this.searchparams) }${ this.hash }`;
+  };
+};

@@ -3,12 +3,13 @@ import countries from './countries.js';
 import { FILTER_ITEMS, ORG_TYPES, ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getCountry, getFirstPathPart, isCountryPath } from './getCountry.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
-import { ac, ce, ctn } from './utils.js';
+import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
+
+require ('./i18n.js')
 
 // Allow for hot-reloading of CSS in development.
 require ('../sass/style.css')
-
 
 /******************************************
  * MODULE VARS AVAILABLE TO ALL FUNCTIONS *
@@ -343,7 +344,7 @@ function loadOtherCountries() {
 }
 
 $(() => {
-  const url = new URL(window.location);
+  const url = new FtmUrl(window.location);
 
   // HACK: Assign into data via Object.assign() below to handle both
   // country and maker data.
@@ -364,22 +365,21 @@ $(() => {
 
   const renderListings = function (result) {
     Object.assign(data, toDataByLocation(result));
-    const searchParams = new URLSearchParams(url.search);
-    const showList = searchParams.get('hide-list') !== 'true';
-    const showFilters = showList && searchParams.get('hide-filters') !== 'true';
-    const showMap = searchParams.get('hide-map') !== 'true';
+    const searchParams = url.searchparams;
+    const showList = searchParams['hide-list'] !== 'true';
+    const showFilters = showList && searchParams['hide-filters'] !== 'true';
+    const showMap = searchParams['hide-map'] !== 'true';
 
     const $map = $('#map');
     // Second, allow an override from ?hide-search=[bool].
-    if (searchParams.get('hide-search') !== null) {
-      showMapSearch = searchParams.get('hide-search') !== 'true';
+    if (searchParams['hide-search'] !== null) {
+      showMapSearch = searchParams['hide-search'] !== 'true';
     }
 
     const filters = createFilters(data);
 
     // Update filters to match any ?state= params
-    const stateParams = searchParams.getAll('state').map(state => state.toUpperCase());
-    const states = stateParams.map(param => param.split(',')).reduce((acc, val) => acc.concat(val), []);
+    const states = (searchParams['state'] || '').toUpperCase().split(',');
     states.forEach(stateName => {
       const stateFilter = filters.states[stateName];
       if (stateFilter) {
@@ -669,9 +669,8 @@ function initMapSearch(data, filters) {
   );
 
   // initialize map search with query param `q` if it's set
-  const url = new URL(window.location.href);
-  const searchParams = new URLSearchParams(url.search);
-  const q = searchParams.get('q');
+  const url = new FtmUrl(window.location.href);
+  const q = url.searchparams['q'];
   if (q) {
     $search.val(q);
     attemptGeocode(q);
@@ -992,12 +991,11 @@ const MAP_INITIAL_VIEW = {
 };
 
 function getMapInitialView() {
-  const url = new URL(window.location.href);
-  const searchParams = new URLSearchParams(url.search);
-  const coords = searchParams.get('coords');
+  const url = new FtmUrl(window.location.href);
+  const coords = url.searchparams['coords'];
   // default zoom is pretty tight because if you're passing latlng
   // you are probably trying to center on a pretty specific location
-  const zoom = parseFloat(searchParams.get('zoom')) || 11;
+  const zoom = parseFloat(url.searchparams['zoom']) || 11;
   if (coords) {
     const latlng = coords.split(',').map(coord => parseFloat(coord));
     if ( // validate lat lng
@@ -1016,10 +1014,9 @@ function getMapInitialView() {
       }
     }
   }
+
   return MAP_INITIAL_VIEW[getCountry()];
-
 }
-
 
 function centerMapToBounds(map, bounds, maxZoom) {
   if (bounds.isEmpty()) {
