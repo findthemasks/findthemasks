@@ -49,7 +49,9 @@ export class FtmUrl {
 
     for (const q of qs) {
       const pair = q.split('=');
-      searchparams[pair[0]] = pair[1];
+      if (pair.length > 1 && pair[0]) {
+        searchparams[pair[0]] = pair[1] || '';
+      }
     }
 
     this.protocol = parser.protocol;
