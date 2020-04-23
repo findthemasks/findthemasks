@@ -304,6 +304,12 @@ h3.city {
   height: 100%;
 }
 
+#map .separator {
+  margin: 10px 0 10px 0;
+  padding-top: 2px;
+  border-top: 1px solid darkgray;
+}
+
 #map .label {
   color: #999;
   font-size: 11px;
@@ -392,7 +398,7 @@ h3.city {
   opacity: 0.7;
   pointer-events: none; /* user clicks should fall through to input field instead */
   position: absolute;
-  top: 1; /* ... see height below... */
+  top: 1px; /* ... see height below... */
   width: 17px;
 }
 
@@ -672,6 +678,26 @@ h3.city {
     margin-top: 4px;
     margin-bottom: 10px;
   }
+}
+/****************
+Data-blog hackery
+****************/
+
+div.figure{width: 100%; margin-left: auto; margin-right:auto;}
+div.caption {
+    text-align: left;
+    font-style: italic;
+    margin: 0 auto;
+    max-width: 800px;
+    color: #666;
+}
+
+div.figure img {
+    width: 100%;
+    height: auto;
+    max-width: 800px;
+    margin: 1rem auto 0 auto;
+    display: block;
 }
 
 .selectr-selected {

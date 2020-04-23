@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const expressHandlebars = require('express-handlebars');
 const setCurrentCountry = require('./middleware/setCurrentCountry.js');
 const setBananaI18n = require('./middleware/setBananaI18n.js');
@@ -23,6 +24,18 @@ app.set('strict routing', true);
 app.use(setCurrentCountry);
 app.use(setBananaI18n);
 
+// Install the webpack-dev-middleware for all the hot-reload goodness in dev.
+if (process.env.NODE_ENV !== 'production') {
+  const webpack = require('webpack');
+  const middleware = require('webpack-dev-middleware');
+  const webpackConfig = require('./webpack-hot.config.js');
+  const compiler = webpack(webpackConfig);
+  app.use(middleware(compiler, {
+    publicPath: webpackConfig.output.publicPath
+  }));
+  app.use(require("webpack-hot-middleware")(compiler));
+}
+
 app.use((req, res, next) => {
   const schema = req.headers['x-forwarded-proto'];
   const host = req.headers.host.split(':')[0];
@@ -35,7 +48,7 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  if(process.env.NODE_ENV === "produce") {
+  if(process.env.NODE_ENV === "production") {
     res.set('Cache-Control', 'public, max-age=300');
   } else {
     res.set('Cache-Control', 'no-cache');
@@ -44,7 +57,6 @@ app.use((req, res, next) => {
 });
 
 app.use(express.static('public'));
-router.use(express.static('public'));
 
 router.get(['/', '/index.html'], (req, res) => {
   res.render('index', {
@@ -86,6 +98,18 @@ router.get(['/give', '/give.html'], (req, res) => {
   });
 });
 
+router.get(['/makers'], (req, res) => {
+  res.render('makers', {
+    version: herokuVersion,
+    ogLocale:  formatFbLocale(res.locals.locale),
+    ogTitle: res.locals.banana.i18n('ftm-makers-og-title'),
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: res.locals.banana.i18n('ftm-makers-og-description'),
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    localizeContactInfo: localizeContactInfo(res.locals.currentCountry)
+  });
+});
+
 router.get('/privacy-policy', (req, res) => {
   res.render('privacy-policy', {
     version: herokuVersion,
@@ -118,6 +142,16 @@ router.get('/volunteer', (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     version: herokuVersion
+  });
+});
+
+router.get('/blog/2020-04-21-data-insights', (req, res) => {
+  res.render('blog/2020_04_21_data_insights', {
+    layout: 'static',
+    title: 'Insights from FindTheMasks-US Data',
+    ogTitle: 'Insights from FindTheMasks-US Data',
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: res.locals.banana.i18n('ftm-default-og-description')
   });
 });
 
