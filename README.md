@@ -1,12 +1,12 @@
-# findthemasks.com (used by getusppe.org)
+# findthemasks.com 
 
-This repo hosts the code for findthemasks.com, which is also used to power the v1 backend of "give ppe" features on getusppe.org
+This repo hosts the code for findthemasks.com which also provides an embeddable map to other projects
 
 - Stats: <https://findthemasks.com/stats.html>
 
 ## New volunteer?
 
-Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp-p8~9oKuXtV_gn7wEBZGGoA>
+Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-dtgs1qck-imUSOaWBZmBMFgnwy5uVqw>
 
 - new dev? please look at issues and comment on something to grab it!
     - Check out the [Getting Started](getting_started.md) doc
@@ -19,13 +19,13 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 
 ## Reading our data to build your own frontend
 
-- Our data file updates every five minutes and can be read from https://storage.googleapis.com/findthemasks.appspot.com/data.json.
-- If you read the json directly, you need to ignore entries without an 'x' in the first field. Otherwise, you may publish info hospitals asked to have taken down. Don't do it!
-- If this sounds like too much work, then please use our:
+- Our data file updates every five minutes and can be read from https://findthemasks.com/data.json [US]
+- Alternatively, the same info is at: https://findthemasks.com/data-us.csv
+- If reading in data and producing web output sounds like a lot to do, please read on:
 
 ## Embeddable widget of donation sites
 
-- We have produced an embeddable version of our map, data and filters, without the call to action that's at the top of findthemasks.com. This was designed for getusppe.org on March 22, but can be reused by anyone.
+- We have produced an embeddable version of our map, data and filters
 - You can view it here: <https://findthemasks.com/give.html>
 - To embed into your site, use this html snippet:
 
