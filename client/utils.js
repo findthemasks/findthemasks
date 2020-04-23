@@ -26,14 +26,14 @@ export function ctn(text) {
 }
 
 const getSearch = (params) => {
-  let searches = [];
+  const searches = [];
 
   for (const key of Object.keys(params)) {
-    searches.push(`${ key }=${ params[key] || '' }`);
+    searches.push(`${key}=${params[key] || ''}`);
   }
 
   if (searches.length > 0) {
-    return `?${ searches.join('&') }`;
+    return `?${searches.join('&')}`;
   }
 
   return '';
@@ -56,15 +56,15 @@ export class FtmUrl {
 
     this.protocol = parser.protocol;
     this.host = parser.host;
-    //this.hostname = parser.hostname;
-    //this.port = parser.port;
+    // this.hostname = parser.hostname;
+    // this.port = parser.port;
     this.pathname = parser.pathname;
-    //this.search = parser.search;
+    // this.search = parser.search;
     this.searchparams = searchparams;
     this.hash = parser.hash;
   }
 
   toString() {
-    return `${ this.protocol }//${ this.host }${ this.pathname }${ getSearch(this.searchparams) }${ this.hash }`;
+    return `${this.protocol}//${this.host}${this.pathname}${getSearch(this.searchparams)}${this.hash}`;
   }
 }

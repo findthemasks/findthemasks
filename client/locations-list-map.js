@@ -3,24 +3,26 @@ import countries from './countries.js';
 import { FILTER_ITEMS, ORG_TYPES, ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getCountry, getFirstPathPart, isCountryPath } from './getCountry.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
-import { ac, ce, ctn, FtmUrl } from './utils.js';
+import {
+ ac, ce, ctn, FtmUrl 
+} from './utils.js';
 import sendEvent from './sendEvent.js';
 
-require('./i18n.js')
-require('./polyfills.js')
+require('./i18n.js');
+require('./polyfills.js');
 
 // Allow for hot-reloading of CSS in development.
-require('../sass/style.css')
+require('../sass/style.css');
 
-/******************************************
+/** ****************************************
  * MODULE VARS AVAILABLE TO ALL FUNCTIONS *
- ******************************************/
+ ***************************************** */
 
 // Master data object, indexed by country code
 const countryData = {};
 const currentCountry = getCountry();
 
-document.body.setAttribute("data-country", currentCountry);
+document.body.setAttribute('data-country', currentCountry);
 
 // Map, markers and map associated UI components are initialized in initMap().
 let autocomplete;
@@ -39,12 +41,12 @@ let secondaryCluster = null;
 
 const secondaryMarkerOptions = {
   icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Ccircle cx='4' cy='4' r='4' style='fill:red'/%3E%3C/svg%3E",
-  opacity: 0.4
+  opacity: 0.4,
 };
 
 const primaryMarkerOptions = {
   icon: null, // Use default
-  opacity: 1
+  opacity: 1,
 };
 
 // Configuration defined in query string. Initialized in jQuery DOM ready function.
@@ -57,9 +59,9 @@ let openInfoWindows = [];
 let locationsListEntries = [];
 let lastLocationRendered = -1;
 
-/*************************
+/** ***********************
  * END MODULE LEVEL VARS *
- *************************/
+ ************************ */
 
 // i18n must be loaded before filter items can be translated
 // config stores the i18n string and this function calls i18n with it
@@ -69,7 +71,7 @@ const translatedFilterItems = (filterItems) => {
   for (const [filterItemKey, filterItem] of Object.entries(filterItems)) {
     translated[filterItemKey] = {
       name: $.i18n(filterItem.name),
-      isSet: false
+      isSet: false,
     };
   }
 
@@ -90,14 +92,14 @@ const parseFiltersFromData = (data) => {
     Object.keys(data[state].cities).forEach((city) => {
       data[state].cities[city].entries.forEach((entry) => {
         // split on commas except if comma is in parentheses
-        entry.accepting.split(/, (?![^(]*\))/).map(a => a.trim()).forEach((i) => {
+        entry.accepting.split(/, (?![^(]*\))/).map((a) => a.trim()).forEach((i) => {
           const filterKey = i.toLowerCase();
           if (Object.prototype.hasOwnProperty.call(FILTER_ITEMS, filterKey) && !Object.prototype.hasOwnProperty.call(acceptedItems, filterKey)) {
-            acceptedItems[filterKey] = Object.assign(
-              {},
-              FILTER_ITEMS[filterKey],
-              { value: filterKey }
-            );
+            acceptedItems[filterKey] = {
+              
+              ...FILTER_ITEMS[filterKey],
+              value: filterKey
+            };
           }
         });
 
@@ -105,11 +107,11 @@ const parseFiltersFromData = (data) => {
           const orgTypeKey = entry.org_type.toLowerCase();
 
           if (Object.prototype.hasOwnProperty.call(ORG_TYPES, orgTypeKey) && !Object.prototype.hasOwnProperty.call(orgTypes, orgTypeKey)) {
-            orgTypes[orgTypeKey] = Object.assign(
-              {},
-              ORG_TYPES[orgTypeKey],
-              { value: orgTypeKey }
-            );
+            orgTypes[orgTypeKey] = {
+              
+              ...ORG_TYPES[orgTypeKey],
+              value: orgTypeKey
+            };
           }
         }
       });
@@ -117,8 +119,8 @@ const parseFiltersFromData = (data) => {
   });
 
   return {
-    acceptedItems: acceptedItems,
-    orgTypes: orgTypes
+    acceptedItems,
+    orgTypes
   };
 };
 
@@ -129,7 +131,7 @@ const parseFiltersFromData = (data) => {
 // If multiple categories have set values, the result is the intersection of those categories
 function createFilters(data) {
   const filters = {
-    states: {}
+    states: {},
   };
 
   for (const state of Object.keys(data)) {
@@ -179,7 +181,7 @@ function createFilterElements(data, filters) {
     acceptedItems.push({
       value: itemFilter.value,
       text: itemFilter.name,
-      selected: itemFilter.isSet
+      selected: itemFilter.isSet,
     });
   }
 
@@ -188,7 +190,7 @@ function createFilterElements(data, filters) {
     data: acceptedItems,
     multiple: true,
     searchable: false,
-    placeholder: $.i18n('ftm-ppe-needed')
+    placeholder: $.i18n('ftm-ppe-needed'),
   });
 
   ppeNeededSelect.on('selectr.select', (option) => {
@@ -207,7 +209,7 @@ function createFilterElements(data, filters) {
     facilityTypes.push({
       value: orgType.value,
       text: orgType.name,
-      selected: orgType.isSet
+      selected: orgType.isSet,
     });
   }
 
@@ -217,7 +219,7 @@ function createFilterElements(data, filters) {
       data: facilityTypes,
       multiple: true,
       searchable: false,
-      placeholder: $.i18n('ftm-facility-type')
+      placeholder: $.i18n('ftm-facility-type'),
     });
 
     facilityTypeSelect.on('selectr.select', (option) => {
@@ -236,7 +238,7 @@ function createFilterElements(data, filters) {
 // Turns a string with embedded \n characters into an Array of text nodes separated by <br>
 function multilineStringToNodes(input) {
   const textNodes = input.split('\n').map((s) => ctn(s));
-  let returnedNodes = [];
+  const returnedNodes = [];
   textNodes.forEach((e) => {
     returnedNodes.push(e);
     returnedNodes.push(document.createElement('br'));
@@ -259,23 +261,21 @@ function getFlatFilteredEntries(data, filters) {
     }
 
     const state = data[stateName];
-    const cities = state.cities;
+    const {cities} = state;
     for (const cityName of Object.keys(cities).sort()) {
       const city = cities[cityName];
 
-      city.entries.sort((a, b) => {
-        return a.name.localeCompare(b.name);
-      }).forEach((entry) => {
+      city.entries.sort((a, b) => a.name.localeCompare(b.name)).forEach((entry) => {
         if (filterAcceptKeys) {
-          const acc = (entry.accepting || "").toLowerCase();
-          if (!filterAcceptKeys.some(s => acc.includes(s))) {
+          const acc = (entry.accepting || '').toLowerCase();
+          if (!filterAcceptKeys.some((s) => acc.includes(s))) {
             return;
           }
         }
 
         if (filterOrgTypeKeys) {
-          const acc = (entry.org_type || "").toLowerCase();
-          if (!filterOrgTypeKeys.some(s => acc === s)) {
+          const acc = (entry.org_type || '').toLowerCase();
+          if (!filterOrgTypeKeys.some((s) => acc === s)) {
             return;
           }
         }
@@ -307,7 +307,7 @@ function getFlatFilteredEntries(data, filters) {
 }
 
 function getDataJsonUrl(filename) {
-  return `/${filename}`
+  return `/${filename}`;
 }
 
 function getCountryDataFilename(country) {
@@ -329,7 +329,7 @@ function loadDataFile(url, dataToStore) {
       // can set a css class for the clusters, but not for individual pins.
       otherMarkers.push(...getMarkers(dataToStore, {}, null, secondaryMarkerOptions).outOfFilters);
       updateClusters(null, secondaryCluster);
-    }
+    },
   );
 }
 
@@ -359,8 +359,8 @@ $(() => {
     data = {};
     dataUrl = getDataJsonUrl('data-makers.json');
   } else {
-    console.error("invalid path");
-    window.location.replace("/");
+    console.error('invalid path');
+    window.location.replace('/');
     return;
   }
 
@@ -380,8 +380,8 @@ $(() => {
     const filters = createFilters(data);
 
     // Update filters to match any ?state= params
-    const states = (searchParams['state'] || '').toUpperCase().split(',');
-    states.forEach(stateName => {
+    const states = (searchParams.state || '').toUpperCase().split(',');
+    states.forEach((stateName) => {
       const stateFilter = filters.states[stateName];
       if (stateFilter) {
         stateFilter.isSet = true;
@@ -402,7 +402,7 @@ $(() => {
 
       if (showFilters) {
         createFilterElements(data, filters);
-        $(".filters-container").show();
+        $('.filters-container').show();
       }
 
       refreshList(data, filters);
@@ -419,7 +419,7 @@ $(() => {
     }
   });
 
-  const footerHeight = 40;  // small buffer near bottom of window
+  const footerHeight = 40; // small buffer near bottom of window
   $(window).scroll(() => {
     if ($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
       renderNextListPage();
@@ -430,7 +430,7 @@ $(() => {
 function refreshList(data, filters) {
   locationsListEntries = getFlatFilteredEntries(data, filters);
   lastLocationRendered = -1;
-  $(".locations-list").empty();
+  $('.locations-list').empty();
   renderNextListPage();
 }
 
@@ -439,7 +439,7 @@ function renderNextListPage() {
     return; // all rendered
   }
 
-  const el = document.getElementsByClassName("locations-list")[0];
+  const el = document.getElementsByClassName('locations-list')[0];
   let renderLocation = lastLocationRendered + 1;
   const children = [];
 
@@ -453,7 +453,7 @@ function renderNextListPage() {
 }
 
 function getOneLineAddress(address) {
-  return address.trim().replace(/\n/g, ", ");
+  return address.trim().replace(/\n/g, ', ');
 }
 
 function googleMapsUri(address) {
@@ -470,7 +470,7 @@ function getEntryEl(entry) {
 
     if (entry.org_type && entry.org_type.length) {
       ac(headerOrgType, [
-        ce('p', null, ctn(translateEnumValue(entry.org_type)))
+        ce('p', null, ctn(translateEnumValue(entry.org_type))),
       ]);
     }
 
@@ -501,7 +501,7 @@ function getEntryEl(entry) {
 
       ac(ppeNeededContainer, [
         ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-ppe-needed'))),
-        ce('p', 'col-12 col-md-9', ctn(translateEnumList(entry.accepting)))
+        ce('p', 'col-12 col-md-9', ctn(translateEnumList(entry.accepting))),
       ]);
 
       ac(entry.domElem, ppeNeededContainer);
@@ -512,7 +512,7 @@ function getEntryEl(entry) {
 
       ac(openPackagesContainer, [
         ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-open-packages'))),
-        ce('p', 'col-12 col-md-9', ctn(translateEnumValue(entry.open_box)))
+        ce('p', 'col-12 col-md-9', ctn(translateEnumValue(entry.open_box))),
       ]);
 
       ac(entry.domElem, openPackagesContainer);
@@ -523,7 +523,7 @@ function getEntryEl(entry) {
 
       ac(instructionsContainer, [
         ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-instructions'))),
-        linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(entry.instructions)))
+        linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(entry.instructions))),
       ]);
 
       ac(entry.domElem, instructionsContainer);
@@ -584,7 +584,7 @@ function initMap(data, filters) {
     return;
   }
 
-  $(".map-container").show();
+  $('.map-container').show();
 
   map = new google.maps.Map(element);
   secondaryCluster = new MarkerClusterer(map, [], {
@@ -597,7 +597,7 @@ function initMap(data, filters) {
     {
       imagePath: '/images/markercluster/m',
       minimumClusterSize: 5,
-      zIndex: 2
+      zIndex: 2,
     });
 
   primaryCluster.addListener('click', (e) => {
@@ -621,8 +621,8 @@ function initMap(data, filters) {
 
       currentViewportCenter = {
         lat: currentLat,
-        lng: currentLng
-      }
+        lng: currentLng,
+      };
     }
   });
 
@@ -632,7 +632,7 @@ function initMap(data, filters) {
     const mapCenter = mapBounds.getCenter();
     currentViewportCenter = {
       lat: mapCenter.lat(),
-      lng: mapCenter.lng()
+      lng: mapCenter.lng(),
     };
   }
 
@@ -646,9 +646,9 @@ function initMap(data, filters) {
   }
 }
 
-/**********************************
+/** ********************************
  * BEGIN MAP SEARCH FUNCTIONALITY *
- **********************************/
+ ********************************* */
 
 /**
  * Responsible for initializing the search field and links below the search field (e.g. use location, reset map, etc).
@@ -661,17 +661,17 @@ function initMapSearch(data, filters) {
   }
 
   // Search element (jquery + html element for autocompleter)
-  const $search = $('#map-search'),
-    searchEl = $search[0];
+  const $search = $('#map-search');
+    const searchEl = $search[0];
 
   // Initialize the map search autocompleter.
   autocomplete = new google.maps.places.Autocomplete(
-    searchEl, { types: ['geocode'] }
+    searchEl, { types: ['geocode'] },
   );
 
   // initialize map search with query param `q` if it's set
   const url = new FtmUrl(window.location.href);
-  const q = url.searchparams['q'];
+  const q = url.searchparams.q;
   if (q) {
     $search.val(q);
     attemptGeocode(q);
@@ -683,18 +683,18 @@ function initMapSearch(data, filters) {
 
   // When the user selects an address from the drop-down, populate the address fields in the form.
   autocomplete.addListener('place_changed', () => {
-    let place = autocomplete.getPlace();
+    const place = autocomplete.getPlace();
     if (place.geometry) {
       // Get the location object that we can map.setCenter() on
-      sendEvent("map", "autocomplete", $search.val());
-      let viewport = place.geometry.viewport;
+      sendEvent('map', 'autocomplete', $search.val());
+      const {viewport} = place.geometry;
       if (viewport) {
         fitMapToMarkersNearBounds(viewport);
       } else {
-        sendEvent("map", "autocomplete-fail", $search.val());
+        sendEvent('map', 'autocomplete-fail', $search.val());
       }
     } else {
-      sendEvent("map", "search", $search.val());
+      sendEvent('map', 'search', $search.val());
       attemptGeocode($search.val());
     }
   });
@@ -702,7 +702,7 @@ function initMapSearch(data, filters) {
   // Setup event listeners for map action links.
   $('#use-location').on('click', (e) => {
     e.preventDefault();
-    sendEvent("map", "center", "user-location");
+    sendEvent('map', 'center', 'user-location');
     centerMapToMarkersNearUser();
   });
 
@@ -710,7 +710,7 @@ function initMapSearch(data, filters) {
     e.preventDefault();
     resetMap(data, filters);
     $search.val('');
-    sendEvent("map", "reset", "default-location");
+    sendEvent('map', 'reset', 'default-location');
   });
 }
 
@@ -720,10 +720,10 @@ function attemptGeocode(searchText) {
   geocoder.geocode({ address: searchText }, (results, status) => {
     // Ensure we got a valid response with an array of at least one result.
     if (status === 'OK' && Array.isArray(results) && results.length > 0) {
-      let viewport = results[0].geometry.viewport;
+      const {viewport} = results[0].geometry;
       fitMapToMarkersNearBounds(viewport);
     } else {
-      sendEvent("map", "geocode-fail", searchText);
+      sendEvent('map', 'geocode-fail', searchText);
     }
   });
 }
@@ -752,10 +752,9 @@ function centerMapToMarkersNearUser() {
       console.error(err);
       // Hide the "User my location" link since we know that will not work.
       $('#use-location').hide();
-
     }, {
       maximumAge: Infinity,
-      timeout: 10000
+      timeout: 10000,
     });
   }
 }
@@ -765,7 +764,7 @@ function centerMapToMarkersNearUser() {
  */
 function fitMapToMarkersNearBounds(bounds) {
   // get center of bounding box and use it to sort markers by distance
-  let center = bounds.getCenter();
+  const center = bounds.getCenter();
 
   const markersByDistance = getMarkersByDistanceFrom(center.lat(), center.lng(), 3);
 
@@ -797,21 +796,21 @@ function getMarkersByDistanceFrom(latitude, longitude, n = 3) {
     // HACK: In the unlikely event that the exact same distance is computed, add one meter to the distance to give it a unique distance
     // This could occur if a marker was added twice to the same location.
     if (markerDistances.has(distance)) {
-      distance = distance + 1;
+      distance += 1;
     }
 
     markerDistances.set(distance, marker);
   }
 
   // order markerDistances by key (distance)
-  let distances = [...markerDistances.keys()].sort((a, b) => a - b);
+  const distances = [...markerDistances.keys()].sort((a, b) => a - b);
   // return array of markers in order of distance ascending
   return distances.slice(0, n).map((distance) => markerDistances.get(distance));
 }
 
-/********************************
+/** ******************************
  * END MAP SEARCH FUNCTIONALITY *
- ********************************/
+ ******************************* */
 
 function getMarkers(data, appliedFilters, bounds, markerOptions) {
   const filterAcceptKeys = appliedFilters.acceptItems && Object.keys(appliedFilters.acceptItems);
@@ -827,7 +826,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
     const hasFilters = Boolean(filterAcceptKeys) || Boolean(filterOrgTypeKeys) || hasStateFilter;
 
     const state = data[stateName];
-    const cities = state.cities;
+    const {cities} = state;
 
     for (const cityName of Object.keys(cities)) {
       const city = cities[cityName];
@@ -841,7 +840,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
           acc[latlong] = [curr];
         }
         return acc;
-      }, {})
+      }, {});
 
       for (const entry of city.entries) {
         // filter out if not in state and state filter is applied
@@ -855,8 +854,8 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
 
         let inAcceptFilter = true;
         if (filterAcceptKeys) {
-          const acc = (entry.accepting || "").toLowerCase();
-          if (!filterAcceptKeys.some(s => acc.includes(s))) {
+          const acc = (entry.accepting || '').toLowerCase();
+          if (!filterAcceptKeys.some((s) => acc.includes(s))) {
             inAcceptFilter = false;
             secondaryFiltersApplied = true;
           }
@@ -865,7 +864,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
         let inOrgTypeFilter = true;
 
         if (filterOrgTypeKeys) {
-          const orgTypeKey = (entry.org_type || "").toLowerCase();
+          const orgTypeKey = (entry.org_type || '').toLowerCase();
           if (!filterOrgTypeKeys.includes(orgTypeKey)) {
             inOrgTypeFilter = false;
             secondaryFiltersApplied = true;
@@ -876,7 +875,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
         // state or secondary filter applied
         const filteredEntry = (hasStateFilter && !inStateFilter) || secondaryFiltersApplied;
 
-        let marker = entry.marker;
+        let {marker} = entry;
 
         if (marker) {
           if (!inSecondaryFilter) {
@@ -889,7 +888,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
 
           // Guard against non-geocoded entries. Assuming no location exactly on the equator or prime meridian
           if (lat && lng) {
-            const otherRequesters = entriesByAddress[`${lat} ${lng}`].filter(e => e.name !== entry.name);
+            const otherRequesters = entriesByAddress[`${lat} ${lng}`].filter((e) => e.name !== entry.name);
             marker = entry.marker = createMarker(
               lat,
               lng,
@@ -900,7 +899,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
               entry.accepting,
               entry.open_box,
               markerOptions,
-              otherRequesters
+              otherRequesters,
             );
           }
         }
@@ -922,7 +921,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
 
   return {
     inFilters: inFiltersMarkers,
-    outOfFilters: outOfFiltersMarkers
+    outOfFilters: outOfFiltersMarkers,
   };
 }
 
@@ -961,7 +960,7 @@ function showMarkers(data, filters, recenterMap = true) {
 
   updateClusters(primaryCluster, secondaryCluster);
 
-  let $mapStats = $('#map-stats');
+  const $mapStats = $('#map-stats');
   updateStats($mapStats, markers.inFilters.length + markers.outOfFilters.length);
 
   // HACK. On some browsers, the markercluster freaks out if it gets a bunch of new markers
@@ -1006,26 +1005,26 @@ const MAP_INITIAL_VIEW = {
 
 function getMapInitialView() {
   const url = new FtmUrl(window.location.href);
-  const coords = url.searchparams['coords'];
+  const coords = url.searchparams.coords;
   // default zoom is pretty tight because if you're passing latlng
   // you are probably trying to center on a pretty specific location
-  const zoom = parseFloat(url.searchparams['zoom']) || 11;
+  const zoom = parseFloat(url.searchparams.zoom) || 11;
   if (coords) {
-    const latlng = coords.split(',').map(coord => parseFloat(coord));
+    const latlng = coords.split(',').map((coord) => parseFloat(coord));
     if ( // validate lat lng
-      latlng.length === 2 &&
-      latlng[0] >= -85 &&
-      latlng[0] <= 85 &&
-      latlng[1] >= -180 &&
-      latlng[1] <= 180
+      latlng.length === 2
+      && latlng[0] >= -85
+      && latlng[0] <= 85
+      && latlng[1] >= -180
+      && latlng[1] <= 180
     ) {
       return {
-        zoom: zoom,
+        zoom,
         center: {
           lat: latlng[0],
-          lng: latlng[1]
-        }
-      }
+          lng: latlng[1],
+        },
+      };
     }
   }
 
@@ -1067,7 +1066,7 @@ const translateEnumList = (enumListString) => {
     // split on commas, unless the comma is in a parenthesis
     return enumListString.split(/, (?![^(]*\))/).map((stringValue) => (
       translateEnumValue(stringValue && stringValue.trim())
-    )).join(', ')
+    )).join(', ');
   }
 
   return enumListString;
@@ -1088,37 +1087,41 @@ function createMapLink(address) {
 
 function addMarkerContent(orgType, address, name, instructions, accepting, open_accepted, separator) {
   // Text to go into InfoWindow
-  const contentTags = separator ? [ce('h5', 'separator', ctn(name))] : [ce('h5', null, ctn(name))]
+  const contentTags = separator ? [ce('h5', 'separator', ctn(name))] : [ce('h5', null, ctn(name))];
 
   if (orgType && orgType.length) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-org-type-label'))),
-      ce('div', 'value', ctn(translateEnumValue(orgType)))
+      ce('div', 'value', ctn(translateEnumValue(orgType))),
     );
   }
 
   if (address) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
-      ce('div', 'value', createMapLink(address)));
+      ce('div', 'value', createMapLink(address))
+);
   }
 
   if (instructions) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
-      linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))));
+      linkifyElement(ce('div', 'value', multilineStringToNodes(instructions)))
+);
   }
 
   if (accepting) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
-      ce('div', 'value', ctn(translateEnumList(accepting))));
+      ce('div', 'value', ctn(translateEnumList(accepting)))
+);
   }
 
   if (open_accepted) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
-      ce('div', 'value', ctn(translateEnumValue(open_accepted))));
+      ce('div', 'value', ctn(translateEnumValue(open_accepted)))
+);
   }
 
   return contentTags;
@@ -1126,18 +1129,16 @@ function addMarkerContent(orgType, address, name, instructions, accepting, open_
 
 function createMarker(latitude, longitude, orgType, address, name, instructions, accepting, open_accepted, markerOptions, otherRequesters) {
   const location = { lat: latitude, lng: longitude };
-  const options = Object.assign({
-    position: location,
-    title: name
-  },
-    markerOptions || {}
-  );
+  const options = {position: location,
+    title: name,
+    ...markerOptions || {}
+  };
   const marker = new google.maps.Marker(options);
 
   marker.addListener('click', () => {
     sendEvent('map', 'click', 'marker');
 
-    openInfoWindows.forEach(infowindow => infowindow.close());
+    openInfoWindows.forEach((infowindow) => infowindow.close());
     openInfoWindows = [];
 
     if (!marker.infowindow) {
@@ -1145,15 +1146,15 @@ function createMarker(latitude, longitude, orgType, address, name, instructions,
       contentTags.push(...addMarkerContent(orgType, address, name, instructions, accepting, open_accepted, false));
 
       if (otherRequesters && otherRequesters.length > 0) {
-        otherRequesters.forEach(e => {
+        otherRequesters.forEach((e) => {
           contentTags.push(...addMarkerContent(e.org_type, e.address, e.name, e.instructions, e.accepting, e.open_box, true));
-        })
+        });
       }
 
       const content = ce('div', null, contentTags);
 
       marker.infowindow = new google.maps.InfoWindow({
-        content: content
+        content
       });
     }
     marker.infowindow.open(null, marker);
@@ -1192,8 +1193,8 @@ function number_format(number, decimal_places, dec_separator, thou_separator) {
   if (typeof thou_separator === 'undefined') thou_separator = ',';
 
   number = Math.round(number * Math.pow(10, decimal_places)) / Math.pow(10, decimal_places);
-  let e = String(number);
-  let f = e.split('.');
+  const e = String(number);
+  const f = e.split('.');
   if (!f[0]) {
     f[0] = '0';
   }
@@ -1208,13 +1209,13 @@ function number_format(number, decimal_places, dec_separator, thou_separator) {
     f[1] = g;
   }
   if (thou_separator !== '' && f[0].length > 3) {
-    let h = f[0];
+    const h = f[0];
     f[0] = '';
     for (let j = 3; j < h.length; j += 3) {
-      let i = h.slice(h.length - j, h.length - j + 3);
+      const i = h.slice(h.length - j, h.length - j + 3);
       f[0] = String(thou_separator + i + f[0]);
     }
-    let j = h.substr(0, (h.length % 3 === 0) ? 3 : (h.length % 3));
+    const j = h.substr(0, (h.length % 3 === 0) ? 3 : (h.length % 3));
     f[0] = j + f[0];
   }
   dec_separator = (decimal_places <= 0) ? '' : dec_separator;

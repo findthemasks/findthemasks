@@ -17,6 +17,6 @@ export default () => {
     sendEvent('socialLink', 'click', socialType);
   });
 
-  const prefillText = $.i18n("ftm-tweet-share-button");
-  $('.twitter-share-button').attr('href', 'https://twitter.com/intent/tweet?text=' + prefillText);
+  const prefillText = $.i18n('ftm-tweet-share-button');
+  $('.twitter-share-button').attr('href', `https://twitter.com/intent/tweet?text=${prefillText}`);
 };

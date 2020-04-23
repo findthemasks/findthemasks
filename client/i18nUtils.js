@@ -7,7 +7,7 @@ export const DEFAULT_LOCALE = 'en';
 // fallback to en if no locale detected is handled there
 export const getCurrentLocaleParam = (defaultLocale = null) => {
   const url = new FtmUrl(window.location);
-  const locale = url.searchparams['locale'] || url.searchparams['fb_locale'] || defaultLocale;
+  const locale = url.searchparams.locale || url.searchparams.fb_locale || defaultLocale;
 
   // Normalize FB locale from fr_FR -> fr-FR
   return locale.replace('_', '-');
@@ -23,5 +23,5 @@ export const getMapsLanguageRegion = () => {
     language = currentLocale.split('-')[0];
   }
 
-  return { language: language, region: region };
+  return { language, region };
 };

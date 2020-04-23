@@ -9,9 +9,9 @@ export default function toDataByLocation(data) {
 
   const published_entries = data
     .values.slice(1)
-    .filter((entry) => entry[approvedIndex] === "x" && entry[latIndex] && entry[lngIndex]);
+    .filter((entry) => entry[approvedIndex] === 'x' && entry[latIndex] && entry[lngIndex]);
 
-  published_entries.forEach( entry => {
+  published_entries.forEach((entry) => {
     const state = entry[stateIndex].trim().toUpperCase();
     const city = entry[cityIndex].trim().toLowerCase();
 
@@ -20,11 +20,11 @@ export default function toDataByLocation(data) {
     const entry_array = city_obj.entries;
     const entry_obj = {};
 
-    headers.forEach( (value, index) => {
+    headers.forEach((value, index) => {
       if (entry[index] !== undefined) {
         entry_obj[value] = entry[index];
       } else {
-        entry_obj[value] = "";
+        entry_obj[value] = '';
       }
     });
     entry_array.push(entry_obj);
