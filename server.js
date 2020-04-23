@@ -166,7 +166,7 @@ router.get(['/whoweare', '/whoweare.html'], (req, res) => {
   });
 });
 
-router.get(['/partners', '/partners.html'], (req, res) => {
+router.get('/partners', (req, res) => {
   res.render('partners', {
     layout: 'static',
     ogLocale: formatFbLocale(res.locals.locale),
