@@ -223,5 +223,10 @@
   "ftm-makers-cta" : "Crea DPI e mettilo nelle mani di chi ne ha bisogno!",
   "ftm-makers-near-me" : "Cerca un Makerspace vicino a te. Possono aiutare a distribuire cose che ' ve effettuate o trovare le forniture necessarie.",
   "ftm-partners-og-title" : "#findthemasks | Partner",
-  "ftm-partners-info" : "Ringraziamo i nostri sponsor e collaboratori per il loro sostegno alla nostra missione di connettere gli operatori sanitari con i DPI di cui hanno bisogno per rimanere al sicuro. Per collaborare con noi, contatta contact@findthemasks.com."
+  "ftm-partners-title" : "Sponsor, Collaboratori & Media",
+  "ftm-partners-info" : "Ringraziamo i nostri sponsor e collaboratori per il loro sostegno alla nostra missione di connettere gli operatori sanitari con i DPI di cui hanno bisogno per rimanere al sicuro. Per collaborare con noi, contatta contact@findthemasks.com.",
+  "ftm-partners-subhead-global" : "Sponsor globali",
+  "ftm-partners-subhead-media" : "Nei media",
+  "ftm-partners-subhead-canada" : "Collaboratori - Canada",
+  "ftm-partners-subhead-us" : "Collaboratori - USA"
 }
