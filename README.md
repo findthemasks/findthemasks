@@ -19,8 +19,8 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-dtgs1qck
 
 ## Reading our data to build your own frontend
 
-- Our data file updates every five minutes and can be read from https://findthemasks.com/data.json [US]
-- Alternatively, the same info is at: https://findthemasks.com/data-us.csv
+- Our curated data file updates every five minutes and can be read from https://findthemasks.com/data-us.json [US]. Each country that we serve has its own country code, i.e. data-ca.json for Canada, data-fr.json for France, etc. 
+- Similarly, we also offer CSV output at http://findthemasks.com/data-us.csv , with similar country-code modifications for each country.
 - If reading in data and producing web output sounds like a lot to do, please read on:
 
 ## Embeddable widget of donation sites
