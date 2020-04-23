@@ -15,8 +15,12 @@ export function ac(el, child) {
 // if child (either a node or an array of nodes) is passed, appends to created element.
 export function ce(elementName, className, child) {
   const el = document.createElement(elementName);
-  className && (el.className = className);
-  child && ac(el, child);
+  if (className) {
+    el.className = className;
+  }
+  if (child) {
+    ac(el, child);
+  }
   return el;
 }
 
@@ -42,7 +46,9 @@ const getSearch = (params) => {
 export class FtmUrl {
   constructor(url) {
     const parser = document.createElement('a');
-    parser.href = url && url.toString() || '';
+    if (url) {
+      parser.href = url.toString() || '';
+    }
 
     const qs = parser.search.replace(/^\?/, '').split('&');
     const searchparams = {};

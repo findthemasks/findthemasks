@@ -174,9 +174,13 @@ export const ORG_TYPES = {
   },
 };
 
-export const ENUM_MAPPINGS = { ...FILTER_ITEMS, ...ORG_TYPES, 'yes': {
-    name: 'ftm-open-packages-yes'
+export const ENUM_MAPPINGS = {
+  ...FILTER_ITEMS,
+  ...ORG_TYPES,
+  yes: {
+    name: 'ftm-open-packages-yes',
   },
-  'no': {
-    name: 'ftm-open-packages-no'
-  }};
+  no: {
+    name: 'ftm-open-packages-no',
+  },
+};

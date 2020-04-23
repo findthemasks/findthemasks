@@ -1,3 +1,5 @@
+/* global gtag */
+
 // Sends event to gtag for analytics
 export default function sendEvent(category, action, label) {
   gtag('event', action, {

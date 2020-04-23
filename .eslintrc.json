@@ -1,7 +1,7 @@
 {
   "parserOptions": {
     // Required for certain syntax usages
-    "ecmaVersion": 2017,
+    "ecmaVersion": 2018,
     "sourceType": "module"
   },
   "plugins": [
@@ -14,7 +14,25 @@
   },
   "rules": {
     // Removed rule "disallow the use of console" from recommended eslint rules
-    "no-console": "off"
+    "no-console": "off",
+
+    // Most of our npm modules are for webpack and thus in devDependencies.
+    "import/no-extraneous-dependencies": "off",
+
+    // We use for..of loops and the rest of the airbnb disallowed syntax looks okay?
+    "no-restricted-syntax": 0,
+
+    // Client code is clearer with file extension.
+    "import/extensions": "off",
+
+    // Assigning into parameters isn't that hard to read in our code.
+    "no-param-reassign": "off",
+
+    // Nothing wrong with plusplus!
+    "no-plusplus": "off",
+
+    // Nothing wrong with continue either.
+    "no-continue": "off"
   },
   "settings": {
     "polyfills": [

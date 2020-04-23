@@ -1,6 +1,6 @@
 
 if (!Object.entries) {
-  Object.entries = function (obj) {
+  Object.entries = function entries(obj) {
     const ownProps = Object.keys(obj);
     let i = ownProps.length;
     const resArray = new Array(i); // preallocate the Array
@@ -13,10 +13,7 @@ if (!Object.entries) {
 if (typeof Object.assign !== 'function') {
   // Must be writable: true, enumerable: false, configurable: true
   Object.defineProperty(Object, 'assign', {
-    value: function assign(target, varArgs) { // .length of function is 2
-
-'use strict';
-
+    value: function assign(target) { // .length of function is 2
       if (target === null || target === undefined) {
         throw new TypeError('Cannot convert undefined or null to object');
       }
@@ -24,6 +21,7 @@ if (typeof Object.assign !== 'function') {
       const to = Object(target);
 
       for (let index = 1; index < arguments.length; index++) {
+        // eslint-disable-next-line prefer-rest-params
         const nextSource = arguments[index];
 
         if (nextSource !== null && nextSource !== undefined) {

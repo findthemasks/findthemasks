@@ -55,7 +55,7 @@ const determineLocaleConfig = (detectedLocale) => {
 };
 
 $(() => {
-  const init = function () {
+  const init = () => {
     // translate static elements and initialize translations
     // then, remove spinner and show page content
     $('.i18n').i18n();

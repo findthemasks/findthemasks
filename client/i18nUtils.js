@@ -20,7 +20,7 @@ export const getMapsLanguageRegion = () => {
   const region = getCountry().toUpperCase();
 
   if (currentLocale) {
-    language = currentLocale.split('-')[0];
+    [language] = currentLocale.split('-');
   }
 
   return { language, region };
