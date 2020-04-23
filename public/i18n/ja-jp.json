@@ -165,7 +165,7 @@
   "ftm-tweet-share-button" : "www.findthemasks.comで、マスクやその他のPPEを寄付する最も近い場所を見つけてください",
   "ftm-nav-about" : "約",
   "ftm-nav-partners" : "パートナー",
-  "ftm-nav-volunteer" : "ボランティア",
+  "ftm-nav-volunteer" : "参加しませんか",
   "ftm-nav-addplace" : "PPEが必要",
   "ftm-nav-share" : "シェア",
   "ftm-nav-faq" : "よくある質問",
@@ -213,14 +213,13 @@
   "ftm-faq-ppe-recipients-header" : "PPE受信者向けのFAQ",
   "ftm-faq-request-processing-length" : "リクエストが処理されるまでどのくらいかかりますか？",
   "ftm-faq-request-processing-length-answer" : "PPEリクエストフォームを送信すると、データモデレーターのボランティアチームがすべての送信内容をチェックしてから、マップとディレクトリにリクエストを公開します。場合によっては、提出後数分でこの問題が発生することがあります。リスティングの公開には、平均して約2時間かかります。",
-  "ftm-faq-update-information" : "PPEリクエストの情報（必要なアイテム、指示など）を更新したい。私は何をすべきか？",
-  "ftm-faq-update-information-answer" : "元の送信後、Googleフォームは送信フォームに示されたメールに領収書を自動生成します。このメールアドレスは公開されませんが、メールの領収書には、PPEリクエスト情報を編集するためにクリックできるリンクが含まれます。受信トレイでGoogleフォームの領収書を見つけ、それを使用してリクエストを何度も編集するだけです。データモデレーターが数時間以内に編集内容を確認します。",
-  "ftm-faq-remove-information" : "PPE受信者リストから削除したい",
-  "ftm-faq-remove-information-answer-1" : "PPEのニーズが満たされた場合は、Googleフォームのメールの領収書でもお知らせください。リクエストで、 \"をリクエストサイトの削除\"とマークし、 \"指示\"フィールドでニーズが満たされていることをお知らせください。",
-  "ftm-faq-remove-information-answer-2" : "データチームによる確認後、ウェブサイト上のピンはグレー表示され、一般の人々に感謝のメッセージを送信し、アクティブなPPEリクエストサイトを表す近くのピンにリダイレクトします。削除リクエストをお待ちしております。 #findthemasksでの目的は必要ありません。",
   "ftm-faq-my-data" : "データはどうなりますか？送信したデータの所有者は誰ですか？",
   "ftm-faq-my-data-answer-1" : "PPEリクエストフォームに記入すると、提供された情報が収集されます。 PPE受信者サイトに関する情報は、誰でも閲覧および使用できるように、公開Webサイトに公開されます。また、公開していないメールと電話番号もリクエストします。これにより、投稿の詳細、フィードバック、またはコラボレーションのリクエストが必要になった場合に、ユーザーに連絡できるようになります。私たちはあなたのデータを処理したり、ベンダー、コンサルタント、または他のサードパーティのサービスプロバイダーと個人情報を共有することがあります。",
   "ftm-faq-my-data-answer-2" : "詳細については、 <a href=\"https://findthemasks.com/privacy-policy\">プライバシーポリシー</a>をご覧ください。",
   "ftm-faq-listing-not-shown" : "リスティングを送信しましたが、まだ'トンは表示されていません。私は何をすべきか？",
-  "ftm-faq-listing-not-shown-answer" : "4時間未満の場合は、しっかりとぶら下げてください。リクエストが急増することがあり、データモデレーターがバックログを処理している場合があります。 12時間以上経過している場合は、電子メール<a href=\"mailto:contact@findthemasks.com\"> contact@findthemasks.com </a> 。"
+  "ftm-faq-listing-not-shown-answer" : "4時間未満の場合は、しっかりとぶら下げてください。リクエストが急増することがあり、データモデレーターがバックログを処理している場合があります。 12時間以上経過している場合は、電子メール<a href=\"mailto:contact@findthemasks.com\"> contact@findthemasks.com </a> 。",
+  "ftm-makers-og-title" : "#findthemasks-メーカーマップ",
+  "ftm-makers-og-description" : "メーカースペースがあなたの地域の個人用保護具（PPE）を作成している場所を見つけます。",
+  "ftm-makers-cta" : "PPEを作成し、それを必要とする人の手に渡してください！",
+  "ftm-makers-near-me" : "お近くのメーカースペースを検索してください。彼らはあなたの事配布することができます'行われましのか、あなたが必要物資を見つけます。"
 }
