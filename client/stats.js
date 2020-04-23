@@ -1,6 +1,7 @@
 import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
 import { getCountry } from './getCountry.js';
+import { FtmUrl } from './utils.js';
 
 const currentCountry = getCountry();
 
@@ -18,7 +19,7 @@ const renderStats = (totalCount, totalCities, stateCounts) => {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-  const url = new URL(window.location);
+  const url = new FtmUrl(window.location);
   const directories = url.pathname.split("/");
 
   let countryDataFilename;

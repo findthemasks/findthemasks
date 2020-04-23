@@ -1,10 +1,10 @@
 export default function toDataByLocation(data) {
   const headers = data.values[1];
-  const approvedIndex = headers.findIndex( e => e === 'approved' );
-  const stateIndex = headers.findIndex( e => e === 'state' );
-  const cityIndex = headers.findIndex( e => e === 'city' );
-  const latIndex = headers.findIndex( e => e === 'lat' );
-  const lngIndex = headers.findIndex( e => e === 'lng' );
+  const approvedIndex = headers.indexOf('approved');
+  const stateIndex = headers.indexOf('state');
+  const cityIndex = headers.indexOf('city');
+  const latIndex = headers.indexOf('lat');
+  const lngIndex = headers.indexOf('lng');
   const data_by_location = {};
 
   const published_entries = data

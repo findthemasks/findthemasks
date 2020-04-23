@@ -360,7 +360,7 @@ h3.page-subhead {
   opacity: 0.7;
   pointer-events: none; /* user clicks should fall through to input field instead */
   position: absolute;
-  top: 1; /* ... see height below... */
+  top: 1px; /* ... see height below... */
   width: 17px;
 }
 
