@@ -6,7 +6,8 @@
         "chrome": "60",
         "ie": "11"
       },
-      "modules" : false
+      "modules" : false,
+      "useBuiltIns": false
     }]
   ]
 }
