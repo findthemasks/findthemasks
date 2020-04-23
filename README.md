@@ -1,6 +1,6 @@
-# findthemasks.com (used by getusppe.org)
+# findthemasks.com 
 
-This repo hosts the code for findthemasks.com, which is also used to power the v1 backend of "give ppe" features on getusppe.org
+This repo hosts the code for findthemasks.com which also provides an embeddable map to other projects
 
 - Stats: <https://findthemasks.com/stats.html>
 
@@ -19,13 +19,13 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-dtgs1qck
 
 ## Reading our data to build your own frontend
 
-- Our curated data file updates every five minutes and can be read from https://findthemasks.com/data-us.json . Each country that we serve has its own country code, i.e. data-ca.json for Canada, data-fr.json for France, etc. 
+- Our curated data file updates every five minutes and can be read from https://findthemasks.com/data-us.json [US]. Each country that we serve has its own country code, i.e. data-ca.json for Canada, data-fr.json for France, etc. 
 - Similarly, we also offer CSV output at http://findthemasks.com/data-us.csv , with similar country-code modifications for each country.
-- If this sounds like too much work, then please use our:
+- If reading in data and producing web output sounds like a lot to do, please read on:
 
 ## Embeddable widget of donation sites
 
-- We have produced an embeddable version of our map, data and filters, without the call to action that's at the top of findthemasks.com. This was designed for getusppe.org on March 22, but can be reused by anyone.
+- We have produced an embeddable version of our map, data and filters
 - You can view it here: <https://findthemasks.com/give.html>
 - To embed into your site, use this html snippet:
 
