@@ -165,7 +165,7 @@
   "ftm-tweet-share-button" : "Znajdź najbliższe miejsce na przekazanie masek i innych środków ochrony osobistej na www.findthemasks.com",
   "ftm-nav-about" : "O",
   "ftm-nav-partners" : "Wzmacniacz",
-  "ftm-nav-volunteer" : "Wolontariusz",
+  "ftm-nav-volunteer" : "Dołącz do nas",
   "ftm-nav-addplace" : "Potrzebuję środków ochrony osobistej",
   "ftm-nav-share" : "Dzielić",
   "ftm-nav-faq" : "FAQ",
@@ -213,14 +213,13 @@
   "ftm-faq-ppe-recipients-header" : "Często zadawane pytania dla odbiorców środków ochrony indywidualnej",
   "ftm-faq-request-processing-length" : "Jak długo potrwa przetwarzanie mojej prośby?",
   "ftm-faq-request-processing-length-answer" : "Po przesłaniu formularza wniosku o ŚOI nasz zespół wolontariuszy moderatorów danych sprawdza każde zgłoszenie przed opublikowaniem żądania w naszej mapie i katalogu. W niektórych przypadkach może się to zdarzyć tak szybko, jak kilka minut po przesłaniu! Opublikowanie aukcji zajmuje średnio około dwóch godzin.",
-  "ftm-faq-update-information" : "Chcę zaktualizować informacje (potrzebne elementy, instrukcje itp.) We wniosku PPE. Co powinienem zrobić?",
-  "ftm-faq-update-information-answer" : "Po pierwotnym przesłaniu Formularze Google automatycznie wygenerują potwierdzenie na adres e-mail wskazany w formularzu. Ten adres e-mail nigdy nie zostanie upubliczniony, ale pokwitowanie e-mail będzie zawierało link, który można kliknąć, aby edytować informacje dotyczące żądania PPE. Po prostu znajdź pokwitowanie z Formularzy Google w skrzynce odbiorczej i używaj go do edytowania żądania, raz po raz. Nasi moderatorzy danych potwierdzą Twoją edycję w ciągu kilku godzin.",
-  "ftm-faq-remove-information" : "Chcę zostać usunięty z listy odbiorców ŚOI",
-  "ftm-faq-remove-information-answer-1" : "Gdy Twoje potrzeby dotyczące środków ochrony osobistej są zaspokojone, potwierdzenie e-mail z Formularzy Google jest również sposobem na poinformowanie nas. W swoim zgłoszeniu zaznacz \" usunąć żądającą witrynę \" i powiedz nam w polu \" Instrukcje \" że Twoje potrzeby są spełnione.",
-  "ftm-faq-remove-information-answer-2" : "Po sprawdzeniu przez nasz zespół ds. Danych, twój pin na stronie internetowej zostanie wyszarzony, a wiadomość z podziękowaniami publiczności i przekierowaniem ich do pobliskich pinów, które reprezentują wciąż aktywne strony z żądaniami PPE. Czekamy na Twoją prośbę o usunięcie; nasz cel #findthemasks nie jest potrzebny!",
   "ftm-faq-my-data" : "Co stanie się z moimi danymi? Kto jest właścicielem danych, które przesyłam?",
   "ftm-faq-my-data-answer-1" : "Gromadzimy informacje, które nam przekazujesz, wypełniając formularz wniosku o ŚOI. Informacje dotyczące witryn odbiorców środków ochrony indywidualnej zostaną opublikowane na naszej publicznej stronie internetowej, aby każdy mógł je zobaczyć i z nich korzystać. Prosimy również o podanie adresu e-mail i numeru telefonu, których nie ujawniamy publicznie, abyśmy mogli skontaktować się z użytkownikiem w razie potrzeby opracowania postu, uzyskania opinii lub prośby o współpracę. Możemy przetwarzać Twoje dane lub udostępniać dane osobowe dostawcom, konsultantom lub innym zewnętrznym dostawcom usług.",
   "ftm-faq-my-data-answer-2" : "Aby uzyskać więcej informacji, zapoznaj się z naszą <a href=\"https://findthemasks.com/privacy-policy\"> Polityką prywatności </a> .",
   "ftm-faq-listing-not-shown" : "I przedstawiła listę ale hasn ' t pokazał się jeszcze. Co powinienem zrobić?",
-  "ftm-faq-listing-not-shown-answer" : "Jeśli minęły mniej niż 4 godziny, trzymaj się mocno! Czasami otrzymujemy wzrost liczby żądań, a nasi moderatorzy danych mogą pracować z zaległościami. Jeśli minęło więcej niż 12 godzin, napisz <a href=\"mailto:contact@findthemasks.com\"> contact@findthemasks.com </a> ."
+  "ftm-faq-listing-not-shown-answer" : "Jeśli minęły mniej niż 4 godziny, trzymaj się mocno! Czasami otrzymujemy wzrost liczby żądań, a nasi moderatorzy danych mogą pracować z zaległościami. Jeśli minęło więcej niż 12 godzin, napisz <a href=\"mailto:contact@findthemasks.com\"> contact@findthemasks.com </a> .",
+  "ftm-makers-og-title" : "#findthemasks - Mapa twórców",
+  "ftm-makers-og-description" : "Dowiedz się, gdzie producenci tworzą w Twojej okolicy środki ochrony osobistej (ŚOI).",
+  "ftm-makers-cta" : "Zrób środki ochrony indywidualnej i oddaj je w ręce tych, którzy tego potrzebują!",
+  "ftm-makers-near-me" : "Wyszukaj Makerspace w pobliżu. Mogą one pomóc rozpowszechniać rzeczy ' już wykonanych lub znaleźć Ci materiały potrzebne."
 }
