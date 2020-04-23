@@ -40,7 +40,7 @@ app.use((req, res, next) => {
   const schema = req.headers['x-forwarded-proto'];
   const host = req.headers.host.split(':')[0];
 
-  if (schema === 'https' || host === 'local.findthemasks.com' || host === 'localhost' ) {
+  if (schema === 'https' || host === 'local.findthemasks.com' || host === 'localhost') {
     return next();
   } else {
     res.redirect('https://' + req.headers.host + req.url);
@@ -48,7 +48,7 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
-  if(process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "production") {
     res.set('Cache-Control', 'public, max-age=300');
   } else {
     res.set('Cache-Control', 'no-cache');
@@ -61,7 +61,7 @@ app.use(express.static('public'));
 router.get(['/', '/index.html'], (req, res) => {
   res.render('index', {
     version: herokuVersion,
-    ogLocale:  formatFbLocale(res.locals.locale),
+    ogLocale: formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-index-og-description'),
@@ -90,7 +90,7 @@ router.get(['/give', '/give.html'], (req, res) => {
   res.render('give', {
     version: herokuVersion,
     layout: 'give',
-    ogLocale:  formatFbLocale(res.locals.locale),
+    ogLocale: formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-give-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
@@ -101,7 +101,7 @@ router.get(['/give', '/give.html'], (req, res) => {
 router.get(['/makers'], (req, res) => {
   res.render('makers', {
     version: herokuVersion,
-    ogLocale:  formatFbLocale(res.locals.locale),
+    ogLocale: formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-makers-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-makers-og-description'),
@@ -114,7 +114,7 @@ router.get('/privacy-policy', (req, res) => {
   res.render('privacy-policy', {
     version: herokuVersion,
     layout: 'static',
-    ogLocale:  formatFbLocale(res.locals.locale),
+    ogLocale: formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-privacy-policy-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-privacy-policy-og-description'),
@@ -158,8 +158,19 @@ router.get('/blog/2020-04-21-data-insights', (req, res) => {
 router.get(['/whoweare', '/whoweare.html'], (req, res) => {
   res.render('whoweare', {
     layout: 'static',
-    ogLocale:  formatFbLocale(res.locals.locale),
+    ogLocale: formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-about-us-og-title'),
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
+    version: herokuVersion
+  });
+});
+
+router.get(['/partners', '/partners.html'], (req, res) => {
+  res.render('partners', {
+    layout: 'static',
+    ogLocale: formatFbLocale(res.locals.locale),
+    ogTitle: res.locals.banana.i18n('ftm-partners-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     version: herokuVersion

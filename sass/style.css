@@ -318,6 +318,29 @@ h3.city {
 }
 
 /*********************
+  * PARTNERS STYLES *
+  *********************/
+h1.page-title {
+  text-transform: uppercase;
+}
+
+h3.page-subhead {
+  background-color: #FDC276;
+  padding: 10px;
+  display: inline-block;
+}
+
+.partner-logos {
+  width: 100%;
+}
+
+.partner-logo-container {
+  display: inline-block;
+  margin: 30px;
+}
+
+
+/*********************
   * MAP SEARCH STYLES *
   *********************/
 
