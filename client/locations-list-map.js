@@ -1,4 +1,4 @@
-/* global google */
+/* global google linkifyElement */
 
 import Selectr from 'mobius1-selectr';
 import MarkerClusterer from '@google/markerclustererplus';
@@ -20,10 +20,6 @@ require('./polyfills.js');
 // Allow for hot-reloading of CSS in development.
 require('../sass/style.css');
 
-/** ****************************************
- * MODULE VARS AVAILABLE TO ALL FUNCTIONS *
- ***************************************** */
-
 // Master data object, indexed by country code
 const countryData = {};
 const currentCountry = getCountry();
@@ -34,12 +30,10 @@ document.body.setAttribute('data-country', currentCountry);
 let gAutocomplete;
 let gMap = null;
 
-// Markers shown with primary prominence: in current country, in selected state(s), matching
-// filters
+// Markers shown with primary prominence: in current country, in selected state(s), matching filters
 let gPrimaryMarkers = [];
 
-// Markers shown with secondary prominence: in current country, outside selected state(s), matching
-// filters
+// Markers shown with secondary prominence: in current country, outside selected state(s), matching filters
 let gSecondaryMarkers = [];
 
 // Markers from outside the current country
@@ -49,6 +43,8 @@ const gOtherMarkers = [];
 let gPrimaryCluster = null;
 // Secondary + other markers shown in secondary cluster
 let gSecondaryCluster = null;
+
+let gCurrentViewportCenter = {};
 
 const SECONDARY_MARKER_OPTIONS = {
   icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Ccircle cx='4' cy='4' r='4' style='fill:red'/%3E%3C/svg%3E",
@@ -69,10 +65,6 @@ let gOpenInfoWindows = [];
 // The big list of displayed locations, as dom elements, and where we are in rendering them
 let gLocationsListEntries = [];
 let gLastLocationRendered = -1;
-
-/** ***********************
- * END MODULE LEVEL VARS *
- ************************ */
 
 // i18n must be loaded before filter items can be translated
 // config stores the i18n string and this function calls i18n with it
@@ -105,8 +97,7 @@ const parseFiltersFromData = (data) => {
         // split on commas except if comma is in parentheses
         entry.accepting.split(/, (?![^(]*\))/).map((a) => a.trim()).forEach((i) => {
           const filterKey = i.toLowerCase();
-          if (Object.prototype.hasOwnProperty.call(FILTER_ITEMS, filterKey)
-              && !Object.prototype.hasOwnProperty.call(acceptedItems, filterKey)) {
+          if (FILTER_ITEMS[filterKey] !== undefined && acceptedItems[filterKey] === undefined) {
             acceptedItems[filterKey] = {
               ...FILTER_ITEMS[filterKey],
               value: filterKey,
@@ -336,7 +327,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
   for (const stateName of Object.keys(data)) {
     const inStateFilter = appliedFilters.states && appliedFilters.states[stateName];
 
-    const hasFilters = Boolean(filterAcceptKeys) || Boolean(filterOrgTypeKeys) || hasStateFilter;
+    const hasFilters = !!filterAcceptKeys || !!filterOrgTypeKeys || hasStateFilter;
 
     const state = data[stateName];
     const { cities } = state;
@@ -344,15 +335,11 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
     for (const cityName of Object.keys(cities)) {
       const city = cities[cityName];
 
-      // Handle multiple entries at the same address. Example: 800 Commissioners Rd E London, ON
-      // N6A 5W9
+      // Handle multiple entries at the same address. Example: 800 Commissioners Rd E London, ON N6A 5W9
       const entriesByAddress = city.entries.reduce((acc, curr) => {
         const latlong = `${curr.lat} ${curr.lng}`;
-        if (latlong in acc) {
-          acc[latlong].push(curr);
-        } else {
-          acc[latlong] = [curr];
-        }
+        acc[latlong] = acc[latlong] || [];
+        acc[latlong].push(curr);
         return acc;
       }, {});
 
@@ -871,13 +858,9 @@ function createFilterElements(data, filters) {
   }
 }
 
-function getDataJsonUrl(filename) {
-  return `/${filename}`;
-}
-
 function getCountryDataFilename(country) {
   // Always use country-specific data.json file
-  return `data-${country}.json`;
+  return `/data-${country}.json`;
 }
 
 // Loads data file from url and assigns into object given by dataToStore
@@ -903,12 +886,10 @@ function loadOtherCountries() {
   for (const code of countryCodes) {
     if (code !== currentCountry) {
       countryData[code] = {};
-      loadDataFile(getDataJsonUrl(getCountryDataFilename(code)), countryData[code]);
+      loadDataFile(getCountryDataFilename(code), countryData[code]);
     }
   }
 }
-
-let currentViewportCenter = {};
 
 /**
  * Returns a list of markers sorted by distance from an arbitrary set of lat/lng coords.
@@ -1110,15 +1091,15 @@ function initMap(data, filters) {
   google.maps.event.addListener(gMap, 'bounds_changed', () => {
     const mapBounds = gMap.getBounds();
 
-    if (mapBounds && currentViewportCenter) {
+    if (mapBounds && gCurrentViewportCenter) {
       const currentLat = mapBounds.getCenter().lat();
       const currentLng = mapBounds.getCenter().lng();
 
-      if (currentLat !== currentViewportCenter.lat || currentLng !== currentViewportCenter.lng) {
+      if (currentLat !== gCurrentViewportCenter.lat || currentLng !== gCurrentViewportCenter.lng) {
         refreshList(data, filters);
       }
 
-      currentViewportCenter = {
+      gCurrentViewportCenter = {
         lat: currentLat,
         lng: currentLng,
       };
@@ -1129,7 +1110,7 @@ function initMap(data, filters) {
 
   if (mapBounds) {
     const mapCenter = mapBounds.getCenter();
-    currentViewportCenter = {
+    gCurrentViewportCenter = {
       lat: mapCenter.lat(),
       lng: mapCenter.lng(),
     };
@@ -1176,10 +1157,10 @@ $(() => {
   if (isCountryPath()) {
     data = {};
     countryData[currentCountry] = data;
-    dataUrl = getDataJsonUrl(getCountryDataFilename(currentCountry));
+    dataUrl = getCountryDataFilename(currentCountry);
   } else if (firstPathPart === 'makers') {
     data = {};
-    dataUrl = getDataJsonUrl('data-makers.json');
+    dataUrl = '/data-makers.json';
   } else {
     console.error('invalid path');
     window.location.replace('/');

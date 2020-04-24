@@ -45,9 +45,9 @@ app.use((req, res, next) => {
   if (schema === 'https' || host === 'local.findthemasks.com' || host === 'localhost') {
     next();
     return;
-  } else {
-    res.redirect('https://' + req.headers.host + req.url);
   }
+  res.redirect(`https://${req.headers.host}${req.url}`);
+
   res.redirect(`https://${req.headers.host}${req.url}`);
 });
 
@@ -177,7 +177,7 @@ router.get('/partners', (req, res) => {
     ogTitle: res.locals.banana.i18n('ftm-partners-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
-    version: herokuVersion
+    version: herokuVersion,
   });
 });
 

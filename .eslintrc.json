@@ -16,6 +16,15 @@
     // Removed rule "disallow the use of console" from recommended eslint rules
     "no-console": "off",
 
+    // Make line length longer.
+    "max-len": ["error", {
+      "code": 120,
+      "ignoreTemplateLiterals": true,
+      "ignoreUrls": true,
+      "ignoreStrings": true,
+      "ignoreRegExpLiterals": true
+    }],
+
     // Most of our npm modules are for webpack and thus in devDependencies.
     "import/no-extraneous-dependencies": "off",
 
@@ -23,7 +32,7 @@
     "no-restricted-syntax": 0,
 
     // Client code is clearer with file extension.
-    "import/extensions": "off",
+    "import/extensions": [2, "always"],
 
     // Assigning into parameters isn't that hard to read in our code.
     "no-param-reassign": "off",

@@ -9,11 +9,11 @@ export default () => {
   $('.add-donation-site-form')
     .attr({ href: `/${currentCountry}/donation-form?locale=${$.i18n().locale}` })
     .click((e) => {
-      sendEvent('addDonationSite', 'click', e.target.attr('href'));
+      sendEvent('addDonationSite', 'click', $(e.target).attr('href'));
     });
 
   $('.social-media-icon').click((e) => {
-    const socialType = e.target.data('socialType');
+    const socialType = $(e.target).data('socialType');
     sendEvent('socialLink', 'click', socialType);
   });
 
