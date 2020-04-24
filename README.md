@@ -1,5 +1,7 @@
 # findthemasks.com
 
+[![Build Status](https://travis-ci.org/findthemasks/findthemasks.svg?branch=master)](https://travis-ci.org/findthemasks/findthemasks)
+
 This repo hosts the code for findthemasks.com which also provides an embeddable map to other projects
 
 - Stats: <https://findthemasks.com/stats.html>
