@@ -51,6 +51,8 @@ let openInfoWindows = [];
 let locationsListEntries = [];
 let lastLocationRendered = -1;
 
+const url = new URL(window.location);
+
 /*************************
  * END MODULE LEVEL VARS *
  *************************/
@@ -366,7 +368,6 @@ function loadOtherCountries() {
 }
 
 $(function () {
-  const url = new URL(window.location);
   // display flag of country
   $('#flag-image'). attr("src", "images/flags/" + currentCountry + ".svg");
 
@@ -387,6 +388,62 @@ $(function () {
 
     const prefillText = $.i18n("ftm-tweet-share-button");
     $('.twitter-share-button').attr('href','https://twitter.com/intent/tweet?text=' + prefillText);
+
+    let lastOrg = null;
+    $('#contactModal').on('show.bs.modal', function (event) {
+      const el = $(event.relatedTarget);
+      const email = el.data('email');
+      const name = el.data('name');
+      const modal = $(this);
+
+      if(lastOrg != name) {
+        lastOrg = name;
+        $('#sender-name').val(null);
+        $('#sender-email').val(null);
+        $('#message-subject').val(null);
+        $('#message-text').val(null);
+      }
+
+      modal.find('.modal-title').text($.i18n('ftm-email-form-title-label') + ' ' + name);
+      modal.find('#message-recipient').val(email);
+    });
+
+    $('#contactModal #send-message').on('click', function (event) {
+      $('.contact-error').html(null);
+      $('#send-message').prop('disabled', true);
+
+      $.post(
+        'https://maskmailer.herokuapp.com/send',
+        {
+          name: $('#sender-name').val(),
+          from: $('#sender-email').val(),
+          subject: $('#message-subject').val(),
+          text: $('#message-text').val(),
+          introduction: $.i18n('ftm-email-introduction'),
+          to: $('#message-recipient').val(),
+          'g-recaptcha-response': grecaptcha.getResponse(),
+        }
+      ).done(function(result) {
+        $('.contact-form').css('display', 'none');
+        $('.contact-success').css('display', 'block');
+        $('#send-message').prop('disabled', false);
+        grecaptcha.reset();
+
+        setTimeout(function() {
+          $('#contactModal').modal('hide');
+        }, 5000);
+
+      }).fail(function(result) {
+        $('.contact-error').html($.i18n('ftm-' + result.responseJSON.message));
+        $('#send-message').prop('disabled', false);
+        grecaptcha.reset();
+      });
+    });
+
+    $('#contactModal').on('hidden.bs.modal', function (event) {
+      $('.contact-form').css('display', 'block');
+      $('.contact-success').css('display', 'none');
+    });
   });
 
   const renderListings = function (result) {
@@ -511,6 +568,18 @@ function googleMapsUri(address) {
 
 function getEntryEl(entry) {
   if (!entry.domElem) {
+    // feature flag for email contact form
+    const searchParams = new URLSearchParams(url.search);
+    const showContact = searchParams.get('show-contact') == 'true';
+
+    // feature flag to insert fake contact info for testing
+    const fakeContact = searchParams.get('fake-contact') == 'true';
+    const testEmail = '6NSUUmRCaj3LaaGQiq4JPB%2BXAXB7gAVv8N%2Fn%2FnwQw2gXWVP1MINy4blDsSPC%0A5wv3%0A'; // raindrift@gmail.com
+
+    if(fakeContact) {
+      entry.encrypted_email = testEmail;
+    }
+
     entry.domElem = ce('div', 'location');
     ac(entry.domElem, ce('h4', null, ctn(entry.name)));
 
@@ -543,6 +612,13 @@ function getEntryEl(entry) {
       }
 
       ac(entry.domElem, para);
+    }
+
+    if (showContact && entry.encrypted_email) {
+      ac(entry.domElem, [
+        ce('label', null, ctn($.i18n('ftm-email-contact'))),
+        $(`<p><a href="#" data-toggle="modal" data-target="#contactModal" data-name="${entry.name}" data-email="${entry.encrypted_email}">${$.i18n('ftm-email-contact-org')}</a></p>`)[0]
+      ]);
     }
 
     if (entry.instructions) {

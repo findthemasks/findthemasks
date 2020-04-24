@@ -104,5 +104,21 @@
   "ftm-thanks-companies": "Header content for thanking company donations",
   "ftm-thanks-smartling": "Thanks for Smartling",
   "ftm-thanks-google": "Thanks for Google",
-  "ftm-thanks-slack": "Thanks for Slack"
+  "ftm-thanks-slack": "Thanks for Slack",
+  "ftm-email-contact": "Label indicating where the email button is located",
+  "ftm-email-contact-org": "Link text to email the organization",
+  "ftm-email-form-name-placeholder": "Placeholder text for the message sender's name",
+  "ftm-email-form-email-placeholder": "Placeholder text for the message sender's email address",
+  "ftm-email-form-subject-placeholder": "Placeholder text indicating the message subject line",
+  "ftm-email-form-message-placeholder": "Placeholder text indicating the message text",
+  "ftm-email-form-title-label": "Title text placed before the org name in the email contact form",
+  "ftm-email-introduction": "Text prepended to the email message, introducing us and explaining how to reply",
+  "ftm-email-sent-confirmation": "Confirmation text, shown when the email is sent successfully",
+  "ftm-mailer-captcha-failed": "Incomplete captcha error message",
+  "ftm-mailer-bad-to": "Invalid recipient address error message",
+  "ftm-mailer-bad-from": "Invalid sender address error message",
+  "ftm-mailer-message-blank": "Message text is blank error message",
+  "ftm-mailer-subject-blank": "Subject is blank error message",
+  "ftm-mailer-mail-failed": "Error message shown when email sending failed for reasons other than user error",
+  "ftm-mailer-message-sent": "Email sent confirmation text"
 }

@@ -168,5 +168,21 @@
   "ftm-thanks-smartling": "Smartling for access to their Translation Managment Platform",
   "ftm-thanks-google": "Google for Maps API credits",
   "ftm-thanks-slack": "Slack for a Pro account",
-  "ftm-tweet-share-button": "Find the closest place to donate masks and other PPE at www.findthemasks.com"
+  "ftm-tweet-share-button": "Find the closest place to donate masks and other PPE at www.findthemasks.com",
+  "ftm-email-contact": "Email",
+  "ftm-email-contact-org": "Email this organization",
+  "ftm-email-form-name-placeholder": "Your Name",
+  "ftm-email-form-email-placeholder": "Your Email Address",
+  "ftm-email-form-subject-placeholder": "Subject",
+  "ftm-email-form-message-placeholder": "Your Message",
+  "ftm-email-form-title-label": "Message to",
+  "ftm-email-introduction": "This message was sent via findthemasks.com. Reply to this message to respond to the sender. When you respond, the sender will be able to see your email address.",
+  "ftm-email-sent-confirmation": "Your message was sent",
+  "ftm-mailer-captcha-failed": "Incomplete captcha",
+  "ftm-mailer-bad-to": "Invalid recipient address",
+  "ftm-mailer-bad-from": "Invalid sender address",
+  "ftm-mailer-message-blank": "Message text is blank",
+  "ftm-mailer-subject-blank": "Subject is blank",
+  "ftm-mailer-mail-failed": "Message sending failed, please try again",
+  "ftm-mailer-message-sent": "Your message was sent"
 }
