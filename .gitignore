@@ -73,3 +73,5 @@ node_modules/
 *~
 
 .DS_Store
+
+functions/service_key.json

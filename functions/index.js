@@ -2,6 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const csv_stringify = require('csv-stringify');
 const {request} = require('gaxios');
+const crypto = require('crypto');
 
 admin.initializeApp();
 
@@ -16,6 +17,7 @@ const Client = require("@googlemaps/google-maps-services-js").Client;
 let CONFIG_CLIENT_ID = '';
 let CONFIG_CLIENT_SECRET = '';
 let GOOGLE_MAPS_API_KEY = '';
+let EMAIL_ENCRYPTION_KEY = '';
 
 const SHEETS = {
   at: '19gKSyKmT4yU7F32R3lBM6p0rmMJXusX_uMYDq1CMTIo',
@@ -36,6 +38,7 @@ if (functions.config().googleapi !== undefined) {
   CONFIG_CLIENT_ID = functions.config().googleapi.client_id
   CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
   GOOGLE_MAPS_API_KEY = functions.config().findthemasks.geocode_key;
+  EMAIL_ENCRYPTION_KEY = functions.config().findthemasks.email_encryption_key;
 }
 
 const COLUMNS = [
@@ -219,7 +222,7 @@ async function getSpreadsheet(country, client) {
   const request = {
     spreadsheetId: SHEETS[country],
     range: 'Combined'
-    };
+  };
   request.auth = client;
 
   let response = await sheets.spreadsheets.values.get(request);
@@ -235,7 +238,6 @@ async function getSpreadsheet(country, client) {
     // Search for things with a pipe. Split. And then create parallel array.
     const field_translations = data['field_translations'] = {};
     for (const row of config_values) {
-      console.log(row);
       if (row.length > 0) {
         const pipe_index = row[0].indexOf('|');
         if (pipe_index !== -1) {
@@ -256,6 +258,27 @@ async function getSpreadsheet(country, client) {
   return data;
 }
 
+const encryptEmail = (email) => {
+  try {
+    const recipient = { email: email };
+    const json = JSON.stringify(recipient);
+    const iv = crypto.randomBytes(16);
+    const cipher = crypto.createCipheriv('aes-256-cbc', EMAIL_ENCRYPTION_KEY, iv);
+    let ciphertext = cipher.update(json, 'utf-8', 'latin1');
+    ciphertext += cipher.final('latin1');
+    const cipherBuffer = Buffer.from(ciphertext, 'latin1');
+    const result = Buffer.concat([iv, cipherBuffer], iv.length + cipherBuffer.length);
+    return encodeURIComponent(result.toString('base64'));
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+const ENCRYPTED_EMAIL_HEADER_NAME = 'Encrypted Email';
+const ENCRYPTED_EMAIL_COL_LABEL = 'encrypted_email';
+
+
 async function snapshotData(country) {
   const base_filename = `data-${country}`;
   const csv_filename = `${base_filename}.csv`;
@@ -264,7 +287,9 @@ async function snapshotData(country) {
 
   // Talk to sheets.
   const client = await getAuthorizedClient();
-  let data = {}
+  let data = {};
+  let csvDataValues = [];
+
   try {
     data = await getSpreadsheet(country, client);
 
@@ -281,12 +306,20 @@ async function snapshotData(country) {
     const published_cols = new Set();
     const headers = [];
     const col_labels = [];
+
+    let emailIndex;
+
     for (let i = 0; i < orig_col_labels.length; i++) {
       const orig_label = orig_col_labels[i];
       if (orig_label && !orig_label.startsWith('_')) {
         headers.push(orig_headers[i]);
         col_labels.push(orig_label);
         published_cols.add(i);
+      } else if (orig_label && orig_label === '_email') {
+        headers.push(ENCRYPTED_EMAIL_HEADER_NAME);
+        col_labels.push(ENCRYPTED_EMAIL_COL_LABEL);
+        published_cols.add(i);
+        emailIndex = i;
       }
     }
 
@@ -295,17 +328,39 @@ async function snapshotData(country) {
     col_labels.push('row');
 
     const trimmed_values = real_values.map((row, row_num) => {
-      const result = row.filter((_, col_num) => published_cols.has(col_num));
+      const result = [];
+
+      row.forEach((value, col_num) => {
+        if (published_cols.has(col_num)) {
+          if (col_num === emailIndex) {
+            result.push(value && encryptEmail(value));
+          } else {
+            result.push(value);
+          }
+        }
+      });
+
       result.push(row_num + 3);  // 2 rows of header and 1-base indexing.
       return result;
     });
+
     const approvedIndex = col_labels.findIndex( e => e === 'approved' );
     if (approvedIndex === -1) {
       throw new Error("sheet missing expected columns. Ensure row 2 headers are sane?");
     }
 
     const approved_rows = trimmed_values.filter(e => e[approvedIndex] === "x");
+
+    const approvedCSVRows = approved_rows.map((row) => (
+      row.filter((_, colNumber) => colNumber !== emailIndex)
+    ));
+
     data.values = [headers, col_labels, ...approved_rows];
+    csvDataValues = [
+      headers.filter((header) => header !== ENCRYPTED_EMAIL_HEADER_NAME),
+      col_labels.filter((header) => header !== ENCRYPTED_EMAIL_COL_LABEL),
+      ...approvedCSVRows
+    ];
   } catch (err) {
     console.error(err);
   }
@@ -319,16 +374,15 @@ async function snapshotData(country) {
     },
     predefinedAcl: "publicRead",
   });
-
   // Build a simple csv file
   console.log("Preparing CSV File");
   const csvFileRef = admin.storage().bucket().file(csv_filename);
 
   // TODO(awong): This looks like a race as the async callback isn't
   // guaranteed to execute before the calling function returns.
-  csv_stringify(data.values, async (err, output) => {
-    if (err !== null) {
-      console.log(err)
+  csv_stringify(csvDataValues, async (err, output) => {
+    if (err) {
+      console.error(err)
     } else {
       await csvFileRef.save(output, {
 	      gzip: true,
