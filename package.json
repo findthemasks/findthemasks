@@ -13,13 +13,12 @@
   "scripts": {
     "build": "npm run webpack",
     "dev": "NODE_ENV='development' nodemon --ignore 'client/' server.js",
-    "lint": "eslint *.js client/*.js",
+    "lint": "eslint '**/*.js'",
     "start": "node server.js",
     "webpack": "NODE_ENV='production' webpack -p --config webpack.config.js"
   },
   "dependencies": {
     "banana-i18n": "^1.2.1",
-    "core-js": "^3.6.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-handlebars": "^4.0.3",

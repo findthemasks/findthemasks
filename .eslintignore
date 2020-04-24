@@ -1,0 +1,14 @@
+# Utility scripts for spreadsheet
+scripts/
+
+# Legacy crud
+public/archive/
+
+# Imported crud
+assets/scripts/
+
+# Packages
+node_modules/
+
+# Generated stuff
+public/generated/

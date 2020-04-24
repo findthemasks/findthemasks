@@ -7,9 +7,7 @@ import countries from './countries.js';
 import { FILTER_ITEMS, ORG_TYPES, ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getCountry, getFirstPathPart, isCountryPath } from './getCountry.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
-import {
-  ac, ce, ctn, FtmUrl,
-} from './utils.js';
+import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
 
 require('mobius1-selectr/src/selectr.css');
@@ -108,10 +106,8 @@ const parseFiltersFromData = (data) => {
         if (entry.orgType) {
           const orgTypeKey = entry.orgType.toLowerCase();
 
-          if (Object.prototype.hasOwnProperty.call(ORG_TYPES, orgTypeKey)
-              && !Object.prototype.hasOwnProperty.call(orgTypes, orgTypeKey)) {
+          if (ORG_TYPES[orgTypeKey] !== undefined && orgTypes[orgTypeKey] === undefined) {
             orgTypes[orgTypeKey] = {
-
               ...ORG_TYPES[orgTypeKey],
               value: orgTypeKey,
             };
@@ -240,43 +236,53 @@ function addMarkerContent(orgType, address, name, instructions, accepting, openB
   if (orgType && orgType.length) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-org-type-label'))),
-      ce('div', 'value', ctn(translateEnumValue(orgType))),
+      ce('div', 'value', ctn(translateEnumValue(orgType)))
     );
   }
 
   if (address) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
-      ce('div', 'value', createMapLink(address)),
+      ce('div', 'value', createMapLink(address))
     );
   }
 
   if (instructions) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-instructions-label'))),
-      linkifyElement(ce('div', 'value', multilineStringToNodes(instructions))),
+      linkifyElement(ce('div', 'value', multilineStringToNodes(instructions)))
     );
   }
 
   if (accepting) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-accepting-label'))),
-      ce('div', 'value', ctn(translateEnumList(accepting))),
+      ce('div', 'value', ctn(translateEnumList(accepting)))
     );
   }
 
   if (openBox) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-open-packages-label'))),
-      ce('div', 'value', ctn(translateEnumValue(openBox))),
+      ce('div', 'value', ctn(translateEnumValue(openBox)))
     );
   }
 
   return contentTags;
 }
 
-function createMarker(latitude, longitude, orgType, address, name, instructions, accepting,
-  openBox, markerOptions, otherRequesters) {
+function createMarker(
+  latitude,
+  longitude,
+  orgType,
+  address,
+  name,
+  instructions,
+  accepting,
+  openBox,
+  markerOptions,
+  otherRequesters
+) {
   const location = { lat: latitude, lng: longitude };
   const options = {
     position: location,
@@ -293,13 +299,15 @@ function createMarker(latitude, longitude, orgType, address, name, instructions,
 
     if (!marker.infowindow) {
       const contentTags = [];
-      contentTags.push(...addMarkerContent(orgType, address, name, instructions, accepting, openBox,
-        false));
+      contentTags.push(
+        ...addMarkerContent(orgType, address, name, instructions, accepting, openBox, false)
+      );
 
       if (otherRequesters && otherRequesters.length > 0) {
         otherRequesters.forEach((e) => {
-          contentTags.push(...addMarkerContent(e.orgType, e.address, e.name, e.instructions,
-            e.accepting, e.openBox, true));
+          contentTags.push(
+            ...addMarkerContent(e.orgType, e.address, e.name, e.instructions, e.accepting, e.openBox, true)
+          );
         });
       }
 
@@ -401,7 +409,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
               entry.accepting,
               entry.openBox,
               markerOptions,
-              otherRequesters,
+              otherRequesters
             );
             entry.marker = marker;
           }
@@ -454,9 +462,15 @@ function updateClusters(primaryCluster, secondaryCluster) {
  */
 function numberFormat(number, decimalPlaces, decSeparator, thouSeparator) {
   // Init defaults.
-  if (typeof decimalPlaces === 'undefined') decimalPlaces = 0;
-  if (typeof decSeparator === 'undefined') decSeparator = '.';
-  if (typeof thouSeparator === 'undefined') thouSeparator = ',';
+  if (typeof decimalPlaces === 'undefined') {
+    decimalPlaces = 0;
+  }
+  if (typeof decSeparator === 'undefined') {
+    decSeparator = '.';
+  }
+  if (typeof thouSeparator === 'undefined') {
+    thouSeparator = ',';
+  }
 
   number = Math.round(number * (10 ** decimalPlaces)) / (10 ** decimalPlaces);
   const e = String(number);
@@ -873,10 +887,10 @@ function loadDataFile(url, dataToStore) {
       // opacity value matches what's in css for the .secondarycluster class -
       // can set a css class for the clusters, but not for individual pins.
       gOtherMarkers.push(
-        ...getMarkers(dataToStore, {}, null, SECONDARY_MARKER_OPTIONS).outOfFilters,
+        ...getMarkers(dataToStore, {}, null, SECONDARY_MARKER_OPTIONS).outOfFilters
       );
       updateClusters(null, gSecondaryCluster);
-    },
+    }
   );
 }
 
@@ -1003,7 +1017,8 @@ function initMapSearch(data, filters) {
 
   // Initialize the map search autocompleter.
   gAutocomplete = new google.maps.places.Autocomplete(
-    searchEl, { types: ['geocode'] },
+    searchEl,
+    { types: ['geocode'] }
   );
 
   // initialize map search with query param `q` if it's set
@@ -1073,12 +1088,15 @@ function initMap(data, filters) {
     minimumClusterSize: 5,
     zIndex: 1,
   });
-  gPrimaryCluster = new MarkerClusterer(gMap, [],
+  gPrimaryCluster = new MarkerClusterer(
+    gMap,
+    [],
     {
       imagePath: '/images/markercluster/m',
       minimumClusterSize: 5,
       zIndex: 2,
-    });
+    }
+  );
 
   gPrimaryCluster.addListener('click', () => {
     sendEvent('map', 'click', 'primaryCluster');
