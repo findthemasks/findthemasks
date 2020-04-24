@@ -6,6 +6,7 @@ const setBananaI18n = require('./middleware/setBananaI18n.js');
 const localizeContactInfo = require('./viewHelpers/localizeContactInfo.js');
 const selectMaskMatchPartialPath = require('./viewHelpers/selectMaskMatchPartialPath');
 const selectLargeDonationSitesPartialPath = require('./viewHelpers/selectLargeDonationSitesPartialPath');
+const getDonationFormUrl = require('./viewHelpers/getDonationFormUrl.js');
 const formatFbLocale = require('./utils/formatFbLocale');
 require('dotenv').config();
 const https = require('https');
@@ -68,10 +69,6 @@ router.get(['/', '/index.html'], (req, res) => {
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     localizeContactInfo: localizeContactInfo(res.locals.currentCountry)
   });
-});
-
-router.get(['/donation-form-bounce', '/donation-form-bounce.html'], (req, res) => {
-  res.render('donation-form-bounce', { layout: false });
 });
 
 router.get('/faq', (req, res) => {
@@ -181,8 +178,8 @@ router.get(['/404', '/404.html'], (req, res) => {
   res.render('404', { layout: false });
 });
 
-router.get('/:countryCode/donation-form', (req, res) => {
-  res.redirect(`/${req.params.countryCode}/donation-form-bounce.html?locale=${req.query.locale}`);
+router.get('/donation-form', (req, res) => {
+  res.redirect(getDonationFormUrl(res.locals.currentCountry, res.locals.locale));
 });
 
 const cached_data = {};

@@ -18,7 +18,6 @@ export function isCountryPath() {
   return true;
 }
 
-// TODO(ajwong): This is copied into donation-form-bounce.handlebars. Careful.
 export function getCountry() {
   const first_path_part = getFirstPathPart();
   if (countries[first_path_part.toLowerCase()]) {

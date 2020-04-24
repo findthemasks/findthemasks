@@ -1,4 +1,4 @@
-# findthemasks.com 
+# findthemasks.com
 
 This repo hosts the code for findthemasks.com which also provides an embeddable map to other projects
 
@@ -19,7 +19,7 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-dtgs1qck
 
 ## Reading our data to build your own frontend
 
-- Our curated data file updates every five minutes and can be read from https://findthemasks.com/data-us.json [US]. Each country that we serve has its own country code, i.e. data-ca.json for Canada, data-fr.json for France, etc. 
+- Our curated data file updates every five minutes and can be read from https://findthemasks.com/data-us.json [US]. Each country that we serve has its own country code, i.e. data-ca.json for Canada, data-fr.json for France, etc.
 - Similarly, we also offer CSV output at http://findthemasks.com/data-us.csv , with similar country-code modifications for each country.
 - If reading in data and producing web output sounds like a lot to do, please read on:
 
@@ -80,7 +80,7 @@ will show the map of the United States in French and `/fr/give.html?locale=en-US
 
 To add a new country, you need to set a few variables.
 1. Get the country code from https://www.iban.com/country-codes.
-2. Add the country code and a link to the donation form to `donation-form-bounce.html`. The form should
+2. Add the country code and a link to the donation form to `viewHelpers/getDonationFormUrl.js`. The form should
 include translations for all official languages in that country.
 3. Add the translated strings for all official languages in that country in `i18n.js`. As a starting point,
 it is OK to launch a new language using an international variant. e.g. you can launch Canada
