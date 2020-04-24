@@ -41,7 +41,32 @@
     "no-plusplus": "off",
 
     // Nothing wrong with continue either.
-    "no-continue": "off"
+    "no-continue": "off",
+
+    // Disable single-line statements (since we enforce curly braces for all)
+    "nonblock-statement-body-position": "off",
+
+    // All blocks require curly braces
+    "curly": [2, "all"],
+
+    "comma-dangle": [2, {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "never",
+      "exports": "never",
+      "functions": "never"
+    }],
+
+    "object-curly-newline": [2, {
+      "ObjectExpression": { "multiline": true, "consistent": true },
+      "ObjectPattern": { "multiline": true, "consistent": true },
+      "ImportDeclaration": { "multiline": true, "consistent": true },
+      "ExportDeclaration": { "multiline": true, "consistent": true }
+    }],
+
+    "object-property-newline": 2,
+
+    "function-paren-newline": [2, "multiline-arguments"]
   },
   "settings": {
     "polyfills": [

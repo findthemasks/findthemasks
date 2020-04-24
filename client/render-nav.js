@@ -2,9 +2,7 @@ import countries from './countries.js';
 import locales from './locales.js';
 import { getCountry } from './getCountry.js';
 import { getCurrentLocaleParam, DEFAULT_LOCALE } from './i18nUtils.js';
-import {
-  ac, ce, ctn, FtmUrl,
-} from './utils.js';
+import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
 
 const currentCountry = getCountry();

@@ -1,5 +1,5 @@
 module.exports = (req, res, next) => {
-  const originalUrl = req.originalUrl;
+  const { originalUrl } = req;
   const directories = originalUrl.split('/');
 
   if (directories.length > 2) {
