@@ -1,0 +1,39 @@
+<div class="modal fade contact-modal" id="contactModal" tabindex="-1" role="dialog" aria-labelledby="contactModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="contactModalLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="contact-form">
+          <form>
+            <div class="form-group">
+              <input type="text" class="form-control i18n" id="sender-name" placeholder="Your Name" data-i18n="[placeholder]ftm-email-form-name-placeholder">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control i18n" id="sender-email" placeholder="Your Email" data-i18n="[placeholder]ftm-email-form-email-placeholder">
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control i18n" id="message-subject" placeholder="Subject" data-i18n="[placeholder]ftm-email-form-subject-placeholder">
+            </div>
+            <div class="form-group">
+              <textarea class="form-control i18n" id="message-text" placeholder="Your Message" data-i18n="[placeholder]ftm-email-form-message-placeholder"></textarea>
+            </div>
+            <div class="g-recaptcha" data-sitekey="6Lc4zOgUAAAAAEVpMkSlTGuS81zHS34yNTMbf16r" data-size="compact"></div>
+          </form>
+          <div class="contact-error">&nbsp;</div>
+          <input type="hidden" id="message-recipient">
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="send-message">Send message</button>
+          </div>
+        </div>
+      </div>
+      <div class="contact-success i18n" data-i18n="ftm-email-sent-confirmation">
+        Your message was sent
+      </div>
+  </div>
+</div>
