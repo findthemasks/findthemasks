@@ -6,16 +6,25 @@ html {
 body {
   background: #fff;
   box-sizing: border-box;
-  color: #222;
-  font: normal normal normal 1rem/1.65 'Roboto', 'Helvetica', sans-serif;
+  color: #333;
+  font: normal normal normal .875rem/1.55 'Open Sans', 'Helvetica', sans-serif;
   height: 100%;
   margin: 0;
   padding: 0;
   text-rendering: optimizeLegibility;
 }
 
+h1, h2, h3, h4, h5 {
+  font-weight: 600;
+}
+
+p a {
+  text-decoration: underline;
+}
+
 a {
   color: #4169E1;
+  font-weight: 600;
 }
 
 .linkified {
@@ -24,6 +33,7 @@ a {
 
 .text-pink {
   color: #EC416F;
+  font-weight: 600;
 }
 
 .bg-dark-blue {
@@ -43,6 +53,33 @@ a {
   top: 58px;
   z-index: 1;
   background: white;
+}
+
+.search-filter-container .bg-dark-blue {
+  padding: 2rem !important;
+}
+
+.search-filter-container h4 {
+  font-weight: 700;
+  font-size: 1.375rem;
+}
+
+.search-filter-container p {
+  font-size: 1rem;
+}
+
+.search-filter-container .input-group-text {
+  padding-right: .7rem !important;
+}
+
+.search-filter-container .form-control {
+  height: auto;
+  font-size: .875rem;
+}
+
+/* even out the spacing between filters... */
+.filters-container > *:first-child {
+  padding-right: 0 !important;
 }
 
 .logo {
@@ -80,7 +117,7 @@ a {
 
 .member-of {
   font-style: italic;
-  font-size: 13px;
+  font-size: .8125rem;
   margin-bottom: 10px;
 
 }
@@ -181,12 +218,33 @@ h3.city {
   text-transform: uppercase;
 }
 
+.locations-container {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 .locations-list-header {
+  padding: 0 !important;
+  margin: 0 !important;
   border-bottom: 1px solid #D4D4D4;
+}
+
+.locations-list-header > * {
+  padding: 1rem 2rem;
+}
+
+.locations-list-header #list-stats {
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .location {
   border-bottom: 1px solid #D4D4D4;
+  padding: 1.5rem 2rem !important;
+}
+
+.location .font-weight-bold {
+  font-weight: 600 !important;
 }
 
 .donation-sites h1 {
@@ -200,7 +258,7 @@ h3.city {
 
 .filters-list h4 {
   display: block;
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 600;
   margin: 25px 0 20px 0;
 }
@@ -214,7 +272,7 @@ h3.city {
   border-radius: 5px;
   border: 1px #ccc solid;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 1.125rem;
   min-width: 2.4em;
   padding: 0.3rem;
   text-align: center;
@@ -377,6 +435,7 @@ h3.page-subhead {
 
 .navbar.ftm {
   background: #4169E1;
+  padding: 0 .75rem;
 }
 
 .navbar.ftm .nav-link,
@@ -384,12 +443,24 @@ h3.page-subhead {
   font-size: 0.9rem;
 }
 
+.navbar.ftm .navbar-brand,
+.navbar.ftm .add-donation-site-form {
+  display: flex;
+  min-height: 100%;
+  align-items: center;
+}
+
 .navbar.ftm .navbar-brand {
   flex-direction: row;
   font-size: inherit;
-  font-weight: 500;
+  font-weight: 700;
   padding: 0;
   text-transform: uppercase;
+  height: 54px;
+}
+
+.navbar.ftm .navbar-toggler {
+  border: 0;
 }
 
 .navbar.ftm .navbar-brand .icon {
@@ -400,29 +471,43 @@ h3.page-subhead {
 
 .navbar.ftm .navbar-brand .text {
   display: inline-block;
-  padding: .5rem 0;
-}
-
-.navbar.ftm .navbar-nav .nav-item {
-  margin: 0 .2rem;
+  font-weight: 700;
 }
 
 .navbar.ftm .navbar-nav .nav-link {
-  padding: .5rem;
+  padding: 1rem;
+  font-weight: 600;
+}
+
+.navbar.ftm .navbar-nav .nav-link:hover {
+  background: rgba(255, 255, 255, .1);
 }
 
 .navbar.ftm .navbar-nav .home-link {
   cursor: pointer;
 }
 
-.navbar.ftm .nav-item.show {
-  background: #3E54A1;
+.navbar.ftm .nav-item.show,
+.navbar.ftm .nav-item.show .nav-link:hover {
+  background: #3F5CBB;
+}
+
+.navbar.ftm .dropdown-menu {
+  border: none;
+  border-radius: 0;
+  margin-top: 0;
 }
 
 .navbar.ftm .dropdown-menu,
 .navbar.ftm .dropdown-item {
-  background: #3E54A1;
+  background: #3F5CBB;
   color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.navbar.ftm .dropdown-item {
+  padding: .4rem 1rem;
 }
 
 .navbar.ftm .dropdown-item:hover {
@@ -433,23 +518,39 @@ h3.page-subhead {
   color: #fff;
   background: #EC416F;
   white-space: nowrap;
+  font-weight: 600;
+  margin-left: 1rem;
+  padding-left: 1rem;
+  padding-right: 1.4rem;
 }
 
-.navbar.ftm .btn-addplace .icon, .icon-requester-pin.icon {
+.navbar.ftm .btn-addplace:hover {
+  background: #F84E7C;
+}
+
+.navbar.ftm .btn-addplace .icon,
+.icon-requester-pin.icon {
   display: inline-block;
   vertical-align: middle;
-  height: 25px;
-  width: 25px;
-  padding-right: 8px;
+  height: 18px;
+  width: 18px;
+  margin-right: 6px;
+  position: relative;
+  top: -2px;
+  background-size: contain;
+  background-position: center;
 }
 
 #countries-dropdown .icon,
 #countries-dropdown-selector .icon {
   display: inline-block;
   vertical-align: middle;
-  height: 24px;
-  width: 24px;
+  height: 18px;
+  width: 18px;
   margin-right: 8px;
+  position: relative;
+  top: -1px;
+  background-size: cover;
 }
 
 /* Mobile first: Desktop breakpoint overrides below */
@@ -470,6 +571,32 @@ h3.page-subhead {
   .map-search-wrap {
     padding-top: 4px;
   }
+
+  .navbar.ftm {
+    padding: 0;
+  }
+
+  .navbar.ftm .navbar-brand {
+    margin-left: .5rem;
+  }
+
+  .navbar.ftm .navbar-nav .nav-link {
+    text-align: center;
+    padding: .75rem;
+  }
+
+  .navbar.ftm .dropdown-item {
+    text-align: center;
+  }
+
+  .navbar.ftm .add-donation-site-form {
+    padding: 0 1rem .5rem 1rem;
+  }
+
+  .navbar.ftm .btn-addplace {
+    width: 100%;
+    margin: 0;
+  }
 }
 
 @media (max-width: 576px) {
@@ -483,9 +610,29 @@ h3.page-subhead {
   h2.state {
     padding: 4px 10px;
   }
-  h3.city,
-  .location {
+  h3.city {
     margin-left: 10px;
+  }
+
+  .search-filter-container .bg-dark-blue,
+  .locations-list-header > *,
+  .location
+   {
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+
+  .search-filter-container .bg-dark-blue {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  .search-filter-container h4 {
+    font-size: 20px;
+  }
+
+  .search-filter-container p {
+    font-size: 15px;
   }
 }
 
@@ -568,3 +715,6 @@ div.figure img {
     display: block;
 }
 
+.selectr-selected {
+  border: none;
+}
