@@ -597,25 +597,17 @@ async function get_live_data() {
   data_static = resp.data;
 }
 
-const makeSmartyStreetRequest = async (url) => (
-  new Promise(async (resolve, reject) => {
+const makeSmartyStreetRequest = async (url) => {
     try {
       const response = await request({
         url: url
       });
-
-      resolve(response.data);
+      return response.data;
     } catch (error) {
-      reject(error);
+      console.error('Smarty Street Error', error);
+      return null;
     }
-  })
-);
-
-async function asyncForEach(array, callback) {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array);
-  }
-}
+};
 
 const annotateSmartyStreetsAddresses = async (country) => {
   const client = await getAuthorizedClient();
@@ -646,7 +638,7 @@ const annotateSmartyStreetsAddresses = async (country) => {
 
     const toWrite = [];
 
-    await asyncForEach(real_values, async (entry, index) => {
+    await Promise.all(real_values.map(async (entry, index) => {
       const finalAddress = entry[addressIndex];
       const isApproved = entry[approvedIndex] === "x";
       const smartyStreetRun = entry[smartyStreetIndex] === "x";
@@ -662,18 +654,18 @@ const annotateSmartyStreetsAddresses = async (country) => {
 
           const data = await makeSmartyStreetRequest(url);
 
-          // smarty street can return multiple, just pick the one it has highest confidence in
-          const predictedAddress = data[0];
+          if (Array.isArray(data)) {
+            // smarty street can return multiple, just pick the one it has highest confidence in
+            const predictedAddress = data[0];
 
-          toWrite.push({ rowIndex, predictedAddress });
+            toWrite.push({ rowIndex, predictedAddress });
+          }
         } else {
           const url = `${SMARTY_STREETS_INTL_API_URL}?country=${upperCaseCountry}&freeform=${address}&auth-id=${SMARTY_STREETS_AUTH_ID}&auth-token=${SMARTY_STREETS_AUTH_TOKEN}`
           console.log('Unsupported intl address');
         }
-      } else {
-        toWrite.push({ rowIndex });
       }
-    });
+    }));
 
     if (toWrite.length > 0) {
       const smartyStreetsWriteData = [];
