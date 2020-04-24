@@ -13,7 +13,8 @@
   "scripts": {
     "build": "npm run webpack",
     "dev": "NODE_ENV='development' nodemon --ignore 'client/' server.js",
-    "lint": "eslint *.js client/*.js --fix",
+    "lint": "eslint *.js client/*.js",
+    "e2e-test": "true",
     "start": "node server.js",
     "webpack": "NODE_ENV='production' webpack -p --config webpack.config.js"
   },

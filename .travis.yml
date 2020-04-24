@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - 12
+
+jobs:
+  include:
+    - stage: lint
+      script: npm run lint
+    - stage: test
+      script: npm run e2e-test
