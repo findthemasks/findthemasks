@@ -103,8 +103,8 @@ const parseFiltersFromData = (data) => {
           }
         });
 
-        if (entry.orgType) {
-          const orgTypeKey = entry.orgType.toLowerCase();
+        if (entry.org_type) {
+          const orgTypeKey = entry.org_type.toLowerCase();
 
           if (ORG_TYPES[orgTypeKey] !== undefined && orgTypes[orgTypeKey] === undefined) {
             orgTypes[orgTypeKey] = {
@@ -373,7 +373,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
         let inOrgTypeFilter = true;
 
         if (filterOrgTypeKeys) {
-          const orgTypeKey = (entry.orgType || '').toLowerCase();
+          const orgTypeKey = (entry.org_type || '').toLowerCase();
           if (!filterOrgTypeKeys.includes(orgTypeKey)) {
             inOrgTypeFilter = false;
             secondaryFiltersApplied = true;
@@ -402,7 +402,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
             marker = createMarker(
               lat,
               lng,
-              entry.orgType,
+              entry.org_type,
               entry.address,
               entry.name,
               entry.instructions,
@@ -648,7 +648,7 @@ function getFlatFilteredEntries(data, filters) {
     }
 
     if (filterOrgTypeKeys) {
-      const acc = (entry.orgType || '').toLowerCase();
+      const acc = (entry.org_type || '').toLowerCase();
       if (!filterOrgTypeKeys.some((s) => acc === s)) {
         return;
       }
@@ -703,9 +703,9 @@ function getEntryEl(entry) {
     const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
     ac(headerHospitalInfo, ce('h5', null, ctn(entry.name)));
 
-    if (entry.orgType && entry.orgType.length) {
+    if (entry.org_type && entry.org_type.length) {
       ac(headerOrgType, [
-        ce('p', null, ctn(translateEnumValue(entry.orgType))),
+        ce('p', null, ctn(translateEnumValue(entry.org_type))),
       ]);
     }
 
