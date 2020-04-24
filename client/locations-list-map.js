@@ -746,10 +746,14 @@ function getEntryEl(entry) {
     ac(entry.domElem, header);
 
     if (showContact && entry.encrypted_email) {
-      ac(entry.domElem, [
-        ce('label', null, ctn($.i18n('ftm-email-contact'))),
-        $(`<p><a href="#" data-toggle="modal" data-target="#contactModal" data-name="${entry.name}" data-email="${entry.encrypted_email}">${$.i18n('ftm-email-contact-org')}</a></p>`)[0]
+      const emailContainer = ce('div', 'row');
+
+      ac(emailContainer, [
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-email-contact'))),
+        $(`<p class="col-12 col-md-9"><a href="#" data-toggle="modal" data-target="#contactModal" data-name="${entry.name}" data-email="${entry.encrypted_email}">${$.i18n('ftm-email-contact-org')}</a></p>`)[0]
       ]);
+
+      ac(entry.domElem, emailContainer);
     }
 
     if (entry.accepting) {
@@ -1206,7 +1210,7 @@ function initContactModal() {
   });
 
   $('#contactModal #send-message').on('click', function (event) {
-    $('.contact-error').html(null);
+    $('.contact-error').html('&nbsp;');
     $('#send-message').prop('disabled', true);
 
     $.post(
@@ -1240,6 +1244,7 @@ function initContactModal() {
   $('#contactModal').on('hidden.bs.modal', function (event) {
     $('.contact-form').css('display', 'block');
     $('.contact-success').css('display', 'none');
+    $('.contact-error').html('&nbsp;');
   });
 }
 
