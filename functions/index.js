@@ -18,6 +18,8 @@ let CONFIG_CLIENT_ID = '';
 let CONFIG_CLIENT_SECRET = '';
 let GOOGLE_MAPS_API_KEY = '';
 let EMAIL_ENCRYPTION_KEY = '';
+let SMARTY_STREETS_AUTH_ID = '';
+let SMARTY_STREETS_AUTH_TOKEN = '';
 
 const SHEETS = {
   at: '19gKSyKmT4yU7F32R3lBM6p0rmMJXusX_uMYDq1CMTIo',
@@ -39,6 +41,8 @@ if (functions.config().googleapi !== undefined) {
   CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
   GOOGLE_MAPS_API_KEY = functions.config().findthemasks.geocode_key;
   EMAIL_ENCRYPTION_KEY = functions.config().findthemasks.email_encryption_key;
+  SMARTY_STREETS_AUTH_ID = functions.config().findthemasks.smarty_streets_auth_id;
+  SMARTY_STREETS_AUTH_TOKEN = functions.config().findthemasks.smarty_streets_auth_token
 }
 
 const COLUMNS = [
@@ -47,7 +51,10 @@ const COLUMNS = [
 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM',
 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'
 ];
-const WRITEBACK_SHEET = "'Combined'";
+const COMBINED_WRITEBACK_SHEET = "'Combined'";
+const SMARTY_STREETS_OUTPUT_SHEET = "'Smarty Street Output'";
+const SMARTY_STREETS_US_API_URL = 'https://us-street.api.smartystreets.com/street-address';
+const SMARTY_STREETS_INTL_API_URL = 'https://international-street.api.smartystreets.com/verify';
 
 // The OAuth Callback Redirect.
 const FUNCTIONS_REDIRECT = `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com/oauthcallback`;
@@ -196,19 +203,19 @@ async function annotateGeocode(data, sheet_id, client) {
       // TODO(awong): Don't hardcode the columns. Make it more robust somehow.
       if (e.geocode.location) {
         data.push({
-          range: `${WRITEBACK_SHEET}!${latColumn}${e.row_num}`,
+          range: `${COMBINED_WRITEBACK_SHEET}!${latColumn}${e.row_num}`,
           values: [ [e.geocode.location.lat] ]
         });
 
         data.push({
-          range: `${WRITEBACK_SHEET}!${lngColumn}${e.row_num}`,
+          range: `${COMBINED_WRITEBACK_SHEET}!${lngColumn}${e.row_num}`,
           values: [ [e.geocode.location.lng] ]
         });
       }
 
       if (e.geocode.canonical_address) {
         data.push({
-          range: `${WRITEBACK_SHEET}!${addressColumn}${e.row_num}`,
+          range: `${COMBINED_WRITEBACK_SHEET}!${addressColumn}${e.row_num}`,
           values: [ [e.geocode.canonical_address] ]
         });
       }
@@ -589,3 +596,180 @@ async function get_live_data() {
   console.log('Setting global variable `data_static` to the contents of ' + url);
   data_static = resp.data;
 }
+
+const makeSmartyStreetRequest = async (url) => (
+  new Promise(async (resolve, reject) => {
+    try {
+      const response = await request({
+        url: url
+      });
+
+      resolve(response.data);
+    } catch (error) {
+      reject(error);
+    }
+  })
+);
+
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+}
+
+const annotateSmartyStreetsAddresses = async (country) => {
+  const client = await getAuthorizedClient();
+
+  const sheetId = SHEETS[country];
+
+  // Open relevant sheet
+  const sheets = google.sheets('v4');
+  const request = {
+    spreadsheetId: sheetId,
+    range: 'Combined'
+  };
+  request.auth = client;
+
+  try {
+    const response = await sheets.spreadsheets.values.get(request);
+    const data = response.data;
+
+    const upperCaseCountry = country.toUpperCase();
+
+    const headers = data.values[1];
+    const [header_values, col_labels, real_values] = splitValues(data);
+
+    const approvedIndex = headers.findIndex(e => e === 'approved');
+    const addressIndex = headers.findIndex(e => e === 'address');
+    const smartyStreetIndex = headers.findIndex(e => e === '_smarty_street_run');
+    const smartyStreetColumn = COLUMNS[smartyStreetIndex];
+
+    const toWrite = [];
+
+    await asyncForEach(real_values, async (entry, index) => {
+      const finalAddress = entry[addressIndex];
+      const isApproved = entry[approvedIndex] === "x";
+      const smartyStreetRun = entry[smartyStreetIndex] === "x";
+
+      // Row numbers start at 1.  First 2 rows are headers, so we need to add 2.
+      const rowIndex = index + 1 + 2;
+
+      if (finalAddress && isApproved && !smartyStreetRun) {
+        const oneLineAddress = finalAddress.replace("\n", ", ").trim();
+
+        if (upperCaseCountry === 'US') {
+          const url = `${SMARTY_STREETS_US_API_URL}?street=${oneLineAddress}&auth-id=${SMARTY_STREETS_AUTH_ID}&auth-token=${SMARTY_STREETS_AUTH_TOKEN}`;
+
+          const data = await makeSmartyStreetRequest(url);
+
+          // smarty street can return multiple, just pick the one it has highest confidence in
+          const predictedAddress = data[0];
+
+          toWrite.push({ rowIndex, predictedAddress });
+        } else {
+          const url = `${SMARTY_STREETS_INTL_API_URL}?country=${upperCaseCountry}&freeform=${address}&auth-id=${SMARTY_STREETS_AUTH_ID}&auth-token=${SMARTY_STREETS_AUTH_TOKEN}`
+          console.log('Unsupported intl address');
+        }
+      } else {
+        toWrite.push({ rowIndex });
+      }
+    });
+
+    if (toWrite.length > 0) {
+      const smartyStreetsWriteData = [];
+      const combinedSheetWriteData = [];
+
+      toWrite.forEach((row) => {
+        const predictedAddress = row.predictedAddress || {};
+        const components = predictedAddress.components || {};
+        const metadata = predictedAddress.metadata || {};
+        const analysis = predictedAddress.analysis || {};
+
+        combinedSheetWriteData.push({
+          range: `${COMBINED_WRITEBACK_SHEET}!${smartyStreetColumn}${row.rowIndex}`,
+          values: [['x']]
+        });
+
+        smartyStreetsWriteData.push({
+          range: `${SMARTY_STREETS_OUTPUT_SHEET}!${row.rowIndex}:${row.rowIndex}`,
+          values: [
+            [
+              row.rowIndex,
+              predictedAddress.delivery_line_1,
+              predictedAddress.last_line,
+              predictedAddress.delivery_point_barcode,
+              components.primary_number,
+              components.street_name,
+              components.street_postdirection,
+              components.street_suffix,
+              components.city_name,
+              components.default_city_name,
+              components.state_abbreviation,
+              components.zipcode,
+              components.plus4_code,
+              components.delivery_point,
+              components.delivery_point_check_digit,
+              metadata.record_type,
+              metadata.zip_type,
+              metadata.county_fips,
+              metadata.county_name,
+              metadata.carrier_route,
+              metadata.congressional_district,
+              metadata.rdi,
+              metadata.elot_sequence,
+              metadata.elot_sort,
+              metadata.latitude,
+              metadata.longitude,
+              metadata.precision,
+              metadata.time_zone,
+              metadata.utc_offset,
+              metadata.dst,
+              metadata.dpv_match_code,
+              analysis.dpv_footnotes,
+              analysis.dpv_cmra,
+              analysis.dpv_vacant,
+              analysis.active
+            ]
+          ]
+        });
+      });
+
+      const smartyStreetsWriteRequest = {
+        spreadsheetId: sheetId,
+        resource: {
+          valueInputOption: 'USER_ENTERED',
+          data: smartyStreetsWriteData
+        }
+      };
+
+      smartyStreetsWriteRequest.auth = client;
+
+      const combinedSheetWriteRequest = {
+        spreadsheetId: sheetId,
+        resource: {
+          valueInputOption: 'USER_ENTERED',
+          data: combinedSheetWriteData
+        }
+      };
+
+      smartyStreetsWriteRequest.auth = client;
+      combinedSheetWriteRequest.auth = client;
+
+      await google.sheets('v4').spreadsheets.values.batchUpdate(smartyStreetsWriteRequest);
+      await google.sheets('v4').spreadsheets.values.batchUpdate(combinedSheetWriteRequest);
+    }
+  } catch (error) {
+    console.error(`Error getting sheet for ${country}`, error);
+  }
+};
+
+module.exports.smarty_streets_analysis = functions.https.onRequest(async (req, res) => {
+  const country = get_country_from_path(req);
+  if (!(country in SHEETS)) {
+    res.status(400).send(`invalid country: ${country} for ${req.path}`);
+    return;
+  }
+
+  await annotateSmartyStreetsAddresses(country);
+  res.status(200).send("Smarty Streets Output tab updated successfully!");
+});
