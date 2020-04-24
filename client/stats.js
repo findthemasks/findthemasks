@@ -18,9 +18,9 @@ const renderStats = (totalCount, totalCities, stateCounts) => {
   $('.stats-container').html(statsHtml);
 };
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
   const url = new FtmUrl(window.location);
-  const directories = url.pathname.split("/");
+  const directories = url.pathname.split('/');
 
   let countryDataFilename;
 
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const stateCounts = {};
 
     for (const state of Object.keys(locations).sort()) {
-      const cities = locations[state].cities;
+      const { cities } = locations[state];
       const citiesKeys = Object.keys(cities);
       const stateCitiesCount = citiesKeys.length;
 
