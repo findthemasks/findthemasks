@@ -2,31 +2,31 @@ import { DEFAULT_LOCALE, getCurrentLocaleParam } from './i18nUtils.js';
 import internationalizeLinks from './internationalizeLinks.js';
 
 const localesMap = {
-  "en": "/i18n/en.json",
-  "en-US": "/i18n/en.json",
-  "fr": "/i18n/fr-fr.json",
-  "fr-FR": "/i18n/fr-fr.json",
-  "de": "/i18n/de-de.json",
-  "de-DE": "/i18n/de-de.json",
-  "it": "/i18n/it-it.json",
-  "it-IT": "/i18n/it-it.json",
-  "es": "/i18n/es-es.json",
-  "es-ES": "/i18n/es-es.json",
-  "pt": "/i18n/pt-pt.json",
-  "pt-PT": "/i18n/pt-pt.json",
-  "pl": "/i18n/pl-pl.json",
-  "pl-PL": "/i18n/pl-pl.json",
-  "zh-TW": "/i18n/zh-tw.json"
+  en: '/i18n/en.json',
+  'en-US': '/i18n/en.json',
+  fr: '/i18n/fr-fr.json',
+  'fr-FR': '/i18n/fr-fr.json',
+  de: '/i18n/de-de.json',
+  'de-DE': '/i18n/de-de.json',
+  it: '/i18n/it-it.json',
+  'it-IT': '/i18n/it-it.json',
+  es: '/i18n/es-es.json',
+  'es-ES': '/i18n/es-es.json',
+  pt: '/i18n/pt-pt.json',
+  'pt-PT': '/i18n/pt-pt.json',
+  pl: '/i18n/pl-pl.json',
+  'pl-PL': '/i18n/pl-pl.json',
+  'zh-TW': '/i18n/zh-tw.json',
 };
 
 const getConfigForLocale = (locale) => {
   if (locale) {
     if (localesMap[locale]) {
       return {
-        locale: locale,
+        locale,
         map: {
-          [locale]: localesMap[locale]
-        }
+          [locale]: localesMap[locale],
+        },
       };
     }
 
@@ -36,8 +36,8 @@ const getConfigForLocale = (locale) => {
       return {
         locale: language,
         map: {
-          [language]: localesMap[language]
-        }
+          [language]: localesMap[language],
+        },
       };
     }
   }
@@ -55,7 +55,7 @@ const determineLocaleConfig = (detectedLocale) => {
 };
 
 $(() => {
-  const init = function () {
+  const init = () => {
     // translate static elements and initialize translations
     // then, remove spinner and show page content
     $('.i18n').i18n();

@@ -21,18 +21,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.7/jquery.i18n.emitter.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-linkify/2.1.9/linkify-element.min.js"></script>
-  <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
   <script>
     window.GOOGLE_MAPS_API_KEY = '{{googleMapsApiKey}}';
   </script>
-  <script type="module" src="/generated/i18n.entry.js?v=v{{ version }}"></script>
-  <link rel="stylesheet" href="/assets/styles/selectr.min.css" />
-  <script src="/assets/scripts/selectr.min.js"></script>
-  <script type="module" src="/generated/locations-list-map.entry.js?v=v{{ version }}"></script>
+  <script src="/generated/locations-list-map.entry.js?v=v{{ version }}" defer></script>
   <title>#Findthemasks</title>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap" rel="stylesheet">
   <meta name="description" content="Help #findthemasks for covid-19" />
   <meta name="keywords" content="#findthemasks, masks, n95, coronavirus, covid-19" />
   <link rel="apple-touch-icon" sizes="180x180" href="/images/icons/apple-touch-icon.png">
@@ -44,6 +40,8 @@
 
   <link rel="canonical" href="https://findthemasks.com/" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <!-- TODO: Remove selectr once give.css is generated and uses the npm version -->
+  <link rel="stylesheet" href="/assets/styles/selectr.min.css" />
   <link rel="stylesheet" href="/give.css" />
   <link rel="stylesheet" href="/images/icons.data.svg.css" />
 

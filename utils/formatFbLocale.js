@@ -5,7 +5,6 @@ module.exports = (locale) => {
   if (locale.includes('-')) {
     [language, region] = locale.split('-');
     return `${language}_${region.toUpperCase()}`;
-  } else {
-    return locale;
   }
+  return locale;
 };

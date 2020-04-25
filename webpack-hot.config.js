@@ -1,9 +1,11 @@
-const config = require('./webpack.config.js');
 const webpack = require('webpack');
-const ErrorOverlayPlugin = require('error-overlay-webpack-plugin')
+const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
+const config = require('./webpack.config.js');
 
 // Currently rendering doesn't have a way to understand HMR to do a partial
 // reload so do a full page refresh per HMR update.
+
+/* eslint-disable compat/compat */
 for (const entry of Object.values(config.entry)) {
   entry.unshift('webpack-hot-middleware/client?reload=true');
 }

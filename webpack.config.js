@@ -7,18 +7,18 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const config = {
   entry: {
-    'render-nav': ["./client/render-nav.js"],
-    'i18n': ["./client/i18n.js"],
-    'stats': ["./client/stats.js"],
-    'style': ["./sass/style.css"],
-    'locations-list-map': ["./client/locations-list-map.js"]
+    'render-nav': ['./client/render-nav.js'],
+    i18n: ['./client/i18n.js'],
+    stats: ['./client/stats.js'],
+    style: ['./sass/style.css'],
+    'locations-list-map': ['./client/locations-list-map.js'],
   },
   resolve: { extensions: ['.js'] },
   mode: isDevelopment ? 'development' : 'production',
   output: {
-    path: path.join(__dirname, `./public/generated`),
+    path: path.join(__dirname, './public/generated'),
     publicPath: '/generated/',
-    filename: '[name].entry.js'
+    filename: '[name].entry.js',
   },
   module: {
     rules: [
@@ -26,7 +26,7 @@ const config = {
         test: /\.scss$|\.css$/,
         use: [
           {
-            loader:  MiniCssExtractPlugin.loader,
+            loader: MiniCssExtractPlugin.loader,
             options: {
               hmr: isDevelopment,
             },
@@ -38,18 +38,25 @@ const config = {
               sourceMap: true,
               sassOptions: {
                 includePaths: glob.sync('node_modules').map((d) => path.join(__dirname, d)),
-              }
-            }
-          }
+              },
+            },
+          },
         ],
+      },
+      {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+        },
       },
     ],
   },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: isDevelopment ? "'development'" : "'production'"
-      }
+        NODE_ENV: isDevelopment ? "'development'" : "'production'",
+      },
     }),
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
@@ -64,7 +71,7 @@ if (isDevelopment) {
   config.devtool = '#eval-source-map';
 } else {
   config.devtool = '#source-map';
-  config.optimization = {minimize: true};
+  config.optimization = { minimize: true };
 }
 
 module.exports = config;

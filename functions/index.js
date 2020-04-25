@@ -2,6 +2,7 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const csv_stringify = require('csv-stringify');
 const {request} = require('gaxios');
+const crypto = require('crypto');
 
 admin.initializeApp();
 
@@ -16,6 +17,9 @@ const Client = require("@googlemaps/google-maps-services-js").Client;
 let CONFIG_CLIENT_ID = '';
 let CONFIG_CLIENT_SECRET = '';
 let GOOGLE_MAPS_API_KEY = '';
+let EMAIL_ENCRYPTION_KEY = '';
+let SMARTY_STREETS_AUTH_ID = '';
+let SMARTY_STREETS_AUTH_TOKEN = '';
 
 const SHEETS = {
   at: '19gKSyKmT4yU7F32R3lBM6p0rmMJXusX_uMYDq1CMTIo',
@@ -36,6 +40,9 @@ if (functions.config().googleapi !== undefined) {
   CONFIG_CLIENT_ID = functions.config().googleapi.client_id
   CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
   GOOGLE_MAPS_API_KEY = functions.config().findthemasks.geocode_key;
+  EMAIL_ENCRYPTION_KEY = functions.config().findthemasks.email_encryption_key;
+  SMARTY_STREETS_AUTH_ID = functions.config().findthemasks.smarty_streets_auth_id;
+  SMARTY_STREETS_AUTH_TOKEN = functions.config().findthemasks.smarty_streets_auth_token
 }
 
 const COLUMNS = [
@@ -44,7 +51,10 @@ const COLUMNS = [
 'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM',
 'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'
 ];
-const WRITEBACK_SHEET = "'Combined'";
+const COMBINED_WRITEBACK_SHEET = "'Combined'";
+const SMARTY_STREETS_OUTPUT_SHEET = "'Smarty Street Output'";
+const SMARTY_STREETS_US_API_URL = 'https://us-street.api.smartystreets.com/street-address';
+const SMARTY_STREETS_INTL_API_URL = 'https://international-street.api.smartystreets.com/verify';
 
 // The OAuth Callback Redirect.
 const FUNCTIONS_REDIRECT = `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com/oauthcallback`;
@@ -193,19 +203,19 @@ async function annotateGeocode(data, sheet_id, client) {
       // TODO(awong): Don't hardcode the columns. Make it more robust somehow.
       if (e.geocode.location) {
         data.push({
-          range: `${WRITEBACK_SHEET}!${latColumn}${e.row_num}`,
+          range: `${COMBINED_WRITEBACK_SHEET}!${latColumn}${e.row_num}`,
           values: [ [e.geocode.location.lat] ]
         });
 
         data.push({
-          range: `${WRITEBACK_SHEET}!${lngColumn}${e.row_num}`,
+          range: `${COMBINED_WRITEBACK_SHEET}!${lngColumn}${e.row_num}`,
           values: [ [e.geocode.location.lng] ]
         });
       }
 
       if (e.geocode.canonical_address) {
         data.push({
-          range: `${WRITEBACK_SHEET}!${addressColumn}${e.row_num}`,
+          range: `${COMBINED_WRITEBACK_SHEET}!${addressColumn}${e.row_num}`,
           values: [ [e.geocode.canonical_address] ]
         });
       }
@@ -219,7 +229,7 @@ async function getSpreadsheet(country, client) {
   const request = {
     spreadsheetId: SHEETS[country],
     range: 'Combined'
-    };
+  };
   request.auth = client;
 
   let response = await sheets.spreadsheets.values.get(request);
@@ -235,7 +245,6 @@ async function getSpreadsheet(country, client) {
     // Search for things with a pipe. Split. And then create parallel array.
     const field_translations = data['field_translations'] = {};
     for (const row of config_values) {
-      console.log(row);
       if (row.length > 0) {
         const pipe_index = row[0].indexOf('|');
         if (pipe_index !== -1) {
@@ -256,6 +265,27 @@ async function getSpreadsheet(country, client) {
   return data;
 }
 
+const encryptEmail = (email) => {
+  try {
+    const recipient = { email: email };
+    const json = JSON.stringify(recipient);
+    const iv = crypto.randomBytes(16);
+    const cipher = crypto.createCipheriv('aes-256-cbc', EMAIL_ENCRYPTION_KEY, iv);
+    let ciphertext = cipher.update(json, 'utf-8', 'latin1');
+    ciphertext += cipher.final('latin1');
+    const cipherBuffer = Buffer.from(ciphertext, 'latin1');
+    const result = Buffer.concat([iv, cipherBuffer], iv.length + cipherBuffer.length);
+    return encodeURIComponent(result.toString('base64'));
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+const ENCRYPTED_EMAIL_HEADER_NAME = 'Encrypted Email';
+const ENCRYPTED_EMAIL_COL_LABEL = 'encrypted_email';
+
+
 async function snapshotData(country) {
   const base_filename = `data-${country}`;
   const csv_filename = `${base_filename}.csv`;
@@ -264,7 +294,9 @@ async function snapshotData(country) {
 
   // Talk to sheets.
   const client = await getAuthorizedClient();
-  let data = {}
+  let data = {};
+  let csvDataValues = [];
+
   try {
     data = await getSpreadsheet(country, client);
 
@@ -281,12 +313,20 @@ async function snapshotData(country) {
     const published_cols = new Set();
     const headers = [];
     const col_labels = [];
+
+    let emailIndex;
+
     for (let i = 0; i < orig_col_labels.length; i++) {
       const orig_label = orig_col_labels[i];
       if (orig_label && !orig_label.startsWith('_')) {
         headers.push(orig_headers[i]);
         col_labels.push(orig_label);
         published_cols.add(i);
+      } else if (orig_label && orig_label === '_email') {
+        headers.push(ENCRYPTED_EMAIL_HEADER_NAME);
+        col_labels.push(ENCRYPTED_EMAIL_COL_LABEL);
+        published_cols.add(i);
+        emailIndex = i;
       }
     }
 
@@ -295,17 +335,39 @@ async function snapshotData(country) {
     col_labels.push('row');
 
     const trimmed_values = real_values.map((row, row_num) => {
-      const result = row.filter((_, col_num) => published_cols.has(col_num));
+      const result = [];
+
+      row.forEach((value, col_num) => {
+        if (published_cols.has(col_num)) {
+          if (col_num === emailIndex) {
+            result.push(value && encryptEmail(value));
+          } else {
+            result.push(value);
+          }
+        }
+      });
+
       result.push(row_num + 3);  // 2 rows of header and 1-base indexing.
       return result;
     });
+
     const approvedIndex = col_labels.findIndex( e => e === 'approved' );
     if (approvedIndex === -1) {
       throw new Error("sheet missing expected columns. Ensure row 2 headers are sane?");
     }
 
     const approved_rows = trimmed_values.filter(e => e[approvedIndex] === "x");
+
+    const approvedCSVRows = approved_rows.map((row) => (
+      row.filter((_, colNumber) => colNumber !== emailIndex)
+    ));
+
     data.values = [headers, col_labels, ...approved_rows];
+    csvDataValues = [
+      headers.filter((header) => header !== ENCRYPTED_EMAIL_HEADER_NAME),
+      col_labels.filter((header) => header !== ENCRYPTED_EMAIL_COL_LABEL),
+      ...approvedCSVRows
+    ];
   } catch (err) {
     console.error(err);
   }
@@ -319,16 +381,15 @@ async function snapshotData(country) {
     },
     predefinedAcl: "publicRead",
   });
-
   // Build a simple csv file
   console.log("Preparing CSV File");
   const csvFileRef = admin.storage().bucket().file(csv_filename);
 
   // TODO(awong): This looks like a race as the async callback isn't
   // guaranteed to execute before the calling function returns.
-  csv_stringify(data.values, async (err, output) => {
-    if (err !== null) {
-      console.log(err)
+  csv_stringify(csvDataValues, async (err, output) => {
+    if (err) {
+      console.error(err)
     } else {
       await csvFileRef.save(output, {
 	      gzip: true,
@@ -535,3 +596,190 @@ async function get_live_data() {
   console.log('Setting global variable `data_static` to the contents of ' + url);
   data_static = resp.data;
 }
+
+const makeSmartyStreetRequest = async (url) => {
+    try {
+      const response = await request({
+        url: url
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Smarty Street Error', error);
+      return null;
+    }
+};
+
+const annotateSmartyStreetsAddresses = async (country) => {
+  const client = await getAuthorizedClient();
+
+  const sheetId = SHEETS[country];
+
+  // Open relevant sheet
+  const sheets = google.sheets('v4');
+  const request = {
+    spreadsheetId: sheetId,
+    range: 'Combined'
+  };
+  request.auth = client;
+
+  try {
+    const response = await sheets.spreadsheets.values.get(request);
+    const data = response.data;
+
+    const upperCaseCountry = country.toUpperCase();
+
+    const headers = data.values[1];
+    const [header_values, col_labels, real_values] = splitValues(data);
+
+    const approvedIndex = headers.findIndex(e => e === 'approved');
+    const addressIndex = headers.findIndex(e => e === 'address');
+    const smartyStreetIndex = headers.findIndex(e => e === '_smarty_street_run');
+    const smartyStreetColumn = COLUMNS[smartyStreetIndex];
+
+    const toWrite = [];
+    const approvedWithAddress = [];
+
+    // only run 50 at a time to avoid quota limits
+    real_values.forEach((entry, index) => {
+      const finalAddress = entry[addressIndex];
+      const isApproved = entry[approvedIndex] === "x";
+      const smartyStreetRun = entry[smartyStreetIndex] === "x";
+
+      if (finalAddress && isApproved && !smartyStreetRun && approvedWithAddress.length <= 50) {
+        approvedWithAddress.push({
+          entry: entry,
+          index: index
+        });
+      }
+    });
+
+    await Promise.all(approvedWithAddress.map(async (approved) => {
+      const entry = approved.entry;
+      const index = approved.index;
+      const finalAddress = entry[addressIndex];
+
+      // Row numbers start at 1.  First 2 rows are headers, so we need to add 2.
+      const rowIndex = index + 1 + 2;
+
+      const oneLineAddress = finalAddress.replace("\n", ", ").trim();
+
+      if (upperCaseCountry === 'US') {
+        const encodedParams = `street=${encodeURIComponent(oneLineAddress)}&auth-id=${encodeURIComponent(SMARTY_STREETS_AUTH_ID)}&auth-token=${encodeURIComponent(SMARTY_STREETS_AUTH_TOKEN)}`;
+        const url = `${SMARTY_STREETS_US_API_URL}?${encodedParams}`;
+
+        const data = await makeSmartyStreetRequest(url);
+
+        if (Array.isArray(data)) {
+          // smarty street can return multiple, just pick the one it has highest confidence in
+          const predictedAddress = data[0];
+
+          toWrite.push({ rowIndex, predictedAddress });
+        } else {
+          console.error(`Smarty Streets returned no results for address: ${oneLineAddress}`, data);
+          toWrite.push({ rowIndex });
+        }
+      } else {
+        const encodedParams = encodeURIComponent(`country=${encodeURIComponent(upperCaseCountry)}&freeform=${encodeURIComponent(address)}&auth-id=${encodeURIComponent(SMARTY_STREETS_AUTH_ID)}&auth-token=${encodeURIComponent(SMARTY_STREETS_AUTH_TOKEN)}`);
+        const url = `${SMARTY_STREETS_INTL_API_URL}?${encodedParams}`;
+        console.log('Unsupported intl address');
+      }
+    }));
+
+    if (toWrite.length > 0) {
+      const smartyStreetsWriteData = [];
+      const combinedSheetWriteData = [];
+
+      toWrite.forEach((row) => {
+        const predictedAddress = row.predictedAddress || {};
+        const components = predictedAddress.components || {};
+        const metadata = predictedAddress.metadata || {};
+        const analysis = predictedAddress.analysis || {};
+
+        combinedSheetWriteData.push({
+          range: `${COMBINED_WRITEBACK_SHEET}!${smartyStreetColumn}${row.rowIndex}`,
+          values: [['x']]
+        });
+
+        smartyStreetsWriteData.push({
+          range: `${SMARTY_STREETS_OUTPUT_SHEET}!${row.rowIndex}:${row.rowIndex}`,
+          values: [
+            [
+              row.rowIndex,
+              predictedAddress.delivery_line_1,
+              predictedAddress.last_line,
+              predictedAddress.delivery_point_barcode,
+              components.primary_number,
+              components.street_name,
+              components.street_postdirection,
+              components.street_suffix,
+              components.city_name,
+              components.default_city_name,
+              components.state_abbreviation,
+              components.zipcode,
+              components.plus4_code,
+              components.delivery_point,
+              components.delivery_point_check_digit,
+              metadata.record_type,
+              metadata.zip_type,
+              metadata.county_fips,
+              metadata.county_name,
+              metadata.carrier_route,
+              metadata.congressional_district,
+              metadata.rdi,
+              metadata.elot_sequence,
+              metadata.elot_sort,
+              metadata.latitude,
+              metadata.longitude,
+              metadata.precision,
+              metadata.time_zone,
+              metadata.utc_offset,
+              metadata.dst,
+              metadata.dpv_match_code,
+              analysis.dpv_footnotes,
+              analysis.dpv_cmra,
+              analysis.dpv_vacant,
+              analysis.active
+            ]
+          ]
+        });
+      });
+
+      const smartyStreetsWriteRequest = {
+        spreadsheetId: sheetId,
+        resource: {
+          valueInputOption: 'USER_ENTERED',
+          data: smartyStreetsWriteData
+        }
+      };
+
+      smartyStreetsWriteRequest.auth = client;
+
+      const combinedSheetWriteRequest = {
+        spreadsheetId: sheetId,
+        resource: {
+          valueInputOption: 'USER_ENTERED',
+          data: combinedSheetWriteData
+        }
+      };
+
+      smartyStreetsWriteRequest.auth = client;
+      combinedSheetWriteRequest.auth = client;
+
+      await google.sheets('v4').spreadsheets.values.batchUpdate(smartyStreetsWriteRequest);
+      await google.sheets('v4').spreadsheets.values.batchUpdate(combinedSheetWriteRequest);
+    }
+  } catch (error) {
+    console.error(`Error getting sheet for ${country}`, error);
+  }
+};
+
+module.exports.smarty_streets_analysis = functions.https.onRequest(async (req, res) => {
+  const country = get_country_from_path(req);
+  if (!(country in SHEETS)) {
+    res.status(400).send(`invalid country: ${country} for ${req.path}`);
+    return;
+  }
+
+  await annotateSmartyStreetsAddresses(country);
+  res.status(200).send("Smarty Streets Output tab updated successfully!");
+});

@@ -1,12 +1,14 @@
-# findthemasks.com (used by getusppe.org)
+# findthemasks.com
 
-This repo hosts the code for findthemasks.com, which is also used to power the v1 backend of "give ppe" features on getusppe.org
+[![Build Status](https://travis-ci.org/findthemasks/findthemasks.svg?branch=master)](https://travis-ci.org/findthemasks/findthemasks)
+
+This repo hosts the code for findthemasks.com which also provides an embeddable map to other projects
 
 - Stats: <https://findthemasks.com/stats.html>
 
 ## New volunteer?
 
-Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp-p8~9oKuXtV_gn7wEBZGGoA>
+Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-dtgs1qck-imUSOaWBZmBMFgnwy5uVqw>
 
 - new dev? please look at issues and comment on something to grab it!
     - Check out the [Getting Started](getting_started.md) doc
@@ -19,13 +21,13 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-czdjjznp
 
 ## Reading our data to build your own frontend
 
-- Our data file updates every five minutes and can be read from https://storage.googleapis.com/findthemasks.appspot.com/data.json.
-- If you read the json directly, you need to ignore entries without an 'x' in the first field. Otherwise, you may publish info hospitals asked to have taken down. Don't do it!
-- If this sounds like too much work, then please use our:
+- Our curated data file updates every five minutes and can be read from https://findthemasks.com/data-us.json [US]. Each country that we serve has its own country code, i.e. data-ca.json for Canada, data-fr.json for France, etc.
+- Similarly, we also offer CSV output at http://findthemasks.com/data-us.csv , with similar country-code modifications for each country.
+- If reading in data and producing web output sounds like a lot to do, please read on:
 
 ## Embeddable widget of donation sites
 
-- We have produced an embeddable version of our map, data and filters, without the call to action that's at the top of findthemasks.com. This was designed for getusppe.org on March 22, but can be reused by anyone.
+- We have produced an embeddable version of our map, data and filters
 - You can view it here: <https://findthemasks.com/give.html>
 - To embed into your site, use this html snippet:
 
@@ -80,7 +82,7 @@ will show the map of the United States in French and `/fr/give.html?locale=en-US
 
 To add a new country, you need to set a few variables.
 1. Get the country code from https://www.iban.com/country-codes.
-2. Add the country code and a link to the donation form to `donation-form-bounce.html`. The form should
+2. Add the country code and a link to the donation form to `viewHelpers/getDonationFormUrl.js`. The form should
 include translations for all official languages in that country.
 3. Add the translated strings for all official languages in that country in `i18n.js`. As a starting point,
 it is OK to launch a new language using an international variant. e.g. you can launch Canada
