@@ -172,6 +172,9 @@ export const ORG_TYPES = {
   'urgent care': {
     name: 'ftm-org-type-urgent-care',
   },
+  'care/nursing home': {
+    name: 'ftm-org-type-care-nursing-home',
+  },
 };
 
 export const ENUM_MAPPINGS = {
