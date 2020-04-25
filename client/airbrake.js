@@ -1,5 +1,7 @@
 /* global airbrakeJs */
 
+import { Notifier } from '@airbrake/browser';
+
 // TODO we should have the environment change so we don't alert on local dev machines
 let environment;
 const { hostname } = window.location;
@@ -11,7 +13,7 @@ if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === 'local.
 
 // automatic alerting only on production
 if (environment === 'production') {
-  const airbrake = new airbrakeJs.Client({
+  const airbrake = new Notifier({
     projectId: 266956,
     projectKey: '2c966fe44a092a4dfe2abeb19c9e112d',
     environment,

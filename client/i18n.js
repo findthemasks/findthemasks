@@ -1,3 +1,7 @@
+require ('./common-init.js');
+
+require('../sass/style.css');
+
 import { DEFAULT_LOCALE, getCurrentLocaleParam } from './i18nUtils.js';
 import internationalizeLinks from './internationalizeLinks.js';
 

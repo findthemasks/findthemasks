@@ -1,4 +1,5 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 const glob = require('glob');
 const webpack = require('webpack');
@@ -53,6 +54,10 @@ const config = {
     ],
   },
   plugins: [
+    new webpack.ProvidePlugin({
+        $: "jquery",
+        jQuery: "jquery"
+    }),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: isDevelopment ? "'development'" : "'production'",
@@ -71,7 +76,12 @@ if (isDevelopment) {
   config.devtool = '#eval-source-map';
 } else {
   config.devtool = '#source-map';
-  config.optimization = { minimize: true };
+//  config.optimization = { minimize: true };
+  config.optimization ={
+    minimizer: [new TerserPlugin   ( {
+      sourceMap: true
+    }
+  )] };
 }
 
 module.exports = config;

@@ -9,11 +9,11 @@ import { getCountry, getFirstPathPart, isCountryPath } from './getCountry.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
+import linkify from 'linkifyjs';
+import linkifyElement from 'linkifyjs/lib/linkify-element.js';
 
-require('mobius1-selectr/src/selectr.css');
-
+require('./common-init.js');
 require('./i18n.js');
-require('./polyfills.js');
 
 // Allow for hot-reloading of CSS in development.
 require('../sass/style.css');
