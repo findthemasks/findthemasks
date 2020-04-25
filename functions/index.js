@@ -657,30 +657,31 @@ const annotateSmartyStreetsAddresses = async (country) => {
       const entry = approved.entry;
       const index = approved.index;
       const finalAddress = entry[addressIndex];
-      const isApproved = entry[approvedIndex] === "x";
-      const smartyStreetRun = entry[smartyStreetIndex] === "x";
 
       // Row numbers start at 1.  First 2 rows are headers, so we need to add 2.
       const rowIndex = index + 1 + 2;
 
-      if (finalAddress && isApproved && !smartyStreetRun) {
-        const oneLineAddress = finalAddress.replace("\n", ", ").trim();
+      const oneLineAddress = finalAddress.replace("\n", ", ").trim();
 
-        if (upperCaseCountry === 'US') {
-          const url = `${SMARTY_STREETS_US_API_URL}?street=${oneLineAddress}&auth-id=${SMARTY_STREETS_AUTH_ID}&auth-token=${SMARTY_STREETS_AUTH_TOKEN}`;
+      if (upperCaseCountry === 'US') {
+        const encodedParams = `street=${encodeURIComponent(oneLineAddress)}&auth-id=${encodeURIComponent(SMARTY_STREETS_AUTH_ID)}&auth-token=${encodeURIComponent(SMARTY_STREETS_AUTH_TOKEN)}`;
+        const url = `${SMARTY_STREETS_US_API_URL}?${encodedParams}`;
 
-          const data = await makeSmartyStreetRequest(url);
+        const data = await makeSmartyStreetRequest(url);
 
-          if (Array.isArray(data)) {
-            // smarty street can return multiple, just pick the one it has highest confidence in
-            const predictedAddress = data[0];
+        if (Array.isArray(data)) {
+          // smarty street can return multiple, just pick the one it has highest confidence in
+          const predictedAddress = data[0];
 
-            toWrite.push({ rowIndex, predictedAddress });
-          }
+          toWrite.push({ rowIndex, predictedAddress });
         } else {
-          const url = `${SMARTY_STREETS_INTL_API_URL}?country=${upperCaseCountry}&freeform=${address}&auth-id=${SMARTY_STREETS_AUTH_ID}&auth-token=${SMARTY_STREETS_AUTH_TOKEN}`
-          console.log('Unsupported intl address');
+          console.error(`Smarty Streets returned no results for address: ${oneLineAddress}`, data);
+          toWrite.push({ rowIndex });
         }
+      } else {
+        const encodedParams = encodeURIComponent(`country=${encodeURIComponent(upperCaseCountry)}&freeform=${encodeURIComponent(address)}&auth-id=${encodeURIComponent(SMARTY_STREETS_AUTH_ID)}&auth-token=${encodeURIComponent(SMARTY_STREETS_AUTH_TOKEN)}`);
+        const url = `${SMARTY_STREETS_INTL_API_URL}?${encodedParams}`;
+        console.log('Unsupported intl address');
       }
     }));
 
