@@ -637,8 +637,25 @@ const annotateSmartyStreetsAddresses = async (country) => {
     const smartyStreetColumn = COLUMNS[smartyStreetIndex];
 
     const toWrite = [];
+    const approvedWithAddress = [];
 
-    await Promise.all(real_values.map(async (entry, index) => {
+    // only run 50 at a time to avoid quota limits
+    real_values.forEach((entry, index) => {
+      const finalAddress = entry[addressIndex];
+      const isApproved = entry[approvedIndex] === "x";
+      const smartyStreetRun = entry[smartyStreetIndex] === "x";
+
+      if (finalAddress && isApproved && !smartyStreetRun && approvedWithAddress.length <= 50) {
+        approvedWithAddress.push({
+          entry: entry,
+          index: index
+        });
+      }
+    });
+
+    await Promise.all(approvedWithAddress.map(async (approved) => {
+      const entry = approved.entry;
+      const index = approved.index;
       const finalAddress = entry[addressIndex];
       const isApproved = entry[approvedIndex] === "x";
       const smartyStreetRun = entry[smartyStreetIndex] === "x";
