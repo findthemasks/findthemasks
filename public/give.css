@@ -585,8 +585,6 @@ h3.city {
     margin-bottom: 10px;
   }
 }
-<<<<<<< HEAD:public/give.css
-=======
 
 .contact-modal .contact-error {
     font-size: 0.8em;
@@ -604,4 +602,3 @@ h3.city {
 .contact-modal #message-text {
     height: 120px;
 }
->>>>>>> Added an email contact form that sends email to an encrypted recipient via a mail relay:public/style.css

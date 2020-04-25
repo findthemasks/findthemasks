@@ -64,7 +64,7 @@ let gOpenInfoWindows = [];
 let gLocationsListEntries = [];
 let gLastLocationRendered = -1;
 
-const url = new URL(window.location);
+const searchParams = new FtmUrl(window.location.href).searchparams;
 
 // i18n must be loaded before filter items can be translated
 // config stores the i18n string and this function calls i18n with it
@@ -533,11 +533,10 @@ const MAP_INITIAL_VIEW = {
 };
 
 function getMapInitialView() {
-  const url = new FtmUrl(window.location.href);
-  const { coords } = url.searchparams;
+  const { coords } = searchParams;
   // default zoom is pretty tight because if you're passing latlng
   // you are probably trying to center on a pretty specific location
-  const zoom = parseFloat(url.searchparams.zoom) || 11;
+  const zoom = parseFloat(searchParams.zoom) || 11;
   if (coords) {
     const latlng = coords.split(',').map((coord) => parseFloat(coord));
     if ( // validate lat lng
@@ -700,15 +699,14 @@ function getFlatFilteredEntries(data, filters) {
 function getEntryEl(entry) {
   if (!entry.domElem) {
     // feature flag for email contact form
-    const searchParams = new URLSearchParams(url.search);
-    const showContact = searchParams.get('show-contact') == 'true';
+    const showContact = searchParams['show-contact'] == 'true';
 
     // feature flag to insert fake contact info for testing
-    const fakeContact = searchParams.get('fake-contact') == 'true';
-    const testEmail = '6NSUUmRCaj3LaaGQiq4JPB%2BXAXB7gAVv8N%2Fn%2FnwQw2gXWVP1MINy4blDsSPC%0A5wv3%0A'; // raindrift@gmail.com
+    // use an encrypted email string (they should be url-safe)
+    const fakeContact = searchParams['fake-contact'];
 
     if(fakeContact) {
-      entry.encrypted_email = testEmail;
+      entry.encrypted_email = fakeContact;
     }
 
     entry.domElem = ce('div', 'location py-3');
@@ -1047,8 +1045,7 @@ function initMapSearch(data, filters) {
   );
 
   // initialize map search with query param `q` if it's set
-  const url = new FtmUrl(window.location.href);
-  const { q } = url.searchparams;
+  const { q } = searchParams;
   if (q) {
     $search.val(q);
     attemptGeocode(q);
@@ -1249,8 +1246,6 @@ function initContactModal() {
 }
 
 $(() => {
-  const url = new FtmUrl(window.location);
-
   // HACK: Assign into data via Object.assign() below to handle both
   // country and maker data.
   let data;
@@ -1271,7 +1266,6 @@ $(() => {
 
   const renderListings = (result) => {
     Object.assign(data, toDataByLocation(result));
-    const searchParams = url.searchparams;
     const showList = searchParams['hide-list'] !== 'true';
     const showFilters = showList && searchParams['hide-filters'] !== 'true';
     const showMap = searchParams['hide-map'] !== 'true';

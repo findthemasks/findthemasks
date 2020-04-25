@@ -244,5 +244,6 @@
   "ftm-mailer-message-blank": "Message text is blank",
   "ftm-mailer-subject-blank": "Subject is blank",
   "ftm-mailer-mail-failed": "Message sending failed, please try again",
-  "ftm-mailer-message-sent": "Your message was sent"
+  "ftm-mailer-message-sent": "Your message was sent",
+  "ftm-mailer-decrypt-failed": "Recipient address decryption failed"
 }
