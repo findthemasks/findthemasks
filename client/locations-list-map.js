@@ -699,13 +699,13 @@ function getFlatFilteredEntries(data, filters) {
 function getEntryEl(entry) {
   if (!entry.domElem) {
     // feature flag for email contact form
-    const showContact = searchParams['show-contact'] == 'true';
+    const showContact = searchParams['show-contact'] === 'true';
 
     // feature flag to insert fake contact info for testing
     // use an encrypted email string (they should be url-safe)
     const fakeContact = searchParams['fake-contact'];
 
-    if(fakeContact) {
+    if (fakeContact) {
       entry.encrypted_email = fakeContact;
     }
 
@@ -748,7 +748,7 @@ function getEntryEl(entry) {
 
       ac(emailContainer, [
         ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-email-contact'))),
-        $(`<p class="col-12 col-md-9"><a href="#" data-toggle="modal" data-target="#contactModal" data-name="${entry.name}" data-email="${entry.encrypted_email}">${$.i18n('ftm-email-contact-org')}</a></p>`)[0]
+        $(`<p class="col-12 col-md-9"><a href="#" data-toggle="modal" data-target="#contactModal" data-name="${entry.name}" data-email="${entry.encrypted_email}">${$.i18n('ftm-email-contact-org')}</a></p>`)[0],
       ]);
 
       ac(entry.domElem, emailContainer);
@@ -1169,7 +1169,7 @@ function initMap(data, filters) {
 // Lazy-loads the Google maps script once we know we need it. Sets up
 // a global initMap callback on the window object so the gmap script
 // can find it.
-function loadMapScript(searchParams, data, filters) {
+function loadMapScript(data, filters) {
   // Property created on window must match name passed in &callback= param
   window.initMap = () => initMap(data, filters);
 
@@ -1188,13 +1188,13 @@ function loadMapScript(searchParams, data, filters) {
 
 function initContactModal() {
   let lastOrg = null;
-  $('#contactModal').on('show.bs.modal', function (event) {
+  $('#contactModal').on('show.bs.modal', function(event) {
     const el = $(event.relatedTarget);
     const email = el.data('email');
     const name = el.data('name');
     const modal = $(this);
 
-    if(lastOrg != name) {
+    if (lastOrg !== name) {
       lastOrg = name;
       $('#sender-name').val(null);
       $('#sender-email').val(null);
@@ -1202,11 +1202,11 @@ function initContactModal() {
       $('#message-text').val(null);
     }
 
-    modal.find('.modal-title').text($.i18n('ftm-email-form-title-label') + ' ' + name);
+    modal.find('.modal-title').text(`${$.i18n('ftm-email-form-title-label')} ${name}`);
     modal.find('#message-recipient').val(email);
   });
 
-  $('#contactModal #send-message').on('click', function (event) {
+  $('#contactModal #send-message').on('click', () => {
     $('.contact-error').html('&nbsp;');
     $('#send-message').prop('disabled', true);
 
@@ -1221,24 +1221,23 @@ function initContactModal() {
         to: $('#message-recipient').val(),
         'g-recaptcha-response': grecaptcha.getResponse(),
       }
-    ).done(function(result) {
+    ).done((result) => {
       $('.contact-form').css('display', 'none');
       $('.contact-success').css('display', 'block');
       $('#send-message').prop('disabled', false);
       grecaptcha.reset();
 
-      setTimeout(function() {
+      setTimeout (function() {
         $('#contactModal').modal('hide');
       }, 5000);
-
-    }).fail(function(result) {
-      $('.contact-error').html($.i18n('ftm-' + result.responseJSON.message));
+    }).fail((result) => {
+      $('.contact-error').html($.i18n(`ftm-${result.responseJSON.message}`));
       $('#send-message').prop('disabled', false);
       grecaptcha.reset();
     });
   });
 
-  $('#contactModal').on('hidden.bs.modal', function (event) {
+  $('#contactModal').on('hidden.bs.modal', () => {
     $('.contact-form').css('display', 'block');
     $('.contact-success').css('display', 'none');
     $('.contact-error').html('&nbsp;');
@@ -1291,7 +1290,7 @@ $(() => {
 
     if (showMap) {
       $map.show();
-      loadMapScript(searchParams, data, filters);
+      loadMapScript(data, filters);
     }
 
     $('.locations-loading').hide();
