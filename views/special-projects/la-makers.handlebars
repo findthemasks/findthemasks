@@ -1,0 +1,90 @@
+<div class="languages-loading" style="position: fixed;top: 50%; left: 50%;">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading translations...</span>
+  </div>
+</div>
+
+<div class="translated-content">
+  {{> top_nav }}
+
+  <div class="row flex-lg-row no-gutters">
+    <div class="col-12 col-lg-6">
+      <div class="bg-white search-filter-container">
+        <div class="bg-dark-blue text-light p-4">
+          <h4 class="mt-0">
+            Make PPE and get it into the hands of those who need it!
+          </h4>
+
+          <p>
+            Search for a vetter Makerspace in the LA area!
+          </p>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+            <span class="input-group-text bg-white border-0 search-icon-wrap">
+              <img class="search-icon" src="/images/icons/search.svg">
+            </span>
+            </div>
+            <input type="search" name="map-search" id="map-search"
+                   class="i18n form-control border-0"
+                   placeholder="Search by city, zip, or address"
+                   data-i18n="[placeholder]ftm-maps-search-placeholder">
+            <div class="input-group-append">
+            <span class="input-group-text bg-white border-0 p-2">
+              <a href="javascript:;" class="map-action-link" id="use-location">
+                <span class="i18n" data-i18n="ftm-maps-search-use-location">Use my location</span>
+              </a>
+            </span>
+            </div>
+          </div>
+
+          <div class="filters-container row text-dark" style="display: none;">
+            <div class="col">
+              <select id="facility-type-select">
+              </select>
+            </div>
+            <div class="col">
+              <select id="ppe-needed-select">
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center locations-list-header px-2 pt-2 pb-3 mb-0 mt-2 mx-2">
+          <div class="flex-grow-1">
+            <span class="icon icon-requester-pin"></span>
+            <span id="list-stats">
+              </span>
+          </div>
+          <div class="d-flex justify-content-end flex-grow-1">
+            <a href="javascript:;" class="map-action-link" id="reset-map">
+              <span class="i18n" data-i18n="ftm-maps-search-reset">Reset map & list</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="map-container">
+        <div class="locations-loading text-center">
+          <img src="/images/icons/loader.svg" alt="loading" class="load-spinner" />
+          <span>Loading vetted makers...</span>
+        </div>
+        <div id="map"></div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+      <div class="locations-loading text-center">
+        <img src="/images/icons/loader.svg" alt="loading" class="load-spinner" />
+        <span>Loading vetted makers...</span>
+      </div>
+
+      <div class="locations-container row no-gutters px-2 m-2" style="display: none;">
+        <div id="locations-list" class="locations-list col"></div>
+      </div>
+    </div>
+  </div>
+</div>
+

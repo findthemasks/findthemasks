@@ -122,6 +122,18 @@ router.get('/privacy-policy', (req, res) => {
   });
 });
 
+router.get(['/special-projects/la-makers'], (req, res) => {
+  res.render('special-projects/la-makers', {
+    version: herokuVersion,
+    ogLocale: formatFbLocale(res.locals.locale),
+    ogTitle: 'Los Angeles Makers',
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: 'Map of Vetter Makers for the city of Los Angeles',
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    localizeContactInfo: localizeContactInfo(res.locals.currentCountry),
+  });
+});
+
 router.get(['/request', '/request.html'], (req, res) => {
   res.render('request', {
     layout: false,
