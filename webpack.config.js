@@ -69,6 +69,7 @@ const config = {
       filename: '[name].css',
       chunkFilename: '[id].css',
     }),
+    require('autoprefixer'),
   ],
 };
 
@@ -76,12 +77,14 @@ if (isDevelopment) {
   config.devtool = '#eval-source-map';
 } else {
   config.devtool = '#source-map';
-//  config.optimization = { minimize: true };
-  config.optimization ={
-    minimizer: [new TerserPlugin   ( {
-      sourceMap: true
+  config.optimization = {
+    minimize: true,
+    usedExports: true,
+    minimizer: [new TerserPlugin({sourceMap: true})],
+    splitChunks: {
+      chunks: 'all'
     }
-  )] };
+  };
 }
 
 module.exports = config;
