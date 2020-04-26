@@ -267,8 +267,22 @@ app.use('/data(-:countryCode)?.csv', createProxyMiddleware({
   changeOrigin: true,
 }));
 
-app.use('/', router);
+// redirect gb -> uk
+const gbUkRedirect = (req, res, next) => {
+  const { originalUrl } = req;
+
+  if (originalUrl.startsWith('/gb')) {
+    res.status(301).redirect(originalUrl.replace(/^\/gb/, '/uk'));
+    return;
+  }
+
+  next();
+};
+
+app.use(/\/[a-zA-Z]{2}/, gbUkRedirect);
 app.use(/\/[a-zA-Z]{2}/, router);
+app.use('/', router);
+
 app.use((req, res) => {
   res.status(404).redirect('/');
 });

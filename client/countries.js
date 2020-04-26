@@ -29,9 +29,9 @@ export default {
     countryCode: 'fr',
     administrativeRegionI18nString: 'ftm-administrative-region-department',
   },
-  gb: {
+  uk: {
     i18nString: 'ftm-united-kingdom',
-    countryCode: 'gb',
+    countryCode: 'uk',
     administrativeRegionI18nString: 'ftm-administrative-region-region',
   },
   in: {

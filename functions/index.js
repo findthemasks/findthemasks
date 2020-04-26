@@ -28,7 +28,7 @@ const SHEETS = {
   de: '1qiR4JRvPrbOwlPnEXCoUFWpfZtV9xadjBTCOhVy-dJM',
   es: '1S3FO5gmXUvQdsGXjC0hBSUxBJZoaUzy1ctylTjUGOlM',
   fr: '1YGWlGPOfJFEsUP6VTFCVohlsHxKMYA5HppatbLwNBVk',
-  gb: '1qPUdGOEZl-c8sQ6Vlm7h48OZScBOVGjzz88AyGCQvEc',
+  uk: '1qPUdGOEZl-c8sQ6Vlm7h48OZScBOVGjzz88AyGCQvEc',
   in: '1w6tm1IvVeR3g_4SvXQRlFHAtudgHvldUFEJlj1p4WDk',
   it: '1YHt6G1ghcXrRqXflevxHAwg2XOXmG2Cym6nSS5vXe7Q',
   pl: '10EsvvozwLTQpn0ejvPjZSWt9lve3fnMHBHltW-v_zkY',
