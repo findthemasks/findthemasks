@@ -48,11 +48,15 @@ a {
   color: white;
 }
 
-.search-filter-container {
-  position: sticky;
-  top: 58px;
-  z-index: 1;
-  background: white;
+@media screen and ( min-width: 800px ) and ( min-height: 700px )
+{
+  .search-filter-container {
+    position: -webkit-sticky; /* Safari */  
+    position: sticky;
+    top: -38px;
+    z-index: 1;
+    background: white;
+  }
 }
 
 .search-filter-container .bg-dark-blue {
