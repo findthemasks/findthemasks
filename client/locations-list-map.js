@@ -64,6 +64,8 @@ let gOpenInfoWindows = [];
 let gLocationsListEntries = [];
 let gLastLocationRendered = -1;
 
+const searchParams = new FtmUrl(window.location.href).searchparams;
+
 // i18n must be loaded before filter items can be translated
 // config stores the i18n string and this function calls i18n with it
 const translatedFilterItems = (filterItems) => {
@@ -532,11 +534,10 @@ const MAP_INITIAL_VIEW = {
 };
 
 function getMapInitialView() {
-  const url = new FtmUrl(window.location.href);
-  const { coords } = url.searchparams;
+  const { coords } = searchParams;
   // default zoom is pretty tight because if you're passing latlng
   // you are probably trying to center on a pretty specific location
-  const zoom = parseFloat(url.searchparams.zoom) || 11;
+  const zoom = parseFloat(searchParams.zoom) || 11;
   if (coords) {
     const latlng = coords.split(',').map((coord) => parseFloat(coord));
     if ( // validate lat lng
@@ -698,6 +699,17 @@ function getFlatFilteredEntries(data, filters) {
 
 function getEntryEl(entry) {
   if (!entry.domElem) {
+    // feature flag for email contact form
+    const showContact = searchParams['show-contact'] === 'true';
+
+    // feature flag to insert fake contact info for testing
+    // use an encrypted email string (they should be url-safe)
+    const fakeContact = searchParams['fake-contact'];
+
+    if (fakeContact) {
+      entry.encrypted_email = fakeContact;
+    }
+
     entry.domElem = ce('div', 'location py-3');
     const header = ce('div', 'd-flex');
     const headerHospitalInfo = ce('div', 'flex-grow-1');
@@ -731,6 +743,17 @@ function getEntryEl(entry) {
     ac(header, headerHospitalInfo);
     ac(header, headerOrgType);
     ac(entry.domElem, header);
+
+    if (showContact && entry.encrypted_email) {
+      const emailContainer = ce('div', 'row');
+
+      ac(emailContainer, [
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-email-contact'))),
+        $(`<p class="col-12 col-md-9"><a href="#" data-toggle="modal" data-target="#contactModal" data-name="${entry.name}" data-email="${entry.encrypted_email}">${$.i18n('ftm-email-contact-org')}</a></p>`)[0],
+      ]);
+
+      ac(entry.domElem, emailContainer);
+    }
 
     if (entry.accepting) {
       const ppeNeededContainer = ce('div', 'row');
@@ -1023,8 +1046,7 @@ function initMapSearch(data, filters) {
   );
 
   // initialize map search with query param `q` if it's set
-  const url = new FtmUrl(window.location.href);
-  const { q } = url.searchparams;
+  const { q } = searchParams;
   if (q) {
     $search.val(q);
     attemptGeocode(q);
@@ -1148,7 +1170,7 @@ function initMap(data, filters) {
 // Lazy-loads the Google maps script once we know we need it. Sets up
 // a global initMap callback on the window object so the gmap script
 // can find it.
-function loadMapScript(searchParams, data, filters) {
+function loadMapScript(data, filters) {
   // Property created on window must match name passed in &callback= param
   window.initMap = () => initMap(data, filters);
 
@@ -1165,9 +1187,65 @@ function loadMapScript(searchParams, data, filters) {
   document.head.appendChild(scriptTag);
 }
 
-$(() => {
-  const url = new FtmUrl(window.location);
+function initContactModal() {
+  let lastOrg = null;
+  $('#contactModal').on('show.bs.modal', (event) => {
+    const el = $(event.relatedTarget);
+    const email = el.data('email');
+    const name = el.data('name');
+    const modal = $(this);
 
+    if (lastOrg !== name) {
+      lastOrg = name;
+      $('#sender-name').val(null);
+      $('#sender-email').val(null);
+      $('#message-subject').val(null);
+      $('#message-text').val(null);
+    }
+
+    modal.find('.modal-title').text(`${$.i18n('ftm-email-form-title-label')} ${name}`);
+    modal.find('#message-recipient').val(email);
+  });
+
+  $('#contactModal #send-message').on('click', () => {
+    $('.contact-error').html('&nbsp;');
+    $('#send-message').prop('disabled', true);
+
+    $.post(
+      'https://maskmailer.herokuapp.com/send',
+      {
+        name: $('#sender-name').val(),
+        from: $('#sender-email').val(),
+        subject: $('#message-subject').val(),
+        text: $('#message-text').val(),
+        introduction: $.i18n('ftm-email-introduction'),
+        to: $('#message-recipient').val(),
+        'g-recaptcha-response': window.grecaptcha.getResponse(),
+      }
+    ).done(() => {
+      $('.contact-form').css('display', 'none');
+      $('.contact-success').css('display', 'block');
+      $('#send-message').prop('disabled', false);
+      window.grecaptcha.reset();
+
+      setTimeout(() => {
+        $('#contactModal').modal('hide');
+      }, 5000);
+    }).fail((result) => {
+      $('.contact-error').html($.i18n(`ftm-${result.responseJSON.message}`));
+      $('#send-message').prop('disabled', false);
+      window.grecaptcha.reset();
+    });
+  });
+
+  $('#contactModal').on('hidden.bs.modal', () => {
+    $('.contact-form').css('display', 'block');
+    $('.contact-success').css('display', 'none');
+    $('.contact-error').html('&nbsp;');
+  });
+}
+
+$(() => {
   // HACK: Assign into data via Object.assign() below to handle both
   // country and maker data.
   let data;
@@ -1188,7 +1266,6 @@ $(() => {
 
   const renderListings = (result) => {
     Object.assign(data, toDataByLocation(result));
-    const searchParams = url.searchparams;
     const showList = searchParams['hide-list'] !== 'true';
     const showFilters = showList && searchParams['hide-filters'] !== 'true';
     const showMap = searchParams['hide-map'] !== 'true';
@@ -1214,7 +1291,7 @@ $(() => {
 
     if (showMap) {
       $map.show();
-      loadMapScript(searchParams, data, filters);
+      loadMapScript(data, filters);
     }
 
     $('.locations-loading').hide();
@@ -1230,6 +1307,8 @@ $(() => {
       refreshList(data, filters);
     }
   };
+
+  initContactModal();
 
   $.getJSON(dataUrl, (result) => {
     if (window.i18nReady) {

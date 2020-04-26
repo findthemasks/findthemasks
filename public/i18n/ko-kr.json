@@ -226,5 +226,22 @@
   "ftm-partners-subhead-global" : "글로벌 스폰서",
   "ftm-partners-subhead-media" : "미디어에서",
   "ftm-partners-subhead-canada" : "공동 작업자-캐나다",
-  "ftm-partners-subhead-us" : "공동 작업자-미국"
+  "ftm-partners-subhead-us" : "공동 작업자-미국",
+  "ftm-email-contact" : "이메일",
+  "ftm-email-contact-org" : "이 조직에 이메일 보내기",
+  "ftm-email-form-name-placeholder" : "당신의 이름",
+  "ftm-email-form-email-placeholder" : "귀하의 이메일 주소",
+  "ftm-email-form-subject-placeholder" : "제목",
+  "ftm-email-form-message-placeholder" : "당신의 메시지",
+  "ftm-email-form-title-label" : "메시지",
+  "ftm-email-introduction" : "이 메시지는 findthemasks.com을 통해 전송되었습니다. 발신자에게 응답하려면이 메시지에 회신하십시오. 응답하면 발신자가 전자 메일 주소를 볼 수 있습니다.",
+  "ftm-email-sent-confirmation" : "귀하의 메시지가 전송되었습니다",
+  "ftm-mailer-captcha-failed" : "불완전한 보안 문자",
+  "ftm-mailer-bad-to" : "잘못된 수신자 주소",
+  "ftm-mailer-bad-from" : "잘못된 발신자 주소",
+  "ftm-mailer-message-blank" : "메시지 텍스트가 비어 있습니다",
+  "ftm-mailer-subject-blank" : "제목이 비어 있습니다",
+  "ftm-mailer-mail-failed" : "메시지를 보내지 못했습니다. 다시 시도하십시오",
+  "ftm-mailer-message-sent" : "귀하의 메시지가 전송되었습니다",
+  "ftm-mailer-decrypt-failed" : "받는 사람 주소 해독에 실패했습니다"
 }

@@ -226,5 +226,22 @@
   "ftm-partners-subhead-global" : "Sponsors mondiaux",
   "ftm-partners-subhead-media" : "Dans les medias",
   "ftm-partners-subhead-canada" : "Collaborateurs - Canada",
-  "ftm-partners-subhead-us" : "Collaborateurs - États-Unis"
+  "ftm-partners-subhead-us" : "Collaborateurs - États-Unis",
+  "ftm-email-contact" : "Email",
+  "ftm-email-contact-org" : "Envoyez un courriel à cette organisation",
+  "ftm-email-form-name-placeholder" : "votre nom",
+  "ftm-email-form-email-placeholder" : "Votre adresse email",
+  "ftm-email-form-subject-placeholder" : "Matière",
+  "ftm-email-form-message-placeholder" : "Votre message",
+  "ftm-email-form-title-label" : "Message à",
+  "ftm-email-introduction" : "Ce message a été envoyé via findthemasks.com. Répondez à ce message pour répondre à l'expéditeur. Lorsque vous répondez, l'expéditeur pourra voir votre adresse e-mail.",
+  "ftm-email-sent-confirmation" : "Votre message a été envoyé",
+  "ftm-mailer-captcha-failed" : "Captcha incomplet",
+  "ftm-mailer-bad-to" : "Adresse de destinataire non valide",
+  "ftm-mailer-bad-from" : "Adresse d'expéditeur non valide",
+  "ftm-mailer-message-blank" : "Le texte du message est vide",
+  "ftm-mailer-subject-blank" : "Le sujet est vide",
+  "ftm-mailer-mail-failed" : "Échec de l'envoi du message, veuillez réessayer",
+  "ftm-mailer-message-sent" : "Votre message a été envoyé",
+  "ftm-mailer-decrypt-failed" : "Échec du déchiffrement de l'adresse du destinataire"
 }

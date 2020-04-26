@@ -226,5 +226,22 @@
   "ftm-partners-subhead-global" : "全球贊助商",
   "ftm-partners-subhead-media" : "在媒體中",
   "ftm-partners-subhead-canada" : "合作者-加拿大",
-  "ftm-partners-subhead-us" : "合作者-美國"
+  "ftm-partners-subhead-us" : "合作者-美國",
+  "ftm-email-contact" : "電子郵件",
+  "ftm-email-contact-org" : "給該組織發送電子郵件",
+  "ftm-email-form-name-placeholder" : "你的名字",
+  "ftm-email-form-email-placeholder" : "您的電子郵件地址",
+  "ftm-email-form-subject-placeholder" : "學科",
+  "ftm-email-form-message-placeholder" : "你的信息",
+  "ftm-email-form-title-label" : "留言給",
+  "ftm-email-introduction" : "此消息是通過findthemasks.com發送的。回复此消息以回復發件人。當您回复時，發件人將能夠看到您的電子郵件地址。",
+  "ftm-email-sent-confirmation" : "您的訊息已發送",
+  "ftm-mailer-captcha-failed" : "驗證碼不完整",
+  "ftm-mailer-bad-to" : "無效的收件人地址",
+  "ftm-mailer-bad-from" : "發件人地址無效",
+  "ftm-mailer-message-blank" : "訊息文字為空白",
+  "ftm-mailer-subject-blank" : "主題為空白",
+  "ftm-mailer-mail-failed" : "郵件發送失敗，請重試",
+  "ftm-mailer-message-sent" : "您的訊息已發送",
+  "ftm-mailer-decrypt-failed" : "收件人地址解密失敗"
 }

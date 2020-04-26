@@ -72,6 +72,7 @@ router.get(['/', '/index.html'], (req, res) => {
     ogDescription: res.locals.banana.i18n('ftm-index-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     localizeContactInfo: localizeContactInfo(res.locals.currentCountry),
+    recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
   });
 });
 
@@ -96,6 +97,7 @@ router.get(['/give', '/give.html'], (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
   });
 });
 
@@ -108,6 +110,7 @@ router.get(['/makers'], (req, res) => {
     ogDescription: res.locals.banana.i18n('ftm-makers-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     localizeContactInfo: localizeContactInfo(res.locals.currentCountry),
+    recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
   });
 });
 

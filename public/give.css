@@ -585,3 +585,20 @@ h3.city {
     margin-bottom: 10px;
   }
 }
+
+.contact-modal .contact-error {
+    font-size: 0.8em;
+    color: red;
+    text-align: right;
+    margin-right: 20px;
+}
+
+.contact-modal .contact-success {
+    display: none;
+    text-align: center;
+    height: 5em;
+}
+
+.contact-modal #message-text {
+    height: 120px;
+}

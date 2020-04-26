@@ -226,5 +226,22 @@
   "ftm-partners-subhead-global" : "Wereldwijde sponsors",
   "ftm-partners-subhead-media" : "In de media",
   "ftm-partners-subhead-canada" : "Bijdragers - Canada",
-  "ftm-partners-subhead-us" : "Medewerkers - VS."
+  "ftm-partners-subhead-us" : "Medewerkers - VS.",
+  "ftm-email-contact" : "E-mail",
+  "ftm-email-contact-org" : "E-mail deze organisatie",
+  "ftm-email-form-name-placeholder" : "Uw naam",
+  "ftm-email-form-email-placeholder" : "Jouw e-mailadres",
+  "ftm-email-form-subject-placeholder" : "Onderwerpen",
+  "ftm-email-form-message-placeholder" : "Uw bericht",
+  "ftm-email-form-title-label" : "Bericht naar",
+  "ftm-email-introduction" : "Dit bericht is verzonden via findthemasks.com. Beantwoord dit bericht om de afzender te beantwoorden. Als je reageert, kan de afzender je e-mailadres zien.",
+  "ftm-email-sent-confirmation" : "Uw bericht is verzonden",
+  "ftm-mailer-captcha-failed" : "Onvolledige captcha",
+  "ftm-mailer-bad-to" : "Ongeldig adres van ontvanger",
+  "ftm-mailer-bad-from" : "Ongeldig afzenderadres",
+  "ftm-mailer-message-blank" : "Berichttekst is leeg",
+  "ftm-mailer-subject-blank" : "Onderwerp is leeg",
+  "ftm-mailer-mail-failed" : "Verzenden van bericht is mislukt. Probeer het opnieuw",
+  "ftm-mailer-message-sent" : "Uw bericht is verzonden",
+  "ftm-mailer-decrypt-failed" : "Ontsleutelen van adres van ontvanger is mislukt"
 }

@@ -226,5 +226,22 @@
   "ftm-partners-subhead-global" : "Глобальные спонсоры",
   "ftm-partners-subhead-media" : "В СМИ",
   "ftm-partners-subhead-canada" : "Соавторы - Канада",
-  "ftm-partners-subhead-us" : "Соавторы - США"
+  "ftm-partners-subhead-us" : "Соавторы - США",
+  "ftm-email-contact" : "Электронное письмо",
+  "ftm-email-contact-org" : "Отправить эту организацию по электронной почте",
+  "ftm-email-form-name-placeholder" : "Твое имя",
+  "ftm-email-form-email-placeholder" : "Ваш адрес электронной почты",
+  "ftm-email-form-subject-placeholder" : "Тема",
+  "ftm-email-form-message-placeholder" : "Твое сообщение",
+  "ftm-email-form-title-label" : "Сообщение для",
+  "ftm-email-introduction" : "Это сообщение было отправлено через findthemasks.com. Ответьте на это сообщение, чтобы ответить отправителю. Когда вы ответите, отправитель сможет увидеть ваш адрес электронной почты.",
+  "ftm-email-sent-confirmation" : "Ваше сообщение было отправлено",
+  "ftm-mailer-captcha-failed" : "Неполная капча",
+  "ftm-mailer-bad-to" : "Неверный адрес получателя",
+  "ftm-mailer-bad-from" : "Неверный адрес отправителя",
+  "ftm-mailer-message-blank" : "Текст сообщения пуст",
+  "ftm-mailer-subject-blank" : "Тема пуста",
+  "ftm-mailer-mail-failed" : "Не удалось отправить сообщение, попробуйте еще раз",
+  "ftm-mailer-message-sent" : "Ваше сообщение было отправлено",
+  "ftm-mailer-decrypt-failed" : "Ошибка расшифровки адреса получателя"
 }

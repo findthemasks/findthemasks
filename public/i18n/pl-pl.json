@@ -226,5 +226,22 @@
   "ftm-partners-subhead-global" : "Globalni sponsorzy",
   "ftm-partners-subhead-media" : "W mediach",
   "ftm-partners-subhead-canada" : "Współpracownicy - Kanada",
-  "ftm-partners-subhead-us" : "Współpracownicy - USA"
+  "ftm-partners-subhead-us" : "Współpracownicy - USA",
+  "ftm-email-contact" : "E-mail",
+  "ftm-email-contact-org" : "Wyślij e-mail do tej organizacji",
+  "ftm-email-form-name-placeholder" : "Twoje imię",
+  "ftm-email-form-email-placeholder" : "Twój adres email",
+  "ftm-email-form-subject-placeholder" : "Przedmiot",
+  "ftm-email-form-message-placeholder" : "Twoja wiadomość",
+  "ftm-email-form-title-label" : "Wiadomość do",
+  "ftm-email-introduction" : "Ta wiadomość została wysłana za pośrednictwem findthemasks.com. Odpowiedz na tę wiadomość, aby odpowiedzieć nadawcy. Gdy odpowiesz, nadawca będzie mógł zobaczyć Twój adres e-mail.",
+  "ftm-email-sent-confirmation" : "Twoja wiadomość została wysłana",
+  "ftm-mailer-captcha-failed" : "Niekompletna captcha",
+  "ftm-mailer-bad-to" : "Nieprawidłowy adres odbiorcy",
+  "ftm-mailer-bad-from" : "Nieprawidłowy adres nadawcy",
+  "ftm-mailer-message-blank" : "Tekst wiadomości jest pusty",
+  "ftm-mailer-subject-blank" : "Temat jest pusty",
+  "ftm-mailer-mail-failed" : "Wysłanie wiadomości nie powiodło się, spróbuj ponownie",
+  "ftm-mailer-message-sent" : "Twoja wiadomość została wysłana",
+  "ftm-mailer-decrypt-failed" : "Odszyfrowanie adresu odbiorcy nie powiodło się"
 }
