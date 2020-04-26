@@ -405,9 +405,23 @@ dl.faq-question {
     cursor: pointer;
   }
 
-  & dt:not(:first-child) {
-    border-top: solid #000 1px;
-    padding-top: 1rem;
+  & dt {
+    &:not(:first-child) {
+      border-top: solid #000 1px;
+      padding-top: 1rem;
+    }
+
+    & h5 {
+      background-repeat: no-repeat;
+      background-position: left;
+      padding-left: 1.5rem;
+      background-size: 1.5rem 1.5rem;
+      background-image: url(/images/icons/dash.svg);
+    }
+
+    &:not(.open) h5 {
+      background-image: url(/images/icons/plus.svg);
+    }
   }
 }
 
