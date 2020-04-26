@@ -1193,7 +1193,7 @@ function initContactModal() {
     const el = $(event.relatedTarget);
     const email = el.data('email');
     const name = el.data('name');
-    const modal = $(this);
+    const modal = $('#contactModal');
 
     if (lastOrg !== name) {
       lastOrg = name;
