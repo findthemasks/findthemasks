@@ -48,7 +48,7 @@ a {
   color: white;
 }
 
-@media screen and ( min-width: 992px ) and ( min-height: 768px )
+@media screen and ( min-width: 800px ) and ( min-height: 700px )
 {
   .search-filter-container {
     position: -webkit-sticky; /* Safari */  
