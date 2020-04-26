@@ -1188,7 +1188,7 @@ function loadMapScript(data, filters) {
 
 function initContactModal() {
   let lastOrg = null;
-  $('#contactModal').on('show.bs.modal', function(event) {
+  $('#contactModal').on('show.bs.modal', (event) => {
     const el = $(event.relatedTarget);
     const email = el.data('email');
     const name = el.data('name');
@@ -1219,21 +1219,21 @@ function initContactModal() {
         text: $('#message-text').val(),
         introduction: $.i18n('ftm-email-introduction'),
         to: $('#message-recipient').val(),
-        'g-recaptcha-response': grecaptcha.getResponse(),
+        'g-recaptcha-response': window.grecaptcha.getResponse(),
       }
-    ).done((result) => {
+    ).done(() => {
       $('.contact-form').css('display', 'none');
       $('.contact-success').css('display', 'block');
       $('#send-message').prop('disabled', false);
-      grecaptcha.reset();
+      window.grecaptcha.reset();
 
-      setTimeout (function() {
+      setTimeout(() => {
         $('#contactModal').modal('hide');
       }, 5000);
     }).fail((result) => {
       $('.contact-error').html($.i18n(`ftm-${result.responseJSON.message}`));
       $('#send-message').prop('disabled', false);
-      grecaptcha.reset();
+      window.grecaptcha.reset();
     });
   });
 
