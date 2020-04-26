@@ -12,7 +12,7 @@ export default () => {
       sendEvent('addDonationSite', 'click', $(e.target).attr('href'));
     });
 
-  $('.social-media-icon, a.share-link').click((e) => {
+  $('.social-media-icon').click((e) => {
     const socialType = $(e.target).data('socialType');
     sendEvent('socialLink', 'click', socialType);
   });
