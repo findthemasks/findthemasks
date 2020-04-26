@@ -68,18 +68,29 @@
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="share-dropdown"
              id="countries-dropdown-selector">
-          <a class="fb-xfbml-parse-ignore dropdown-item" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.findthemasks.com%2F&amp;src=sdkpreparse','popup', 'width=600,height=800');return false;" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.findthemasks.com%2F&amp;src=sdkpreparse">
+          <a data-social-type="facebook"
+             class="share-link fb-xfbml-parse-ignore dropdown-item"
+             onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.findthemasks.com%2F&amp;src=sdkpreparse','popup', 'width=600,height=800');return false;"
+             href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.findthemasks.com%2F&amp;src=sdkpreparse">
             <div class="icon icon-facebook"></div> Facebook
           </a>
-          <a target="_blank" class="dropdown-item" href="https://www.instagram.com/findthemasks/" rel="noopener noreferrer">
+          <a data-social-type="instagram"
+             target="_blank"
+             class="share-link dropdown-item"
+             href="https://www.instagram.com/findthemasks/"
+             rel="noopener noreferrer">
             <div class="icon icon-instagram"></div> Instagram
           </a>
-          <a class="twitter-share-button dropdown-item" target="_blank" href="">
+          <a data-social-type="twitter"
+             class="share-link twitter-share-button dropdown-item"
+             target="_blank"
+             href="">
             <div class="icon icon-twitter"></div> Twitter
           </a>
-          <a target="_blank"
+          <a data-social-type="reddit"
+             target="_blank"
              rel="noopener noreferrer"
-             class="dropdown-item"
+             class="share-link dropdown-item"
              href="https://www.reddit.com/search?q=findthemasks">
             <div class="icon icon-reddit"></div> Reddit
           </a>
