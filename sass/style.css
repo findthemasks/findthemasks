@@ -397,6 +397,19 @@ h3.city {
   margin: 30px;
 }
 
+/*********************
+  * FAQ STYLES *
+  *********************/
+dl.faq-question {
+  .btn-link {
+    cursor: pointer;
+  }
+
+  & dt:not(:first-child) {
+    border-top: solid #000 1px;
+    padding-top: 1rem;
+  }
+}
 
 /*********************
   * MAP SEARCH STYLES *

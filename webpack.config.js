@@ -8,6 +8,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 const config = {
   entry: {
     'render-nav': ['./client/render-nav.js'],
+    faq: ['./client/faq.js'],
     i18n: ['./client/i18n.js'],
     stats: ['./client/stats.js'],
     style: ['./sass/style.css'],
