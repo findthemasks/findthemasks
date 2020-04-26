@@ -51,7 +51,7 @@ a {
 @media screen and ( min-width: 800px ) and ( min-height: 700px )
 {
   .search-filter-container {
-    position: -webkit-sticky; /* Safari */  
+    position: -webkit-sticky; /* Safari */
     position: sticky;
     top: -38px;
     z-index: 1;
@@ -382,7 +382,7 @@ h3.city {
 /*********************
   * PARTNERS STYLES *
   *********************/
-h3.page-subhead {
+.page-subhead {
   background-color: #FDC276;
   padding: 10px;
   display: inline-block;
