@@ -272,7 +272,7 @@ const gbUkRedirect = (req, res, next) => {
   const { originalUrl } = req;
 
   if (originalUrl.startsWith('/gb')) {
-    res.status(301).redirect(originalUrl.replace(/^\/gb/, '/uk'));
+    res.status(302).redirect(originalUrl.replace(/^\/gb/, '/uk'));
     return;
   }
 
