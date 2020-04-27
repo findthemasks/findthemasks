@@ -51,7 +51,7 @@ a {
 @media screen and ( min-width: 800px ) and ( min-height: 700px )
 {
   .search-filter-container {
-    position: -webkit-sticky; /* Safari */  
+    position: -webkit-sticky; /* Safari */
     position: sticky;
     top: -38px;
     z-index: 1;
@@ -386,7 +386,7 @@ p.page-info {
 /*********************
   * PARTNERS STYLES *
   *********************/
-h3.page-subhead {
+.page-subhead {
   background-color: #FDC276;
   padding: 10px;
   display: inline-block;
@@ -401,6 +401,33 @@ h3.page-subhead {
   margin: 30px;
 }
 
+/*********************
+  * FAQ STYLES *
+  *********************/
+dl.faq-question {
+  .btn-link {
+    cursor: pointer;
+  }
+
+  & dt {
+    &:not(:first-child) {
+      border-top: solid #000 1px;
+      padding-top: 1rem;
+    }
+
+    & h5 {
+      background-repeat: no-repeat;
+      background-position: left;
+      padding-left: 1.5rem;
+      background-size: 1.5rem 1.5rem;
+      background-image: url(/images/icons/dash.svg);
+    }
+
+    &:not(.open) h5 {
+      background-image: url(/images/icons/plus.svg);
+    }
+  }
+}
 
 /*********************
   * MAP SEARCH STYLES *
