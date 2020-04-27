@@ -32,6 +32,10 @@ const DONATION_FORMS_BY_COUNTRY = {
     defaultForm: 'en',
     en: 'https://docs.google.com/forms/d/11u77lVmIAt-B0245uD09UXEFV7XNSJo4op_DhoS5kfY/viewform',
   },
+  uk: {
+    defaultForm: 'en',
+    en: 'https://docs.google.com/forms/d/11u77lVmIAt-B0245uD09UXEFV7XNSJo4op_DhoS5kfY/viewform',
+  },
   in: {
     defaultForm: 'en',
     en: 'https://docs.google.com/forms/u/1/d/1ctE1739x2S3STlL-1eNpnhlBWzLvgDNXrdeutzYCKvo/viewform',
