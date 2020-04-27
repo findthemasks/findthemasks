@@ -395,6 +395,40 @@ h3.city {
 }
 
 /*********************
+  * Volunteer Icons *
+  *********************/
+.volunteer-needs {
+  background-repeat: no-repeat;
+  background-position: left top;
+  padding-left: 3rem;
+  background-size: 2rem 2rem;
+
+  &.translation {
+    background-image: url(/images/icons/translations.svg);
+  }
+
+  &.tech {
+    background-image: url(/images/icons/tech.svg);
+  }
+
+  &.internationalization {
+    background-image: url(/images/icons/i18n.svg);
+  }
+
+  &.moderators {
+    background-image: url(/images/icons/moderators.svg);
+  }
+
+  &.outreach {
+    background-image: url(/images/icons/addlroles.svg);
+  }
+
+  &.social-media {
+    background-image: url(/images/fb.svg);
+  }
+}
+
+/*********************
   * PARTNERS STYLES *
   *********************/
 .page-subhead {
