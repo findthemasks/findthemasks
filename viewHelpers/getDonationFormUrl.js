@@ -28,10 +28,6 @@ const DONATION_FORMS_BY_COUNTRY = {
     en: 'https://docs.google.com/forms/d/1nyejh2JL0YtOkMw87UtMDKXY8oVcJQnfEyusGjNVpmA/viewform',
     fr: 'https://docs.google.com/forms/d/e/1FAIpQLScys-wlfSEwCLNa5dnJIIR7LTdh7e3fpha7SL7A2jvJok8Tog/viewform',
   },
-  gb: {
-    defaultForm: 'en',
-    en: 'https://docs.google.com/forms/d/11u77lVmIAt-B0245uD09UXEFV7XNSJo4op_DhoS5kfY/viewform',
-  },
   uk: {
     defaultForm: 'en',
     en: 'https://docs.google.com/forms/d/11u77lVmIAt-B0245uD09UXEFV7XNSJo4op_DhoS5kfY/viewform',

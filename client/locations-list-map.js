@@ -524,7 +524,6 @@ const MAP_INITIAL_VIEW = {
   de: { zoom: 5, center: { lat: 51.165691, lng: 10.451526 } },
   es: { zoom: 5, center: { lat: 40.163667, lng: -3.74922 } },
   fr: { zoom: 5, center: { lat: 46.227638, lng: 2.213749 } },
-  gb: { zoom: 5, center: { lat: 55.378051, lng: -3.435973 } },
   in: { zoom: 5, center: { lat: 20.593684, lng: 78.96288 } },
   it: { zoom: 5, center: { lat: 41.87194, lng: 12.56738 } },
   pl: { zoom: 5, center: { lat: 51.919438, lng: 19.145136 } },
