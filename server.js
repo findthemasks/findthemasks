@@ -86,7 +86,7 @@ router.get('/faq', (req, res) => {
   });
 });
 
-router.get(['/give', '/give.html'], (req, res) => {
+router.get(['/embed', '/give', '/give.html'], (req, res) => {
   res.render('give', {
     version: herokuVersion,
     layout: 'give',
