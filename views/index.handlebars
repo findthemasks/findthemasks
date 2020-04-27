@@ -14,10 +14,10 @@
 
           {{#if (eq datasetType "makers")}}
             <h4>
-              Make PPE. Get it into the hands of those who need it.
+              Make PPE &amp; get it into the hands of those who need it.
             </h4>
             <p>
-              Search for a Makerspace near you.
+              Search for a Maker Group near you to coordinate with. Questions? Read our <a class="text-light" href="/faq">Maker FAQ</a>.
             </p>
           {{else}}
             <h4 class="mt-0 i18n" data-i18n="ftm-ppe-cta">
@@ -77,7 +77,7 @@
         <div class="locations-loading text-center">
           <img src="/images/icons/loader.svg" alt="loading" class="load-spinner" />
           {{#if (eq datasetType "makers")}}
-            <span>Makerspaces</span>
+            <span>Maker Groups</span>
           {{else}}
             <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
           {{/if}}
@@ -90,7 +90,7 @@
       <div class="locations-loading text-center">
         <img src="/images/icons/loader.svg" alt="loading" class="load-spinner" />
         {{#if (eq datasetType "makers")}}
-          <span>Makerspaces</span>
+          <span>Maker Groups</span>
         {{else}}
           <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
         {{/if}}

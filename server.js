@@ -63,22 +63,6 @@ app.use(express.static('public'));
 
 router.get(['/', '/index.html'], (req, res) => {
   const isMaker = res.locals.datasetType === 'makers';
-  /*
-  if (res.locals.datasetType === 'makers') {
-    res.render('makers', {
-      version: herokuVersion,
-      dataset: res.locals.dataset,
-      datasetType: res.locals.datasetType,
-      ogLocale: formatFbLocale(res.locals.locale),
-      ogTitle: res.locals.banana.i18n('ftm-makers-og-title'),
-      ogUrl: `http://${req.hostname}${req.originalUrl}`,
-      ogDescription: res.locals.banana.i18n('ftm-makers-og-description'),
-      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-      localizeContactInfo: localizeContactInfo(res.locals.dataset),
-      recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
-    });
-  } else {
- */
   res.render('index', {
     version: herokuVersion,
     ogLocale: formatFbLocale(res.locals.locale),
@@ -217,6 +201,10 @@ router.get('/donation-form', (req, res) => {
   res.redirect(getDonationFormUrl(res.locals.dataset, res.locals.locale));
 });
 
+router.get('/maker-form', (req, res) => {
+  res.redirect('https://airtable.com/shruH5B27UP3PqKgg');
+});
+
 const cachedData = {};
 
 function sendDataJson(countryCode, res) {
@@ -300,12 +288,13 @@ const gbUkRedirect = (req, res, next) => {
 
 app.use(/\/[a-zA-Z]{2}/, gbUkRedirect);
 
+// List of all datasets available. Used to identify the json data file.
 const ALL_DATASETS = new Set([
   'makers',
   ...Object.keys(countries),
 ]);
 
-// Takes the dataSet, which is usually the first path element in the URL,
+// Takes the dataset, which is usually the first path element in the URL,
 // and returns the type of dataset. This is used by templates to choose the
 // content and data schema to render.
 //
@@ -334,6 +323,7 @@ app.use('/:dataset', (req, res, next) => {
     next();
   }
 });
+
 app.use('/', (req, res, next) => {
   res.locals.dataset = 'us';
   res.locals.datasetType = getDatasetType(res.locals.dataset);

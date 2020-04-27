@@ -67,9 +67,18 @@ let gLastLocationRendered = -1;
 
 const searchParams = new FtmUrl(window.location.href).searchparams;
 
+// Converts a string from 'a,b,c' to 'a, b, c'
+function addSpaceAfterComma(str) {
+  if (str) {
+    return str.split(',').join(', ');
+  }
+
+  return undefined;
+}
+
 // i18n must be loaded before filter items can be translated
 // config stores the i18n string and this function calls i18n with it
-const translatedFilterItems = (filterItems) => {
+function translatedFilterItems(filterItems) {
   const translated = {};
 
   for (const [filterItemKey, filterItem] of Object.entries(filterItems)) {
@@ -88,7 +97,7 @@ const translatedFilterItems = (filterItems) => {
 // and returns the i18n keys from FILTER_ITEMS for accepting items that match
 //
 // NOTE: the incoming data structure is very brittle; if that changes at all, this will break
-const parseFiltersFromData = (data) => {
+function parseFiltersFromData(data) {
   const acceptedItems = {};
   const orgTypes = {};
 
@@ -135,15 +144,21 @@ const parseFiltersFromData = (data) => {
 function createFilters(data) {
   const filters = {
     states: {},
+    acceptItems: [],
+    orgTypes: [],
   };
 
   for (const state of Object.keys(data)) {
     filters.states[state] = { name: state, isSet: false };
   }
 
-  const dataFilters = parseFiltersFromData(data);
-  filters.acceptItems = translatedFilterItems(dataFilters.acceptedItems);
-  filters.orgTypes = translatedFilterItems(dataFilters.orgTypes);
+  try {
+    const dataFilters = parseFiltersFromData(data);
+    filters.acceptItems = translatedFilterItems(dataFilters.acceptedItems);
+    filters.orgTypes = translatedFilterItems(dataFilters.orgTypes);
+  } catch (e) {
+    console.error(e);
+  }
 
   return filters;
 }
@@ -236,12 +251,44 @@ function createMakerMarkerContent(entry, separator) {
   // Text to go into InfoWindow
   const contentTags = separator ? [ce('h5', 'separator', ctn(entry.name))] : [ce('h5', null, ctn(entry.name))];
 
-  if (entry.instructions) {
-    contentTags.push(
-      ce('div', 'label', ctn('Description')),
-      linkifyElement(ce('div', 'value', multilineStringToNodes(entry.instructions)))
-    );
+  // TODO: Dedupe with addParagraph() in createMakerListItemEl().
+  const addParagraph = (name, value) => {
+    if (value) {
+      const row = ce('div', 'row');
+
+      ac(row, [
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn(name)),
+        linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(value))),
+      ]);
+
+      contentTags.push(row);
+    }
   }
+
+  const addLine = (name, value) => {
+    if (value) {
+      const div = ce('div', 'row');
+      ac(div, [
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn(name)),
+        linkifyElement(ce('p', 'col-12 col-md-9', ctn(value))),
+      ]);
+      contentTags.push(div);
+    }
+  }
+
+  addParagraph('Website', entry.website);
+  addParagraph('Contact', entry.public_contact);
+  addLine('Capabilities', addSpaceAfterComma(entry.capabilities));
+  addLine('Products', addSpaceAfterComma(entry.products));
+  addLine('Other Product', addSpaceAfterComma(entry.other_product));
+  addLine('Face Shield Type', addSpaceAfterComma(entry.face_shield_type));
+  addLine('Are you collecting?', entry.collecting_site);
+  addLine('Are you shipping?', entry.shipping);
+  addLine('Are you taking volunteers?', entry.accepting_volunteers);
+  addLine('Other Type of Space', entry.other_type_of_space);
+  addLine('Accepting PPE Requests', entry.accepting_ppe_requests);
+  addLine('Org Collaborations', addSpaceAfterComma(entry.org_collaboration));
+  addLine('Other Capabilities', addSpaceAfterComma(entry.other_capability));
 
   return contentTags;
 }
@@ -294,12 +341,12 @@ function createMarkerContent(entry, separator) {
   }
 
   return createRequesterMarkerContent(
-    entry.orgType,
+    entry.org_type,
     entry.address,
     entry.name,
     entry.instructions,
     entry.accepting,
-    entry.openBox,
+    entry.open_box,
     separator
   );
 }
@@ -524,7 +571,11 @@ function numberFormat(number, decimalPlaces, decSeparator, thouSeparator) {
 function updateStats($elem, count) {
   const prettyMarkerCount = numberFormat(count, 0);
 
-  $elem.html($.i18n('ftm-requesters-count', prettyMarkerCount));
+  if (gDatasetType === 'makers') {
+    $elem.html(`${prettyMarkerCount} Groups`);
+  } else {
+    $elem.html($.i18n('ftm-requesters-count', prettyMarkerCount));
+  }
 }
 
 // Source for country center points: https://developers.google.com/public-data/docs/canonical/countries_csv
@@ -708,17 +759,6 @@ function getFlatFilteredEntries(data, filters) {
 }
 
 function createMakerListItemEl(entry) {
-  // feature flag for email contact form
-  const showContact = searchParams['show-contact'] === 'true';
-
-  // feature flag to insert fake contact info for testing
-  // use an encrypted email string (they should be url-safe)
-  const fakeContact = searchParams['fake-contact'];
-
-  if (fakeContact) {
-    entry.encrypted_email = fakeContact;
-  }
-
   entry.domElem = ce('div', 'location py-3');
   const header = ce('div', 'd-flex');
   const headerMakerspaceInfo = ce('div', 'flex-grow-1');
@@ -727,30 +767,50 @@ function createMakerListItemEl(entry) {
   ac(header, headerMakerspaceInfo);
   ac(entry.domElem, header);
 
-  if (entry.instructions) {
-    const instructionsContainer = ce('div', 'row');
+  // TODO: Dedupe addLine and addParagraph with createMakerMarkerContent()
+  const addParagraph = (name, value) => {
+    if (value) {
+      const row = ce('div', 'row');
 
-    ac(instructionsContainer, [
-      ce('label', 'col-12 col-md-3 font-weight-bold', ctn('Description')),
-      linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(entry.instructions))),
-    ]);
+      ac(row, [
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn(name)),
+        linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(value))),
+      ]);
 
-    ac(entry.domElem, instructionsContainer);
+      ac(entry.domElem, row);
+    }
   }
+
+  const addLine = (name, value) => {
+    if (value) {
+      const row = ce('div', 'row');
+
+      ac(row, [
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn(name)),
+        linkifyElement(ce('p', 'col-12 col-md-9', ctn(value))),
+      ]);
+
+      ac(entry.domElem, row);
+    }
+  }
+
+  addParagraph('Website', entry.website);
+  addParagraph('Contact', entry.public_contact);
+  addLine('Location', `${entry.city}, ${entry.state} ${entry.zip}`);
+  addLine('Capabilities', addSpaceAfterComma(entry.capabilities));
+  addLine('Products', addSpaceAfterComma(entry.products));
+  addLine('Other Product', addSpaceAfterComma(entry.other_product));
+  addLine('Face Shield Type', addSpaceAfterComma(entry.face_shield_type));
+  addLine('Are you collecting?', entry.collecting_site);
+  addLine('Are you shipping?', entry.shipping);
+  addLine('Are you taking volunteers?', entry.accepting_volunteers);
+  addLine('Other Type of Space', entry.other_type_of_space);
+  addLine('Accepting PPE Requests', entry.accepting_ppe_requests);
+  addLine('Org Collaborations', addSpaceAfterComma(entry.org_collaboration));
+  addLine('Other Capabilities', addSpaceAfterComma(entry.other_capability));
 }
 
 function createRequesterListItemEl(entry) {
-  // feature flag for email contact form
-  const showContact = searchParams['show-contact'] === 'true';
-
-  // feature flag to insert fake contact info for testing
-  // use an encrypted email string (they should be url-safe)
-  const fakeContact = searchParams['fake-contact'];
-
-  if (fakeContact) {
-    entry.encrypted_email = fakeContact;
-  }
-
   entry.domElem = ce('div', 'location py-3');
   const header = ce('div', 'd-flex');
   const headerHospitalInfo = ce('div', 'flex-grow-1');
@@ -785,7 +845,7 @@ function createRequesterListItemEl(entry) {
   ac(header, headerOrgType);
   ac(entry.domElem, header);
 
-  if (showContact && entry.encrypted_email) {
+  if (entry.encrypted_email) {
     const emailContainer = ce('div', 'row');
 
     ac(emailContainer, [
@@ -807,7 +867,7 @@ function createRequesterListItemEl(entry) {
     ac(entry.domElem, ppeNeededContainer);
   }
 
-  if (entry.openBox) {
+  if (entry.open_box) {
     const openPackagesContainer = ce('div', 'row');
 
     ac(openPackagesContainer, [
@@ -840,7 +900,7 @@ function getEntryEl(entry) {
     }
   }
 
-  return entry.domElem; // TODO: generate this here.
+  return entry.domElem;
 }
 
 function renderNextListPage() {

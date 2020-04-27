@@ -14,7 +14,7 @@
             <div class="col-xl-4" style="padding: 0px">
               <h3 style="white-space: nowrap">
                 {{#if (eq datasetType "makers")}}
-                  <span>Makerspaces</span>
+                  <span>Maker Groups</span>
                 {{else}}
                   <span class="i18n" data-i18n="ftm-map-of-sites">Donation sites</span>
                 {{/if}}
@@ -57,7 +57,7 @@
         <div class="locations-loading text-center">
           <div class="spinner-border" role="status"></div>
           {{#if (eq datasetType "makers")}}
-            <div>Loading Makerspaces...</div>
+            <div>Loading Maker Groups...</div>
           {{else}}
             <div class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</div>
           {{/if}}
@@ -84,7 +84,7 @@
         <div class="locations-container" style="display: none;">
           <h3 style="padding: 30px 0px 5px 0px; margin: 0px;">
             {{#if (eq datasetType "makers")}}
-              <span>List of Makerspaces</span>
+              <span>List of Maker Groups</span>
             {{else}}
               <span class="i18n" data-i18n="ftm-list-of-sites">List of donation sites</span> <span id="list-stats"></span>
             {{/if}}
