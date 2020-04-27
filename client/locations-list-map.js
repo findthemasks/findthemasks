@@ -699,17 +699,6 @@ function getFlatFilteredEntries(data, filters) {
 
 function getEntryEl(entry) {
   if (!entry.domElem) {
-    // feature flag for email contact form
-    const showContact = searchParams['show-contact'] === 'true';
-
-    // feature flag to insert fake contact info for testing
-    // use an encrypted email string (they should be url-safe)
-    const fakeContact = searchParams['fake-contact'];
-
-    if (fakeContact) {
-      entry.encrypted_email = fakeContact;
-    }
-
     entry.domElem = ce('div', 'location py-3');
     const header = ce('div', 'd-flex');
     const headerHospitalInfo = ce('div', 'flex-grow-1');
@@ -744,7 +733,7 @@ function getEntryEl(entry) {
     ac(header, headerOrgType);
     ac(entry.domElem, header);
 
-    if (showContact && entry.encrypted_email) {
+    if (entry.encrypted_email) {
       const emailContainer = ce('div', 'row');
 
       ac(emailContainer, [

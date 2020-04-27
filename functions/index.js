@@ -1,13 +1,13 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const csv_stringify = require('csv-stringify');
-const {request} = require('gaxios');
+const { request } = require('gaxios');
 const crypto = require('crypto');
 
 admin.initializeApp();
 
-const {OAuth2Client} = require('google-auth-library');
-const {google} = require('googleapis');
+const { OAuth2Client } = require('google-auth-library');
+const { google } = require('googleapis');
 const Client = require("@googlemaps/google-maps-services-js").Client;
 
 // TODO: Use firebase functions:config:set to configure your googleapi object:
@@ -33,7 +33,7 @@ const SHEETS = {
   it: '1YHt6G1ghcXrRqXflevxHAwg2XOXmG2Cym6nSS5vXe7Q',
   pl: '10EsvvozwLTQpn0ejvPjZSWt9lve3fnMHBHltW-v_zkY',
   pt: '1QnyjUUBT_P476dEl0WfQwVnW15Ie7ogty7DiOkMhHLo',
-  us: '1GwP7Ly6iaqgcms0T80QGCNW4y2gJ7tzVND2CktFqnXM',
+  us: '1GwP7Ly6iaqgcms0T80QGCNW4y2gJ7tzVND2CktFqnXM'
 };
 
 if (functions.config().googleapi !== undefined) {
@@ -46,10 +46,10 @@ if (functions.config().googleapi !== undefined) {
 }
 
 const COLUMNS = [
-'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM',
-'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+  'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+  'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM',
+  'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'
 ];
 const COMBINED_WRITEBACK_SHEET = "'Combined'";
 const SMARTY_STREETS_OUTPUT_SHEET = "'Smarty Street Output'";
@@ -73,7 +73,7 @@ module.exports.authgoogleapi = functions.https.onRequest((req, res) => {
   res.redirect(functionsOauthClient.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES,
-    prompt: 'consent',
+    prompt: 'consent'
   }));
 });
 
@@ -86,11 +86,11 @@ module.exports.oauthcallback = functions.https.onRequest(async (req, res) => {
   res.set('Cache-Control', 'private, max-age=0, s-maxage=0');
   const code = req.query.code;
   try {
-    const {tokens} = await functionsOauthClient.getToken(code);
+    const { tokens } = await functionsOauthClient.getToken(code);
     // Now tokens contains an access_token and an optional refresh_token. Save them.
     await admin.database().ref(DB_TOKEN_PATH).set(tokens);
     return res.status(200).send('App successfully configured with new Credentials. '
-        + 'You can now close this page.');
+      + 'You can now close this page.');
   } catch (error) {
     return res.status(400).send(error);
   }
@@ -107,9 +107,13 @@ async function getAuthorizedClient() {
   return functionsOauthClient;
 }
 
-function splitValues(data) { return [ data.values[0], data.values[1], data.values.slice(2) ]; }
+function splitValues(data) {
+  return [data.values[0], data.values[1], data.values.slice(2)];
+}
 
-function get_country_from_path(req) { return req.path.split('/',2)[1] || 'us'; }
+function get_country_from_path(req) {
+  return req.path.split('/', 2)[1] || 'us';
+}
 
 async function annotateGeocode(data, sheet_id, client) {
   // Annotate Geocodes for missing items. Track the updated rows. Write back.
@@ -117,14 +121,14 @@ async function annotateGeocode(data, sheet_id, client) {
   const maps_client = new Client({});
   const [header_values, col_labels, real_values] = splitValues(data);
 
-  const approvedIndex = headers.findIndex( e => e === 'approved' );
-  const addressIndex = headers.findIndex( e => e === 'address' );
-  const stateIndex = headers.findIndex( e => e === 'state' );
-  const cityIndex = headers.findIndex( e => e === 'city' );
-  const origAddressIndex = headers.findIndex( e => e === 'orig_address' );
-  const latIndex = headers.findIndex( e => e === 'lat' );
-  const lngIndex = headers.findIndex( e => e === 'lng' );
-  const timestampIdx = headers.findIndex( e => e === 'timestamp' );
+  const approvedIndex = headers.findIndex(e => e === 'approved');
+  const addressIndex = headers.findIndex(e => e === 'address');
+  const stateIndex = headers.findIndex(e => e === 'state');
+  const cityIndex = headers.findIndex(e => e === 'city');
+  const origAddressIndex = headers.findIndex(e => e === 'orig_address');
+  const latIndex = headers.findIndex(e => e === 'lat');
+  const lngIndex = headers.findIndex(e => e === 'lng');
+  const timestampIdx = headers.findIndex(e => e === 'timestamp');
 
   // The timestamp column is the first of the form response columns.
   // Subtracting it off gives us the right column ordinal for the
@@ -137,33 +141,33 @@ async function annotateGeocode(data, sheet_id, client) {
   const promises = [];
   const doGeocode = (address, entry, row_num, do_latlong) => {
     return getLatLng(address, maps_client).then(geocode => {
-        if (entry[addressIndex]) {
-          // Do not overwrite if there is already an address listed.
-          geocode.canonical_address = null;
-        } else {
-          entry[addressIndex] = geocode.canonical_address;
-        }
+      if (entry[addressIndex]) {
+        // Do not overwrite if there is already an address listed.
+        geocode.canonical_address = null;
+      } else {
+        entry[addressIndex] = geocode.canonical_address;
+      }
 
-        if (do_latlong) {
-          entry[latIndex] = geocode.location.lat;
-          entry[lngIndex] = geocode.location.lng;
-        } else {
-          geocode.location = null;
-        }
-        console.log("Writing ", geocode);
-        to_write_back.push({row_num, geocode});
-        return geocode;
-      }).catch( e => {
-        console.error(e);
-        entry[latIndex] = 'N/A';
-        entry[lngIndex] = 'N/A';
-      });
+      if (do_latlong) {
+        entry[latIndex] = geocode.location.lat;
+        entry[lngIndex] = geocode.location.lng;
+      } else {
+        geocode.location = null;
+      }
+      console.log("Writing ", geocode);
+      to_write_back.push({ row_num, geocode });
+      return geocode;
+    }).catch(e => {
+      console.error(e);
+      entry[latIndex] = 'N/A';
+      entry[lngIndex] = 'N/A';
+    });
   };
 
   // TODO(awong): Do we still need this rate limit?
   // Geolocation only allows 50qps. Overkilling it causes rejects. Artifically cap here.
   let num_lookups = 0;
-  real_values.forEach( (entry, index) => {
+  real_values.forEach((entry, index) => {
     const final_address = entry[addressIndex];
     const needs_latlong = entry[approvedIndex] === "x";
 
@@ -175,7 +179,7 @@ async function annotateGeocode(data, sheet_id, client) {
     const missing_lat_lng = (entry.length < (latIndex + 1)) || !entry[latIndex] || !entry[lngIndex];
 
     if (!final_address || (needs_latlong && missing_lat_lng)) {
-    console.log("Doing soemthing");
+      console.log("Doing soemthing");
       const address = final_address || `${entry[origAddressIndex]}, ${entry[cityIndex]}, ${entry[stateIndex]}`;
 
       // TODO(awong): do some smarter throttle system.
@@ -183,7 +187,7 @@ async function annotateGeocode(data, sheet_id, client) {
       console.debug(`Calling geocoder for entry: ${entry} on row: ${row_num} and address: ${address} `);
       promises.push(doGeocode(address, entry, row_num, needs_latlong));
     }
-  } );
+  });
 
   await Promise.all(promises);
   // Attempt to write back now.
@@ -193,30 +197,30 @@ async function annotateGeocode(data, sheet_id, client) {
       spreadsheetId: sheet_id,
       resource: {
         valueInputOption: 'USER_ENTERED',
-        data: data,
+        data: data
       }
     };
     write_request.auth = client;
 
-    to_write_back.forEach( e => {
+    to_write_back.forEach(e => {
       console.log(`writing lat-long,address cols ${latColumn},${lngColumn},${addressColumn} : ${JSON.stringify(e)}`);
       // TODO(awong): Don't hardcode the columns. Make it more robust somehow.
       if (e.geocode.location) {
         data.push({
           range: `${COMBINED_WRITEBACK_SHEET}!${latColumn}${e.row_num}`,
-          values: [ [e.geocode.location.lat] ]
+          values: [[e.geocode.location.lat]]
         });
 
         data.push({
           range: `${COMBINED_WRITEBACK_SHEET}!${lngColumn}${e.row_num}`,
-          values: [ [e.geocode.location.lng] ]
+          values: [[e.geocode.location.lng]]
         });
       }
 
       if (e.geocode.canonical_address) {
         data.push({
           range: `${COMBINED_WRITEBACK_SHEET}!${addressColumn}${e.row_num}`,
-          values: [ [e.geocode.canonical_address] ]
+          values: [[e.geocode.canonical_address]]
         });
       }
     });
@@ -334,13 +338,25 @@ async function snapshotData(country) {
     headers.push('Row');
     col_labels.push('row');
 
+    const contactFormOptOutIndex = orig_col_labels.findIndex(e => e === '_contact_form_opt_out');
+
     const trimmed_values = real_values.map((row, row_num) => {
       const result = [];
+
+      // Opt out of mail relay if
+      // country's sheet does not have opt out option
+      // OR opt out column has content in it
+      const hasOptedOutOfContact = contactFormOptOutIndex === -1
+        || (Boolean(row[contactFormOptOutIndex]) && row[contactFormOptOutIndex].trim().length > 0);
 
       row.forEach((value, col_num) => {
         if (published_cols.has(col_num)) {
           if (col_num === emailIndex) {
-            result.push(value && encryptEmail(value));
+            if (hasOptedOutOfContact || !value) {
+              result.push('');
+            } else {
+              result.push(encryptEmail(value));
+            }
           } else {
             result.push(value);
           }
@@ -351,7 +367,7 @@ async function snapshotData(country) {
       return result;
     });
 
-    const approvedIndex = col_labels.findIndex( e => e === 'approved' );
+    const approvedIndex = col_labels.findIndex(e => e === 'approved');
     if (approvedIndex === -1) {
       throw new Error("sheet missing expected columns. Ensure row 2 headers are sane?");
     }
@@ -379,7 +395,7 @@ async function snapshotData(country) {
       cacheControl: "public, max-age=20",
       contentType: "application/json"
     },
-    predefinedAcl: "publicRead",
+    predefinedAcl: "publicRead"
   });
   // Build a simple csv file
   console.log("Preparing CSV File");
@@ -392,13 +408,13 @@ async function snapshotData(country) {
       console.error(err)
     } else {
       await csvFileRef.save(output, {
-	      gzip: true,
-	      metadata: {
-	        cacheControl: "public, max-age=20",
-                contentType: "application/text"
-	      },
-	      predefinedAcl: "publicRead",
-	 });
+        gzip: true,
+        metadata: {
+          cacheControl: "public, max-age=20",
+          contentType: "application/text"
+        },
+        predefinedAcl: "publicRead"
+      });
     }
   });
 
@@ -412,7 +428,7 @@ async function snapshotData(country) {
       cacheControl: "public, max-age=20",
       contentType: "text/html"
     },
-    predefinedAcl: "publicRead",
+    predefinedAcl: "publicRead"
   });
 
   return [data, html_snippets];
@@ -424,7 +440,7 @@ async function getLatLng(address, client) {
   const response = await client.geocode({
     params: {
       address: address,
-      key: GOOGLE_MAPS_API_KEY,
+      key: GOOGLE_MAPS_API_KEY
     },
     timeout: 5000 // milliseconds
   });
@@ -433,7 +449,7 @@ async function getLatLng(address, client) {
     const result = response.data.results[0];
     const retval = {
       canonical_address: result.formatted_address,
-      location: result.geometry.location,
+      location: result.geometry.location
     };
     return retval;
   } else {
@@ -444,9 +460,9 @@ async function getLatLng(address, client) {
 
 function toDataByLocation(data) {
   const headers = data.values[1];
-  const approvedIndex = headers.findIndex( e => e === 'approved' );
-  const stateIndex = headers.findIndex( e => e === 'state' );
-  const cityIndex = headers.findIndex( e => e === 'city' );
+  const approvedIndex = headers.findIndex(e => e === 'approved');
+  const stateIndex = headers.findIndex(e => e === 'state');
+  const cityIndex = headers.findIndex(e => e === 'city');
   const data_by_location = {};
 
   const published_entries = data.values.slice(1).filter((entry) => entry[approvedIndex] === "x");
@@ -466,7 +482,7 @@ function toDataByLocation(data) {
       entry_array = data_by_location[state][city];
     }
     const entry_obj = {};
-    headers.forEach( (value, index) => {
+    headers.forEach((value, index) => {
       if (entry[index] !== "") {
         entry_obj[value] = (typeof entry[index]) === 'string' ? entry[index].trim() : entry[index];
       }
@@ -513,7 +529,7 @@ function toHtmlSnippets(data_by_location) {
         addLine(`<h4 class="marginBottomZero">${name}</h4>`);
 
         addLine('<label>Address</label>')
-        addLine(`<p class="marginTopZero medEmph">${address.replace(/\n/g,'<br>')}</p>`);
+        addLine(`<p class="marginTopZero medEmph">${address.replace(/\n/g, '<br>')}</p>`);
 
         if (instructions !== "") {
           addLine('<label>Instructions</label>')
@@ -592,21 +608,21 @@ data_static = null;
 
 async function get_live_data() {
   const url = 'https://storage.googleapis.com/findthemasks.appspot.com/data-us.json';
-  let resp = await request({url});
+  let resp = await request({ url });
   console.log('Setting global variable `data_static` to the contents of ' + url);
   data_static = resp.data;
 }
 
 const makeSmartyStreetRequest = async (url) => {
-    try {
-      const response = await request({
-        url: url
-      });
-      return response.data;
-    } catch (error) {
-      console.error('Smarty Street Error', error);
-      return null;
-    }
+  try {
+    const response = await request({
+      url: url
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Smarty Street Error', error);
+    return null;
+  }
 };
 
 const annotateSmartyStreetsAddresses = async (country) => {
