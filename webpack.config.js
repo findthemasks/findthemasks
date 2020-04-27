@@ -11,7 +11,7 @@ const config = {
     faq: ['./client/faq.js'],
     i18n: ['./client/i18n.js'],
     stats: ['./client/stats.js'],
-    style: ['./sass/style.css'],
+    style: ['./sass/style.scss'],
     'locations-list-map': ['./client/locations-list-map.js'],
   },
   resolve: { extensions: ['.js'] },
