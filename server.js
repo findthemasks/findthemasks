@@ -79,16 +79,16 @@ router.get(['/', '/index.html'], (req, res) => {
     });
   } else {
  */
-    res.render('index', {
-      version: herokuVersion,
-      ogLocale: formatFbLocale(res.locals.locale),
-      ogTitle: isMaker ? res.locals.banana.i18n('ftm-makers-og-title') : res.locals.banana.i18n('ftm-index-og-title'),
-      ogUrl: `http://${req.hostname}${req.originalUrl}`,
-      ogDescription: isMaker ? res.locals.banana.i18n('ftm-makers-og-description') : res.locals.banana.i18n('ftm-index-og-description'),
-      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-      localizeContactInfo: localizeContactInfo(res.locals.dataset),
-      recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
-    });
+  res.render('index', {
+    version: herokuVersion,
+    ogLocale: formatFbLocale(res.locals.locale),
+    ogTitle: isMaker ? res.locals.banana.i18n('ftm-makers-og-title') : res.locals.banana.i18n('ftm-index-og-title'),
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: isMaker ? res.locals.banana.i18n('ftm-makers-og-description') : res.locals.banana.i18n('ftm-index-og-description'),
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    localizeContactInfo: localizeContactInfo(res.locals.dataset),
+    recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
+  });
 //  }
 });
 
@@ -302,7 +302,7 @@ app.use(/\/[a-zA-Z]{2}/, gbUkRedirect);
 
 const ALL_DATASETS = new Set([
   'makers',
-  ...Object.keys(countries)
+  ...Object.keys(countries),
 ]);
 
 // Takes the dataSet, which is usually the first path element in the URL,

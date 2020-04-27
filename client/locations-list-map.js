@@ -5,7 +5,7 @@ import MarkerClusterer from '@google/markerclustererplus';
 import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
 import { FILTER_ITEMS, ORG_TYPES, ENUM_MAPPINGS } from './formEnumLookups.js';
-import { getCountry, getFirstPathPart, isCountryPath } from './getCountry.js';
+import { getCountry } from './getCountry.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
@@ -20,9 +20,10 @@ require('../sass/style.scss');
 
 // Master data object, indexed by country code
 const countryData = {};
-const currentCountry = getCountry();
+const gDataset = document.body.dataset['dataset'];
+const gDatasetType = document.body.dataset['datasetType'];
 
-document.body.setAttribute('data-country', currentCountry);
+document.body.setAttribute('data-country', gDataset); // TODO Remove this?
 
 // Map, markers and map associated UI components are initialized in initMap().
 let gAutocomplete;
@@ -231,7 +232,21 @@ function multilineStringToNodes(input) {
   return returnedNodes.slice(0, -1);
 }
 
-function addMarkerContent(orgType, address, name, instructions, accepting, openBox, separator) {
+function createMakerMarkerContent(entry, separator) {
+  // Text to go into InfoWindow
+  const contentTags = separator ? [ce('h5', 'separator', ctn(entry.name))] : [ce('h5', null, ctn(entry.name))];
+
+  if (entry.instructions) {
+    contentTags.push(
+      ce('div', 'label', ctn('Description')),
+      linkifyElement(ce('div', 'value', multilineStringToNodes(entry.instructions)))
+    );
+  }
+
+  return contentTags;
+}
+
+function createRequesterMarkerContent(orgType, address, name, instructions, accepting, openBox, separator) {
   // Text to go into InfoWindow
   const contentTags = separator ? [ce('h5', 'separator', ctn(name))] : [ce('h5', null, ctn(name))];
 
@@ -273,18 +288,23 @@ function addMarkerContent(orgType, address, name, instructions, accepting, openB
   return contentTags;
 }
 
-function createMarker(
-  latitude,
-  longitude,
-  orgType,
-  address,
-  name,
-  instructions,
-  accepting,
-  openBox,
-  markerOptions,
-  otherRequesters
-) {
+function createMarkerContent(entry, separator) {
+  if (gDatasetType === 'makers') {
+    return createMakerMarkerContent(entry, separator);
+  }
+
+  return createRequesterMarkerContent(
+    entry.orgType,
+    entry.address,
+    entry.name,
+    entry.instructions,
+    entry.accepting,
+    entry.openBox,
+    separator
+  );
+}
+
+export function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
   const location = { lat: latitude, lng: longitude };
   const options = {
     position: location,
@@ -301,16 +321,11 @@ function createMarker(
 
     if (!marker.infowindow) {
       const contentTags = [];
-      contentTags.push(
-        ...addMarkerContent(orgType, address, name, instructions, accepting, openBox, false)
-      );
+      contentTags.push(...createMarkerContent(entry, false));
 
-      if (otherRequesters && otherRequesters.length > 0) {
-        otherRequesters.forEach((e) => {
-          console.log(e);
-          contentTags.push(
-            ...addMarkerContent(e.org_type, e.address, e.name, e.instructions, e.accepting, e.open_box, true)
-          );
+      if (otherEntries && otherEntries.length > 0) {
+        otherEntries.forEach((e) => {
+          contentTags.push(...createMarkerContent(e, true));
         });
       }
 
@@ -401,18 +416,13 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
           // Guard against non-geocoded entries. Assuming no location exactly on the equator or
           // prime meridian
           if (lat && lng) {
-            const otherRequesters = entriesByAddress[`${lat} ${lng}`].filter((e) => e.name !== entry.name);
+            const otherEntries = entriesByAddress[`${lat} ${lng}`].filter((e) => e.name !== entry.name);
             marker = createMarker(
               lat,
               lng,
-              entry.org_type,
-              entry.address,
-              entry.name,
-              entry.instructions,
-              entry.accepting,
-              entry.open_box,
+              entry,
               markerOptions,
-              otherRequesters
+              otherEntries
             );
             entry.marker = marker;
           }
@@ -697,84 +707,136 @@ function getFlatFilteredEntries(data, filters) {
   return entries;
 }
 
+function createMakerListItemEl(entry) {
+  // feature flag for email contact form
+  const showContact = searchParams['show-contact'] === 'true';
+
+  // feature flag to insert fake contact info for testing
+  // use an encrypted email string (they should be url-safe)
+  const fakeContact = searchParams['fake-contact'];
+
+  if (fakeContact) {
+    entry.encrypted_email = fakeContact;
+  }
+
+  entry.domElem = ce('div', 'location py-3');
+  const header = ce('div', 'd-flex');
+  const headerMakerspaceInfo = ce('div', 'flex-grow-1');
+  ac(headerMakerspaceInfo, ce('h5', null, ctn(entry.name)));
+
+  ac(header, headerMakerspaceInfo);
+  ac(entry.domElem, header);
+
+  if (entry.instructions) {
+    const instructionsContainer = ce('div', 'row');
+
+    ac(instructionsContainer, [
+      ce('label', 'col-12 col-md-3 font-weight-bold', ctn('Description')),
+      linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(entry.instructions))),
+    ]);
+
+    ac(entry.domElem, instructionsContainer);
+  }
+}
+
+function createRequesterListItemEl(entry) {
+  // feature flag for email contact form
+  const showContact = searchParams['show-contact'] === 'true';
+
+  // feature flag to insert fake contact info for testing
+  // use an encrypted email string (they should be url-safe)
+  const fakeContact = searchParams['fake-contact'];
+
+  if (fakeContact) {
+    entry.encrypted_email = fakeContact;
+  }
+
+  entry.domElem = ce('div', 'location py-3');
+  const header = ce('div', 'd-flex');
+  const headerHospitalInfo = ce('div', 'flex-grow-1');
+  const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
+  ac(headerHospitalInfo, ce('h5', null, ctn(entry.name)));
+
+  if (entry.org_type && entry.org_type.length) {
+    ac(headerOrgType, [
+      ce('p', null, ctn(translateEnumValue(entry.org_type))),
+    ]);
+  }
+
+  const addr = entry.address.trim().split('\n');
+
+  if (addr.length) {
+    const para = ce('p', 'marginTopZero medEmph');
+    const link = ce('a', 'map-link');
+    const $link = $(link);
+    const address = getOneLineAddress(entry.address);
+    link.href = googleMapsUri(address);
+    link.target = '_blank';
+    $link.click(() => {
+      sendEvent('listView', 'clickAddress', address);
+    });
+    ac(para, link);
+    ac(link, ctn(address));
+
+    ac(headerHospitalInfo, para);
+  }
+
+  ac(header, headerHospitalInfo);
+  ac(header, headerOrgType);
+  ac(entry.domElem, header);
+
+  if (showContact && entry.encrypted_email) {
+    const emailContainer = ce('div', 'row');
+
+    ac(emailContainer, [
+      ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-email-contact'))),
+      $(`<p class="col-12 col-md-9"><a href="#" data-toggle="modal" data-target="#contactModal" data-name="${entry.name}" data-email="${entry.encrypted_email}">${$.i18n('ftm-email-contact-org')}</a></p>`)[0],
+    ]);
+
+    ac(entry.domElem, emailContainer);
+  }
+
+  if (entry.accepting) {
+    const ppeNeededContainer = ce('div', 'row');
+
+    ac(ppeNeededContainer, [
+      ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-ppe-needed'))),
+      ce('p', 'col-12 col-md-9', ctn(translateEnumList(entry.accepting))),
+    ]);
+
+    ac(entry.domElem, ppeNeededContainer);
+  }
+
+  if (entry.openBox) {
+    const openPackagesContainer = ce('div', 'row');
+
+    ac(openPackagesContainer, [
+      ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-open-packages'))),
+      ce('p', 'col-12 col-md-9', ctn(translateEnumValue(entry.openBox))),
+    ]);
+
+    ac(entry.domElem, openPackagesContainer);
+  }
+
+  if (entry.instructions) {
+    const instructionsContainer = ce('div', 'row');
+
+    ac(instructionsContainer, [
+      ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-instructions'))),
+      linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(entry.instructions))),
+    ]);
+
+    ac(entry.domElem, instructionsContainer);
+  }
+}
+
 function getEntryEl(entry) {
   if (!entry.domElem) {
-    entry.domElem = ce('div', 'location py-3');
-    const header = ce('div', 'd-flex');
-    const headerHospitalInfo = ce('div', 'flex-grow-1');
-    const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
-    ac(headerHospitalInfo, ce('h5', null, ctn(entry.name)));
-
-    if (entry.org_type && entry.org_type.length) {
-      ac(headerOrgType, [
-        ce('p', null, ctn(translateEnumValue(entry.org_type))),
-      ]);
-    }
-
-    const addr = entry.address.trim().split('\n');
-
-    if (addr.length) {
-      const para = ce('p', 'marginTopZero medEmph');
-      const link = ce('a', 'map-link');
-      const $link = $(link);
-      const address = getOneLineAddress(entry.address);
-      link.href = googleMapsUri(address);
-      link.target = '_blank';
-      $link.click(() => {
-        sendEvent('listView', 'clickAddress', address);
-      });
-      ac(para, link);
-      ac(link, ctn(address));
-
-      ac(headerHospitalInfo, para);
-    }
-
-    ac(header, headerHospitalInfo);
-    ac(header, headerOrgType);
-    ac(entry.domElem, header);
-
-    if (entry.encrypted_email) {
-      const emailContainer = ce('div', 'row');
-
-      ac(emailContainer, [
-        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-email-contact'))),
-        $(`<p class="col-12 col-md-9"><a href="#" data-toggle="modal" data-target="#contactModal" data-name="${entry.name}" data-email="${entry.encrypted_email}">${$.i18n('ftm-email-contact-org')}</a></p>`)[0],
-      ]);
-
-      ac(entry.domElem, emailContainer);
-    }
-
-    if (entry.accepting) {
-      const ppeNeededContainer = ce('div', 'row');
-
-      ac(ppeNeededContainer, [
-        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-ppe-needed'))),
-        ce('p', 'col-12 col-md-9', ctn(translateEnumList(entry.accepting))),
-      ]);
-
-      ac(entry.domElem, ppeNeededContainer);
-    }
-
-    if (entry.open_box) {
-      const openPackagesContainer = ce('div', 'row');
-
-      ac(openPackagesContainer, [
-        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-open-packages'))),
-        ce('p', 'col-12 col-md-9', ctn(translateEnumValue(entry.open_box))),
-      ]);
-
-      ac(entry.domElem, openPackagesContainer);
-    }
-
-    if (entry.instructions) {
-      const instructionsContainer = ce('div', 'row');
-
-      ac(instructionsContainer, [
-        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-instructions'))),
-        linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(entry.instructions))),
-      ]);
-
-      ac(entry.domElem, instructionsContainer);
+    // Adds the domElem field if it has not been created.
+    if (gDatasetType === 'makers') {
+      createMakerListItemEl(entry);
+    } else {
+      createRequesterListItemEl(entry);
     }
   }
 
@@ -885,11 +947,6 @@ function createFilterElements(data, filters) {
   }
 }
 
-function getCountryDataFilename(country) {
-  // Always use country-specific data.json file
-  return `/data-${country}.json`;
-}
-
 // Loads data file from url and assigns into object given by dataToStore
 function loadDataFile(url, dataToStore) {
   $.getJSON(
@@ -907,13 +964,22 @@ function loadDataFile(url, dataToStore) {
   );
 }
 
+function getDatasetFilename(dataset) {
+  // Always use country-specific data.json file
+  return `/data-${dataset}.json`;
+}
+
 function loadOtherCountries() {
+  if (gDatasetType !== 'default') {
+    return;
+  }
+
   const countryCodes = Object.keys(countries);
 
   for (const code of countryCodes) {
-    if (code !== currentCountry) {
+    if (code !== gDataset) {
       countryData[code] = {};
-      loadDataFile(getCountryDataFilename(code), countryData[code]);
+      loadDataFile(getDatasetFilename(code), countryData[code]);
     }
   }
 }
@@ -1151,9 +1217,7 @@ function initMap(data, filters) {
   // Initialize autosuggest/search field above the map.
   initMapSearch(data, filters);
 
-  if (isCountryPath()) {
-    loadOtherCountries();
-  }
+  loadOtherCountries();
 }
 
 // Lazy-loads the Google maps script once we know we need it. Sets up
@@ -1235,26 +1299,8 @@ function initContactModal() {
 }
 
 $(() => {
-  // HACK: Assign into data via Object.assign() below to handle both
-  // country and maker data.
-  let data;
-  let dataUrl;
-  const firstPathPart = getFirstPathPart();
-  if (isCountryPath()) {
-    data = {};
-    countryData[currentCountry] = data;
-    dataUrl = getCountryDataFilename(currentCountry);
-  } else if (firstPathPart === 'makers') {
-    data = {};
-    dataUrl = '/data-makers.json';
-  } else {
-    console.error('invalid path');
-    window.location.replace('/');
-    return;
-  }
-
   const renderListings = (result) => {
-    Object.assign(data, toDataByLocation(result));
+    const data = toDataByLocation(result);
     const showList = searchParams['hide-list'] !== 'true';
     const showFilters = showList && searchParams['hide-filters'] !== 'true';
     const showMap = searchParams['hide-map'] !== 'true';
@@ -1299,7 +1345,7 @@ $(() => {
 
   initContactModal();
 
-  $.getJSON(dataUrl, (result) => {
+  $.getJSON(getDatasetFilename(gDataset), (result) => {
     if (window.i18nReady) {
       renderListings(result);
     } else {

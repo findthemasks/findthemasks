@@ -1,7 +1,7 @@
 import { FtmUrl } from './utils.js';
 import countries from './countries.js';
 
-export function getFirstPathPart() {
+function getFirstPathPart() {
   const url = new FtmUrl(window.location);
   const directories = url.pathname.split('/');
   if (directories.length >= 2) {
@@ -9,13 +9,6 @@ export function getFirstPathPart() {
   }
 
   return '';
-}
-
-export function isCountryPath() {
-  if (getFirstPathPart() === 'makers') {
-    return false;
-  }
-  return true;
 }
 
 export function getCountry() {
