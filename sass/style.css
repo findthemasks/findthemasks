@@ -379,6 +379,10 @@ h3.city {
   opacity: 0.4;
 }
 
+p.page-info {
+  width: 60%;
+}
+
 /*********************
   * PARTNERS STYLES *
   *********************/
