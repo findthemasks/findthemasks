@@ -11,13 +11,22 @@
     <div class="col-12 col-lg-6 search-filter-container">
       <div class="bg-white ">
         <div class="bg-dark-blue text-light p-4">
-          <h4 class="mt-0 i18n" data-i18n="ftm-ppe-cta">
-            Let's get our PPE into the hands of those who need it!
-          </h4>
 
-          <p class="i18n" data-i18n="[html]ftm-requester-near-me">
-            Search for a requester near you. Not sure how to give? Read our FAQ.
-          </p>
+          {{#if (eq datasetType "makers")}}
+            <h4>
+              Make PPE. Get it into the hands of those who need it.
+            </h4>
+            <p>
+              Search for a Makerspace near you.
+            </p>
+          {{else}}
+            <h4 class="mt-0 i18n" data-i18n="ftm-ppe-cta">
+              Let's get our PPE into the hands of those who need it!
+            </h4>
+            <p class="i18n" data-i18n="[html]ftm-requester-near-me">
+              Search for a requester near you. Not sure how to give? Read our FAQ.
+            </p>
+          {{/if}}
 
           <div class="input-group mb-3">
             <div class="input-group-prepend">
@@ -67,7 +76,11 @@
       <div class="map-container">
         <div class="locations-loading text-center">
           <img src="/images/icons/loader.svg" alt="loading" class="load-spinner" />
-          <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
+          {{#if (eq datasetType "makers")}}
+            <span>Makerspaces</span>
+          {{else}}
+            <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
+          {{/if}}
         </div>
         <div id="map"></div>
       </div>
@@ -76,7 +89,11 @@
     <div class="col-12 col-lg-6">
       <div class="locations-loading text-center">
         <img src="/images/icons/loader.svg" alt="loading" class="load-spinner" />
-        <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
+        {{#if (eq datasetType "makers")}}
+          <span>Makerspaces</span>
+        {{else}}
+          <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>
+        {{/if}}
       </div>
 
       <div class="locations-container row no-gutters px-2 m-2" style="display: none;">

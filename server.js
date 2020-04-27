@@ -1,8 +1,9 @@
 const express = require('express');
+const countries = require('./client/countries.js'); // TODO: Move out of client.
 const expressHandlebars = require('express-handlebars');
 const https = require('https');
+const handlebarsHelpers = require('handlebars-helpers')();
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const setCurrentCountry = require('./middleware/setCurrentCountry.js');
 const setBananaI18n = require('./middleware/setBananaI18n.js');
 const localizeContactInfo = require('./viewHelpers/localizeContactInfo.js');
 const selectMaskMatchPartialPath = require('./viewHelpers/selectMaskMatchPartialPath');
@@ -22,7 +23,6 @@ app.set('view engine', 'handlebars');
 
 app.set('strict routing', true);
 
-app.use(setCurrentCountry);
 app.use(setBananaI18n);
 
 // Install the webpack-dev-middleware for all the hot-reload goodness in dev.
@@ -62,16 +62,34 @@ app.use((req, res, next) => {
 app.use(express.static('public'));
 
 router.get(['/', '/index.html'], (req, res) => {
-  res.render('index', {
-    version: herokuVersion,
-    ogLocale: formatFbLocale(res.locals.locale),
-    ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
-    ogUrl: `http://${req.hostname}${req.originalUrl}`,
-    ogDescription: res.locals.banana.i18n('ftm-index-og-description'),
-    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    localizeContactInfo: localizeContactInfo(res.locals.currentCountry),
-    recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
-  });
+  const isMaker = res.locals.datasetType === 'makers';
+  /*
+  if (res.locals.datasetType === 'makers') {
+    res.render('makers', {
+      version: herokuVersion,
+      dataset: res.locals.dataset,
+      datasetType: res.locals.datasetType,
+      ogLocale: formatFbLocale(res.locals.locale),
+      ogTitle: res.locals.banana.i18n('ftm-makers-og-title'),
+      ogUrl: `http://${req.hostname}${req.originalUrl}`,
+      ogDescription: res.locals.banana.i18n('ftm-makers-og-description'),
+      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+      localizeContactInfo: localizeContactInfo(res.locals.dataset),
+      recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
+    });
+  } else {
+ */
+    res.render('index', {
+      version: herokuVersion,
+      ogLocale: formatFbLocale(res.locals.locale),
+      ogTitle: isMaker ? res.locals.banana.i18n('ftm-makers-og-title') : res.locals.banana.i18n('ftm-index-og-title'),
+      ogUrl: `http://${req.hostname}${req.originalUrl}`,
+      ogDescription: isMaker ? res.locals.banana.i18n('ftm-makers-og-description') : res.locals.banana.i18n('ftm-index-og-description'),
+      googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+      localizeContactInfo: localizeContactInfo(res.locals.dataset),
+      recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
+    });
+//  }
 });
 
 router.get('/faq', (req, res) => {
@@ -81,8 +99,8 @@ router.get('/faq', (req, res) => {
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
-    largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.currentCountry),
-    maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.currentCountry),
+    largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.dataset),
+    maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.dataset),
   });
 });
 
@@ -100,27 +118,14 @@ router.get(['/give', '/give.html'], (req, res) => {
 });
 
 router.get(['/embed'], (req, res) => {
-  res.render('embed', {
+  res.render('give', {
     version: herokuVersion,
-    layout: 'embed',
+    layout: 'give',
     ogLocale: formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-give-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
-  });
-});
-
-router.get(['/makers'], (req, res) => {
-  res.render('makers', {
-    version: herokuVersion,
-    ogLocale: formatFbLocale(res.locals.locale),
-    ogTitle: res.locals.banana.i18n('ftm-makers-og-title'),
-    ogUrl: `http://${req.hostname}${req.originalUrl}`,
-    ogDescription: res.locals.banana.i18n('ftm-makers-og-description'),
-    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    localizeContactInfo: localizeContactInfo(res.locals.currentCountry),
     recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
   });
 });
@@ -144,7 +149,7 @@ router.get(['/special-projects/la-makers'], (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: 'Map of Vetter Makers for the city of Los Angeles',
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    localizeContactInfo: localizeContactInfo(res.locals.currentCountry),
+    localizeContactInfo: localizeContactInfo(res.locals.dataset),
   });
 });
 
@@ -209,7 +214,7 @@ router.get(['/404', '/404.html'], (req, res) => {
 });
 
 router.get('/donation-form', (req, res) => {
-  res.redirect(getDonationFormUrl(res.locals.currentCountry, res.locals.locale));
+  res.redirect(getDonationFormUrl(res.locals.dataset, res.locals.locale));
 });
 
 const cachedData = {};
@@ -294,8 +299,47 @@ const gbUkRedirect = (req, res, next) => {
 };
 
 app.use(/\/[a-zA-Z]{2}/, gbUkRedirect);
-app.use(/\/[a-zA-Z]{2}/, router);
-app.use('/', router);
+
+const ALL_DATASETS = new Set([
+  'makers',
+  ...Object.keys(countries)
+]);
+
+// Takes the dataSet, which is usually the first path element in the URL,
+// and returns the type of dataset. This is used by templates to choose the
+// content and data schema to render.
+//
+// TODO: Reword this file to be based on dataset, not country.
+function getDatasetType(dataset) {
+  if (dataset === 'makers') {
+    return dataset;
+  }
+
+  return 'default';
+}
+
+app.use('/:dataset', (req, res, next) => {
+  const lowerCased = req.params.dataset.toLowerCase();
+  if (ALL_DATASETS.has(lowerCased)) {
+    res.locals.dataset = req.params.dataset;
+    res.locals.datasetType = getDatasetType(res.locals.dataset);
+
+    // Redirect to lower-cased path.
+    if (req.params.dataset !== lowerCased) {
+      res.status(302).redirect(`/${lowerCased}`);
+      return;
+    }
+    router(req, res, next);
+  } else {
+    next();
+  }
+});
+app.use('/', (req, res, next) => {
+  res.locals.dataset = 'us';
+  res.locals.datasetType = getDatasetType(res.locals.dataset);
+
+  router(req, res, next);
+});
 
 app.use((req, res) => {
   res.status(404).redirect('/');

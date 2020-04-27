@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   at: {
     i18nString: 'ftm-austria',
     countryCode: 'at',
