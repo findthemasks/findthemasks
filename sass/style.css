@@ -379,8 +379,19 @@ h3.city {
   opacity: 0.4;
 }
 
+/*********************
+ * Static page styles *
+   *********************/
+
 .page-title {
   text-transform: uppercase;
+}
+
+.email-button {
+  border: #EC416F;
+  background: #EC416F;
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 /*********************
