@@ -1216,6 +1216,7 @@ function initContactModal() {
       $('.contact-success').css('display', 'block');
       $('#send-message').prop('disabled', false);
       window.grecaptcha.reset();
+      sendEvent('contactOrganization', 'sendEmail', $('#contactModal').find('.modal-title').val());
 
       setTimeout(() => {
         $('#contactModal').modal('hide');
