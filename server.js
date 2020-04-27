@@ -86,10 +86,23 @@ router.get('/faq', (req, res) => {
   });
 });
 
-router.get(['/embed', '/give', '/give.html'], (req, res) => {
+router.get(['/give', '/give.html'], (req, res) => {
   res.render('give', {
     version: herokuVersion,
     layout: 'give',
+    ogLocale: formatFbLocale(res.locals.locale),
+    ogTitle: res.locals.banana.i18n('ftm-give-og-title'),
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
+    recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
+  });
+});
+
+router.get(['/embed'], (req, res) => {
+  res.render('embed', {
+    version: herokuVersion,
+    layout: 'embed',
     ogLocale: formatFbLocale(res.locals.locale),
     ogTitle: res.locals.banana.i18n('ftm-give-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
