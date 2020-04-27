@@ -307,8 +307,9 @@ function createMarker(
 
       if (otherRequesters && otherRequesters.length > 0) {
         otherRequesters.forEach((e) => {
+          console.log(e);
           contentTags.push(
-            ...addMarkerContent(e.orgType, e.address, e.name, e.instructions, e.accepting, e.openBox, true)
+            ...addMarkerContent(e.org_type, e.address, e.name, e.instructions, e.accepting, e.open_box, true)
           );
         });
       }
@@ -409,7 +410,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
               entry.name,
               entry.instructions,
               entry.accepting,
-              entry.openBox,
+              entry.open_box,
               markerOptions,
               otherRequesters
             );
@@ -766,12 +767,12 @@ function getEntryEl(entry) {
       ac(entry.domElem, ppeNeededContainer);
     }
 
-    if (entry.openBox) {
+    if (entry.open_box) {
       const openPackagesContainer = ce('div', 'row');
 
       ac(openPackagesContainer, [
         ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-open-packages'))),
-        ce('p', 'col-12 col-md-9', ctn(translateEnumValue(entry.openBox))),
+        ce('p', 'col-12 col-md-9', ctn(translateEnumValue(entry.open_box))),
       ]);
 
       ac(entry.domElem, openPackagesContainer);
