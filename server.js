@@ -1,9 +1,8 @@
 const express = require('express');
-const countries = require('./client/countries.js'); // TODO: Move out of client.
 const expressHandlebars = require('express-handlebars');
 const https = require('https');
-const handlebarsHelpers = require('handlebars-helpers')();
 const { createProxyMiddleware } = require('http-proxy-middleware');
+const countries = require('./client/countries.js'); // TODO: Move out of client.
 const setBananaI18n = require('./middleware/setBananaI18n.js');
 const localizeContactInfo = require('./viewHelpers/localizeContactInfo.js');
 const selectMaskMatchPartialPath = require('./viewHelpers/selectMaskMatchPartialPath');
@@ -11,6 +10,7 @@ const selectLargeDonationSitesPartialPath = require('./viewHelpers/selectLargeDo
 const getDonationFormUrl = require('./viewHelpers/getDonationFormUrl.js');
 const formatFbLocale = require('./utils/formatFbLocale');
 require('dotenv').config();
+require('handlebars-helpers')();
 
 const herokuVersion = process.env.HEROKU_RELEASE_VERSION;
 

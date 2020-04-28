@@ -20,8 +20,8 @@ require('../sass/style.scss');
 
 // Master data object, indexed by country code
 const countryData = {};
-const gDataset = document.body.dataset['dataset'];
-const gDatasetType = document.body.dataset['datasetType'];
+const gDataset = document.body.dataset.dataset;
+const gDatasetType = document.body.dataset.datasetType;
 
 document.body.setAttribute('data-country', gDataset); // TODO Remove this?
 
@@ -89,7 +89,7 @@ function translatedFilterItems(filterItems) {
   }
 
   return translated;
-};
+}
 
 // get list of possible values for `Accepted Items`
 // iterates through data to extract all unique "accepting" items
@@ -135,7 +135,7 @@ function parseFiltersFromData(data) {
     acceptedItems,
     orgTypes,
   };
-};
+}
 
 // Builds the data structure for tracking which filters are set
 // If all values in a category are false, it's treated as no filter - all items are included
@@ -166,9 +166,9 @@ function createFilters(data) {
 }
 
 // Returns true if there are any filter values found in the data.
-function hasFilters(filters) {
-  for (const values of Object.values(filters)) {
-    if (values.length > 0) {
+function areFiltersEmpty(filters) {
+  for (const key of Object.keys(filters)) {
+    if (filters[key].length > 0) {
       return true;
     }
   }
@@ -275,7 +275,7 @@ function createMakerMarkerContent(entry, separator) {
 
       contentTags.push(row);
     }
-  }
+  };
 
   const addLine = (name, value) => {
     if (value) {
@@ -286,7 +286,7 @@ function createMakerMarkerContent(entry, separator) {
       ]);
       contentTags.push(div);
     }
-  }
+  };
 
   addParagraph('Website', entry.website);
   addParagraph('Contact', entry.public_contact);
@@ -363,11 +363,11 @@ function createMarkerContent(entry, separator) {
   );
 }
 
-export function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
+function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
   const location = { lat: latitude, lng: longitude };
   const options = {
     position: location,
-    title: name,
+    title: entry.name,
     ...markerOptions || {},
   };
   const marker = new google.maps.Marker(options);
@@ -791,7 +791,7 @@ function createMakerListItemEl(entry) {
 
       ac(entry.domElem, row);
     }
-  }
+  };
 
   const addLine = (name, value) => {
     if (value) {
@@ -804,7 +804,7 @@ function createMakerListItemEl(entry) {
 
       ac(entry.domElem, row);
     }
-  }
+  };
 
   addParagraph('Website', entry.website);
   addParagraph('Contact', entry.public_contact);
@@ -1406,7 +1406,7 @@ $(() => {
     if (showList) {
       $('.locations-container').show();
 
-      if (showFilters && hasFilters(filters)) {
+      if (showFilters && !areFiltersEmpty(filters)) {
         createFilterElements(data, filters);
         $('.filters-container').show();
       }
