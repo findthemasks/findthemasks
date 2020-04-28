@@ -163,6 +163,16 @@ function createFilters(data) {
   return filters;
 }
 
+// Returns true if there are any filter values found in the data.
+function hasFilters(filters) {
+  for (const values of Object.values(filters)) {
+    if (values.length > 0) {
+      return true;
+    }
+  }
+  return false;
+}
+
 // Creates an 'applied' property in filters with the subset of the 'states' and 'acceptItems'
 // filters that are actually set. getFilteredContent/showMarkers can scan this 'applied' object
 // instead of walking the full set.
@@ -761,7 +771,7 @@ function getFlatFilteredEntries(data, filters) {
 function createMakerListItemEl(entry) {
   entry.domElem = ce('div', 'location py-3');
   const header = ce('div', 'd-flex');
-  const headerMakerspaceInfo = ce('div', 'flex-grow-1');
+  const headerMakerspaceInfo = ce('div', 'flex-grow-1 grey-background');
   ac(headerMakerspaceInfo, ce('h5', null, ctn(entry.name)));
 
   ac(header, headerMakerspaceInfo);
@@ -1394,7 +1404,7 @@ $(() => {
     if (showList) {
       $('.locations-container').show();
 
-      if (showFilters) {
+      if (showFilters && hasFilters(filters)) {
         createFilterElements(data, filters);
         $('.filters-container').show();
       }
