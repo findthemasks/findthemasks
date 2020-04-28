@@ -261,7 +261,7 @@ function multilineStringToNodes(input) {
 
 function createMakerMarkerContent(entry, separator) {
   // Text to go into InfoWindow
-  const contentTags =  [ce('h5', separator ? 'separator' : null, ctn(entry.name))];
+  const contentTags = [ce('h5', separator ? 'separator' : null, ctn(entry.name))];
 
   // TODO: Dedupe with addParagraph() in createMakerListItemEl().
   const addParagraph = (name, value) => {
