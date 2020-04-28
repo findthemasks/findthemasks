@@ -69,6 +69,11 @@ const generateTopNav = () => {
       countryDropdownItems.appendChild(element);
     });
   }
+  $('.location-link').on('click', (e) => {
+    e.preventDefault();
+    const newLocation = $(e.currentTarget).data('location');
+    window.location.assign(`/${currentCountry}/${newLocation}${window.location.search}`);
+  });
 };
 
 $(() => {
