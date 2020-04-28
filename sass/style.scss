@@ -1,3 +1,4 @@
+
 @import 'icons.data.svg';
 
 html {
@@ -27,6 +28,15 @@ p a {
 a {
   color: #4169E1;
   font-weight: 600;
+
+  &:not([href]) {
+    color: #4169E1;
+
+    &:hover {
+      cursor: pointer;
+      color: #0056b3;
+    }
+  }
 }
 
 .linkified {

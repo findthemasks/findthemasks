@@ -231,9 +231,27 @@ function multilineStringToNodes(input) {
   return returnedNodes.slice(0, -1);
 }
 
-function addMarkerContent(orgType, address, name, instructions, accepting, openBox, separator) {
+function addMarkerContent(entry, separator) {
+  const {
+    name,
+    rdi,
+    address,
+    instructions,
+    accepting,
+    org_type: orgType,
+    open_box: openBox,
+  } = entry;
+
   // Text to go into InfoWindow
-  const contentTags = separator ? [ce('h5', 'separator', ctn(name))] : [ce('h5', null, ctn(name))];
+  let nameChildren = [ctn(name)];
+  if (rdi === 'Residential') {
+    nameChildren = nameChildren.concat([
+      ctn(' '),
+      $(`<a tabindex="0" class="popover-dismiss" role="button" data-toggle="popover" data-trigger="focus" title="${$.i18n('ftm-residential-popover-title')}" data-content="${$.i18n('ftm-residential-popover-content')}">(Residential)</a>`)[0]
+    ]);
+  }
+
+  const contentTags = separator ? [ce('h5', 'separator', nameChildren)] : [ce('h5', null, nameChildren)];
 
   if (orgType && orgType.length) {
     contentTags.push(
@@ -276,19 +294,14 @@ function addMarkerContent(orgType, address, name, instructions, accepting, openB
 function createMarker(
   latitude,
   longitude,
-  orgType,
-  address,
-  name,
-  instructions,
-  accepting,
-  openBox,
+  entry,
   markerOptions,
   otherRequesters
 ) {
   const location = { lat: latitude, lng: longitude };
   const options = {
     position: location,
-    title: name,
+    title: entry.name,
     ...markerOptions || {},
   };
   const marker = new google.maps.Marker(options);
@@ -302,14 +315,13 @@ function createMarker(
     if (!marker.infowindow) {
       const contentTags = [];
       contentTags.push(
-        ...addMarkerContent(orgType, address, name, instructions, accepting, openBox, false)
+        ...addMarkerContent(entry, false)
       );
 
       if (otherRequesters && otherRequesters.length > 0) {
         otherRequesters.forEach((e) => {
-          console.log(e);
           contentTags.push(
-            ...addMarkerContent(e.org_type, e.address, e.name, e.instructions, e.accepting, e.open_box, true)
+            ...addMarkerContent(e, true)
           );
         });
       }
@@ -405,12 +417,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
             marker = createMarker(
               lat,
               lng,
-              entry.org_type,
-              entry.address,
-              entry.name,
-              entry.instructions,
-              entry.accepting,
-              entry.open_box,
+              entry,
               markerOptions,
               otherRequesters
             );
@@ -578,6 +585,10 @@ function centerMapToBounds(map, bounds, maxZoom) {
   }
 }
 
+const initResidentialPopover = () => {
+  $('[data-toggle="popover"]').popover();
+};
+
 /**
  * Changes the markers currently rendered on the map based strictly on . This will reset the
  * 'markers' module variable as well.
@@ -630,6 +641,8 @@ function showMarkers(data, filters, recenterMap = true) {
       centerMapToBounds(gMap, bounds, 9);
     }, 0);
   }
+
+  initResidentialPopover();
 }
 
 // Return filtered data, sorted by location, in a flat list
@@ -703,7 +716,16 @@ function getEntryEl(entry) {
     const header = ce('div', 'd-flex');
     const headerHospitalInfo = ce('div', 'flex-grow-1');
     const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
-    ac(headerHospitalInfo, ce('h5', null, ctn(entry.name)));
+    let nameChildren = [ctn(entry.name)];
+
+    if (entry.rdi === 'Residential') {
+      nameChildren = nameChildren.concat([
+        ctn(' '),
+        $(`<a tabindex="0" class="popover-dismiss" role="button" data-toggle="popover" data-trigger="focus" title="${$.i18n('ftm-residential-popover-title')}" data-content="${$.i18n('ftm-residential-popover-content')}">(Residential)</a>`)[0]
+      ]);
+    }
+
+    ac(headerHospitalInfo, ce('h5', null, nameChildren));
 
     if (entry.org_type && entry.org_type.length) {
       ac(headerOrgType, [
@@ -797,6 +819,7 @@ function renderNextListPage() {
 
   ac(el, children);
   gLastLocationRendered = renderLocation - 1;
+  initResidentialPopover();
 }
 
 function refreshList(data, filters) {
