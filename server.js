@@ -102,11 +102,12 @@ router.get(['/give', '/give.html'], (req, res) => {
 });
 
 router.get(['/embed'], (req, res) => {
+  const isMaker = res.locals.datasetType === 'makers';
   res.render('give', {
     version: herokuVersion,
     layout: 'give',
     ogLocale: formatFbLocale(res.locals.locale),
-    ogTitle: res.locals.banana.i18n('ftm-give-og-title'),
+    ogTitle: isMaker ? '#findthemasks | makers embed' : res.locals.banana.i18n('ftm-give-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,

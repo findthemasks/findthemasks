@@ -105,15 +105,17 @@ function parseFiltersFromData(data) {
     Object.keys(data[state].cities).forEach((city) => {
       data[state].cities[city].entries.forEach((entry) => {
         // split on commas except if comma is in parentheses
-        entry.accepting.split(/, (?![^(]*\))/).map((a) => a.trim()).forEach((i) => {
-          const filterKey = i.toLowerCase();
-          if (FILTER_ITEMS[filterKey] !== undefined && acceptedItems[filterKey] === undefined) {
-            acceptedItems[filterKey] = {
-              ...FILTER_ITEMS[filterKey],
-              value: filterKey,
-            };
-          }
-        });
+        if (entry.accepting) {
+          entry.accepting.split(/, (?![^(]*\))/).map((a) => a.trim()).forEach((i) => {
+            const filterKey = i.toLowerCase();
+            if (FILTER_ITEMS[filterKey] !== undefined && acceptedItems[filterKey] === undefined) {
+              acceptedItems[filterKey] = {
+                ...FILTER_ITEMS[filterKey],
+                value: filterKey,
+              };
+            }
+          });
+        }
 
         if (entry.org_type) {
           const orgTypeKey = entry.org_type.toLowerCase();
