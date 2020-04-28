@@ -12,6 +12,7 @@ const config = {
     i18n: ['./client/i18n.js'],
     stats: ['./client/stats.js'],
     style: ['./sass/style.scss'],
+    give: ['./sass/give.scss'],
     'locations-list-map': ['./client/locations-list-map.js'],
   },
   resolve: { extensions: ['.js'] },
