@@ -82,8 +82,8 @@ router.get('/faq', (req, res) => {
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
-    largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.dataset),
-    maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.dataset),
+    largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.countryCode),
+    maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.countryCode),
   });
 });
 
@@ -207,7 +207,15 @@ router.get('/maker-form', (req, res) => {
 
 // Recursively handle routes for makers overriding the dataset so the main
 // map functionality can be run in a different "mode" so to speak.
-router.use('/makers(/embed)?$', (req, res, next) => {
+router.use('/makers', (req, res, next) => {
+  const remainingUrl = req.originalUrl.substr(req.baseUrl.length);
+  if (remainingUrl && !remainingUrl.match(/\/(embed(\/)?)?/)) {
+    console.log("redirecting");
+    res.status(404).redirect('/');
+    return;
+  }
+
+  // Override the dataset. Expect countryCode to be set at the top-level routing.
   res.locals.dataset = 'makers';
 
   router(req, res, next);
@@ -304,7 +312,7 @@ app.use('/:countryCode', (req, res, next) => {
 
   if (ALL_COUNTRIES.has(lowerCased)) {
     res.locals.countryCode = req.params.countryCode;
-    res.locals.dataset = res.locals.countryCode;
+    res.locals.dataset = 'requester';
 
     // Redirect to lower-cased path.
     if (req.params.countryCode !== lowerCased) {
@@ -320,7 +328,7 @@ app.use('/:countryCode', (req, res, next) => {
 app.use('/', (req, res, next) => {
   // Default values for countryCode and dataset.
   res.locals.countryCode = 'us';
-  res.locals.dataset = 'us';
+  res.locals.dataset = 'requester';
 
   router(req, res, next);
 });

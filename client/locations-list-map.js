@@ -5,7 +5,6 @@ import MarkerClusterer from '@google/markerclustererplus';
 import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
 import { FILTER_ITEMS, ORG_TYPES, ENUM_MAPPINGS } from './formEnumLookups.js';
-import { getCountry } from './getCountry.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
@@ -20,7 +19,7 @@ require('../sass/style.scss');
 
 // Master data object, indexed by country code
 const countryData = {};
-const gCountryCode = document.body.dataset.countryCode;
+const gCountryCode = document.body.dataset.country;
 const gDataset = document.body.dataset.dataset;
 
 // Map, markers and map associated UI components are initialized in initMap().
@@ -262,7 +261,7 @@ function multilineStringToNodes(input) {
 
 function createMakerMarkerContent(entry, separator) {
   // Text to go into InfoWindow
-  const contentTags = separator ? [ce('h5', 'separator', ctn(entry.name))] : [ce('h5', null, ctn(entry.name))];
+  const contentTags =  [ce('h5', separator ? 'separator' : null, ctn(entry.name))];
 
   // TODO: Dedupe with addParagraph() in createMakerListItemEl().
   const addParagraph = (name, value) => {
@@ -631,7 +630,7 @@ function getMapInitialView() {
     }
   }
 
-  return MAP_INITIAL_VIEW[getCountry()];
+  return MAP_INITIAL_VIEW[gCountryCode];
 }
 
 function centerMapToBounds(map, bounds, maxZoom) {
@@ -1037,9 +1036,13 @@ function loadDataFile(url, dataToStore) {
   );
 }
 
-function getDatasetFilename(dataset) {
+function getDatasetFilename(dataset, countryCode) {
   // Always use country-specific data.json file
-  return `/data-${dataset}.json`;
+  if (dataset === 'requester') {
+    return `/data-${countryCode}.json`;
+  }
+
+  return `/${dataset}-${countryCode}.json`;
 }
 
 function loadOtherCountries() {
@@ -1052,7 +1055,7 @@ function loadOtherCountries() {
   for (const code of countryCodes) {
     if (code !== gCountryCode) {
       countryData[code] = {};
-      loadDataFile(getDatasetFilename(code), countryData[code]);
+      loadDataFile(getDatasetFilename(gDataset, code), countryData[code]);
     }
   }
 }
@@ -1418,7 +1421,7 @@ $(() => {
 
   initContactModal();
 
-  $.getJSON(getDatasetFilename(gDataset), (result) => {
+  $.getJSON(getDatasetFilename(gDataset, gCountryCode), (result) => {
     if (window.i18nReady) {
       renderListings(result);
     } else {
