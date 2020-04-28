@@ -16,7 +16,7 @@ require('./i18n.js');
 require('./polyfills.js');
 
 // Allow for hot-reloading of CSS in development.
-require('../sass/style.css');
+require('../sass/style.scss');
 
 // Master data object, indexed by country code
 const countryData = {};
