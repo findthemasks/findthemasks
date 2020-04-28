@@ -166,13 +166,16 @@ function createFilters(data) {
 }
 
 // Returns true if there are any filter values found in the data.
-function areFiltersEmpty(filters) {
-  for (const key of Object.keys(filters)) {
-    if (filters[key].length > 0) {
-      return false;
-    }
+function areThereFilters(filters) {
+  if ('acceptItems' in filters && Object.keys(filters.acceptItems).length > 0) {
+    return true;
   }
-  return true;
+
+  if ('orgType' in filters && Object.keys(filters.orgType).length > 0) {
+    return true;
+  }
+
+  return false;
 }
 
 // Creates an 'applied' property in filters with the subset of the 'states' and 'acceptItems'
@@ -1406,7 +1409,7 @@ $(() => {
     if (showList) {
       $('.locations-container').show();
 
-      if (showFilters && !areFiltersEmpty(filters)) {
+      if (showFilters && areThereFilters(filters)) {
         createFilterElements(data, filters);
         $('.filters-container').show();
       }
