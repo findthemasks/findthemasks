@@ -247,7 +247,7 @@ function addMarkerContent(entry, separator) {
   if (rdi === 'Residential') {
     nameChildren = nameChildren.concat([
       ctn(' '),
-      $(`<a tabindex="0" class="popover-dismiss" role="button" data-toggle="popover" data-trigger="focus" title="${$.i18n('ftm-residential-popover-title')}" data-content="${$.i18n('ftm-residential-popover-content')}">(Residential)</a>`)[0]
+      $(`<a tabindex="0" class="popover-dismiss" role="button" data-toggle="popover" data-trigger="focus" title="${$.i18n('ftm-residential-popover-title')}" data-content="${$.i18n('ftm-residential-popover-content')}">(Residential)</a>`)[0],
     ]);
   }
 
@@ -721,7 +721,7 @@ function getEntryEl(entry) {
     if (entry.rdi === 'Residential') {
       nameChildren = nameChildren.concat([
         ctn(' '),
-        $(`<a tabindex="0" class="popover-dismiss" role="button" data-toggle="popover" data-trigger="focus" title="${$.i18n('ftm-residential-popover-title')}" data-content="${$.i18n('ftm-residential-popover-content')}">(Residential)</a>`)[0]
+        $(`<a tabindex="0" class="popover-dismiss" role="button" data-toggle="popover" data-trigger="focus" title="${$.i18n('ftm-residential-popover-title')}" data-content="${$.i18n('ftm-residential-popover-content')}">(Residential)</a>`)[0],
       ]);
     }
 
