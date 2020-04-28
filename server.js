@@ -48,8 +48,6 @@ app.use((req, res, next) => {
     return;
   }
   res.redirect(`https://${req.headers.host}${req.url}`);
-
-  res.redirect(`https://${req.headers.host}${req.url}`);
 });
 
 app.use((req, res, next) => {
