@@ -5,7 +5,6 @@ import MarkerClusterer from '@google/markerclustererplus';
 import toDataByLocation from './toDataByLocation.js';
 import countries from './countries.js';
 import { FILTER_ITEMS, ORG_TYPES, ENUM_MAPPINGS } from './formEnumLookups.js';
-import { getCountry, getFirstPathPart, isCountryPath } from './getCountry.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
@@ -20,9 +19,8 @@ require('../sass/style.scss');
 
 // Master data object, indexed by country code
 const countryData = {};
-const currentCountry = getCountry();
-
-document.body.setAttribute('data-country', currentCountry);
+const gCountryCode = document.body.dataset.country;
+const gDataset = document.body.dataset.dataset;
 
 // Map, markers and map associated UI components are initialized in initMap().
 let gAutocomplete;
@@ -66,9 +64,18 @@ let gLastLocationRendered = -1;
 
 const searchParams = new FtmUrl(window.location.href).searchparams;
 
+// Converts a string from 'a,b,c' to 'a, b, c'
+function addSpaceAfterComma(str) {
+  if (str) {
+    return str.split(',').join(', ');
+  }
+
+  return undefined;
+}
+
 // i18n must be loaded before filter items can be translated
 // config stores the i18n string and this function calls i18n with it
-const translatedFilterItems = (filterItems) => {
+function translatedFilterItems(filterItems) {
   const translated = {};
 
   for (const [filterItemKey, filterItem] of Object.entries(filterItems)) {
@@ -79,7 +86,7 @@ const translatedFilterItems = (filterItems) => {
   }
 
   return translated;
-};
+}
 
 // get list of possible values for `Accepted Items`
 // iterates through data to extract all unique "accepting" items
@@ -87,7 +94,7 @@ const translatedFilterItems = (filterItems) => {
 // and returns the i18n keys from FILTER_ITEMS for accepting items that match
 //
 // NOTE: the incoming data structure is very brittle; if that changes at all, this will break
-const parseFiltersFromData = (data) => {
+function parseFiltersFromData(data) {
   const acceptedItems = {};
   const orgTypes = {};
 
@@ -95,15 +102,17 @@ const parseFiltersFromData = (data) => {
     Object.keys(data[state].cities).forEach((city) => {
       data[state].cities[city].entries.forEach((entry) => {
         // split on commas except if comma is in parentheses
-        entry.accepting.split(/, (?![^(]*\))/).map((a) => a.trim()).forEach((i) => {
-          const filterKey = i.toLowerCase();
-          if (FILTER_ITEMS[filterKey] !== undefined && acceptedItems[filterKey] === undefined) {
-            acceptedItems[filterKey] = {
-              ...FILTER_ITEMS[filterKey],
-              value: filterKey,
-            };
-          }
-        });
+        if (entry.accepting) {
+          entry.accepting.split(/, (?![^(]*\))/).map((a) => a.trim()).forEach((i) => {
+            const filterKey = i.toLowerCase();
+            if (FILTER_ITEMS[filterKey] !== undefined && acceptedItems[filterKey] === undefined) {
+              acceptedItems[filterKey] = {
+                ...FILTER_ITEMS[filterKey],
+                value: filterKey,
+              };
+            }
+          });
+        }
 
         if (entry.org_type) {
           const orgTypeKey = entry.org_type.toLowerCase();
@@ -123,7 +132,7 @@ const parseFiltersFromData = (data) => {
     acceptedItems,
     orgTypes,
   };
-};
+}
 
 // Builds the data structure for tracking which filters are set
 // If all values in a category are false, it's treated as no filter - all items are included
@@ -134,17 +143,36 @@ const parseFiltersFromData = (data) => {
 function createFilters(data) {
   const filters = {
     states: {},
+    acceptItems: [],
+    orgTypes: [],
   };
 
   for (const state of Object.keys(data)) {
     filters.states[state] = { name: state, isSet: false };
   }
 
-  const dataFilters = parseFiltersFromData(data);
-  filters.acceptItems = translatedFilterItems(dataFilters.acceptedItems);
-  filters.orgTypes = translatedFilterItems(dataFilters.orgTypes);
+  try {
+    const dataFilters = parseFiltersFromData(data);
+    filters.acceptItems = translatedFilterItems(dataFilters.acceptedItems);
+    filters.orgTypes = translatedFilterItems(dataFilters.orgTypes);
+  } catch (e) {
+    console.error(e);
+  }
 
   return filters;
+}
+
+// Returns true if there are any filter values found in the data.
+function areThereFilters(filters) {
+  if ('acceptItems' in filters && Object.keys(filters.acceptItems).length > 0) {
+    return true;
+  }
+
+  if ('orgType' in filters && Object.keys(filters.orgType).length > 0) {
+    return true;
+  }
+
+  return false;
 }
 
 // Creates an 'applied' property in filters with the subset of the 'states' and 'acceptItems'
@@ -231,7 +259,53 @@ function multilineStringToNodes(input) {
   return returnedNodes.slice(0, -1);
 }
 
-function addMarkerContent(orgType, address, name, instructions, accepting, openBox, separator) {
+function createMakerMarkerContent(entry, separator) {
+  // Text to go into InfoWindow
+  const contentTags = [ce('h5', separator ? 'separator' : null, ctn(entry.name))];
+
+  // TODO: Dedupe with addParagraph() in createMakerListItemEl().
+  const addParagraph = (name, value) => {
+    if (value) {
+      const row = ce('div', 'row');
+
+      ac(row, [
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn(name)),
+        linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(value))),
+      ]);
+
+      contentTags.push(row);
+    }
+  };
+
+  const addLine = (name, value) => {
+    if (value) {
+      const div = ce('div', 'row');
+      ac(div, [
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn(name)),
+        linkifyElement(ce('p', 'col-12 col-md-9', ctn(value))),
+      ]);
+      contentTags.push(div);
+    }
+  };
+
+  addParagraph('Website', entry.website);
+  addParagraph('Contact', entry.public_contact);
+  addLine('Capabilities', addSpaceAfterComma(entry.capabilities));
+  addLine('Products', addSpaceAfterComma(entry.products));
+  addLine('Other Product', addSpaceAfterComma(entry.other_product));
+  addLine('Face Shield Type', addSpaceAfterComma(entry.face_shield_type));
+  addLine('Are you collecting?', entry.collecting_site);
+  addLine('Are you shipping?', entry.shipping);
+  addLine('Are you taking volunteers?', entry.accepting_volunteers);
+  addLine('Other Type of Space', entry.other_type_of_space);
+  addLine('Accepting PPE Requests', entry.accepting_ppe_requests);
+  addLine('Org Collaborations', addSpaceAfterComma(entry.org_collaboration));
+  addLine('Other Capabilities', addSpaceAfterComma(entry.other_capability));
+
+  return contentTags;
+}
+
+function createRequesterMarkerContent(orgType, address, name, instructions, accepting, openBox, separator) {
   // Text to go into InfoWindow
   const contentTags = separator ? [ce('h5', 'separator', ctn(name))] : [ce('h5', null, ctn(name))];
 
@@ -273,22 +347,27 @@ function addMarkerContent(orgType, address, name, instructions, accepting, openB
   return contentTags;
 }
 
-function createMarker(
-  latitude,
-  longitude,
-  orgType,
-  address,
-  name,
-  instructions,
-  accepting,
-  openBox,
-  markerOptions,
-  otherRequesters
-) {
+function createMarkerContent(entry, separator) {
+  if (gDataset === 'makers') {
+    return createMakerMarkerContent(entry, separator);
+  }
+
+  return createRequesterMarkerContent(
+    entry.org_type,
+    entry.address,
+    entry.name,
+    entry.instructions,
+    entry.accepting,
+    entry.open_box,
+    separator
+  );
+}
+
+function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
   const location = { lat: latitude, lng: longitude };
   const options = {
     position: location,
-    title: name,
+    title: entry.name,
     ...markerOptions || {},
   };
   const marker = new google.maps.Marker(options);
@@ -301,16 +380,11 @@ function createMarker(
 
     if (!marker.infowindow) {
       const contentTags = [];
-      contentTags.push(
-        ...addMarkerContent(orgType, address, name, instructions, accepting, openBox, false)
-      );
+      contentTags.push(...createMarkerContent(entry, false));
 
-      if (otherRequesters && otherRequesters.length > 0) {
-        otherRequesters.forEach((e) => {
-          console.log(e);
-          contentTags.push(
-            ...addMarkerContent(e.org_type, e.address, e.name, e.instructions, e.accepting, e.open_box, true)
-          );
+      if (otherEntries && otherEntries.length > 0) {
+        otherEntries.forEach((e) => {
+          contentTags.push(...createMarkerContent(e, true));
         });
       }
 
@@ -401,18 +475,13 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
           // Guard against non-geocoded entries. Assuming no location exactly on the equator or
           // prime meridian
           if (lat && lng) {
-            const otherRequesters = entriesByAddress[`${lat} ${lng}`].filter((e) => e.name !== entry.name);
+            const otherEntries = entriesByAddress[`${lat} ${lng}`].filter((e) => e.name !== entry.name);
             marker = createMarker(
               lat,
               lng,
-              entry.org_type,
-              entry.address,
-              entry.name,
-              entry.instructions,
-              entry.accepting,
-              entry.open_box,
+              entry,
               markerOptions,
-              otherRequesters
+              otherEntries
             );
             entry.marker = marker;
           }
@@ -514,7 +583,11 @@ function numberFormat(number, decimalPlaces, decSeparator, thouSeparator) {
 function updateStats($elem, count) {
   const prettyMarkerCount = numberFormat(count, 0);
 
-  $elem.html($.i18n('ftm-requesters-count', prettyMarkerCount));
+  if (gDataset === 'makers') {
+    $elem.html(`${prettyMarkerCount} Groups`);
+  } else {
+    $elem.html($.i18n('ftm-requesters-count', prettyMarkerCount));
+  }
 }
 
 // Source for country center points: https://developers.google.com/public-data/docs/canonical/countries_csv
@@ -557,7 +630,7 @@ function getMapInitialView() {
     }
   }
 
-  return MAP_INITIAL_VIEW[getCountry()];
+  return MAP_INITIAL_VIEW[gCountryCode];
 }
 
 function centerMapToBounds(map, bounds, maxZoom) {
@@ -697,88 +770,149 @@ function getFlatFilteredEntries(data, filters) {
   return entries;
 }
 
+function createMakerListItemEl(entry) {
+  entry.domElem = ce('div', 'location py-3');
+  const header = ce('div', 'd-flex');
+  const headerMakerspaceInfo = ce('div', 'flex-grow-1 grey-background');
+  ac(headerMakerspaceInfo, ce('h5', null, ctn(entry.name)));
+
+  ac(header, headerMakerspaceInfo);
+  ac(entry.domElem, header);
+
+  // TODO: Dedupe addLine and addParagraph with createMakerMarkerContent()
+  const addParagraph = (name, value) => {
+    if (value) {
+      const row = ce('div', 'row');
+
+      ac(row, [
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn(name)),
+        linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(value))),
+      ]);
+
+      ac(entry.domElem, row);
+    }
+  };
+
+  const addLine = (name, value) => {
+    if (value) {
+      const row = ce('div', 'row');
+
+      ac(row, [
+        ce('label', 'col-12 col-md-3 font-weight-bold', ctn(name)),
+        linkifyElement(ce('p', 'col-12 col-md-9', ctn(value))),
+      ]);
+
+      ac(entry.domElem, row);
+    }
+  };
+
+  addParagraph('Website', entry.website);
+  addParagraph('Contact', entry.public_contact);
+  addLine('Location', `${entry.city}, ${entry.state} ${entry.zip}`);
+  addLine('Capabilities', addSpaceAfterComma(entry.capabilities));
+  addLine('Products', addSpaceAfterComma(entry.products));
+  addLine('Other Product', addSpaceAfterComma(entry.other_product));
+  addLine('Face Shield Type', addSpaceAfterComma(entry.face_shield_type));
+  addLine('Are you collecting?', entry.collecting_site);
+  addLine('Are you shipping?', entry.shipping);
+  addLine('Are you taking volunteers?', entry.accepting_volunteers);
+  addLine('Other Type of Space', entry.other_type_of_space);
+  addLine('Accepting PPE Requests', entry.accepting_ppe_requests);
+  addLine('Org Collaborations', addSpaceAfterComma(entry.org_collaboration));
+  addLine('Other Capabilities', addSpaceAfterComma(entry.other_capability));
+}
+
+function createRequesterListItemEl(entry) {
+  entry.domElem = ce('div', 'location py-3');
+  const header = ce('div', 'd-flex');
+  const headerHospitalInfo = ce('div', 'flex-grow-1');
+  const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
+  ac(headerHospitalInfo, ce('h5', null, ctn(entry.name)));
+
+  if (entry.org_type && entry.org_type.length) {
+    ac(headerOrgType, [
+      ce('p', null, ctn(translateEnumValue(entry.org_type))),
+    ]);
+  }
+
+  const addr = entry.address.trim().split('\n');
+
+  if (addr.length) {
+    const para = ce('p', 'marginTopZero medEmph');
+    const link = ce('a', 'map-link');
+    const $link = $(link);
+    const address = getOneLineAddress(entry.address);
+    link.href = googleMapsUri(address);
+    link.target = '_blank';
+    $link.click(() => {
+      sendEvent('listView', 'clickAddress', address);
+    });
+    ac(para, link);
+    ac(link, ctn(address));
+
+    ac(headerHospitalInfo, para);
+  }
+
+  ac(header, headerHospitalInfo);
+  ac(header, headerOrgType);
+  ac(entry.domElem, header);
+
+  if (entry.encrypted_email) {
+    const emailContainer = ce('div', 'row');
+
+    ac(emailContainer, [
+      ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-email-contact'))),
+      $(`<p class="col-12 col-md-9"><a href="#" data-toggle="modal" data-target="#contactModal" data-name="${entry.name}" data-email="${entry.encrypted_email}">${$.i18n('ftm-email-contact-org')}</a></p>`)[0],
+    ]);
+
+    ac(entry.domElem, emailContainer);
+  }
+
+  if (entry.accepting) {
+    const ppeNeededContainer = ce('div', 'row');
+
+    ac(ppeNeededContainer, [
+      ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-ppe-needed'))),
+      ce('p', 'col-12 col-md-9', ctn(translateEnumList(entry.accepting))),
+    ]);
+
+    ac(entry.domElem, ppeNeededContainer);
+  }
+
+  if (entry.open_box) {
+    const openPackagesContainer = ce('div', 'row');
+
+    ac(openPackagesContainer, [
+      ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-open-packages'))),
+      ce('p', 'col-12 col-md-9', ctn(translateEnumValue(entry.openBox))),
+    ]);
+
+    ac(entry.domElem, openPackagesContainer);
+  }
+
+  if (entry.instructions) {
+    const instructionsContainer = ce('div', 'row');
+
+    ac(instructionsContainer, [
+      ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-instructions'))),
+      linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(entry.instructions))),
+    ]);
+
+    ac(entry.domElem, instructionsContainer);
+  }
+}
+
 function getEntryEl(entry) {
   if (!entry.domElem) {
-    entry.domElem = ce('div', 'location py-3');
-    const header = ce('div', 'd-flex');
-    const headerHospitalInfo = ce('div', 'flex-grow-1');
-    const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
-    ac(headerHospitalInfo, ce('h5', null, ctn(entry.name)));
-
-    if (entry.org_type && entry.org_type.length) {
-      ac(headerOrgType, [
-        ce('p', null, ctn(translateEnumValue(entry.org_type))),
-      ]);
-    }
-
-    const addr = entry.address.trim().split('\n');
-
-    if (addr.length) {
-      const para = ce('p', 'marginTopZero medEmph');
-      const link = ce('a', 'map-link');
-      const $link = $(link);
-      const address = getOneLineAddress(entry.address);
-      link.href = googleMapsUri(address);
-      link.target = '_blank';
-      $link.click(() => {
-        sendEvent('listView', 'clickAddress', address);
-      });
-      ac(para, link);
-      ac(link, ctn(address));
-
-      ac(headerHospitalInfo, para);
-    }
-
-    ac(header, headerHospitalInfo);
-    ac(header, headerOrgType);
-    ac(entry.domElem, header);
-
-    if (entry.encrypted_email) {
-      const emailContainer = ce('div', 'row');
-
-      ac(emailContainer, [
-        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-email-contact'))),
-        $(`<p class="col-12 col-md-9"><a href="#" data-toggle="modal" data-target="#contactModal" data-name="${entry.name}" data-email="${entry.encrypted_email}">${$.i18n('ftm-email-contact-org')}</a></p>`)[0],
-      ]);
-
-      ac(entry.domElem, emailContainer);
-    }
-
-    if (entry.accepting) {
-      const ppeNeededContainer = ce('div', 'row');
-
-      ac(ppeNeededContainer, [
-        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-ppe-needed'))),
-        ce('p', 'col-12 col-md-9', ctn(translateEnumList(entry.accepting))),
-      ]);
-
-      ac(entry.domElem, ppeNeededContainer);
-    }
-
-    if (entry.open_box) {
-      const openPackagesContainer = ce('div', 'row');
-
-      ac(openPackagesContainer, [
-        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-open-packages'))),
-        ce('p', 'col-12 col-md-9', ctn(translateEnumValue(entry.open_box))),
-      ]);
-
-      ac(entry.domElem, openPackagesContainer);
-    }
-
-    if (entry.instructions) {
-      const instructionsContainer = ce('div', 'row');
-
-      ac(instructionsContainer, [
-        ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-instructions'))),
-        linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(entry.instructions))),
-      ]);
-
-      ac(entry.domElem, instructionsContainer);
+    // Adds the domElem field if it has not been created.
+    if (gDataset === 'makers') {
+      createMakerListItemEl(entry);
+    } else {
+      createRequesterListItemEl(entry);
     }
   }
 
-  return entry.domElem; // TODO: generate this here.
+  return entry.domElem;
 }
 
 function renderNextListPage() {
@@ -885,11 +1019,6 @@ function createFilterElements(data, filters) {
   }
 }
 
-function getCountryDataFilename(country) {
-  // Always use country-specific data.json file
-  return `/data-${country}.json`;
-}
-
 // Loads data file from url and assigns into object given by dataToStore
 function loadDataFile(url, dataToStore) {
   $.getJSON(
@@ -907,13 +1036,26 @@ function loadDataFile(url, dataToStore) {
   );
 }
 
+function getDatasetFilename(dataset, countryCode) {
+  // Always use country-specific data.json file
+  if (dataset === 'requester') {
+    return `/data-${countryCode}.json`;
+  }
+
+  return `/${dataset}-${countryCode}.json`;
+}
+
 function loadOtherCountries() {
+  if (gDataset === 'makers') {
+    return;
+  }
+
   const countryCodes = Object.keys(countries);
 
   for (const code of countryCodes) {
-    if (code !== currentCountry) {
+    if (code !== gCountryCode) {
       countryData[code] = {};
-      loadDataFile(getCountryDataFilename(code), countryData[code]);
+      loadDataFile(getDatasetFilename(gDataset, code), countryData[code]);
     }
   }
 }
@@ -1151,9 +1293,7 @@ function initMap(data, filters) {
   // Initialize autosuggest/search field above the map.
   initMapSearch(data, filters);
 
-  if (isCountryPath()) {
-    loadOtherCountries();
-  }
+  loadOtherCountries();
 }
 
 // Lazy-loads the Google maps script once we know we need it. Sets up
@@ -1235,26 +1375,8 @@ function initContactModal() {
 }
 
 $(() => {
-  // HACK: Assign into data via Object.assign() below to handle both
-  // country and maker data.
-  let data;
-  let dataUrl;
-  const firstPathPart = getFirstPathPart();
-  if (isCountryPath()) {
-    data = {};
-    countryData[currentCountry] = data;
-    dataUrl = getCountryDataFilename(currentCountry);
-  } else if (firstPathPart === 'makers') {
-    data = {};
-    dataUrl = '/data-makers.json';
-  } else {
-    console.error('invalid path');
-    window.location.replace('/');
-    return;
-  }
-
   const renderListings = (result) => {
-    Object.assign(data, toDataByLocation(result));
+    const data = toDataByLocation(result);
     const showList = searchParams['hide-list'] !== 'true';
     const showFilters = showList && searchParams['hide-filters'] !== 'true';
     const showMap = searchParams['hide-map'] !== 'true';
@@ -1288,7 +1410,7 @@ $(() => {
     if (showList) {
       $('.locations-container').show();
 
-      if (showFilters) {
+      if (showFilters && areThereFilters(filters)) {
         createFilterElements(data, filters);
         $('.filters-container').show();
       }
@@ -1299,7 +1421,7 @@ $(() => {
 
   initContactModal();
 
-  $.getJSON(dataUrl, (result) => {
+  $.getJSON(getDatasetFilename(gDataset, gCountryCode), (result) => {
     if (window.i18nReady) {
       renderListings(result);
     } else {
