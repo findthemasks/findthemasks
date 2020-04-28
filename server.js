@@ -70,10 +70,9 @@ router.get(['/', '/index.html'], (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: isMaker ? res.locals.banana.i18n('ftm-makers-og-description') : res.locals.banana.i18n('ftm-index-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    localizeContactInfo: localizeContactInfo(res.locals.dataset),
+    localizeContactInfo: localizeContactInfo(res.locals.countryCode),
     recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
   });
-//  }
 });
 
 router.get('/faq', (req, res) => {
@@ -134,7 +133,7 @@ router.get(['/special-projects/la-makers'], (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: 'Map of Vetter Makers for the city of Los Angeles',
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    localizeContactInfo: localizeContactInfo(res.locals.dataset),
+    localizeContactInfo: localizeContactInfo(res.locals.countryCode),
   });
 });
 
@@ -199,12 +198,22 @@ router.get(['/404', '/404.html'], (req, res) => {
 });
 
 router.get('/donation-form', (req, res) => {
-  res.redirect(getDonationFormUrl(res.locals.dataset, res.locals.locale));
+  res.redirect(getDonationFormUrl(res.locals.countryCode, res.locals.locale));
 });
 
 router.get('/maker-form', (req, res) => {
   res.redirect('https://airtable.com/shruH5B27UP3PqKgg');
 });
+
+// Recursively handle routes for makers overriding the dataset so the main
+// map functionality can be run in a different "mode" so to speak.
+router.use('/makers(/embed)?$', (req, res, next) => {
+  res.locals.dataset = 'makers';
+  res.locals.datasetType = getDatasetType(res.locals.dataset);
+
+  router(req, res, next);
+});
+
 
 const cachedData = {};
 
@@ -289,17 +298,11 @@ const gbUkRedirect = (req, res, next) => {
 
 app.use(/\/[a-zA-Z]{2}/, gbUkRedirect);
 
-// List of all datasets available. Used to identify the json data file.
-const ALL_DATASETS = new Set([
-  'makers',
-  ...Object.keys(countries),
-]);
+const ALL_COUNTRIES = new Set(Object.keys(countries));
 
 // Takes the dataset, which is usually the first path element in the URL,
 // and returns the type of dataset. This is used by templates to choose the
 // content and data schema to render.
-//
-// TODO: Reword this file to be based on dataset, not country.
 function getDatasetType(dataset) {
   if (dataset === 'makers') {
     return dataset;
@@ -308,14 +311,16 @@ function getDatasetType(dataset) {
   return 'default';
 }
 
-app.use('/:dataset', (req, res, next) => {
-  const lowerCased = req.params.dataset.toLowerCase();
-  if (ALL_DATASETS.has(lowerCased)) {
-    res.locals.dataset = req.params.dataset;
+app.use('/:countryCode', (req, res, next) => {
+  const lowerCased = req.params.countryCode.toLowerCase();
+
+  if (ALL_COUNTRIES.has(lowerCased)) {
+    res.locals.countryCode = req.params.countryCode;
+    res.locals.dataset = res.locals.countryCode;
     res.locals.datasetType = getDatasetType(res.locals.dataset);
 
     // Redirect to lower-cased path.
-    if (req.params.dataset !== lowerCased) {
+    if (req.params.countryCode !== lowerCased) {
       res.status(302).redirect(`/${lowerCased}`);
       return;
     }
@@ -326,6 +331,8 @@ app.use('/:dataset', (req, res, next) => {
 });
 
 app.use('/', (req, res, next) => {
+  // Default values for countryCode and dataset.
+  res.locals.countryCode = 'us';
   res.locals.dataset = 'us';
   res.locals.datasetType = getDatasetType(res.locals.dataset);
 

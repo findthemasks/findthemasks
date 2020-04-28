@@ -20,10 +20,9 @@ require('../sass/style.scss');
 
 // Master data object, indexed by country code
 const countryData = {};
+const gCountryCode = document.body.dataset.countryCode;
 const gDataset = document.body.dataset.dataset;
 const gDatasetType = document.body.dataset.datasetType;
-
-document.body.setAttribute('data-country', gDataset); // TODO Remove this?
 
 // Map, markers and map associated UI components are initialized in initMap().
 let gAutocomplete;
@@ -1052,7 +1051,7 @@ function loadOtherCountries() {
   const countryCodes = Object.keys(countries);
 
   for (const code of countryCodes) {
-    if (code !== gDataset) {
+    if (code !== gCountryCode) {
       countryData[code] = {};
       loadDataFile(getDatasetFilename(code), countryData[code]);
     }
