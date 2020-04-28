@@ -651,6 +651,8 @@ const annotateSmartyStreetsAddresses = async (country) => {
     const addressIndex = headers.findIndex(e => e === 'address');
     const smartyStreetIndex = headers.findIndex(e => e === '_smarty_street_run');
     const smartyStreetColumn = COLUMNS[smartyStreetIndex];
+    const rdiIndex = headers.findIndex(e => e === 'rdi');
+    const rdiColumn = COLUMNS[rdiIndex];
 
     const toWrite = [];
     const approvedWithAddress = [];
@@ -715,6 +717,13 @@ const annotateSmartyStreetsAddresses = async (country) => {
           range: `${COMBINED_WRITEBACK_SHEET}!${smartyStreetColumn}${row.rowIndex}`,
           values: [['x']]
         });
+
+        if (rdiIndex !== -1) {
+          combinedSheetWriteData.push({
+            range: `${COMBINED_WRITEBACK_SHEET}!${rdiColumn}${row.rowIndex}`,
+            values: [[metadata.rdi]]
+          });
+        }
 
         smartyStreetsWriteData.push({
           range: `${SMARTY_STREETS_OUTPUT_SHEET}!${row.rowIndex}:${row.rowIndex}`,
