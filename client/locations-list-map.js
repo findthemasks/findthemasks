@@ -169,10 +169,10 @@ function createFilters(data) {
 function areFiltersEmpty(filters) {
   for (const key of Object.keys(filters)) {
     if (filters[key].length > 0) {
-      return true;
+      return false;
     }
   }
-  return false;
+  return true;
 }
 
 // Creates an 'applied' property in filters with the subset of the 'states' and 'acceptItems'
