@@ -12,7 +12,7 @@
       <div class="bg-white ">
         <div class="bg-dark-blue text-light p-4">
 
-          {{#if (eq datasetType "makers")}}
+          {{#if (eq dataset "makers")}}
             <h4>
               Make PPE &amp; get it into the hands of those who need it.
             </h4>
@@ -76,7 +76,7 @@
       <div class="map-container">
         <div class="locations-loading text-center">
           <img src="/images/icons/loader.svg" alt="loading" class="load-spinner" />
-          {{#if (eq datasetType "makers")}}
+          {{#if (eq dataset "makers")}}
             <span>Maker Groups</span>
           {{else}}
             <span class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</span>

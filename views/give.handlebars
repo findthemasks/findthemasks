@@ -13,7 +13,7 @@
           <div class="row" style="margin: 0px 0px 20px 0px;">
             <div class="col-xl-4" style="padding: 0px">
               <h3 style="white-space: nowrap">
-                {{#if (eq datasetType "makers")}}
+                {{#if (eq dataset "makers")}}
                   <span>Maker Groups</span>
                 {{else}}
                   <span class="i18n" data-i18n="ftm-map-of-sites">Donation sites</span>
@@ -39,7 +39,7 @@
 
           <div id="map" data-enable-search="true"></div>
           <span style="padding-right: 5px;"><span class="i18n" data-i18n="[html]ftm-collaboration-with">Made in collaboration with <a href="." target="_blank">#findthemasks</a>.</span> 
-          {{#if (eq datasetType "makers")}}
+          {{#if (eq dataset "makers")}}
             <span>Want to join the #findthemasks makers map? Need to update or remove info?</span>
             <span>
               Please <a href="./maker-form">
@@ -56,7 +56,7 @@
 
         <div class="locations-loading text-center">
           <div class="spinner-border" role="status"></div>
-          {{#if (eq datasetType "makers")}}
+          {{#if (eq dataset "makers")}}
             <div>Loading Maker Groups...</div>
           {{else}}
             <div class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</div>
@@ -83,7 +83,7 @@
 
         <div class="locations-container" style="display: none;">
           <h3 style="padding: 30px 0px 5px 0px; margin: 0px;">
-            {{#if (eq datasetType "makers")}}
+            {{#if (eq dataset "makers")}}
               <span>List of Maker Groups</span>
             {{else}}
               <span class="i18n" data-i18n="ftm-list-of-sites">List of donation sites</span> <span id="list-stats"></span>

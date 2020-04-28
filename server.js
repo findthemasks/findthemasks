@@ -62,7 +62,7 @@ app.use((req, res, next) => {
 app.use(express.static('public'));
 
 router.get(['/', '/index.html'], (req, res) => {
-  const isMaker = res.locals.datasetType === 'makers';
+  const isMaker = res.locals.dataset === 'makers';
   res.render('index', {
     version: herokuVersion,
     ogLocale: formatFbLocale(res.locals.locale),
@@ -101,7 +101,7 @@ router.get(['/give', '/give.html'], (req, res) => {
 });
 
 router.get(['/embed'], (req, res) => {
-  const isMaker = res.locals.datasetType === 'makers';
+  const isMaker = res.locals.dataset === 'makers';
   res.render('give', {
     version: herokuVersion,
     layout: 'give',
@@ -209,7 +209,6 @@ router.get('/maker-form', (req, res) => {
 // map functionality can be run in a different "mode" so to speak.
 router.use('/makers(/embed)?$', (req, res, next) => {
   res.locals.dataset = 'makers';
-  res.locals.datasetType = getDatasetType(res.locals.dataset);
 
   router(req, res, next);
 });
@@ -300,24 +299,12 @@ app.use(/\/[a-zA-Z]{2}/, gbUkRedirect);
 
 const ALL_COUNTRIES = new Set(Object.keys(countries));
 
-// Takes the dataset, which is usually the first path element in the URL,
-// and returns the type of dataset. This is used by templates to choose the
-// content and data schema to render.
-function getDatasetType(dataset) {
-  if (dataset === 'makers') {
-    return dataset;
-  }
-
-  return 'default';
-}
-
 app.use('/:countryCode', (req, res, next) => {
   const lowerCased = req.params.countryCode.toLowerCase();
 
   if (ALL_COUNTRIES.has(lowerCased)) {
     res.locals.countryCode = req.params.countryCode;
     res.locals.dataset = res.locals.countryCode;
-    res.locals.datasetType = getDatasetType(res.locals.dataset);
 
     // Redirect to lower-cased path.
     if (req.params.countryCode !== lowerCased) {
@@ -334,7 +321,6 @@ app.use('/', (req, res, next) => {
   // Default values for countryCode and dataset.
   res.locals.countryCode = 'us';
   res.locals.dataset = 'us';
-  res.locals.datasetType = getDatasetType(res.locals.dataset);
 
   router(req, res, next);
 });

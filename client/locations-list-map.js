@@ -22,7 +22,6 @@ require('../sass/style.scss');
 const countryData = {};
 const gCountryCode = document.body.dataset.countryCode;
 const gDataset = document.body.dataset.dataset;
-const gDatasetType = document.body.dataset.datasetType;
 
 // Map, markers and map associated UI components are initialized in initMap().
 let gAutocomplete;
@@ -350,7 +349,7 @@ function createRequesterMarkerContent(orgType, address, name, instructions, acce
 }
 
 function createMarkerContent(entry, separator) {
-  if (gDatasetType === 'makers') {
+  if (gDataset === 'makers') {
     return createMakerMarkerContent(entry, separator);
   }
 
@@ -585,7 +584,7 @@ function numberFormat(number, decimalPlaces, decSeparator, thouSeparator) {
 function updateStats($elem, count) {
   const prettyMarkerCount = numberFormat(count, 0);
 
-  if (gDatasetType === 'makers') {
+  if (gDataset === 'makers') {
     $elem.html(`${prettyMarkerCount} Groups`);
   } else {
     $elem.html($.i18n('ftm-requesters-count', prettyMarkerCount));
@@ -907,7 +906,7 @@ function createRequesterListItemEl(entry) {
 function getEntryEl(entry) {
   if (!entry.domElem) {
     // Adds the domElem field if it has not been created.
-    if (gDatasetType === 'makers') {
+    if (gDataset === 'makers') {
       createMakerListItemEl(entry);
     } else {
       createRequesterListItemEl(entry);
@@ -1044,7 +1043,7 @@ function getDatasetFilename(dataset) {
 }
 
 function loadOtherCountries() {
-  if (gDatasetType !== 'default') {
+  if (gDataset === 'makers') {
     return;
   }
 
