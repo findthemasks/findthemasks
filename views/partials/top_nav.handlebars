@@ -5,101 +5,90 @@
       <div class="icon icon-ftm_logo"></div>
     </li>
     <li class="nav-item">
-      <a class="home-link" onclick="window.location='index.html'+window.location.search;"><span class="text">Find The Masks</span></a>
+      <a class="home-link location-link text-light" data-location='index.html'><span class="text">Find The
+          Masks</span></a>
     </li>
   </ul>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+    aria-controls="navbarCollapse" aria-expanded="false">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item dropdown active">
-        <a class="nav-link dropdown-toggle" href="#" id="countries-dropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="#" id="countries-dropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
         </a>
         <div class="dropdown-menu dropdown-menu-left" aria-labelledby="countries-dropdown"
-              id="countries-dropdown-selector">
+          id="countries-dropdown-selector">
         </div>
       </li>
       <li class="nav-item dropdown active">
-        <a class="nav-link dropdown-toggle" href="#" id="locales-dropdown" role="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="#" id="locales-dropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
         </a>
-        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="locales-dropdown"
-              id="locales-dropdown-selector">
+        <div class="dropdown-menu dropdown-menu-left" aria-labelledby="locales-dropdown" id="locales-dropdown-selector">
         </div>
       </li>
     </ul>
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link i18n" data-i18n="ftm-nav-about" href="javascript:;" onclick="window.location='whoweare.html'+window.location.search;">About</a>
+        <a class="nav-link i18n location-link" data-location='whoweare' data-i18n="ftm-nav-about" href="#">About</a>
       </li>
-      <!--Uncomment below when partners page is ready -->
-      <!--<li class="nav-item active">-->
-        <!--<a class="nav-link i18n" data-i18n="ftm-nav-partners" href="#">Partners</a>-->
-      <!--</li>-->
-      <!--<li class="nav-item active">-->
-        <!--<a class="nav-link i18n" data-i18n="ftm-nav-partnersr" href="javascript:;"-->
-           <!--onclick="window.location='partners'+window.location.search;">-->
-          <!--Partners-->
-        <!--</a>-->
-      <!--</li>-->
       <li class="nav-item active">
-        <a class="nav-link i18n" data-i18n="ftm-nav-volunteer" href="javascript:;"
-           onclick="window.location='volunteer'+window.location.search;">
+        <a class="nav-link i18n location-link" data-location='volunteer' data-i18n="ftm-nav-volunteer" href="#">
           Join Us
         </a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link i18n" data-i18n="ftm-nav-faq" href="javascript:;" onclick="window.location='faq'+window.location.search;">
+        <a class="nav-link i18n location-link" data-location='faq' data-i18n="ftm-nav-faq" href="#">
           FAQ
         </a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link i18n" data-i18n="ftm-nav-partners" href="javascript:;" onclick="window.location='partners'+window.location.search;">
+        <a class="nav-link i18n location-link" data-location='partners' data-i18n="ftm-nav-partners" href="#">
           Partners
         </a>
       </li>
       <li class="nav-item dropdown active">
-        <a class="nav-link dropdown-toggle i18n" href="#" id="share-dropdown" role="button"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-           data-i18n="ftm-nav-share">
+        <a class="nav-link dropdown-toggle i18n" href="#" id="share-dropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false" data-i18n="ftm-nav-share">
           Share
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="share-dropdown"
-             id="countries-dropdown-selector">
-          <a data-social-type="facebook"
-             class="share-link fb-xfbml-parse-ignore dropdown-item"
-             onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.findthemasks.com%2F&amp;src=sdkpreparse','popup', 'width=600,height=800');return false;"
-             href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.findthemasks.com%2F&amp;src=sdkpreparse">
+          id="countries-dropdown-selector">
+          <a data-social-type="facebook" class="share-link fb-xfbml-parse-ignore dropdown-item"
+            onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.findthemasks.com%2F&amp;src=sdkpreparse','popup', 'width=600,height=800');return false;"
+            href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fwww.findthemasks.com%2F&amp;src=sdkpreparse">
             <div class="icon icon-facebook"></div> Facebook
           </a>
-          <a data-social-type="instagram"
-             target="_blank"
-             class="share-link dropdown-item"
-             href="https://www.instagram.com/findthemasks/"
-             rel="noopener noreferrer">
+          <a data-social-type="instagram" target="_blank" class="share-link dropdown-item"
+            href="https://www.instagram.com/findthemasks/" rel="noopener noreferrer">
             <div class="icon icon-instagram"></div> Instagram
           </a>
-          <a data-social-type="twitter"
-             class="share-link twitter-share-button dropdown-item"
-             target="_blank"
-             href="">
+          <a data-social-type="twitter" class="share-link twitter-share-button dropdown-item" target="_blank" href="">
             <div class="icon icon-twitter"></div> Twitter
           </a>
-          <a data-social-type="reddit"
-             target="_blank"
-             rel="noopener noreferrer"
-             class="share-link dropdown-item"
-             href="https://www.reddit.com/search?q=findthemasks">
+          <a data-social-type="reddit" target="_blank" rel="noopener noreferrer" class="share-link dropdown-item"
+            href="https://www.reddit.com/search?q=findthemasks">
             <div class="icon icon-reddit"></div> Reddit
           </a>
         </div>
       </li>
       <li class="nav-item">
-        <a href="#" class="add-donation-site-form">
-          <button class="btn btn-addplace my-2 my-sm-0" type="button"><div class="icon icon-add_place"></div><span class="i18n" data-i18n="ftm-nav-addplace">I need PPE</span></button>
+        {{#if (eq dataset "makers")}}
+        <a href="https://airtable.com/shruH5B27UP3PqKgg" class="add-makerspace-form">
+          <button class="btn btn-addplace my-2 my-sm-0" type="button">
+            <div class="icon icon-add_place"></div><span>Add Makerspace</span>
+          </button>
         </a>
+        {{else}}
+        <a href="#" class="add-donation-site-form">
+          <button class="btn btn-addplace my-2 my-sm-0" type="button">
+            <div class="icon icon-add_place"></div><span class="i18n" data-i18n="ftm-nav-addplace">I need PPE</span>
+          </button>
+        </a>
+        {{/if}}
       </li>
     </ul>
   </div>

@@ -1,12 +1,11 @@
 import countries from './countries.js';
 import locales from './locales.js';
-import { getCountry } from './getCountry.js';
 import { getCurrentLocaleParam, DEFAULT_LOCALE } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
 
-const currentCountry = getCountry();
-document.body.setAttribute('data-country', currentCountry);
+const currentCountry = document.body.dataset.country;
+const currentDataset = document.body.dataset.dataset;
 
 const generateTopNav = () => {
   const currentLocale = getCurrentLocaleParam(DEFAULT_LOCALE);
@@ -69,6 +68,23 @@ const generateTopNav = () => {
       countryDropdownItems.appendChild(element);
     });
   }
+  $('.location-link').on('click', (e) => {
+    e.preventDefault();
+    const newLocation = $(e.currentTarget).data('location');
+    // construct URL from country and dataset, leaving it out if either is "default"
+    // in the case of currentCountry, that means US
+    // in the case of dataset, we only include it if dataset === 'makers'
+    // TODO: if we add a third dataset, that will need to change.
+    let newUrl = '';
+    if (currentCountry !== 'us') {
+      newUrl += `/${currentCountry}`;
+    }
+    if (currentDataset === 'makers') {
+      newUrl += `/${currentDataset}`;
+    }
+    newUrl += `/${newLocation}${window.location.search}`;
+    window.location.assign(newUrl);
+  });
 };
 
 $(() => {

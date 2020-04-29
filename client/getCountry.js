@@ -11,13 +11,6 @@ export function getFirstPathPart() {
   return '';
 }
 
-export function isCountryPath() {
-  if (getFirstPathPart() === 'makers') {
-    return false;
-  }
-  return true;
-}
-
 export function getCountry() {
   const firstPathPart = getFirstPathPart();
   if (countries[firstPathPart.toLowerCase()]) {
