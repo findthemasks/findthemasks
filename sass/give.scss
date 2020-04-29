@@ -310,6 +310,22 @@ h3.city {
   padding: 0;
 }
 
+.map-link {
+  color: #4169E1;
+  text-decoration: underline;
+
+  &:not([href]) {
+    color: #4169E1;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+      color: #0056b3;
+    }
+  }
+}
+
 .locations-loading {
   padding-top: 20px;
 }
