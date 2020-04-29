@@ -1,12 +1,10 @@
 import countries from './countries.js';
 import locales from './locales.js';
-import { getCountry } from './getCountry.js';
 import { getCurrentLocaleParam, DEFAULT_LOCALE } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
 
-const currentCountry = getCountry();
-document.body.setAttribute('data-country', currentCountry);
+const currentCountry = document.body.dataset.country;
 const currentDataset = document.body.dataset.dataset;
 
 const generateTopNav = () => {
