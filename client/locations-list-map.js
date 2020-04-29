@@ -884,7 +884,7 @@ function createRequesterListItemEl(entry) {
 
     ac(openPackagesContainer, [
       ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-open-packages'))),
-      ce('p', 'col-12 col-md-9', ctn(translateEnumValue(entry.openBox))),
+      ce('p', 'col-12 col-md-9', ctn(translateEnumValue(entry.open_box))),
     ]);
 
     ac(entry.domElem, openPackagesContainer);
