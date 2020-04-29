@@ -305,7 +305,21 @@ function createMakerMarkerContent(entry, separator) {
   return contentTags;
 }
 
-function createRequesterMarkerContent(orgType, address, name, instructions, accepting, openBox, separator) {
+const initResidentialPopover = () => {
+  $('[data-toggle="popover"]').popover();
+};
+
+function createRequesterMarkerContent(entry, separator) {
+  const {
+    org_type: orgType,
+    address,
+    name,
+    instructions,
+    accepting,
+    open_box: openBox,
+    rdi,
+  } = entry;
+
   // Text to go into InfoWindow
   const contentTags = separator ? [ce('h5', 'separator', ctn(name))] : [ce('h5', null, ctn(name))];
 
@@ -317,9 +331,17 @@ function createRequesterMarkerContent(orgType, address, name, instructions, acce
   }
 
   if (address) {
+    let addressChildren = [createMapLink(address)];
+    if (rdi === 'Residential') {
+      addressChildren = addressChildren.concat([
+        ctn(' \u25CF '),
+        $(`<a tabindex="0" class="popover-dismiss map-link" role="button" data-toggle="popover" data-trigger="focus" title="${$.i18n('ftm-residential-popover-title')}" data-content="${$.i18n('ftm-residential-popover-content')}">${$.i18n('ftm-residential-location')}</a>`)[0],
+      ]);
+    }
+
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
-      ce('div', 'value', createMapLink(address))
+      ce('div', 'value', addressChildren)
     );
   }
 
@@ -353,12 +375,7 @@ function createMarkerContent(entry, separator) {
   }
 
   return createRequesterMarkerContent(
-    entry.org_type,
-    entry.address,
-    entry.name,
-    entry.instructions,
-    entry.accepting,
-    entry.open_box,
+    entry,
     separator
   );
 }
@@ -390,9 +407,15 @@ function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
 
       const content = ce('div', null, contentTags);
 
-      marker.infowindow = new google.maps.InfoWindow({
+      const info = new google.maps.InfoWindow({
         content,
       });
+
+      google.maps.event.addListener(info, 'domready', () => {
+        initResidentialPopover();
+      });
+
+      marker.infowindow = info;
     }
     marker.infowindow.open(null, marker);
     gOpenInfoWindows.push(marker.infowindow);
@@ -847,8 +870,18 @@ function createRequesterListItemEl(entry) {
     $link.click(() => {
       sendEvent('listView', 'clickAddress', address);
     });
-    ac(para, link);
     ac(link, ctn(address));
+
+    let addressChildren = [link];
+
+    if (entry.rdi === 'Residential') {
+      addressChildren = addressChildren.concat([
+        ctn(' \u25CF '),
+        $(`<a tabindex="0" class="popover-dismiss map-link" role="button" data-toggle="popover" data-trigger="focus" title="${$.i18n('ftm-residential-popover-title')}" data-content="${$.i18n('ftm-residential-popover-content')}">${$.i18n('ftm-residential-location')}</a>`)[0],
+      ]);
+    }
+
+    ac(para, addressChildren);
 
     ac(headerHospitalInfo, para);
   }
@@ -931,6 +964,7 @@ function renderNextListPage() {
 
   ac(el, children);
   gLastLocationRendered = renderLocation - 1;
+  initResidentialPopover();
 }
 
 function refreshList(data, filters) {
