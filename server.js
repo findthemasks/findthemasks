@@ -2,7 +2,7 @@ const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const https = require('https');
 const { createProxyMiddleware } = require('http-proxy-middleware');
-const setCurrentCountry = require('./middleware/setCurrentCountry.js');
+const countries = require('./client/countries.js'); // TODO: Move out of client.
 const setBananaI18n = require('./middleware/setBananaI18n.js');
 const localizeContactInfo = require('./viewHelpers/localizeContactInfo.js');
 const selectMaskMatchPartialPath = require('./viewHelpers/selectMaskMatchPartialPath');
@@ -10,6 +10,7 @@ const selectLargeDonationSitesPartialPath = require('./viewHelpers/selectLargeDo
 const getDonationFormUrl = require('./viewHelpers/getDonationFormUrl.js');
 const formatFbLocale = require('./utils/formatFbLocale');
 require('dotenv').config();
+require('handlebars-helpers')();
 
 const herokuVersion = process.env.HEROKU_RELEASE_VERSION;
 
@@ -22,7 +23,6 @@ app.set('view engine', 'handlebars');
 
 app.set('strict routing', true);
 
-app.use(setCurrentCountry);
 app.use(setBananaI18n);
 
 // Install the webpack-dev-middleware for all the hot-reload goodness in dev.
@@ -62,14 +62,15 @@ app.use((req, res, next) => {
 app.use(express.static('public'));
 
 router.get(['/', '/index.html'], (req, res) => {
+  const isMaker = res.locals.dataset === 'makers';
   res.render('index', {
     version: herokuVersion,
     ogLocale: formatFbLocale(res.locals.locale),
-    ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
+    ogTitle: isMaker ? res.locals.banana.i18n('ftm-makers-og-title') : res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
-    ogDescription: res.locals.banana.i18n('ftm-index-og-description'),
+    ogDescription: isMaker ? res.locals.banana.i18n('ftm-makers-og-description') : res.locals.banana.i18n('ftm-index-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    localizeContactInfo: localizeContactInfo(res.locals.currentCountry),
+    localizeContactInfo: localizeContactInfo(res.locals.countryCode),
     recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
   });
 });
@@ -81,8 +82,8 @@ router.get('/faq', (req, res) => {
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
-    largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.currentCountry),
-    maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.currentCountry),
+    largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.countryCode),
+    maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.countryCode),
   });
 });
 
@@ -99,15 +100,16 @@ router.get(['/give', '/give.html'], (req, res) => {
   });
 });
 
-router.get(['/makers'], (req, res) => {
-  res.render('makers', {
+router.get(['/embed'], (req, res) => {
+  const isMaker = res.locals.dataset === 'makers';
+  res.render('give', {
     version: herokuVersion,
+    layout: 'give',
     ogLocale: formatFbLocale(res.locals.locale),
-    ogTitle: res.locals.banana.i18n('ftm-makers-og-title'),
+    ogTitle: isMaker ? '#findthemasks | makers embed' : res.locals.banana.i18n('ftm-give-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
-    ogDescription: res.locals.banana.i18n('ftm-makers-og-description'),
+    ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    localizeContactInfo: localizeContactInfo(res.locals.currentCountry),
     recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
   });
 });
@@ -131,7 +133,7 @@ router.get(['/special-projects/la-makers'], (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: 'Map of Vetter Makers for the city of Los Angeles',
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    localizeContactInfo: localizeContactInfo(res.locals.currentCountry),
+    localizeContactInfo: localizeContactInfo(res.locals.countryCode),
   });
 });
 
@@ -196,8 +198,29 @@ router.get(['/404', '/404.html'], (req, res) => {
 });
 
 router.get('/donation-form', (req, res) => {
-  res.redirect(getDonationFormUrl(res.locals.currentCountry, res.locals.locale));
+  res.redirect(getDonationFormUrl(res.locals.countryCode, res.locals.locale));
 });
+
+router.get('/maker-form', (req, res) => {
+  res.redirect('https://airtable.com/shruH5B27UP3PqKgg');
+});
+
+// Recursively handle routes for makers overriding the dataset so the main
+// map functionality can be run in a different "mode" so to speak.
+router.use('/makers', (req, res, next) => {
+  const remainingUrl = req.originalUrl.substr(req.baseUrl.length);
+  if (remainingUrl && !remainingUrl.match(/\/(embed(\/)?)?/)) {
+    console.log('redirecting');
+    res.status(404).redirect('/');
+    return;
+  }
+
+  // Override the dataset. Expect countryCode to be set at the top-level routing.
+  res.locals.dataset = 'makers';
+
+  router(req, res, next);
+});
+
 
 const cachedData = {};
 
@@ -281,8 +304,34 @@ const gbUkRedirect = (req, res, next) => {
 };
 
 app.use(/\/[a-zA-Z]{2}/, gbUkRedirect);
-app.use(/\/[a-zA-Z]{2}/, router);
-app.use('/', router);
+
+const ALL_COUNTRIES = new Set(Object.keys(countries));
+
+app.use('/:countryCode', (req, res, next) => {
+  const lowerCased = req.params.countryCode.toLowerCase();
+
+  if (ALL_COUNTRIES.has(lowerCased)) {
+    res.locals.countryCode = req.params.countryCode;
+    res.locals.dataset = 'requester';
+
+    // Redirect to lower-cased path.
+    if (req.params.countryCode !== lowerCased) {
+      res.status(302).redirect(`/${lowerCased}`);
+      return;
+    }
+    router(req, res, next);
+  } else {
+    next();
+  }
+});
+
+app.use('/', (req, res, next) => {
+  // Default values for countryCode and dataset.
+  res.locals.countryCode = 'us';
+  res.locals.dataset = 'requester';
+
+  router(req, res, next);
+});
 
 app.use((req, res) => {
   res.status(404).redirect('/');
