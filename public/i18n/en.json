@@ -261,5 +261,8 @@
   "ftm-mailer-subject-blank": "Subject is blank",
   "ftm-mailer-mail-failed": "Message sending failed, please try again",
   "ftm-mailer-message-sent": "Your message was sent",
-  "ftm-mailer-decrypt-failed": "Recipient address decryption failed"
+  "ftm-mailer-decrypt-failed": "Recipient address decryption failed",
+  "ftm-residential-location": "Residential",
+  "ftm-residential-popover-title": "Why residential?",
+  "ftm-residential-popover-content": "About 15% of our recipients list home addresses. This may be because it is safer/easier for donors to drop off at a nearby location, because their office hours are limited, or because they are having trouble getting PPE at work. If you prefer to donate directly to a healthcare institution, please select another entry from among our thousands of recipients in need!"
 }
