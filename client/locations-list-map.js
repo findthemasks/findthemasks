@@ -1410,6 +1410,16 @@ function initContactModal() {
   });
 }
 
+const applyFilterParams = ((params, filterSet) => {
+  params.forEach((param) => {
+    const filter = filterSet[decodeURIComponent(param)];
+
+    if (filter) {
+      filter.isSet = true;
+    }
+  });
+});
+
 $(() => {
   const renderListings = (result) => {
     const data = toDataByLocation(result);
@@ -1427,12 +1437,15 @@ $(() => {
 
     // Update filters to match any ?state= params
     const states = (searchParams.state || '').toUpperCase().split(',');
-    states.forEach((stateName) => {
-      const stateFilter = filters.states[stateName];
-      if (stateFilter) {
-        stateFilter.isSet = true;
-      }
-    });
+    applyFilterParams(states, filters.states);
+
+    // Update filters to match any ?accepting= params
+    const accepting = (searchParams.accepting || '').toLowerCase().split(',');
+    applyFilterParams(accepting, filters.acceptItems);
+
+    // Update filters to match any ?orgType= params
+    const orgTypes = (searchParams.orgType || '').toLowerCase().split(',');
+    applyFilterParams(orgTypes, filters.orgTypes);
 
     updateFilters(filters);
 
