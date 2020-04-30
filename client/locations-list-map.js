@@ -1373,6 +1373,7 @@ function initContactModal() {
   $('#contactModal #send-message').on('click', () => {
     $('.contact-error').html('&nbsp;');
     $('#send-message').prop('disabled', true);
+    sendEvent('contactOrganization', 'emailSendButtonClicked', $('#contactModal').find('.modal-title').val());
 
     $.post(
       'https://maskmailer.herokuapp.com/send',
@@ -1390,6 +1391,7 @@ function initContactModal() {
       $('.contact-success').css('display', 'block');
       $('#send-message').prop('disabled', false);
       window.grecaptcha.reset();
+      sendEvent('contactOrganization', 'emailSent', $('#contactModal').find('.modal-title').val());
 
       setTimeout(() => {
         $('#contactModal').modal('hide');
