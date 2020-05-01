@@ -231,8 +231,8 @@ On mac, `brew install npm`
 
     npm install
 
-You'll need to do this once when first setting up, and periodically as dependencies change
-the dev server script (see next section) will crap out with an error message when a new
+You'll need to do this once when first setting up, and periodically as dependencies change.
+The dev server script (see next section) will crap out with an error message when a new
 dependency is added - this is your cue to  run 'npm install' again.
 
 ### Run the dev server
