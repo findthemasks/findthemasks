@@ -2,11 +2,20 @@
 <nav class="navbar sticky-top navbar-expand-lg navbar-top navbar-dark ftm">
   <ul class="navbar-nav navbar-brand">
     <li class="nav-item">
-      <div class="icon icon-ftm_logo"></div>
+      {{#if (eq dataset "makers")}}
+        <div class="icon icon-ftmakers_logo"></div>
+      {{else}}
+        <div class="icon icon-ftm_logo"></div>
+      {{/if}}
     </li>
     <li class="nav-item">
-      <a class="home-link location-link text-light" data-location='index.html'><span class="text">Find The
-          Masks</span></a>
+      {{#if (eq dataset "makers")}}
+        <a class="home-link location-link text-light" data-location='index.html'><span class="text">Find The
+            Makers</span></a>
+      {{else}}
+        <a class="makers-home-link location-link text-light" data-location='index.html'><span class="text">Find The
+            Masks</span></a>
+      {{/if}}
     </li>
   </ul>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
@@ -88,6 +97,21 @@
             <div class="icon icon-add_place"></div><span class="i18n" data-i18n="ftm-nav-addplace">I need PPE</span>
           </button>
         </a>
+        {{/if}}
+      </li>
+      <li class="nav-item">
+        {{#if (eq dataset "makers")}}
+          <a href="https://findthemasks.com" class="xlink">
+            <button class="btn btn-xlink my-2 my-sm-0" type="button">
+              <div class="icon icon-ftm_logo_black"></div><span>Find The Masks</span>
+            </button>
+          </a>
+        {{else}}
+          <a href="https://findthemakers.com" class="xlink">
+            <button class="btn btn-xlink my-2 my-sm-0" type="button">
+              <div class="icon icon-ftmakers_logo_black"></div><span>Find The Makers</span>
+            </button>
+          </a>
         {{/if}}
       </li>
     </ul>
