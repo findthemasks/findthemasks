@@ -18,10 +18,11 @@ From the root directory of this repo:
 
 ```
 $ ./local_setup.sh
+$ npm install
 $ npm run dev
 ```
 
-#### Running in docker
+#### Running in docker (optional)
 
 Requirements:
 * docker
