@@ -42,38 +42,21 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-dtgs1qck
 ?hide-map={true/false}
 ?hide-filters={true/false}
 ?hide-list={true/false} (also hides filters)
-?hide-search={true/false} (beta)
+?hide-search={true/false}
 ?locale={see available locales in dropdown at https://findthemasks.com}
 ?q={map search term: '100 Fake Road, Kansas, MO'}
 ?coords={lat,lng}&zoom=12 // zoom only works in concert with coords
 ```
 
-All boolean parameters default to false (unless they're in beta).
+All true/false parameters default to false.
 
 So, for state-specific pages you can now use something like:
 <https://findthemasks.com/give.html?state=CA&hide-map=true&hide-filters=true>
 This will return just the filtered list of donations sites in California.
 
-**Beta features:**
-
-Since beta features are disabled by default, you can enable them via:
-
-```
-?show-search=true
-```
-
-## Current Countries
-* United States - us
-* France - fr
-* Canada - ca
-
-## Current Locales
-* English - en
-* French - fr
-
 ## Adding Countries and Locales
 
-We use a directory structure to view country-specific datasets.
+We use virtual paths via routing rules on the server to view country-specific datasets.
 
 For example, `/us/give.html` will filter the map to the United States and `/fr/give.html` will filter to France.
 
@@ -117,7 +100,7 @@ Moderation is done by volunteers in accordance with the guidance laid out in the
 
 ## Directory structure
 
-- `/public` - The client-side code for the website. Currently has some symlinks to legacy file locations.
+- `/public` - The client-side code for the website. 
 - `/functions` - The cloud function used to generate data.json. Not needed for frontend work.
 
 ## Firebase
