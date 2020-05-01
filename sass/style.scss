@@ -1,4 +1,5 @@
 @import 'colors';
+@import 'typography';
 @import 'icons.data.svg';
 
 html {
@@ -10,7 +11,7 @@ body {
   background: #fff;
   box-sizing: border-box;
   color: $text-color;
-  font: normal normal normal .875rem/1.55 'Open Sans', 'Helvetica', sans-serif;
+  font: normal normal normal #{$font-size-default}/1.55 #{$font-stack-default};
   height: 100%;
   margin: 0;
   padding: 0;
@@ -68,7 +69,8 @@ a {
 
 .search-filter-container h4 {
   font-weight: 700;
-  font-size: 1.375rem;
+  font-size: $heading-size-3;
+  margin-bottom: .25rem;
 }
 
 .search-filter-container p {
@@ -81,7 +83,7 @@ a {
 
 .search-filter-container .form-control {
   height: auto;
-  font-size: .875rem;
+  font-size: $font-size-small;
 }
 
 /* even out the spacing between filters... */
@@ -151,7 +153,7 @@ a {
 }
 
 .subhead-right{
-  font-size: 1rem;
+  font-size: $font-size-default;
   text-align: left;
   width: calc(60% + 40px);
 }
@@ -241,13 +243,14 @@ h3.city {
 }
 
 .locations-list-header #list-stats {
-  font-size: 1rem;
+  font-size: $font-size-default;
   font-weight: 600;
 }
 
 .location {
   border-bottom: 1px solid #D4D4D4;
   padding: 1.5rem 2rem !important;
+  font-size: $font-size-small;
 }
 
 .location .font-weight-bold {
@@ -314,16 +317,23 @@ h3.city {
   border-top: 1px solid darkgray;
 }
 
+#map h5 {
+  font-family: $font-stack-default;
+}
+
 #map .label {
-  color: #999;
-  font-size: 11px;
-  font-weight: 400;
+  font-family: $font-stack-default;
+  color: $text-color;
+  font-size: $font-size-small;
+  font-weight: 600;
   padding: 6px 0 2px 0;
-  text-transform: uppercase;
 }
 
 #map .value {
-  font-weight: 400
+  font-family: $font-stack-default;
+  font-weight: 400;
+  font-size: $font-size-small;
+  padding-bottom: 6px;
 }
 #map-stats {
   color: $text-color;
@@ -519,7 +529,7 @@ dl.faq-question {
 
 .map-action-link {
   white-space: nowrap;
-  font-size: 14px;
+  font-size: $font-size-small;
 }
 
 .map-action-link:hover {
@@ -539,7 +549,7 @@ dl.faq-question {
 
 .navbar.ftm .nav-link,
 .navbar.ftm .btn {
-  font-size: 0.9rem;
+  font-size: $font-size-small;
 }
 
 .navbar.ftm .navbar-brand,
@@ -602,7 +612,7 @@ dl.faq-question {
 .navbar.ftm .dropdown-item {
   background: #3F5CBB;
   color: #fff;
-  font-size: 14px;
+  font-size: $font-size-small;
   font-weight: 600;
 }
 
@@ -728,11 +738,11 @@ dl.faq-question {
   }
 
   .search-filter-container h4 {
-    font-size: 20px;
+    font-size: $heading-size-3-mobile;
   }
 
   .search-filter-container p {
-    font-size: 15px;
+    font-size: $font-size-small;
   }
 }
 
@@ -813,6 +823,10 @@ div.figure img {
     max-width: 800px;
     margin: 1rem auto 0 auto;
     display: block;
+}
+
+.selectr-container {
+  font-size: $font-size-small;
 }
 
 .selectr-selected {

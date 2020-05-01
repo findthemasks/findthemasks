@@ -1,4 +1,5 @@
 @import 'colors';
+@import 'typography';
 @import 'icons.data.svg';
 
 html {
@@ -10,7 +11,7 @@ body {
   background: #fff;
   box-sizing: border-box;
   color: #222;
-  font: normal normal normal 1rem/1.65 'Open Sans', 'Helvetica', sans-serif;
+  font: normal normal normal #{$font-size-default}/1.65 'Open Sans', 'Helvetica', sans-serif;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -117,7 +118,7 @@ hr {margin-top: 1.7rem;}
 }
 
 .subhead-right{
-  font-size: 1rem;
+  font-size: $font-size-default;
   text-align: left;
   width: calc(60% + 40px);
 }
