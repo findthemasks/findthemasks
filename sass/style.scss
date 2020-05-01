@@ -64,7 +64,7 @@ a {
 }
 
 .search-filter-container .bg-dark-blue {
-  padding: 2rem !important;
+  padding: 2rem;
 }
 
 .search-filter-container h4 {
@@ -78,7 +78,7 @@ a {
 }
 
 .search-filter-container .input-group-text {
-  padding-right: .7rem !important;
+  padding-right: .65rem;
 }
 
 .search-filter-container .form-control {
@@ -88,7 +88,7 @@ a {
 
 /* even out the spacing between filters... */
 .filters-container > *:first-child {
-  padding-right: 0 !important;
+  padding-right: 0;
 }
 
 .logo {
@@ -228,13 +228,13 @@ h3.city {
 }
 
 .locations-container {
-  padding: 0 !important;
-  margin: 0 !important;
+  padding: 0;
+  margin: 0;
 }
 
 .locations-list-header {
-  padding: 0 !important;
-  margin: 0 !important;
+  padding: 0;
+  margin: 0;
   border-bottom: 1px solid #D4D4D4;
 }
 
@@ -249,12 +249,12 @@ h3.city {
 
 .location {
   border-bottom: 1px solid #D4D4D4;
-  padding: 1.5rem 2rem !important;
+  padding: 1.5rem 2rem;
   font-size: $font-size-small;
 }
 
-.location .font-weight-bold {
-  font-weight: 600 !important;
+.location label {
+  font-weight: 600;
 }
 
 .donation-sites h1 {
@@ -728,13 +728,13 @@ dl.faq-question {
   .locations-list-header > *,
   .location
    {
-    padding-left: 1.25rem !important;
-    padding-right: 1.25rem !important;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
   }
 
   .search-filter-container .bg-dark-blue {
-    padding-top: 1.5rem !important;
-    padding-bottom: 1.5rem !important;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
   }
 
   .search-filter-container h4 {
