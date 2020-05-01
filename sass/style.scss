@@ -641,6 +641,41 @@ dl.faq-question {
   background-position: center;
 }
 
+.navbar.ftm .xlink {
+  display: flex;
+  min-height: 100%;
+  align-items: center;
+}
+
+.navbar.ftm .btn-xlink {
+  color: #000;
+  background: #fdc276;
+  white-space: nowrap;
+  font-weight: 600;
+  margin-left: 1rem;
+  padding-left: 1rem;
+  padding-right: 1.4rem;
+}
+
+.navbar.ftm .btn-xlink:hover {
+  background: #fdd197;
+}
+
+.navbar.ftm .btn-xlink .icon,
+.icon-ftmakers_logo.icon {
+  display: inline-block;
+  vertical-align: middle;
+  height: 18px;
+  width: 18px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-right: 6px;
+  position: relative;
+  top: -2px;
+  background-size: contain;
+  background-position: center;
+}
+
 #countries-dropdown .icon,
 #countries-dropdown-selector .icon {
   display: inline-block;
