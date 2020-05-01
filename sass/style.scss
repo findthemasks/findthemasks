@@ -1,4 +1,4 @@
-
+@import 'colors';
 @import 'icons.data.svg';
 
 html {
@@ -9,7 +9,7 @@ html {
 body {
   background: #fff;
   box-sizing: border-box;
-  color: #333;
+  color: $text-color;
   font: normal normal normal .875rem/1.55 'Open Sans', 'Helvetica', sans-serif;
   height: 100%;
   margin: 0;
@@ -26,7 +26,7 @@ p a {
 }
 
 a {
-  color: #4169E1;
+  color: $blue;
   font-weight: 600;
 }
 
@@ -35,12 +35,12 @@ a {
 }
 
 .text-pink {
-  color: #EC416F;
+  color: $pink;
   font-weight: 600;
 }
 
 .bg-dark-blue {
-  background: #3E54A1;
+  background: $blue-dark;
 }
 
 .translated-content {
@@ -326,7 +326,7 @@ h3.city {
   font-weight: 400
 }
 #map-stats {
-  color: #333;
+  color: $text-color;
   font-size: 22px;
   font-weight: 300;
   margin-left: 10px;
@@ -347,11 +347,11 @@ h3.city {
 }
 
 .map-link {
-  color: #4169E1;
+  color: $blue;
   text-decoration: underline;
 
   &:not([href]) {
-    color: #4169E1;
+    color: $blue;
     text-decoration: underline;
 
     &:hover {
@@ -407,8 +407,8 @@ h3.city {
 }
 
 .email-button {
-  border: #EC416F;
-  background: #EC416F;
+  border: $pink;
+  background: $pink;
   padding-left: 2rem;
   padding-right: 2rem;
 }
@@ -451,7 +451,7 @@ h3.city {
   * PARTNERS STYLES *
   *********************/
 .page-subhead {
-  background-color: #FDC276;
+  background-color: $yellow;
   padding: 10px;
   display: inline-block;
 }
@@ -533,7 +533,7 @@ dl.faq-question {
 }
 
 .navbar.ftm {
-  background: #4169E1;
+  background: $blue;
   padding: 0 .75rem;
 }
 
@@ -611,12 +611,12 @@ dl.faq-question {
 }
 
 .navbar.ftm .dropdown-item:hover {
-  background: #4169E1;
+  background: $blue;
 }
 
 .navbar.ftm .btn-addplace {
   color: #fff;
-  background: #EC416F;
+  background: $pink;
   white-space: nowrap;
   font-weight: 600;
   margin-left: 1rem;
