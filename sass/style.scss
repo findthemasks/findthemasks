@@ -414,6 +414,9 @@ h3.city {
 
 .page-title {
   text-transform: uppercase;
+  font-size: $heading-size-1;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
 }
 
 .email-button {
@@ -460,24 +463,55 @@ h3.city {
 /*********************
   * PARTNERS STYLES *
   *********************/
+
+.content section {
+  margin-bottom: 2rem;
+}
+
 .page-subhead {
+  font-size: $heading-size-3;
   background-color: $yellow;
-  padding: 10px;
+  padding: 5px 8px;
   display: inline-block;
+  margin-bottom: 1rem;
 }
 
 .partner-logos {
   width: 100%;
 }
 
+.partner-logos-large {
+  .partner-logo-container {
+    width: 33%;
+    text-align: center;
+  }
+}
+
+.partner-logos-small {
+  .partner-logo-container {
+    width: 19.6%;
+  }
+}
+
 .partner-logo-container {
   display: inline-block;
-  margin: 30px;
+  padding: 1.5rem;
+
+  img {
+    width: 100%;
+  }
 }
 
 /*********************
   * FAQ STYLES *
   *********************/
+
+.faq-header {
+  font-size: $heading-size-3;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
 dl.faq-question {
   .btn-link {
     cursor: pointer;
@@ -485,16 +519,22 @@ dl.faq-question {
 
   & dt {
     &:not(:first-child) {
-      border-top: solid #000 1px;
-      padding-top: 1rem;
+      border-top: 2px solid $gray;
+      padding-top: .75rem;
     }
 
-    & h5 {
-      background-repeat: no-repeat;
+    padding-bottom: .75rem;
+
+    h5 {
+      font-size: $font-size-default;
+      margin: 0;
       background-position: left;
-      padding-left: 1.5rem;
+      font-weight: 600;
+      padding-left: 1.75rem;
       background-size: 1.5rem 1.5rem;
       background-image: url(/images/icons/dash.svg);
+      background-repeat: no-repeat;
+      background-position: 0px -3px;
     }
 
     &:not(.open) h5 {
