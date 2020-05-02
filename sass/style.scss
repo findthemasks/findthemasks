@@ -461,48 +461,6 @@ h3.city {
 }
 
 /*********************
-  * PARTNERS STYLES *
-  *********************/
-
-.content section {
-  margin-bottom: 2rem;
-}
-
-.page-subhead {
-  font-size: $heading-size-3;
-  background-color: $yellow;
-  padding: 5px 8px;
-  display: inline-block;
-  margin-bottom: 1rem;
-}
-
-.partner-logos {
-  width: 100%;
-}
-
-.partner-logos-large {
-  .partner-logo-container {
-    width: 33%;
-    text-align: center;
-  }
-}
-
-.partner-logos-small {
-  .partner-logo-container {
-    width: 19.6%;
-  }
-}
-
-.partner-logo-container {
-  display: inline-block;
-  padding: 1.5rem;
-
-  img {
-    width: 100%;
-  }
-}
-
-/*********************
   * FAQ STYLES *
   *********************/
 
@@ -738,9 +696,68 @@ dl.faq-question {
   background-size: cover;
 }
 
+/*********************
+  * PARTNERS STYLES *
+  *********************/
+
+.content section {
+  margin-bottom: 2rem;
+}
+
+.page-subhead {
+  font-size: $heading-size-3;
+  background-color: $yellow;
+  padding: 5px 8px;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.partner-logos {
+  width: 100%;
+}
+
+.partner-logos-large {
+  .partner-logo-container {
+    text-align: center;
+  }
+}
+
+.partner-logos-small {
+  .partner-logo-container {
+    width: 49%;
+  }
+}
+
+.partner-logo-container {
+  display: inline-block;
+  padding: 1.5rem;
+
+  img {
+    width: 100%;
+  }
+}
+
+
 /* Mobile first: Desktop breakpoint overrides below */
 
 @media (min-width: 992px) {
+  /*********************
+  * PARTNERS STYLES *
+  *********************/
+
+  .partner-logos-large {
+    .partner-logo-container {
+      width: 33%;
+      text-align: center;
+    }
+  }
+
+  .partner-logos-small {
+    .partner-logo-container {
+      width: 19.6%;
+    }
+  }
+
   .map-container {
     position: fixed;
     height: calc(100vh - 58px);
