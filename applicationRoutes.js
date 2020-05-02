@@ -110,6 +110,7 @@ router.get('/volunteer', (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     version: herokuVersion,
+    localContactEmail: getLocalContactEmail(res.locals.countryCode),
   });
 });
 
