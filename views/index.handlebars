@@ -10,7 +10,7 @@
   <div class="row flex-lg-row no-gutters">
     <div class="col-12 col-lg-6 search-filter-container">
       <div class="bg-white ">
-        <div class="bg-dark-blue text-light p-4">
+        <div class="bg-dark-blue text-light">
 
           {{#if (eq dataset "makers")}}
             <h4>
@@ -39,7 +39,7 @@
                    placeholder="Search by city, zip, or address"
                    data-i18n="[placeholder]ftm-maps-search-placeholder">
             <div class="input-group-append">
-            <span class="input-group-text bg-white border-0 p-2">
+            <span class="input-group-text bg-white border-0">
               <a href="javascript:;" class="map-action-link" id="use-location">
                 <span class="i18n" data-i18n="ftm-maps-search-use-location">Use my location</span>
               </a>
@@ -59,7 +59,7 @@
           </div>
         </div>
 
-        <div class="d-flex align-items-center locations-list-header px-2 pt-2 pb-3 mb-0 mt-2 mx-2">
+        <div class="d-flex align-items-center locations-list-header">
           <div class="flex-grow-1">
             <span class="icon icon-requester-pin"></span><span id="list-stats"></span>
           </div>
@@ -96,7 +96,7 @@
         {{/if}}
       </div>
 
-      <div class="locations-container row no-gutters px-2 m-2" style="display: none;">
+      <div class="locations-container row no-gutters" style="display: none;">
         <div id="locations-list" class="locations-list col"></div>
       </div>
       {{> contact_form}}

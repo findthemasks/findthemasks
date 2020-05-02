@@ -269,7 +269,7 @@ function createMakerMarkerContent(entry, separator) {
       const row = ce('div', 'row');
 
       ac(row, [
-        ce('label', 'col-12 col-md-3 font-weight-bold', ctn(name)),
+        ce('label', 'col-12 col-md-3', ctn(name)),
         linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(value))),
       ]);
 
@@ -281,7 +281,7 @@ function createMakerMarkerContent(entry, separator) {
     if (value) {
       const div = ce('div', 'row');
       ac(div, [
-        ce('label', 'col-12 col-md-3 font-weight-bold', ctn(name)),
+        ce('label', 'col-12 col-md-3', ctn(name)),
         linkifyElement(ce('p', 'col-12 col-md-9', ctn(value))),
       ]);
       contentTags.push(div);
@@ -794,7 +794,7 @@ function getFlatFilteredEntries(data, filters) {
 }
 
 function createMakerListItemEl(entry) {
-  entry.domElem = ce('div', 'location py-3');
+  entry.domElem = ce('div', 'location');
   const header = ce('div', 'd-flex');
   const headerMakerspaceInfo = ce('div', 'flex-grow-1 grey-background');
   ac(headerMakerspaceInfo, ce('h5', null, ctn(entry.name)));
@@ -808,7 +808,7 @@ function createMakerListItemEl(entry) {
       const row = ce('div', 'row');
 
       ac(row, [
-        ce('label', 'col-12 col-md-3 font-weight-bold', ctn(name)),
+        ce('label', 'col-12 col-md-3', ctn(name)),
         linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(value))),
       ]);
 
@@ -821,7 +821,7 @@ function createMakerListItemEl(entry) {
       const row = ce('div', 'row');
 
       ac(row, [
-        ce('label', 'col-12 col-md-3 font-weight-bold', ctn(name)),
+        ce('label', 'col-12 col-md-3', ctn(name)),
         linkifyElement(ce('p', 'col-12 col-md-9', ctn(value))),
       ]);
 
@@ -846,7 +846,7 @@ function createMakerListItemEl(entry) {
 }
 
 function createRequesterListItemEl(entry) {
-  entry.domElem = ce('div', 'location py-3');
+  entry.domElem = ce('div', 'location');
   const header = ce('div', 'd-flex');
   const headerHospitalInfo = ce('div', 'flex-grow-1');
   const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
@@ -894,7 +894,7 @@ function createRequesterListItemEl(entry) {
     const emailContainer = ce('div', 'row');
 
     ac(emailContainer, [
-      ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-email-contact'))),
+      ce('label', 'col-12 col-md-3', ctn($.i18n('ftm-email-contact'))),
       $(`<p class="col-12 col-md-9"><a href="#" data-toggle="modal" data-target="#contactModal" data-name="${entry.name}" data-email="${entry.encrypted_email}">${$.i18n('ftm-email-contact-org')}</a></p>`)[0],
     ]);
 
@@ -905,7 +905,7 @@ function createRequesterListItemEl(entry) {
     const ppeNeededContainer = ce('div', 'row');
 
     ac(ppeNeededContainer, [
-      ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-ppe-needed'))),
+      ce('label', 'col-12 col-md-3', ctn($.i18n('ftm-ppe-needed'))),
       ce('p', 'col-12 col-md-9', ctn(translateEnumList(entry.accepting))),
     ]);
 
@@ -916,7 +916,7 @@ function createRequesterListItemEl(entry) {
     const openPackagesContainer = ce('div', 'row');
 
     ac(openPackagesContainer, [
-      ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-open-packages'))),
+      ce('label', 'col-12 col-md-3', ctn($.i18n('ftm-open-packages'))),
       ce('p', 'col-12 col-md-9', ctn(translateEnumValue(entry.open_box))),
     ]);
 
@@ -927,7 +927,7 @@ function createRequesterListItemEl(entry) {
     const instructionsContainer = ce('div', 'row');
 
     ac(instructionsContainer, [
-      ce('label', 'col-12 col-md-3 font-weight-bold', ctn($.i18n('ftm-instructions'))),
+      ce('label', 'col-12 col-md-3', ctn($.i18n('ftm-instructions'))),
       linkifyElement(ce('p', 'col-12 col-md-9', multilineStringToNodes(entry.instructions))),
     ]);
 

@@ -1,3 +1,5 @@
+@import 'colors';
+@import 'typography';
 @import 'icons.data.svg';
 
 html {
@@ -9,7 +11,7 @@ body {
   background: #fff;
   box-sizing: border-box;
   color: #222;
-  font: normal normal normal 1rem/1.65 'Open Sans', 'Helvetica', sans-serif;
+  font: normal normal normal #{$font-size-default}/1.65 'Open Sans', 'Helvetica', sans-serif;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -17,7 +19,7 @@ body {
 }
 
 .text-pink {
-  color: #EC416F;
+  color: $pink;
 }
 
 .content-container {
@@ -55,7 +57,7 @@ h1 {
 }
 
 h2 {
-  color: #333;
+  color: $text-color;
   font-size: 1.8rem;
   font-weight: 800;
   margin: 30px 0 20px 0;
@@ -116,7 +118,7 @@ hr {margin-top: 1.7rem;}
 }
 
 .subhead-right{
-  font-size: 1rem;
+  font-size: $font-size-default;
   text-align: left;
   width: calc(60% + 40px);
 }
@@ -291,7 +293,7 @@ h3.city {
 }
 
 #map-stats, #list-stats {
-  color: #333;
+  color: $text-color;
   font-size: 22px;
   font-weight: 300;
   margin-left: 10px;
@@ -312,11 +314,11 @@ h3.city {
 }
 
 .map-link {
-  color: #4169E1;
+  color: $blue;
   text-decoration: underline;
 
   &:not([href]) {
-    color: #4169E1;
+    color: $blue;
     text-decoration: underline;
 
     &:hover {
@@ -442,7 +444,7 @@ h3.city {
 }
 
 .navbar.ftm {
-  background: #4169E1;
+  background: $blue;
 }
 
 .navbar.ftm .nav-link,
@@ -478,22 +480,22 @@ h3.city {
 }
 
 .navbar.ftm .nav-item.show {
-  background: #3E54A1;
+  background: $blue-dark;
 }
 
 .navbar.ftm .dropdown-menu,
 .navbar.ftm .dropdown-item {
-  background: #3E54A1;
+  background: $blue-dark;
   color: #fff;
 }
 
 .navbar.ftm .dropdown-item:hover {
-  background: #4169E1;
+  background: $blue;
 }
 
 .navbar.ftm .btn-addplace {
   color: #fff;
-  background: #EC416F;
+  background: $pink;
   white-space: nowrap;
 }
 
