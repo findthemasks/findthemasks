@@ -9,31 +9,29 @@ const countries = require('./client/countries.js'); // TODO: Move out of client.
 const router = express.Router();
 
 const cachedData = {};
+const cachedMakersData = {};
 
-function sendDataJson(countryCode, res) {
+function sendDataJson(cache, countryCode, res) {
   const HEADERS = {
     'Content-Type': 'application/json',
     'Access-Control-Allow-Origin': '*',
   };
 
-  if (countryCode in cachedData) {
+  if (countryCode in cache) {
     // Return memoized data.
     res.writeHead(200, HEADERS);
-    res.write(cachedData[countryCode].data);
+    res.write(cache[countryCode].data);
     res.end();
   } else {
     res.sendStatus(404);
   }
 }
 
-router.use(express.static('public'));
-
-router.get('/data(-:countryCode)?.json', (req, res) => {
-  const countryCode = req.params.countryCode || 'us';
-
+function sendDataJsonFromCache(cache, prefix, countryCode, res) {
+  console.log(prefix, countryCode);
   const now = new Date();
-  if (countryCode in cachedData && cachedData[countryCode].expires_at > now) {
-    sendDataJson(countryCode, res);
+  if (countryCode in cache && cache[countryCode].expires_at > now) {
+    sendDataJson(cache, countryCode, res);
     return;
   }
 
@@ -41,7 +39,7 @@ router.get('/data(-:countryCode)?.json', (req, res) => {
   const options = {
     hostname: 'storage.googleapis.com',
     port: 443,
-    path: `/findthemasks.appspot.com/data-${countryCode}.json`,
+    path: `/findthemasks.appspot.com/${prefix}-${countryCode}.json`,
     method: 'GET',
   };
 
@@ -52,23 +50,35 @@ router.get('/data(-:countryCode)?.json', (req, res) => {
       if (dataRes.statusCode === 200) {
         // Cache for 5 mins.
         const newExpiresAt = new Date(now.getTime() + (5 * 60 * 1000));
-        cachedData[countryCode] = {
+        cache[countryCode] = {
           expires_at: newExpiresAt,
           data: newData,
         };
       }
 
-      sendDataJson(countryCode, res);
+      sendDataJson(cache, countryCode, res);
     });
   });
 
   dataReq.on('error', (error) => {
     console.error(`unable to fetch data for ${countryCode}: ${error}. Sending stale data.`);
     // Send stale data.
-    sendDataJson(countryCode, res);
+    sendDataJson(cache, countryCode, res);
   });
 
   dataReq.end();
+}
+
+router.use(express.static('public'));
+
+router.get('/data(-:countryCode)?.json', (req, res) => {
+  const countryCode = req.params.countryCode || 'us';
+  sendDataJsonFromCache(cachedData, 'data', countryCode, res);
+});
+
+router.get('/makers(-:countryCode)?.json', (req, res) => {
+  const countryCode = req.params.countryCode || 'us';
+  sendDataJsonFromCache(cachedMakersData, 'makers', countryCode, res);
 });
 
 router.get('/data(-:countryCode)?.csv', createProxyMiddleware({
