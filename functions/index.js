@@ -3,6 +3,7 @@ const admin = require('firebase-admin');
 const csv_stringify = require('csv-stringify');
 const { request } = require('gaxios');
 const crypto = require('crypto');
+const { loadMakerData } = require('./airtable-connector.js');
 
 admin.initializeApp();
 
@@ -562,6 +563,11 @@ function toHtmlSnippets(data_by_location) {
 
 module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
   const country = get_country_from_path(req);
+  if (country === 'makers') {
+    loadMakerData(admin, req, res);
+    return;
+  }
+
   if (!(country in SHEETS)) {
     res.status(400).send(`invalid country: ${country} for ${req.path}`);
     return;
