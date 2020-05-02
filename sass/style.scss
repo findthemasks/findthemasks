@@ -528,10 +528,10 @@ dl.faq-question {
 .map-action-link {
   white-space: nowrap;
   font-size: $font-size-small;
-}
 
-.map-action-link:hover {
-  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 .map-action-link img {
