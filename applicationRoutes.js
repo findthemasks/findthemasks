@@ -3,7 +3,6 @@
 const express = require('express');
 const formatFbLocale = require('./utils/formatFbLocale');
 const getDonationFormUrl = require('./viewHelpers/getDonationFormUrl.js');
-const localizeContactInfo = require('./viewHelpers/localizeContactInfo.js');
 const localizePartialPath = require('./viewHelpers/localizePartialPath');
 
 const herokuVersion = process.env.HEROKU_RELEASE_VERSION;
@@ -19,7 +18,7 @@ router.get(['/', '/index.html'], (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: isMaker ? res.locals.banana.i18n('ftm-makers-og-description') : res.locals.banana.i18n('ftm-index-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    localizeContactInfo: localizeContactInfo(res.locals.countryCode),
+    localizeContactInfo: localizePartialPath('contact_info', res.locals.countryCode),
     recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
   });
 });
@@ -82,7 +81,7 @@ router.get(['/special-projects/la-makers'], (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: 'Map of Vetter Makers for the city of Los Angeles',
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    localizeContactInfo: localizeContactInfo(res.locals.countryCode),
+    localizeContactInfo: localizePartialPath('contact_info', res.locals.countryCode),
   });
 });
 
