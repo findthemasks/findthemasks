@@ -428,8 +428,20 @@ h3.city {
   padding-right: 2rem;
 }
 
-.volunteer-list {
+ul.volunteer-list {
   list-style-type: none;
+}
+
+dl.volunteer-list {
+  dt,
+  dd {
+    margin-bottom: 0;
+  }
+}
+
+.regional-team:not(:last-child) {
+  border-bottom: 1px solid;
+  margin-bottom: 1rem;
 }
 
 /*********************
