@@ -235,7 +235,7 @@ h3.city {
 .locations-list-header {
   padding: 0;
   margin: 0;
-  border-bottom: 1px solid #D4D4D4;
+  border-bottom: 1px solid $border-gray;
 }
 
 .locations-list-header > * {
@@ -248,7 +248,7 @@ h3.city {
 }
 
 .location {
-  border-bottom: 1px solid #D4D4D4;
+  border-bottom: 1px solid $border-gray;
   padding: 1.5rem 2rem;
   font-size: $font-size-small;
 }
@@ -314,7 +314,7 @@ h3.city {
 #map .separator {
   margin: 10px 0 10px 0;
   padding-top: 2px;
-  border-top: 1px solid darkgray;
+  border-top: 1px solid $border-gray;
 }
 
 #map h5 {
