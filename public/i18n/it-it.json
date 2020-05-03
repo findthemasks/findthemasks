@@ -6,7 +6,11 @@
     "message-documentation" : "qqq"
   },
   "ftm-ppe-cta" : "Lascia che ' s porti il nostro DPI nelle mani di chi ne ha bisogno!",
+  "makers-ppe-cta" : "Fai in modo che PPE & lo porti nelle mani di chi ne ha bisogno.",
   "ftm-requester-near-me" : "Cerca un richiedente vicino a te. Non sei sicuro di come dare? <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> Leggi le nostre FAQ </a> .",
+  "maker-request-near-me" : "Coordinare con un gruppo Maker vicino a te. Domande? <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> Leggi le domande frequenti su Maker. </a>",
+  "ftm-CTA-link-back" : "Vuoi trovare le istituzioni richiedenti vicino a te? <a a class=\"text-light\" href='www.findthemasks.com'> Scopri Trova le maschere. </a>",
+  "maker-CTA-link-back" : "Vuoi trovare gruppi di produttori di DPI vicino a te? <a a class=\"text-light\" href='/makers'> Scopri Trova i produttori. </a>",
   "ftm-accepted-items" : "Filtra per Articoli accettati",
   "ftm-accepting" : "Accettare",
   "ftm-ppe-needed" : "DPI necessari",
