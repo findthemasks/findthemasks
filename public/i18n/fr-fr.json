@@ -6,7 +6,11 @@
     "message-documentation" : "qqq"
   },
   "ftm-ppe-cta" : "Laissez ' s mettre notre EPI entre les mains de ceux qui en ont besoin!",
+  "makers-ppe-cta" : "Faites en sorte que l'EPI & soit entre les mains de ceux qui en ont besoin.",
   "ftm-requester-near-me" : "Recherchez un demandeur près de chez vous. Vous ne savez pas comment donner? <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> Lisez notre FAQ </a> .",
+  "maker-request-near-me" : "Coordonnez-vous avec un groupe de créateurs près de chez vous. Des questions? <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> Lisez notre FAQ Maker. </a> .",
+  "ftm-CTA-link-back" : "Vous voulez trouver les établissements demandeurs près de chez vous? <a a class=\"text-light\" href='www.findthemasks.com'> Découvrez Find the Masks. </a> .",
+  "maker-CTA-link-back" : "Vous voulez trouver des groupes PPE Maker près de chez vous? <a a class=\"text-light\" href='/makers'> Découvrez Find the Makers. </a>",
   "ftm-accepted-items" : "Articles acceptés",
   "ftm-accepting" : "Accepte",
   "ftm-ppe-needed" : "EPI nécessaire",
