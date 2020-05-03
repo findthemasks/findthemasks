@@ -13,18 +13,24 @@
         <div class="bg-dark-blue text-light">
 
           {{#if (eq dataset "makers")}}
-            <h4>
+            <h4 class="mt-0 i18n" data-i18n="makers-ppe-cta">
               Make PPE &amp; get it into the hands of those who need it.
             </h4>
-            <p>
-              Coordinate with a Maker Group near you. Questions? Read the <a class="text-light" href="/faq#section-makers">Maker FAQ</a>.
+            <p class="i18n" data-i18n="[html]maker-request-near-me">
+              Coordinate with a Maker Group near you. Questions? <a class="text-light" href="/faq#section-makers">Read our Maker FAQ.</a>.
+            </p>
+             <p class="i18n" data-i18n="[html]ftm-CTA-link-back">
+              Want to find requesting institutions near you? <a class="text-light" href="/">Check out Find the Masks.</a>.
             </p>
           {{else}}
             <h4 class="mt-0 i18n" data-i18n="ftm-ppe-cta">
               Let's get our PPE into the hands of those who need it!
             </h4>
             <p class="i18n" data-i18n="[html]ftm-requester-near-me">
-              Search for a requester near you. Not sure how to give? Read our FAQ.
+              Search for a requester near you. Not sure how to give? <a class="text-light" href="/faq">Check out Find the Makers.</a>
+            </p>
+            <p class="i18n" data-i18n="[html]maker-CTA-link-back">
+              Want to find PPE Maker Groups near you? <a class="text-light" href="/makers">Check out Find the Makers.</a>
             </p>
           {{/if}}
 
