@@ -6,7 +6,11 @@
     "message-documentation" : "qqq"
   },
   "ftm-ppe-cta" : "Lassen Sie ' s unsere PPE in die Hände derer, die es brauchen!",
+  "makers-ppe-cta" : "Lassen Sie PPE & es in die Hände derer geben, die es brauchen.",
   "ftm-requester-near-me" : "Suchen Sie nach einem Anforderer in Ihrer Nähe. Nicht sicher, wie man gibt? <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> Lesen Sie unsere FAQ </a> .",
+  "maker-request-near-me" : "Koordinieren Sie mit einer Maker Group in Ihrer Nähe. Fragen? <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> Lesen Sie unsere Maker-FAQ. </a> .",
+  "ftm-CTA-link-back" : "Möchten Sie anfragende Institutionen in Ihrer Nähe finden? <a href='www.findthemasks.com'> Check out Finde die Masken. </a> .",
+  "maker-CTA-link-back" : "Möchten Sie PPE Maker Groups in Ihrer Nähe finden? <a href='/makers'> Check out Finde die Macher. </a>",
   "ftm-accepted-items" : "Nach akzeptierten Elementen filtern",
   "ftm-accepting" : "Akzeptieren",
   "ftm-ppe-needed" : "PSA benötigt",
