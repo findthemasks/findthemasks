@@ -6,6 +6,7 @@ const getDonationFormUrl = require('./viewHelpers/getDonationFormUrl.js');
 const localizeContactInfo = require('./viewHelpers/localizeContactInfo.js');
 const selectMaskMatchPartialPath = require('./viewHelpers/selectMaskMatchPartialPath');
 const selectLargeDonationSitesPartialPath = require('./viewHelpers/selectLargeDonationSitesPartialPath');
+const getLocalContactEmail = require('./viewHelpers/getLocalContactEmail');
 
 const herokuVersion = process.env.HEROKU_RELEASE_VERSION;
 
@@ -34,6 +35,7 @@ router.get('/faq', (req, res) => {
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.countryCode),
     maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.countryCode),
+    localContactEmail: getLocalContactEmail(res.locals.countryCode),
   });
 });
 
@@ -108,6 +110,7 @@ router.get('/volunteer', (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     version: herokuVersion,
+    localContactEmail: getLocalContactEmail(res.locals.countryCode),
   });
 });
 
