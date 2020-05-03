@@ -3,9 +3,7 @@
 const express = require('express');
 const formatFbLocale = require('./utils/formatFbLocale');
 const getDonationFormUrl = require('./viewHelpers/getDonationFormUrl.js');
-const localizeContactInfo = require('./viewHelpers/localizeContactInfo.js');
-const selectMaskMatchPartialPath = require('./viewHelpers/selectMaskMatchPartialPath');
-const selectLargeDonationSitesPartialPath = require('./viewHelpers/selectLargeDonationSitesPartialPath');
+const localizePartialPath = require('./viewHelpers/localizePartialPath');
 const getLocalContactEmail = require('./viewHelpers/getLocalContactEmail');
 
 const herokuVersion = process.env.HEROKU_RELEASE_VERSION;
@@ -21,7 +19,7 @@ router.get(['/', '/index.html'], (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: isMaker ? res.locals.banana.i18n('ftm-makers-og-description') : res.locals.banana.i18n('ftm-index-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    localizeContactInfo: localizeContactInfo(res.locals.countryCode),
+    localizeContactInfo: localizePartialPath('contact_info', res.locals.countryCode),
     recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
   });
 });
@@ -33,8 +31,8 @@ router.get('/faq', (req, res) => {
     ogTitle: res.locals.banana.i18n('ftm-index-og-title'),
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
-    largeDonationSitesPartialPath: selectLargeDonationSitesPartialPath(res.locals.countryCode),
-    maskMatchPartialPath: selectMaskMatchPartialPath(res.locals.countryCode),
+    largeDonationSitesPartialPath: localizePartialPath('large_donation_sites', res.locals.countryCode),
+    maskMatchPartialPath: localizePartialPath('mask_match', res.locals.countryCode),
     localContactEmail: getLocalContactEmail(res.locals.countryCode),
   });
 });
@@ -85,7 +83,7 @@ router.get(['/special-projects/la-makers'], (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: 'Map of Vetter Makers for the city of Los Angeles',
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    localizeContactInfo: localizeContactInfo(res.locals.countryCode),
+    localizeContactInfo: localizePartialPath('contact_info', res.locals.countryCode),
   });
 });
 
@@ -132,6 +130,7 @@ router.get(['/whoweare', '/whoweare.html'], (req, res) => {
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     version: herokuVersion,
+    regionalSpotlightPartialPath: localizePartialPath('regional_spotlight', res.locals.countryCode),
   });
 });
 
