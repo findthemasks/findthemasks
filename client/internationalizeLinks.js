@@ -18,7 +18,6 @@ export default () => {
   });
 
   $('.large-donation-link').click((e) => {
-    console.log(e);
     sendEvent('largeDonation', 'click', $(e.target).attr('href'));
   });
 
