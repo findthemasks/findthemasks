@@ -975,16 +975,26 @@ function refreshList(data, filters) {
 }
 
 function onFilterChange(data, prefix, idx, selected, filters) {
-  const filter = filters[prefix] && filters[prefix][Object.keys(filters[prefix])[idx]];
-  if (!filter) {
+  const primaryFilter = filters[prefix] && filters[prefix][Object.keys(filters[prefix])[idx]];
+  if (!primaryFilter) {
     return;
   }
 
-  if (selected) {
-    filter.isSet = true;
-  } else {
-    filter.isSet = false;
-  }
+  // Also apply filters that have the same display name
+  const matchingFilterKeys = Object.keys(filters[prefix]).filter((filterKey) => {
+    const matchingFilter = filters[prefix][filterKey];
+
+    return matchingFilter && matchingFilter.name === primaryFilter.name;
+  });
+
+  matchingFilterKeys.forEach((matchingFilterKey) => {
+    const filter = filters[prefix][matchingFilterKey];
+    if (selected) {
+      filter.isSet = true;
+    } else {
+      filter.isSet = false;
+    }
+  });
 
   updateFilters(filters);
   refreshList(data, filters);
@@ -994,8 +1004,20 @@ function onFilterChange(data, prefix, idx, selected, filters) {
 function createFilterElements(data, filters) {
   const acceptedItems = [];
 
+  // remove filters with the same name
+  const selectedAcceptItemsFilters = {};
+
+  // If name is same, do not add filter
+  // When filtering, check if matches any filters that match the name of the selected value
+
   for (const item of Object.keys(filters.acceptItems)) {
     const itemFilter = filters.acceptItems[item];
+    selectedAcceptItemsFilters[itemFilter.name] = itemFilter;
+  }
+
+  for (const item of Object.keys(selectedAcceptItemsFilters)) {
+    const itemFilter = selectedAcceptItemsFilters[item];
+
     acceptedItems.push({
       value: itemFilter.value,
       text: itemFilter.name,
