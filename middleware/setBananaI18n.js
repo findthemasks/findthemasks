@@ -1,5 +1,6 @@
 const fs = require('fs');
 const Banana = require('banana-i18n');
+const locales = require('../client/locales');
 
 const DEFAULT_LOCALE = 'en';
 
@@ -57,6 +58,24 @@ module.exports = (req, res, next) => {
     messages: config.messages,
   });
 
+  const translatedLocales = [];
+  let activeLocale;
+
+  locales.forEach((l) => {
+    const translatedLocale = {
+      localeCode: l.localeCode,
+      name: banana.i18n(l.i18nString),
+    };
+
+    if (translatedLocale.localeCode === locale) {
+      activeLocale = translatedLocale;
+    }
+
+    translatedLocales.push(translatedLocale);
+  });
+
+  res.locals.locales = translatedLocales;
+  res.locals.activeLocale = activeLocale;
   res.locals.locale = locale;
   res.locals.banana = banana;
 

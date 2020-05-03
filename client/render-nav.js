@@ -1,6 +1,4 @@
 import countries from './countries.js';
-import locales from './locales.js';
-import { getCurrentLocaleParam, DEFAULT_LOCALE } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
 
@@ -8,34 +6,11 @@ const currentCountry = document.body.dataset.country;
 const currentDataset = document.body.dataset.dataset;
 
 const generateTopNav = () => {
-  const currentLocale = getCurrentLocaleParam(DEFAULT_LOCALE);
-
-  const localeDropdownLink = document.getElementById('locales-dropdown');
   const countryDropdownLink = document.getElementById('countries-dropdown');
-  const localeDropdownItems = document.getElementById('locales-dropdown-selector');
   const countryDropdownItems = document.getElementById('countries-dropdown-selector');
 
-  if (localeDropdownLink && countryDropdownLink && localeDropdownItems && countryDropdownItems) {
-    const sortedLocales = locales.sort((localeA, localeB) => {
-      const aLocalized = $.i18n(localeA.i18nString);
-      const bLocalized = $.i18n(localeB.i18nString);
-      return aLocalized.localeCompare(bLocalized);
-    });
-
-    sortedLocales.forEach((locale) => {
-      if (locale.localeCode.toLowerCase() === currentLocale.toLowerCase()) {
-        localeDropdownLink.textContent = $.i18n(locale.i18nString);
-      }
-
-      const element = document.createElement('a');
-      element.className = 'dropdown-item';
-      const currentUrl = new FtmUrl(window.location.href);
-      currentUrl.searchparams.locale = locale.localeCode;
-      element.setAttribute('href', currentUrl.toString());
-      element.textContent = $.i18n(locale.i18nString);
-      element.addEventListener('click', () => sendEvent('i18n', 'set-locale', locale.localeCode));
-      localeDropdownItems.appendChild(element);
-    });
+  if (countryDropdownLink && countryDropdownItems) {
+    // element.addEventListener('click', () => sendEvent('i18n', 'set-locale', locale.localeCode));
 
     const sortedCountryKeys = Object.keys(countries).sort((a, b) => {
       const countryA = countries[a];

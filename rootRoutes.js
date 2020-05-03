@@ -28,7 +28,6 @@ function sendDataJson(cache, countryCode, res) {
 }
 
 function sendDataJsonFromCache(cache, prefix, countryCode, res) {
-  console.log(prefix, countryCode);
   const now = new Date();
   if (countryCode in cache && cache[countryCode].expires_at > now) {
     sendDataJson(cache, countryCode, res);
@@ -109,6 +108,7 @@ router.use('/:countryCode', (req, res, next) => {
   const lowerCased = req.params.countryCode.toLowerCase();
 
   if (ALL_COUNTRIES.has(lowerCased)) {
+    res.locals.countries = countries;
     res.locals.countryCode = req.params.countryCode;
 
     // Redirect to lower-cased path.

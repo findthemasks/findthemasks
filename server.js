@@ -2,18 +2,31 @@ const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const vhost = require('vhost');
 const setBananaI18n = require('./middleware/setBananaI18n.js');
+const setCurrentUrl = require('./middleware/setCurrentUrl.js');
 const rootRoutes = require('./rootRoutes');
 require('dotenv').config();
 require('handlebars-helpers')();
 
+const handlebars = expressHandlebars.create({
+  helpers: {
+    createLocaleDropdownHref: (localeCode, settings) => {
+      const url = new URL(settings.data.root.currentUrl);
+      url.searchParams.set('locale', localeCode);
+
+      return url.href;
+    },
+  },
+});
+
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.engine('handlebars', expressHandlebars());
+app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 app.set('strict routing', true);
 
+app.use(setCurrentUrl);
 app.use(setBananaI18n);
 
 // Install the webpack-dev-middleware for all the hot-reload goodness in dev.

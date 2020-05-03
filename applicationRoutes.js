@@ -162,7 +162,6 @@ router.get('/maker-form', (req, res) => {
 router.use('/makers', (req, res, next) => {
   const remainingUrl = req.originalUrl.substr(req.baseUrl.length);
   if (remainingUrl && !remainingUrl.match(/\/(embed(\/)?)?/)) {
-    console.log('redirecting');
     res.status(404).redirect('/');
     return;
   }
