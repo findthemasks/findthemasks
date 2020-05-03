@@ -17,6 +17,11 @@ export default () => {
     sendEvent('socialLink', 'click', socialType);
   });
 
+  $('.large-donation-link').click((e) => {
+    console.log(e);
+    sendEvent('largeDonation', 'click', $(e.target).attr('href'));
+  });
+
   const prefillText = $.i18n('ftm-tweet-share-button');
   $('.twitter-share-button').attr('href', `https://twitter.com/intent/tweet?text=${prefillText}`);
 };
