@@ -1,3 +1,5 @@
+import sendEvent from './sendEvent.js';
+
 $(() => {
   // initializes collapse toggling on FAQ page
   // it's a bit markup dependent, but this approach seemed
@@ -11,5 +13,12 @@ $(() => {
       $header.addClass('open');
     }
     $header.next('dd').collapse('toggle');
+    sendEvent('faq', 'click', event.currentTarget.id);
   });
+
+  const faqQuestionHash = document.location.hash;
+  if (faqQuestionHash) {
+    const $faqQuestion = $(`#${faqQuestionHash.substring(1)}`);
+    $faqQuestion.click();
+  }
 });
