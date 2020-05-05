@@ -3,7 +3,7 @@
 import Selectr from 'mobius1-selectr';
 import MarkerClusterer from '@google/markerclustererplus';
 import toDataByLocation from './toDataByLocation.js';
-import countries from './countries.js';
+import countries from '../constants/countries.js';
 import { FILTER_ITEMS, ORG_TYPES, ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';

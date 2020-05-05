@@ -4,7 +4,7 @@ const express = require('express');
 const https = require('https');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const applicationRoutes = require('./applicationRoutes');
-const countries = require('./client/countries.js'); // TODO: Move out of client.
+const countries = require('./constants/countries.js');
 
 const router = express.Router();
 

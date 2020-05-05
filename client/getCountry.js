@@ -1,5 +1,5 @@
 import { FtmUrl } from './utils.js';
-import countries from './countries.js';
+import countries from '../constants/countries.js';
 
 export function getFirstPathPart() {
   const url = new FtmUrl(window.location);

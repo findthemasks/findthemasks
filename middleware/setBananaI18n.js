@@ -1,7 +1,7 @@
 const fs = require('fs');
 const Banana = require('banana-i18n');
-const locales = require('../client/locales');
-const countries = require('../client/countries');
+const locales = require('../constants/locales');
+const countries = require('../constants/countries');
 
 const DEFAULT_LOCALE = 'en';
 
