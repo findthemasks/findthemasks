@@ -5,8 +5,6 @@ const https = require('https');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const applicationRoutes = require('./applicationRoutes');
 const countries = require('./client/countries.js'); // TODO: Move out of client.
-const setBananaI18n = require('./middleware/setBananaI18n.js');
-const setCurrentUrl = require('./middleware/setCurrentUrl.js');
 
 const router = express.Router();
 
