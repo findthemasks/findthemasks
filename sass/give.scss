@@ -4,6 +4,8 @@
 @import "filter-styles";
 @import "breakpoints";
 
+$embed-body-height: 600px;
+
 html {
   height: 100%;
   width: 100%;
@@ -25,6 +27,15 @@ body {
   display: none; /* hidden until translations load */
 }
 
+.embed-main {
+  height: $embed-body-height;
+}
+
+footer {
+  margin-top: 20px;
+  text-align: center;
+}
+
 .header-block {
   background: $blue-dark;
 
@@ -41,6 +52,11 @@ body {
   .map-action-link {
     color: $text-light;
   }
+}
+
+.locations-list {
+  height: $embed-body-height;
+  overflow-y: scroll;
 }
 
 .location {
@@ -90,12 +106,11 @@ body {
 .map-container {
   position: relative;
   width: 100%;
-  height: calc(100vh - 58px);
+  height: $embed-body-height;
 
   @media (min-width: $breakpoint-md) {
     position: fixed;
     width: 66.66667%;
-    height: calc(100vh - 58px);
   }
 
   #map {

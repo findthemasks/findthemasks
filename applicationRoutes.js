@@ -47,6 +47,7 @@ router.get(['/give', '/give.html'], (req, res) => {
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
+    hideList: req.query['hide-list'],
   });
 });
 
