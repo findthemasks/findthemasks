@@ -4,9 +4,13 @@
     <div class="row">
       <div class="navbar-brand col-12">
         {{#if (eq dataset "makers")}}
-        <div class="icon icon-ftmakers_logo"></div>
+        <a href="http://findthemakers.com" target="_blank">
+          <div class="icon icon-ftmakers_logo"></div>
+        </a>
         {{else}}
-        <div class="icon icon-ftm_logo"></div>
+        <a href="http://findthemasks.com" target="_blank">
+          <div class="icon icon-ftm_logo"></div>
+        </a>
         {{/if}}
         {{#if (eq dataset "makers")}}
         <span class="home-link location-link text-light">Maker Groups</span>
