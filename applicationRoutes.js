@@ -48,6 +48,7 @@ router.get(['/give', '/give.html'], (req, res) => {
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
     hideList: req.query['hide-list'],
+    hideMap: req.query['hide-map'],
   });
 });
 

@@ -62,7 +62,7 @@
   </header>
 
   <div class="row embed-main flex-lg-row no-gutters">
-    <div class="col-12 {{#unless hideList}}col-lg-8{{/unless}} order-lg-2">
+    <div class="col-12 {{#unless hideList}}col-lg-8{{/unless}} order-lg-2 {{#if hideMap}}d-none{{/if}}">
       <div class="map-container {{#if hideList}}w-100{{/if}}">
         <div class="locations-loading text-center">
           <div class="spinner-border" role="status"></div>
@@ -76,8 +76,8 @@
       </div>
     </div>
 
-    <div class="col-12 col-lg-4 order-lg-1 locations-container" style="display: none;">
-      <div id="locations-list" class="locations-list"></div>
+    <div class="col-12 {{#unless hideMap}}col-lg-4{{/unless}} order-lg-1 locations-container" style="display: none;">
+      <div id="locations-list {{#if hideMap}}w-100{{/if}}" class="locations-list"></div>
     </div>
   </div>
 
