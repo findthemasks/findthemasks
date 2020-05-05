@@ -14,7 +14,7 @@
   "ftm-accepts-open-boxes" : "Принимает открытые коробки / сумки",
   "ftm-ack-data-sources" : "Этот сайт также содержит данные <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , проекта:",
   "ftm-add-donation-site-question" : "Хотите присоединиться к карте #findthemasks? Нужно обновить или удалить информацию?",
-  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Заполните эту форму </button> </a>",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button type='button' class='btn-sm btn-primary'> Заполните эту форму </button> </a>",
   "ftm-collaboration-with" : "Сделано в сотрудничестве с <a href=\".\" target=\"_blank\"> #findthemasks </a> .",
   "ftm-address" : "Адрес",
   "ftm-org-type" : "Тип организации",

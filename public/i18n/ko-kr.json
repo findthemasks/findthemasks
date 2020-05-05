@@ -14,7 +14,7 @@
   "ftm-accepts-open-boxes" : "개봉 된 상자 / 가방을 받아들입니다",
   "ftm-ack-data-sources" : "이 사이트에는 다음의 프로젝트 인 <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> 데이터도 포함됩니다.",
   "ftm-add-donation-site-question" : "#findthemasks지도에 가입하고 싶으십니까? 정보를 업데이트하거나 제거해야합니까?",
-  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> 이 양식을 작성하십시오 </button> </a>",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button type='button' class='btn-sm btn-primary'> 이 양식을 작성하십시오 </button> </a>",
   "ftm-collaboration-with" : "<a href=\".\" target=\"_blank\"> #findthemasks </a> 와 공동으로 제작되었습니다.",
   "ftm-address" : "주소",
   "ftm-org-type" : "조직 유형",

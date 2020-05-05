@@ -14,7 +14,7 @@
   "ftm-accepts-open-boxes" : "खोले गए बक्से / बैग स्वीकार करता है",
   "ftm-ack-data-sources" : "इस साइट में <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , एक प्रोजेक्ट का डेटा भी शामिल है:",
   "ftm-add-donation-site-question" : "#Findthemasks मैप में शामिल होना चाहते हैं? जानकारी अपडेट करने या निकालने की आवश्यकता है?",
-  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> इस फॉर्म को </button> </a> पूरा करें",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button type='button' class='btn-sm btn-primary'> इस फॉर्म को </button> </a> पूरा करें",
   "ftm-collaboration-with" : "<a href=\".\" target=\"_blank\"> #findthemasks </a> सहयोग से बनाया गया।",
   "ftm-address" : "पता",
   "ftm-org-type" : "संगठन का प्रकार",

@@ -14,7 +14,7 @@
   "ftm-accepts-open-boxes" : "Accepteert geopende dozen / tassen",
   "ftm-ack-data-sources" : "Deze site bevat ook gegevens van <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , een project van:",
   "ftm-add-donation-site-question" : "Wil je lid worden van de #findthemasks-kaart? Wilt u informatie bijwerken of verwijderen?",
-  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button style='margin-top:20px;' type='button' class='btn-sm btn-primary'> Vul dit formulier in </button> </a>",
+  "ftm-add-donation-site-answer" : "<a class='add-donation-site-form'> <button type='button' class='btn-sm btn-primary'> Vul dit formulier in </button> </a>",
   "ftm-collaboration-with" : "Gemaakt in samenwerking met <a href=\".\" target=\"_blank\"> #findthemasks </a> .",
   "ftm-address" : "Adres",
   "ftm-org-type" : "organisatie type",
