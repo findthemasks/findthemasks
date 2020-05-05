@@ -28,7 +28,9 @@ body {
 }
 
 .embed-main {
-  height: $embed-body-height;
+  @media (min-width: $breakpoint-md) {
+    height: $embed-body-height;
+  }
 }
 
 footer {
