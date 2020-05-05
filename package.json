@@ -13,7 +13,7 @@
   "scripts": {
     "build": "npm run webpack",
     "dev": "NODE_ENV='development' nodemon --ignore 'client/' server.js",
-    "lint": "eslint '**/*.js'",
+    "lint-client": "eslint 'client/**/*.js' --config 'client/.eslintrc.json'",
     "start": "node server.js",
     "webpack": "NODE_ENV='production' webpack -p --config webpack.config.js"
   },
@@ -43,8 +43,6 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-react": "^7.19.0",
-    "eslint-plugin-react-hooks": "^2.5.0",
     "fibers": "^4.0.2",
     "lodash.template": ">=4.5.0",
     "mini-css-extract-plugin": "^0.9.0",
