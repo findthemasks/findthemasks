@@ -22,6 +22,8 @@ const countryData = {};
 const gCountryCode = document.body.dataset.country;
 const gDataset = document.body.dataset.dataset;
 
+const isEmbed = document.body.dataset.embed;
+
 // Map, markers and map associated UI components are initialized in initMap().
 let gAutocomplete;
 let gMap = null;
@@ -854,7 +856,7 @@ function createRequesterListItemEl(entry) {
 
   if (entry.org_type && entry.org_type.length) {
     ac(headerOrgType, [
-      ce('p', null, ctn(translateEnumValue(entry.org_type))),
+      ce('span', 'org-type', ctn(translateEnumValue(entry.org_type))),
     ]);
   }
 
@@ -1442,6 +1444,17 @@ const applyFilterParams = ((params, filterSet) => {
   });
 });
 
+const initializeEmbedLocationCollapse = () => {
+  $(".location .row").addClass("collapse");
+  $(".location .row").collapse({ toggle: false });
+  $(document).on('click', '.location .d-flex', (e) => {
+    // ensure it doesn't happen if they click the google map link
+    if (!$(e.target).hasClass('map-link')) {
+      $(e.currentTarget).siblings('.row').collapse('toggle');
+    }
+  });
+}
+
 $(() => {
   const renderListings = (result) => {
     const data = toDataByLocation(result);
@@ -1487,6 +1500,11 @@ $(() => {
       }
 
       refreshList(data, filters);
+    }
+
+    // initializes collapse logic on locations table if this is the embed
+    if (isEmbed) {
+      initializeEmbedLocationCollapse();
     }
   };
 

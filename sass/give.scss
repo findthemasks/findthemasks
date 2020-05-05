@@ -46,22 +46,28 @@ body {
 .location {
   padding: 1rem;
   overflow-wrap: break-word;
+  font-size: $font-size-small;
   border-bottom: 1px solid $border-gray;
   label,
   h5 {
     font-weight: 600;
   }
 
-  p {
-    font-size: 0.9rem;
-    line-height: 1rem;
+  // adds dropdown caret icon to support collapse logic
+  & > .d-flex {
+    background-image: $icon-dropdown;
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    color: black;
+    cursor: pointer;
   }
 
-  label {
-    color: #444;
-    font-size: 12px;
-    letter-spacing: 1.1px;
-    text-transform: uppercase;
+  .row {
+    line-height: $font-size-small;
+
+    p {
+      margin-bottom: 0.5rem;
+    }
   }
 
   .map-link {
@@ -119,8 +125,8 @@ body {
   text-transform: uppercase;
   height: 54px;
   .icon {
-    height: 42px;
-    width: 42px;
+    height: 48px;
+    width: 48px;
     padding-right: 8px;
   }
 }
