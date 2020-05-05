@@ -607,6 +607,7 @@ function numberFormat(number, decimalPlaces, decSeparator, thouSeparator) {
  */
 function updateStats($elem, count) {
   const prettyMarkerCount = numberFormat(count, 0);
+  $elem.show();
 
   if (gDataset === 'makers') {
     $elem.html(`${prettyMarkerCount} Groups`);
