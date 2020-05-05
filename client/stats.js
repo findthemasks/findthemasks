@@ -10,7 +10,7 @@ const renderStats = (totalCount, totalCities, stateCounts) => {
 
   statsHtml.push(`<p><strong>${$.i18n('ftm-total-donation-sites-count')}</strong> ${totalCount}</p>`);
   statsHtml.push(`<p><strong>${$.i18n('ftm-total-donation-sites-cities-count')}</strong> ${totalCities}</p>`);
-  statsHtml.push(`<p><strong>${$.i18n('ftm-administrative-region-donation-sites', $.i18n(countries[currentCountry].administrativeRegionI18nString))}</strong></p>`);
+  statsHtml.push(`<p><strong>${$.i18n('ftm-stats-donation-cities-by-region', $.i18n(countries[currentCountry].administrativeRegionI18nString))}</strong></p>`);
   for (const state of Object.keys(stateCounts)) {
     statsHtml.push(`<div>${state}: ${stateCounts[state]}</div>`);
   }
