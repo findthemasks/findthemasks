@@ -1,105 +1,114 @@
-<body>
-<main class="content give">
-    <div class="languages-loading" style="position: fixed;top: 50%; left: 50%;">
-        <div class="spinner-border" role="status">
-          <span class="sr-only">Loading translations...</span>
-        </div>
+<div class="translated-content">
+
+  <header class="header-block container-fluid">
+    <div class="row">
+      <div class="navbar-brand col-12">
+        {{#if (eq dataset "makers")}}
+        <div class="icon icon-ftmakers_logo"></div>
+        {{else}}
+        <div class="icon icon-ftm_logo"></div>
+        {{/if}}
+        {{#if (eq dataset "makers")}}
+        <span class="home-link location-link text-light">Maker Groups</span>
+        {{else}}
+        <span class="makers-home-link location-link text-light">Donation
+          Sites</span>
+        {{/if}}
+      </div>
     </div>
-
-    <div class="translated-content">
-      <div class="container" style="padding-bottom: 40px;">
-        <div class="map-container" style="display: none;">
-
-          <div class="row" style="margin: 0px 0px 20px 0px;">
-            <div class="col-xl-4" style="padding: 0px">
-              <h3 style="white-space: nowrap">
-                {{#if (eq dataset "makers")}}
-                  <span>Maker Groups</span>
-                {{else}}
-                  <span class="i18n" data-i18n="ftm-map-of-sites">Donation sites</span>
-                {{/if}}
-                <span id="map-stats"></span>
-              </h3>
-            </div>
-            <div class="col-xl-8" style="padding: 0px">
-              <div class="map-search-wrap">
-                <div class="search-input">
-                  <input style="" type="search" name="map-search" id="map-search" class="i18n" placeholder="Search by city, zip, or address" data-i18n="[placeholder]ftm-maps-search-placeholder">
-                  <!-- Icon credit to https://feathericons.com/  -->
-                  <img class="search-icon" src="/images/icons/search.svg">
-                </div>
-                <!-- BETA: To enable search field, either change data-enable-search to "true" in #map below, or add hide-search=false/show-search=true to query string. -->
-                <div class="search-controls">
-                  <a href="javascript:;" class="map-action-link" id="use-location"><span class="i18n" data-i18n="ftm-maps-search-use-location">Use my location</span><span class="search-control-separator">|</span></a>
-
-                <a href="javascript:;" class="map-action-link" id="reset-map"><span class="i18n" data-i18n="ftm-maps-search-reset">Reset map</span></a></div>
-              </div>
-            </div>
+    <div class="row filters-container ">
+      <div class="col-lg-6">
+        <div class="input-group mb-1">
+          <div class="input-group-prepend">
+            <span class="input-group-text bg-white border-0 search-icon-wrap">
+              <img class="search-icon" src="/images/icons/search.svg">
+            </span>
           </div>
-
-          <div id="map" data-enable-search="true"></div>
-          {{#if (eq dataset "makers")}}
-            <span style="padding-right: 5px;">
-              <span>Made in collaboration with <a href="." target="_blank">#findthemasks</a> and <a href="https://www.nationofmakers.us" target="_blank">Nation of Makers</a>.</span>
-              <span>Want to join the #findthemasks makers map? Need to update or remove info?</span>
+          <input type="search" name="map-search" id="map-search" class="i18n form-control border-0"
+            placeholder="Search by city, zip, or address" data-i18n="[placeholder]ftm-maps-search-placeholder">
+          <div class="input-group-append">
+            <span class="input-group-text bg-white border-0">
+              <a href="javascript:;" class="map-action-link" id="use-location">
+                <span class="i18n" data-i18n="ftm-maps-search-use-location">Use my location</span>
+              </a>
             </span>
-            <span>
-              Please <a href="./maker-form" target="_blank">
-              fill out this form</a>. We will review it as soon as possible.
-            </span>
-          {{else}}
-            <span style="padding-right: 5px;">
-              <span style="padding-right: 5px;"><span class="i18n" data-i18n="[html]ftm-collaboration-with">Made in collaboration with <a href="." target="_blank">#findthemasks</a>.</span>
-              <span class="i18n" data-i18n="[html]ftm-add-donation-site-question">Want to join the #findthemasks map? Need to update or remove info?</span>
-            </span>
-            <span class="i18n" data-i18n="[html]ftm-add-donation-site-answer">
-              Please <a href="./donation-form">
-              fill out this form</a>. We will review it as soon as possible.
-            </span>
-          {{/if}}
-        </div>
-
-        <div class="locations-loading text-center">
-          <div class="spinner-border" role="status"></div>
-          {{#if (eq dataset "makers")}}
-            <div>Loading Maker Groups...</div>
-          {{else}}
-            <div class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</div>
-          {{/if}}
-        </div>
-
-        <div class="filters-container mt-2 text-dark" style="display: none;">
-          <div class="row">
-            <div class="col">
-              <h3>Filters</h3>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <select id="facility-type-select">
-              </select>
-            </div>
-            <div class="col">
-              <select id="ppe-needed-select">
-              </select>
-            </div>
           </div>
         </div>
+      </div>
 
-        <div class="locations-container" style="display: none;">
-          <h3 style="padding: 30px 0px 5px 0px; margin: 0px;">
-            {{#if (eq dataset "makers")}}
-              <span>List of Maker Groups</span>
-            {{else}}
-              <span class="i18n" data-i18n="ftm-list-of-sites">List of donation sites</span> <span id="list-stats"></span>
-            {{/if}}
-          </h3>
-
-          <div id="locations-list" class="locations-list"></div>
-        </div>
+      <div class="col-lg-3 col-6 filters-container mb-1" style="display: none;">
+        <select id="facility-type-select">
+        </select>
+      </div>
+      <div class="col-lg-3 col-6 filters-container mb-1" style="display: none;">
+        <select id="ppe-needed-select">
+        </select>
       </div>
     </div>
 
-    {{> contact_form}}
-</main>
-</body>
+    <div class="row">
+      <div class="col-12 list-stats-reset">
+        <span id="list-stats"></span> -
+        <a href="javascript:;" class="map-action-link" id="reset-map">
+          <span class="i18n" data-i18n="ftm-maps-search-reset">Reset map & list</span>
+        </a>
+      </div>
+    </div>
+
+  </header>
+
+  <div class="row flex-lg-row no-gutters">
+    <div class="col-12 col-lg-8 order-lg-2">
+      <div class="map-container">
+        <div class="locations-loading text-center">
+          <div class="spinner-border" role="status"></div>
+          {{#if (eq dataset "makers")}}
+          <div>Loading Maker Groups...</div>
+          {{else}}
+          <div class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</div>
+          {{/if}}
+        </div>
+        <div id="map" data-enable-search="true"></div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4 order-lg-1">
+      <div class="locations-container" style="display: none;">
+        <h3 style="padding: 30px 0px 5px 0px; margin: 0px;">
+          {{#if (eq dataset "makers")}}
+          <span>List of Maker Groups</span>
+          {{else}}
+          <span class="i18n" data-i18n="ftm-list-of-sites">List of donation sites</span> <span id="list-stats"></span>
+          {{/if}}
+        </h3>
+
+        <div id="locations-list" class="locations-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TODO: put in footer !-->
+  {{#if (eq dataset "makers")}}
+  <span style="padding-right: 5px;">
+    <span>Made in collaboration with <a href="." target="_blank">#findthemasks</a> and <a
+        href="https://www.nationofmakers.us" target="_blank">Nation of Makers</a>.</span>
+    <span>Want to join the #findthemasks makers map? Need to update or remove info?</span>
+  </span>
+  <span>
+    Please <a href="./maker-form" target="_blank">
+      fill out this form</a>. We will review it as soon as possible.
+  </span>
+  {{else}}
+  <span style="padding-right: 5px;">
+    <span class="i18n" data-i18n="[html]ftm-collaboration-with">Made in
+      collaboration with <a href="." target="_blank">#findthemasks</a>.</span>
+    <span class="i18n" data-i18n="[html]ftm-add-donation-site-question">Want to join the #findthemasks map?
+      Need to update or remove info?</span>
+  </span>
+  <span class="i18n" data-i18n="[html]ftm-add-donation-site-answer">
+    Please <a href="./donation-form">
+      fill out this form</a>. We will review it as soon as possible.
+  </span>
+  {{/if}}
+</div>
+{{> contact_form}}

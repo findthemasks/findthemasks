@@ -1,6 +1,8 @@
 @import "colors";
 @import "typography";
 @import "icons.data.svg";
+@import "filter-styles";
+@import "breakpoints";
 
 html {
   height: 100%;
@@ -523,41 +525,6 @@ dl.faq-question {
   * MAP SEARCH STYLES *
   *********************/
 
-.search-icon-wrap {
-  width: 1.8rem;
-}
-
-#map-search.form-control:focus {
-  border-color: inherit;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
-.search-icon {
-  height: 2.3rem; /* synchronized w/ input field for vertical centering, being an SVG it should not warp */
-  left: 10px;
-  opacity: 0.7;
-  pointer-events: none; /* user clicks should fall through to input field instead */
-  position: absolute;
-  top: 1px; /* ... see height below... */
-  width: 17px;
-}
-
-.map-action-link {
-  white-space: nowrap;
-  font-size: $font-size-small;
-
-  &:hover {
-    text-decoration: none;
-  }
-}
-
-.map-action-link img {
-  padding-right: 5px;
-  width: 21px;
-  height: 21px;
-}
-
 .navbar.ftm {
   background: $blue;
   padding: 0 0.75rem;
@@ -757,7 +724,7 @@ dl.faq-question {
 
 /* Mobile first: Desktop breakpoint overrides below */
 
-@media (min-width: 992px) {
+@media (min-width: $breakpoint-md) {
   /*********************
   * PARTNERS STYLES *
   *********************/
@@ -782,13 +749,10 @@ dl.faq-question {
   }
 }
 
-@media (max-width: 992px) {
+@media (max-width: $breakpoint-md) {
   .search-input {
     margin: 0px;
     margin-right: 15px;
-  }
-  .map-search-wrap {
-    padding-top: 4px;
   }
 
   .navbar.ftm {
@@ -818,10 +782,7 @@ dl.faq-question {
   }
 }
 
-@media (max-width: 576px) {
-  .map-search-wrap {
-    display: block;
-  }
+@media (max-width: $breakpoint-xs) {
   .search-controls {
     justify-content: center;
     padding-top: 5px;
@@ -858,7 +819,7 @@ dl.faq-question {
   * END MAP SEARCH STYLES *
   *************************/
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: $breakpoint-sm) {
   .content-container {
     margin-left: 15px;
     margin-right: 15px;
@@ -935,14 +896,6 @@ div.figure img {
   max-width: 800px;
   margin: 1rem auto 0 auto;
   display: block;
-}
-
-.selectr-container {
-  font-size: $font-size-small;
-}
-
-.selectr-selected {
-  border: none;
 }
 
 .contact-modal .contact-error {

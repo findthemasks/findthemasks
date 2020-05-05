@@ -1,6 +1,8 @@
-@import 'colors';
-@import 'typography';
-@import 'icons.data.svg';
+@import "colors";
+@import "typography";
+@import "icons.data.svg";
+@import "filter-styles";
+@import "breakpoints";
 
 html {
   height: 100%;
@@ -11,7 +13,8 @@ body {
   background: #fff;
   box-sizing: border-box;
   color: #222;
-  font: normal normal normal #{$font-size-default}/1.65 'Open Sans', 'Helvetica', sans-serif;
+  font: normal normal normal #{$font-size-default}/ 1.65 "Open Sans",
+    "Helvetica", sans-serif;
   height: 100%;
   margin: 0;
   padding: 0;
@@ -31,15 +34,22 @@ body {
   display: none; /* hidden until translations load */
 }
 
-.heading-container {
-  background: royalblue;
-  color: white;
-  padding: 30px 0 20px 0;
-  text-align: center;
-}
+.header-block {
+  background: $blue-dark;
 
-.heading-container a {
-  color: white;
+  @media (min-width: $breakpoint-md) {
+    position: sticky;
+    z-index: 1020;
+    top: 0;
+  }
+
+  .list-stats-reset {
+    color: $text-light;
+    font-weight: 600;
+  }
+  .map-action-link {
+    color: $text-light;
+  }
 }
 
 .logo {
@@ -64,7 +74,9 @@ h2 {
   text-align: center;
 }
 
-hr {margin-top: 1.7rem;}
+hr {
+  margin-top: 1.7rem;
+}
 
 .social-media-icons {
   margin-top: 1rem;
@@ -77,10 +89,10 @@ hr {margin-top: 1.7rem;}
 }
 
 .social-media-icon {
-  float:left;
+  float: left;
   margin-right: 10px;
   width: 24px;
-  height:24px;
+  height: 24px;
   margin-top: 0px;
 }
 
@@ -93,7 +105,6 @@ hr {margin-top: 1.7rem;}
   font-style: italic;
   font-size: 13px;
   margin-bottom: 10px;
-
 }
 
 .subhead {
@@ -117,7 +128,7 @@ hr {margin-top: 1.7rem;}
   width: calc(40% + 40px);
 }
 
-.subhead-right{
+.subhead-right {
   font-size: $font-size-default;
   text-align: left;
   width: calc(60% + 40px);
@@ -175,7 +186,7 @@ hr {margin-top: 1.7rem;}
 h2.state {
   background: #eee;
   color: #000;
-  font: 800 24px 'Roboto';
+  font: 800 24px "Roboto";
   letter-spacing: 3px;
   margin: 0;
   padding: 4px 15px;
@@ -222,62 +233,21 @@ h3.city {
   margin-bottom: -10px;
 }
 
-.filters-list div {
-  display: inline-block;
-  margin: 0 3px 3px 0;
-}
-
-.filters-container {
-  margin: 0 30px;
-}
-
-/* On the give page, filters and list take full width of their containers */
-.give .filters-container {
-  margin: 0;
-}
-
-.filters-list h4 {
-  display: block;
-  font-size: 18px;
-  font-weight: 600;
-  margin: 25px 0 20px 0;
-}
-
-.filters-list input {
-  display: none;
-}
-
-.filters-list label {
-  background: white;
-  border-radius: 5px;
-  border: 1px #ccc solid;
-  cursor: pointer;
-  font-size: 18px;
-  min-width: 2.4em;
-  padding: 0.3rem;
-  text-align: center;
-}
-
-.filters-list label:hover {
-  background:#7c9bf7;
-  border-color: #7c9bf7;
-  color: white;
-}
-
-.filters-list label.selected {
-  background: royalblue;
-  border-color: #c2d1ff;
-  color: white;
-}
-
 .map-container {
-  padding: 30px 0 5px 0;
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 58px);
+
+  @media (min-width: $breakpoint-md) {
+    position: fixed;
+    width: 66.66667%;
+    height: calc(100vh - 58px);
+  }
 }
 
 #map {
-  height: 400px;
+  height: 100%;
   width: 100%;
-  margin-bottom: 1rem;
 }
 
 #map .label {
@@ -289,16 +259,7 @@ h3.city {
 }
 
 #map .value {
-  font-weight: 400
-}
-
-#map-stats, #list-stats {
-  color: $text-color;
-  font-size: 22px;
-  font-weight: 300;
-  margin-left: 10px;
-  padding-top: 1px;
-  text-align: center;
+  font-weight: 400;
 }
 
 .donation-map-title {
@@ -373,142 +334,25 @@ h3.city {
   * MAP SEARCH STYLES *
   *********************/
 
-/* What actually varies with breakpoints */
-.map-search-wrap {
+.navbar-brand {
   display: flex;
-  margin-top: 20px;
-  position: relative;
-  width: 100%;
-}
-
-.map-search-wrap:first-child {
-  margin-top: 0;
-}
-
-.search-icon {
-  height: 2.3rem; /* synchronized w/ input field for vertical centering, being an SVG it should not warp */
-  left: 10px;
-  opacity: 0.7;
-  pointer-events: none; /* user clicks should fall through to input field instead */
-  position: absolute;
-  top: 1; /* ... see height below... */
-  width: 17px;
-}
-
-#map-search {
-  border: 1px solid #ccc;
-  height: 2.3rem;
-}
-
-#map-search {
-  outline-color: #000;
-}
-
-#map-search {
-  border-radius: 3px;
-  line-height: 2.3rem;
-  margin-bottom: 5px;
-  outline: none;
-  padding: 0.4rem 0.8rem 0.4rem 35px;
-  width: 100%;
-}
-
-.search-input {
-  display: flex;
-  margin: 0px 15px 0px 20px;
-  position: relative;
-  width: 100%;
-  width:100%;
-}
-
-.search-controls {
-  display: flex;
-  padding-top: 7px;
-}
-
-.search-control-separator {
-  padding: 0px 8px;
-  color: #ccc;
-  font-size: 14px;
-}
-
-.map-action-link {
-  white-space: nowrap;
-  font-size: 14px;
-}
-
-.map-action-link:hover {
-  text-decoration: none;
-}
-
-.map-action-link img {
-  padding-right: 5px;
-  width: 21px;
-  height: 21px;
-}
-
-.navbar.ftm {
-  background: $blue;
-}
-
-.navbar.ftm .nav-link,
-.navbar.ftm .btn {
-  font-size: 0.9rem;
-}
-
-.navbar.ftm .navbar-brand {
+  min-height: 100%;
+  align-items: center;
   flex-direction: row;
-  font-size: inherit;
-  font-weight: 500;
-  padding: 0;
+  font-weight: 700;
   text-transform: uppercase;
+  height: 54px;
 }
 
-.navbar.ftm .navbar-brand .icon {
+.navbar-brand .icon {
   height: 42px;
   width: 42px;
   padding-right: 8px;
 }
 
-.navbar.ftm .navbar-brand .text {
+.navbar-brand .text {
   display: inline-block;
-  padding: .5rem 0;
-}
-
-.navbar.ftm .navbar-nav .nav-item {
-  margin: 0 .2rem;
-}
-
-.navbar.ftm .navbar-nav .nav-link {
-  padding: .5rem;
-}
-
-.navbar.ftm .nav-item.show {
-  background: $blue-dark;
-}
-
-.navbar.ftm .dropdown-menu,
-.navbar.ftm .dropdown-item {
-  background: $blue-dark;
-  color: #fff;
-}
-
-.navbar.ftm .dropdown-item:hover {
-  background: $blue;
-}
-
-.navbar.ftm .btn-addplace {
-  color: #fff;
-  background: $pink;
-  white-space: nowrap;
-}
-
-.navbar.ftm .btn-addplace .icon {
-  display: inline-block;
-  vertical-align: middle;
-  height: 25px;
-  width: 25px;
-  padding-right: 8px;
+  padding: 0.5rem 0;
 }
 
 #countries-dropdown .icon,
@@ -522,17 +366,7 @@ h3.city {
 
 /* Mobile first: Desktop breakpoint overrides below */
 
-@media (max-width: 1200px) {
-  .search-input {
-    margin: 0px;
-    margin-right: 15px;
-  }
-  .map-search-wrap {
-    padding-top: 4px;
-  }
-}
-
-@media (max-width: 576px) {
+@media (max-width: $breakpoint-xs) {
   .map-search-wrap {
     display: block;
   }
@@ -552,7 +386,7 @@ h3.city {
   * END MAP SEARCH STYLES *
   *************************/
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: $breakpoint-sm) {
   .content-container {
     margin-left: 15px;
     margin-right: 15px;
@@ -581,14 +415,6 @@ h3.city {
     text-align: center;
   }
 
-  .filters-container {
-    margin: 0 15px;
-  }
-
-  .nav-link {
-    font-size: 0.7rem;
-  }
-
   .need-ppe {
     margin-left: 0;
     margin-right: 0;
@@ -612,24 +438,24 @@ h3.city {
 }
 
 .contact-modal .contact-error {
-    font-size: 0.8em;
-    color: red;
-    text-align: right;
-    margin-right: 20px;
+  font-size: 0.8em;
+  color: red;
+  text-align: right;
+  margin-right: 20px;
 }
 
 .contact-modal .contact-success {
-    display: none;
-    text-align: center;
-    height: 5em;
+  display: none;
+  text-align: center;
+  height: 5em;
 }
 
 .contact-modal #message-text {
-    height: 120px;
+  height: 120px;
 }
 
 .grey-background {
-    border-radius: 5px;
-    padding: 1.15ex 1ex 0ex 1ex;
-    background-color: #dcdcdc;
+  border-radius: 5px;
+  padding: 1.15ex 1ex 0ex 1ex;
+  background-color: #dcdcdc;
 }
