@@ -5,10 +5,15 @@ const formatFbLocale = require('./utils/formatFbLocale');
 const getDonationFormUrl = require('./viewHelpers/getDonationFormUrl.js');
 const localizePartialPath = require('./viewHelpers/localizePartialPath');
 const getLocalContactEmail = require('./viewHelpers/getLocalContactEmail');
+const setBananaI18n = require('./middleware/setBananaI18n.js');
+const setCurrentUrl = require('./middleware/setCurrentUrl.js');
 
 const herokuVersion = process.env.HEROKU_RELEASE_VERSION;
 
 const router = express.Router();
+
+router.use(setCurrentUrl);
+router.use(setBananaI18n);
 
 router.get(['/', '/index.html'], (req, res) => {
   const isMaker = res.locals.dataset === 'makers';

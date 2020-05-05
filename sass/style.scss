@@ -611,6 +611,11 @@ dl.faq-question {
 
 .navbar.ftm .navbar-nav .home-link {
   cursor: pointer;
+  color: $text-light;
+
+  &:hover {
+    color: $text-light
+  }
 }
 
 .navbar.ftm .nav-item.show,

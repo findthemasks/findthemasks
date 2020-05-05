@@ -1,4 +1,3 @@
-<script src="/generated/render-nav.entry.js?v=v{{ version }}"></script>
 <nav class="navbar sticky-top navbar-expand-lg navbar-top navbar-dark ftm">
   <ul class="navbar-nav navbar-brand">
     <li class="nav-item">
@@ -10,10 +9,10 @@
     </li>
     <li class="nav-item">
       {{#if (eq dataset "makers")}}
-        <a class="home-link location-link text-light" data-location='index.html'><span class="text">Find The
+        <a class="home-link location-link" href="{{createNavbarItemHref ''}}"><span class="text">Find The
             Makers</span></a>
       {{else}}
-        <a class="makers-home-link location-link text-light" data-location='index.html'><span class="text">Find The
+        <a class="home-link location-link" href="{{createNavbarItemHref ''}}"><span class="text">Find The
             Masks</span></a>
       {{/if}}
     </li>
@@ -27,9 +26,13 @@
       <li class="nav-item dropdown active">
         <a class="nav-link dropdown-toggle" href="#" id="countries-dropdown" role="button" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
+          <div class="icon icon-cf_{{activeCountry.countryCode}}"></div>{{activeCountry.name}}
         </a>
         <div class="dropdown-menu dropdown-menu-left" aria-labelledby="countries-dropdown"
           id="countries-dropdown-selector">
+          {{#each countries}}
+            <a href="{{createCountryDropdownHref this.countryCode}}" class="dropdown-item countries-dropdown-item" data-code="{{this.countryCode}}">{{this.name}}</a>
+          {{/each}}
         </div>
       </li>
       <li class="nav-item dropdown active">
@@ -39,27 +42,29 @@
         </a>
         <div class="dropdown-menu dropdown-menu-left" aria-labelledby="locales-dropdown" id="locales-dropdown-selector">
           {{#each locales}}
-            <a href="{{createLocaleDropdownHref this.localeCode}}" class="dropdown-item">{{this.name}}</a>
+            <a href="{{createLocaleDropdownHref this.localeCode}}" class="dropdown-item locales-dropdown-item" data-code="{{this.localeCode}}">{{this.name}}</a>
           {{/each}}
         </div>
       </li>
     </ul>
     <ul class="navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link i18n location-link" data-location='whoweare' data-i18n="ftm-nav-about" href="#">About</a>
+        <a class="nav-link i18n" data-i18n="ftm-nav-about" href="{{createNavbarItemHref 'whoweare'}}">
+          About
+        </a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link i18n location-link" data-location='volunteer' data-i18n="ftm-nav-volunteer" href="#">
+        <a class="nav-link i18n" data-i18n="ftm-nav-volunteer" href="{{createNavbarItemHref 'volunteer'}}">
           Join Us
         </a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link i18n location-link" data-location='faq' data-i18n="ftm-nav-faq" href="#">
+        <a class="nav-link i18n" data-i18n="ftm-nav-faq" href="{{createNavbarItemHref 'faq'}}">
           FAQ
         </a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link i18n location-link" data-location='partners' data-i18n="ftm-nav-partners" href="#">
+        <a class="nav-link i18n" data-i18n="ftm-nav-partners" href="{{createNavbarItemHref 'partners'}}">
           Partners
         </a>
       </li>
@@ -121,3 +126,4 @@
     </ul>
   </div>
 </nav>
+<script src="/generated/render-nav.entry.js?v=v{{ version }}"></script>

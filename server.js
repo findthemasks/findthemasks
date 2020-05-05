@@ -1,19 +1,43 @@
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const vhost = require('vhost');
-const setBananaI18n = require('./middleware/setBananaI18n.js');
-const setCurrentUrl = require('./middleware/setCurrentUrl.js');
 const rootRoutes = require('./rootRoutes');
 require('dotenv').config();
 require('handlebars-helpers')();
 
 const handlebars = expressHandlebars.create({
   helpers: {
+    createCountryDropdownHref: (countryCode, settings) => {
+      const url = new URL(settings.data.root.currentUrl);
+      const path = url.pathname.replace(/(\/[a-z]{2}\/|\/)/, `/${countryCode}/`);
+      return `${path}${url.search}`;
+    },
     createLocaleDropdownHref: (localeCode, settings) => {
       const url = new URL(settings.data.root.currentUrl);
       url.searchParams.set('locale', localeCode);
 
       return url.href;
+    },
+    createNavbarItemHref: (page, settings) => {
+      const currentCountry = settings.data.root.countryCode;
+      const currentDataset = settings.data.root.dataset;
+
+      const url = new URL(settings.data.root.currentUrl);
+
+      // construct URL from country and dataset, leaving it out if either is "default"
+      // in the case of currentCountry, that means US
+      // in the case of dataset, we only include it if dataset === 'makers'
+      // TODO: if we add a third dataset, that will need to change.
+      let newUrl = '';
+      if (currentCountry !== 'us') {
+        newUrl += `/${currentCountry}`;
+      }
+      if (currentDataset === 'makers') {
+        newUrl += `/${currentDataset}`;
+      }
+      newUrl += `/${page}${url.search}`;
+
+      return newUrl;
     },
   },
 });
@@ -25,9 +49,6 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 app.set('strict routing', true);
-
-app.use(setCurrentUrl);
-app.use(setBananaI18n);
 
 // Install the webpack-dev-middleware for all the hot-reload goodness in dev.
 if (process.env.NODE_ENV !== 'production') {
