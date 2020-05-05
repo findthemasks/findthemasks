@@ -277,7 +277,7 @@ h3.city {
 #map {
   height: 400px;
   width: 100%;
-  margin-bottom: .3ex;
+  margin-bottom: 1rem;
 }
 
 #map .label {
@@ -311,6 +311,10 @@ h3.city {
   display: inline;
   margin: 0;
   padding: 0;
+}
+
+.add-donation-site-form {
+  line-height: 3;
 }
 
 .map-link {
