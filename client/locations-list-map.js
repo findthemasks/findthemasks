@@ -1445,15 +1445,15 @@ const applyFilterParams = ((params, filterSet) => {
 });
 
 const initializeEmbedLocationCollapse = () => {
-  $(".location .row").addClass("collapse");
-  $(".location .row").collapse({ toggle: false });
+  $('.location .row').addClass('collapse');
+  $('.location .row').collapse({ toggle: false });
   $(document).on('click', '.location .d-flex', (e) => {
     // ensure it doesn't happen if they click the google map link
     if (!$(e.target).hasClass('map-link')) {
       $(e.currentTarget).siblings('.row').collapse('toggle');
     }
   });
-}
+};
 
 $(() => {
   const renderListings = (result) => {
