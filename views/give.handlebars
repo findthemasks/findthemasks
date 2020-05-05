@@ -61,17 +61,18 @@
   </header>
 
   <div class="row embed-main flex-lg-row no-gutters">
+    <div class="locations-loading text-center">
+      <div class="spinner-border" role="status"></div>
+      {{#if (eq dataset "makers")}}
+      <div>Loading Maker Groups...</div>
+      {{else}}
+      <div class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</div>
+      {{/if}}
+    </div>
+
     <div class="col-12 {{#unless hideList}}col-lg-8{{/unless}} order-lg-2 {{#if hideMap}}d-none{{/if}}">
       <div class="map-container {{#if hideList}}w-100{{/if}}">
         <div id="map" data-enable-search="true"></div>
-        <div class="locations-loading text-center">
-          <div class="spinner-border" role="status"></div>
-          {{#if (eq dataset "makers")}}
-          <div>Loading Maker Groups...</div>
-          {{else}}
-          <div class="i18n" data-i18n="ftm-donations-site-loading">Loading donation sites...</div>
-          {{/if}}
-        </div>
       </div>
     </div>
 
