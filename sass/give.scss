@@ -81,6 +81,10 @@ footer {
     font-weight: 600;
   }
 
+  .org-type {
+    text-align: right;
+  }
+
   // adds dropdown caret icon to support collapse logic
   & > .d-flex {
     background-image: $icon-dropdown;
