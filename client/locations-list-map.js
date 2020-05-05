@@ -969,6 +969,25 @@ function renderNextListPage() {
   initResidentialPopover();
 }
 
+function initializeEmbedLocationCollapse() {
+  const $locationRows = $('.location .row');
+  $locationRows.addClass('collapse');
+  $locationRows.collapse({ toggle: false });
+  if ($('.location').length <= 3) {
+    $locationRows.collapse('show');
+  } else {
+    // ensure they are all hidden, including ones that may have been opened during
+    // prior navigation
+    $locationRows.collapse('hide');
+  }
+  $(document).on('click', '.location .d-flex', (e) => {
+    // ensure it doesn't happen if they click the google map link
+    if (!$(e.target).hasClass('map-link')) {
+      $(e.currentTarget).siblings('.row').collapse('toggle');
+    }
+  });
+}
+
 function refreshList(data, filters) {
   gLocationsListEntries = getFlatFilteredEntries(data, filters);
   gLastLocationRendered = -1;
@@ -1447,25 +1466,6 @@ const applyFilterParams = ((params, filterSet) => {
     }
   });
 });
-
-const initializeEmbedLocationCollapse = () => {
-  const $locationRows = $('.location .row');
-  $locationRows.addClass('collapse');
-  $locationRows.collapse({ toggle: false });
-  if ($('.location').length <= 3) {
-    $locationRows.collapse('show');
-  } else {
-    // ensure they are all hidden, including ones that may have been opened during
-    // prior navigation
-    $locationRows.collapse('hide');
-  }
-  $(document).on('click', '.location .d-flex', (e) => {
-    // ensure it doesn't happen if they click the google map link
-    if (!$(e.target).hasClass('map-link')) {
-      $(e.currentTarget).siblings('.row').collapse('toggle');
-    }
-  });
-};
 
 $(() => {
   const renderListings = (result) => {
