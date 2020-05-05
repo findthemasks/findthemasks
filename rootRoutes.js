@@ -49,6 +49,7 @@ function sendDataJsonFromCache(cache, prefix, countryCode, res) {
       if (dataRes.statusCode === 200) {
         // Cache for 5 mins.
         const newExpiresAt = new Date(now.getTime() + (5 * 60 * 1000));
+        // eslint-disable-next-line no-param-reassign
         cache[countryCode] = {
           expires_at: newExpiresAt,
           data: newData,
@@ -113,12 +114,12 @@ router.use('/:countryCode', (req, res, next) => {
     // Redirect to lower-cased path.
     if (req.params.countryCode !== lowerCased) {
       res.status(302).redirect(`/${lowerCased}`);
-      return;
+      return null;
     }
-    applicationRoutes(req, res, next);
-  } else {
-    next();
+    return applicationRoutes(req, res, next);
   }
+
+  return next();
 });
 
 router.use('/', (req, res, next) => {
