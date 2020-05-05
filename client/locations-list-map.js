@@ -974,6 +974,10 @@ function refreshList(data, filters) {
   gLastLocationRendered = -1;
   $('.locations-list').empty();
   renderNextListPage();
+  // initializes collapse logic on locations table if this is the embed
+  if (isEmbed) {
+    initializeEmbedLocationCollapse();
+  }
 }
 
 function onFilterChange(data, prefix, idx, selected, filters) {
@@ -1445,8 +1449,16 @@ const applyFilterParams = ((params, filterSet) => {
 });
 
 const initializeEmbedLocationCollapse = () => {
-  $('.location .row').addClass('collapse');
-  $('.location .row').collapse({ toggle: false });
+  const $locationRows = $('.location .row');
+  $locationRows.addClass('collapse');
+  $locationRows.collapse({ toggle: false });
+  if ($('.location').length <= 3) {
+    $locationRows.collapse('show');
+  } else {
+    // ensure they are all hidden, including ones that may have been opened during
+    // prior navigation
+    $locationRows.collapse('hide');
+  }
   $(document).on('click', '.location .d-flex', (e) => {
     // ensure it doesn't happen if they click the google map link
     if (!$(e.target).hasClass('map-link')) {
@@ -1500,11 +1512,6 @@ $(() => {
       }
 
       refreshList(data, filters);
-    }
-
-    // initializes collapse logic on locations table if this is the embed
-    if (isEmbed) {
-      initializeEmbedLocationCollapse();
     }
   };
 
