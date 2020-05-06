@@ -613,7 +613,7 @@ function updateStats($elem, count) {
   }
 }
 
-// Source for country center points: https://developers.google.com/public-data/docs/canonical/countries_csv
+// Source for country center points: https://developers.google.com/public-data/docs/canonical/countries_csv - tweak
 const MAP_INITIAL_VIEW = {
   at: { zoom: 6, center: { lat: 47.716231, lng: 13.90072 } },
   ca: { zoom: 4, center: { lat: 57.130366, lng: -99.346771 } },
