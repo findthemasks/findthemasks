@@ -28,13 +28,6 @@ body {
   display: none; /* hidden until translations load */
 }
 
-.embed-main {
-  @media (min-width: $breakpoint-md) {
-    height: $embed-body-height;
-  }
-  height: $embed-body-height-sm * 2;
-}
-
 .locations-loading {
   position: absolute;
   left: 50%;
