@@ -341,6 +341,8 @@ async function snapshotData(country) {
 
     const contactFormOptOutIndex = orig_col_labels.findIndex(e => e === '_contact_form_opt_out');
 
+    let resultEmailIndex = -1;
+
     const trimmed_values = real_values.map((row, row_num) => {
       const result = [];
 
@@ -358,6 +360,7 @@ async function snapshotData(country) {
             } else {
               result.push(encryptEmail(value));
             }
+            resultEmailIndex = result.length - 1;
           } else {
             result.push(value);
           }
@@ -376,13 +379,13 @@ async function snapshotData(country) {
     const approved_rows = trimmed_values.filter(e => e[approvedIndex] === "x");
 
     const approvedCSVRows = approved_rows.map((row) => (
-      row.filter((_, colNumber) => colNumber !== emailIndex)
+      row.filter((_, colNumber) => colNumber !== resultEmailIndex)
     ));
 
     data.values = [headers, col_labels, ...approved_rows];
     csvDataValues = [
-      headers.filter((header) => header !== ENCRYPTED_EMAIL_HEADER_NAME),
-      col_labels.filter((header) => header !== ENCRYPTED_EMAIL_COL_LABEL),
+      headers.filter((header, index) => index !== resultEmailIndex),
+      col_labels.filter((header, index) => index !== resultEmailIndex),
       ...approvedCSVRows
     ];
   } catch (err) {
