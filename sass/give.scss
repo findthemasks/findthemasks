@@ -5,7 +5,7 @@
 @import "breakpoints";
 
 $embed-body-height: 50vh;
-$embed-body-height-sm: 30vh;
+$embed-body-height-sm: 35vh;
 
 html {
   height: 100%;
@@ -128,8 +128,6 @@ footer {
 
   @media (min-width: $breakpoint-md) {
     height: $embed-body-height;
-    position: fixed;
-    width: 66.66667%;
   }
 
   #map {
