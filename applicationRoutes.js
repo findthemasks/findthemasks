@@ -50,6 +50,9 @@ router.get(['/give', '/give.html', '/embed'], (req, res) => {
     recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
     hideList: req.query['hide-list'] === 'true',
     hideMap: req.query['hide-map'] === 'true',
+    // NOTE: hide list currently hides filters...but that may change!
+    // if it does, this needs to change.
+    hideFilters: req.query['hide-filters'] === 'true' || req.query['hide-list'] === 'true',
   });
 });
 
