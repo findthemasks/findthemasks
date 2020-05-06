@@ -17,7 +17,7 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-dtgs1qck
 
 ## Current setup
 
-- The website reads from a google sheet, generates a json blob, which is rendered by a Node server.
+- The website reads from a Google sheet, generates a json blob, which is rendered by a Node server.
 
 ## Reading our data to build your own frontend
 

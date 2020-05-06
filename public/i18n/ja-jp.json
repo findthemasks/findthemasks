@@ -6,7 +6,11 @@
     "message-documentation" : "qqq"
   },
   "ftm-ppe-cta" : "してみましょう' sがそれを必要とする人々の手に私達のPPEを入手！",
+  "ftm-makers-ppe-cta" : "PPE &がそれを必要とする人の手に渡るようにします。",
   "ftm-requester-near-me" : "お近くの依頼者を検索してください。与える方法がわからない？ <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> FAQ </a>をお読みください。",
+  "ftm-maker-request-near-me" : "お近くのメーカーグループと調整してください。質問は？ <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> Maker FAQをお読みください。 </a> 。",
+  "ftm-cta-link-back" : "お近くのリクエスト機関を見つけたいですか？ <a a class=\"text-light\" href='www.findthemasks.com'>マスクの検索を確認してください。 </a> 。",
+  "ftm-maker-cta-link-back" : "お近くのPPEメーカーグループを見つけたいですか？ <a a class=\"text-light\" href='/makers'>メーカーを探すをチェックしてください。 </a>",
   "ftm-accepted-items" : "承認済みアイテムでフィルター",
   "ftm-accepting" : "受付中",
   "ftm-ppe-needed" : "必要なＰＰＥ",

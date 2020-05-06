@@ -6,7 +6,11 @@
     "message-documentation" : "qqq"
   },
   "ftm-ppe-cta" : "하자 ' 의 그것을 필요로하는 사람들의 손에 우리의 PPE를 얻을!",
+  "ftm-makers-ppe-cta" : "PPE & 을 필요한 사람들의 손에 넣으십시오.",
   "ftm-requester-near-me" : "근처에있는 요청자를 검색하십시오. 주는 방법을 잘 모르십니까? <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> FAQ를 읽으십시오 </a> .",
+  "ftm-maker-request-near-me" : "가까운 메이커 그룹과 조정하십시오. 질문이 있으십니까? <a class=\"text-light\" href=\"javascript:;\" onclick=\"window.location='faq'+window.location.search;\"> 메이커 FAQ를 읽으십시오. </a> .",
+  "ftm-cta-link-back" : "가까운 기관을 찾고 싶습니까? <a a class=\"text-light\" href='www.findthemasks.com'> 마스크 찾기를 확인하십시오. </a> .",
+  "ftm-maker-cta-link-back" : "가까운 PPE 메이커 그룹을 찾고 싶으십니까? <a a class=\"text-light\" href='/makers'> 제조사 찾기를 확인하십시오. </a>",
   "ftm-accepted-items" : "허용 된 품목별로 필터링",
   "ftm-accepting" : "수락",
   "ftm-ppe-needed" : "필요한 PPE",
