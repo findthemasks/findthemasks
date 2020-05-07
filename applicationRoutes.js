@@ -37,20 +37,7 @@ router.get('/faq', (req, res) => {
   });
 });
 
-router.get(['/give', '/give.html'], (req, res) => {
-  res.render('give', {
-    version: herokuVersion,
-    layout: 'give',
-    ogLocale: formatFbLocale(res.locals.locale),
-    ogTitle: res.locals.banana.i18n('ftm-give-og-title'),
-    ogUrl: `http://${req.hostname}${req.originalUrl}`,
-    ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
-    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
-    recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
-  });
-});
-
-router.get(['/embed'], (req, res) => {
+router.get(['/give', '/give.html', '/embed'], (req, res) => {
   const isMaker = res.locals.dataset === 'makers';
   res.render('give', {
     version: herokuVersion,
@@ -61,6 +48,11 @@ router.get(['/embed'], (req, res) => {
     ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
+    hideList: req.query['hide-list'] === 'true',
+    hideMap: req.query['hide-map'] === 'true',
+    // NOTE: hide list currently hides filters...but that may change!
+    // if it does, this needs to change.
+    hideFilters: req.query['hide-filters'] === 'true' || req.query['hide-list'] === 'true',
   });
 });
 

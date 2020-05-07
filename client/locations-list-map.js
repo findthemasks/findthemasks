@@ -22,6 +22,8 @@ const countryData = {};
 const gCountryCode = document.body.dataset.country;
 const gDataset = document.body.dataset.dataset;
 
+const isEmbed = document.body.dataset.embed;
+
 // Map, markers and map associated UI components are initialized in initMap().
 let gAutocomplete;
 let gMap = null;
@@ -605,6 +607,7 @@ function numberFormat(number, decimalPlaces, decSeparator, thouSeparator) {
  */
 function updateStats($elem, count) {
   const prettyMarkerCount = numberFormat(count, 0);
+  $elem.show();
 
   if (gDataset === 'makers') {
     $elem.html(`${prettyMarkerCount} Groups`);
@@ -854,7 +857,7 @@ function createRequesterListItemEl(entry) {
 
   if (entry.org_type && entry.org_type.length) {
     ac(headerOrgType, [
-      ce('p', null, ctn(translateEnumValue(entry.org_type))),
+      ce('span', 'org-type', ctn(translateEnumValue(entry.org_type))),
     ]);
   }
 
@@ -967,11 +970,34 @@ function renderNextListPage() {
   initResidentialPopover();
 }
 
+function initializeEmbedLocationCollapse() {
+  const $locationRows = $('.location .row');
+  $locationRows.addClass('collapse');
+  $locationRows.collapse({ toggle: false });
+  if ($('.location').length <= 3) {
+    $locationRows.collapse('show');
+  } else {
+    // ensure they are all hidden, including ones that may have been opened during
+    // prior navigation
+    $locationRows.collapse('hide');
+  }
+  $(document).on('click', '.location .d-flex', (e) => {
+    // ensure it doesn't happen if they click the google map link
+    if (!$(e.target).hasClass('map-link')) {
+      $(e.currentTarget).siblings('.row').collapse('toggle');
+    }
+  });
+}
+
 function refreshList(data, filters) {
   gLocationsListEntries = getFlatFilteredEntries(data, filters);
   gLastLocationRendered = -1;
   $('.locations-list').empty();
   renderNextListPage();
+  // initializes collapse logic on locations table if this is the embed
+  if (isEmbed) {
+    initializeEmbedLocationCollapse();
+  }
 }
 
 function onFilterChange(data, prefix, idx, selected, filters) {
