@@ -25,34 +25,10 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-dtgs1qck
 - Similarly, we also offer CSV output at http://findthemasks.com/data-us.csv , with similar country-code modifications for each country.
 - If reading in data and producing web output sounds like a lot to do, please read on:
 
-## Embeddable widget of donation sites
+## How can I embed your map on my site?
 
-- We have produced an embeddable version of our map, data and filters
-- You can view it here: <https://findthemasks.com/give.html>
-- To embed into your site, use this html snippet:
+We'd love for anyone to embed our map to help fight the battle against coronavirus. Please go here for detailed instructions: <https://github.com/findthemasks/findthemasks/wiki/Embedding-%23findthemasks-donation-sites-page>
 
-```html
-<iframe style="width: 100%; height: 800px; border: none;" src="https://findthemasks.com/give.html"></iframe>
-```
-
-- We also support state specific data views, hiding the map, hiding the filters through query params, initializing on specific locations, and specifying locale:
-
-```html
-?state={CA/WA/NY/etc}
-?hide-map={true/false}
-?hide-filters={true/false}
-?hide-list={true/false} (also hides filters)
-?hide-search={true/false}
-?locale={see available locales in dropdown at https://findthemasks.com}
-?q={map search term: '100 Fake Road, Kansas, MO'}
-?coords={lat,lng}&zoom=12 // zoom only works in concert with coords
-```
-
-All true/false parameters default to false.
-
-So, for state-specific pages you can now use something like:
-<https://findthemasks.com/give.html?state=CA&hide-map=true&hide-filters=true>
-This will return just the filtered list of donations sites in California.
 
 ## Adding Countries and Locales
 
