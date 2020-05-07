@@ -1,6 +1,10 @@
 const Airtable = require('airtable');
 const functions = require('firebase-functions');
+const csv = require('csv-parse');
+const fs = require('fs');
 const zipcodes = require('zipcodes');
+const { geocodeAddress } = require('./geocode.js');
+const { readAirtableSharedView, parseAirtableData } = require('./airtable-shared-view.js');
 
 const FIELDS = [
       "approved", 
@@ -26,12 +30,17 @@ const FIELDS = [
       "min_request",
       "lat", 
       "lng",
+      "description",
 ];
 
-let AIRTABLE_API_KEY = '';
+let AIRTABLE_API_KEY = null;
 
 if (functions.config().findthemasks !== undefined) {
   AIRTABLE_API_KEY = functions.config().findthemasks.airtable_api_key;
+}
+
+if (!AIRTABLE_API_KEY) {
+  AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY;
 }
 
 
@@ -72,15 +81,16 @@ function toDataJson(entries) {
   };
 }
 
-function loadMakerData(admin, req, res) {
-  const base = new Airtable({apiKey: 'key7sP7fMv2drjUnJ'}).base('appmMuprpuCFw4wCd');
+function loadNomData(admin) {
+  const base = new Airtable({apiKey: AIRTABLE_API_KEY}).base('appmMuprpuCFw4wCd');
 
   const items = [];
-  base('Spaces and Groups').select({
+  return base('Spaces and Groups').select({
     view: "Public Map Export"
   }).all().then(async records => {
     const entries = [];
     const saves = [];
+    const geocodePromises = [];
     for (const record of records) {
       const entry = {};
       for (const [fieldname, value] of Object.entries(record.fields)) {
@@ -100,39 +110,101 @@ function loadMakerData(admin, req, res) {
 
       // Missing lat/lng. Geocode it.
       if (!entry.lat || !entry.lng) {
-        let geocode = null;
-        if (entry.zip) {
-          geocode = zipcodes.lookup(entry.zip);
-        } else {
-          geocode = zipcodes.lookup(entry.city, entry.state);
-        }
-        if (geocode && geocode.latitude && geocode.longitude) {
-          entry.lat = geocode.latitude;
-          entry.lng = geocode.longitude;
+        let geocode = geocodeEntry(entry);
+        geocodePromises.push(geocode.then(e => {
           record.set('[lat]', geocode.latitude);
           record.set('[lng]', geocode.longitude);
           saves.push(record.save());
-        }
+        }));
       }
     }
+    await Promise.all(geocodePromises);
     await Promise.all(saves);
     return entries;
-  }).then(async (entries) => {
-    const data = toDataJson(entries);
-    const datafileRef = admin.storage().bucket().file('makers-us.json');
-    await datafileRef.save(JSON.stringify(data), {
-      gzip: true,
-      metadata: {
-        cacheControl: "public, max-age=20",
-        contentType: "application/json"
-      },
-      predefinedAcl: "publicRead"
-    });
-    return res.status(200).send(`<body>loaded: ${JSON.stringify(data, null, 2)}</body>`);
-  }).catch(err => {
-    return res.status(500).send(err);
   });
+}
 
+async function writeMakerJson(entries, admin, req, res) {
+  const data = toDataJson(entries);
+  const datafileRef = admin.storage().bucket().file('makers-us.json');
+  await datafileRef.save(JSON.stringify(data), {
+    gzip: true,
+    metadata: {
+      cacheControl: "public, max-age=20",
+      contentType: "application/json"
+    },
+    predefinedAcl: "publicRead"
+  });
+  return res.status(200).send(`<body>loaded: ${JSON.stringify(data, null, 2)}</body>`);
+}
+
+const OSMS_FIELD_MAP = {
+  'ID': '',
+  'Your Facebook Group (or other) Name': 'name',
+  'City': 'city',
+  'Country': 'country',
+  'State/Region': 'state',
+  'Zip Code': 'zip',
+  'URL': 'website',
+  'Description': '',
+  'PPE Items Produced': 'products',
+  'If "Other" PPE Items produced, please fill in:': 'other_product',
+  'Face Shield Type': 'face_shield_type',
+  'Type of Organization': '',
+  'Type of Org - Other': '',
+  'Public Contact Info': '',
+  'Nation of Makers List': 'is_from_nom',
+};
+
+function geocodeEntry(entry) {
+  let address = "";
+  if (entry.zip) {
+    address = `${entry.zip}`;
+  } else if (entry.country) {
+    address = `${entry.country}`;
+    if (entry.state) {
+      address = `${entry.state} ${address}`;
+      if (entry.city) {
+        address = `${entry.city}, ${address}`;
+      }
+    }
+  }
+  entry.address = address;
+
+  return geocodeAddress(address).then(geocode => {
+    entry.lat = geocode.location.lat;
+    entry.lng = geocode.location.lng;
+    return entry;
+  }).catch(e => console.error(e))
+}
+
+async function loadOsmsData() {
+  const OSMS_SHARED_VIEW = 'https://airtable.com/shrjbq5Lc5GfY1XxC/tbl2MGCIVfMuZA5Am';
+
+  const values = [];
+
+  const airtableData = await readAirtableSharedView(OSMS_SHARED_VIEW);
+  const dataRows = parseAirtableData(airtableData);
+  const geocodePromises = [];
+
+  for (const entry of dataRows) {
+    values.push(entry);
+
+    // OSMS id column is the name.
+    entry.name = entry.airtable_id;
+
+    geocodePromises.push(geocodeEntry(entry));
+  }
+
+  await Promise.all(geocodePromises);
+  return values;
+}
+
+async function loadMakerData(admin, req, res) {
+  const nomData = await loadNomData();
+  const osmsData = await loadOsmsData();
+
+  await writeMakerJson([...nomData, ...osmsData], admin, req, res);
 }
 
 module.exports = { loadMakerData };

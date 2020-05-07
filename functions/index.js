@@ -4,12 +4,12 @@ const csv_stringify = require('csv-stringify');
 const { request } = require('gaxios');
 const crypto = require('crypto');
 const { loadMakerData } = require('./airtable-connector.js');
+const { geocodeAddress } = require('./geocode.js');
 
 admin.initializeApp();
 
 const { OAuth2Client } = require('google-auth-library');
 const { google } = require('googleapis');
-const Client = require("@googlemaps/google-maps-services-js").Client;
 
 // TODO: Use firebase functions:config:set to configure your googleapi object:
 // googleapi.client_id = Google API client ID,
@@ -17,7 +17,6 @@ const Client = require("@googlemaps/google-maps-services-js").Client;
 // googleapi.sheet_id = Google Sheet id (long string in middle of sheet URL)
 let CONFIG_CLIENT_ID = '';
 let CONFIG_CLIENT_SECRET = '';
-let GOOGLE_MAPS_API_KEY = '';
 let EMAIL_ENCRYPTION_KEY = '';
 let SMARTY_STREETS_AUTH_ID = '';
 let SMARTY_STREETS_AUTH_TOKEN = '';
@@ -41,7 +40,6 @@ const SHEETS = {
 if (functions.config().googleapi !== undefined) {
   CONFIG_CLIENT_ID = functions.config().googleapi.client_id
   CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
-  GOOGLE_MAPS_API_KEY = functions.config().findthemasks.geocode_key;
   EMAIL_ENCRYPTION_KEY = functions.config().findthemasks.email_encryption_key;
   SMARTY_STREETS_AUTH_ID = functions.config().findthemasks.smarty_streets_auth_id;
   SMARTY_STREETS_AUTH_TOKEN = functions.config().findthemasks.smarty_streets_auth_token
@@ -120,7 +118,6 @@ function get_country_from_path(req) {
 async function annotateGeocode(data, sheet_id, client) {
   // Annotate Geocodes for missing items. Track the updated rows. Write back.
   const headers = data.values[1];
-  const maps_client = new Client({});
   const [header_values, col_labels, real_values] = splitValues(data);
 
   const approvedIndex = headers.findIndex(e => e === 'approved');
@@ -142,7 +139,7 @@ async function annotateGeocode(data, sheet_id, client) {
   const to_write_back = [];
   const promises = [];
   const doGeocode = (address, entry, row_num, do_latlong) => {
-    return getLatLng(address, maps_client).then(geocode => {
+    return geocodeAddress(address).then(geocode => {
       if (entry[addressIndex]) {
         // Do not overwrite if there is already an address listed.
         geocode.canonical_address = null;
@@ -166,9 +163,6 @@ async function annotateGeocode(data, sheet_id, client) {
     });
   };
 
-  // TODO(awong): Do we still need this rate limit?
-  // Geolocation only allows 50qps. Overkilling it causes rejects. Artifically cap here.
-  let num_lookups = 0;
   real_values.forEach((entry, index) => {
     const final_address = entry[addressIndex];
     const needs_latlong = entry[approvedIndex] === "x";
@@ -184,8 +178,6 @@ async function annotateGeocode(data, sheet_id, client) {
       console.log("Doing soemthing");
       const address = final_address || `${entry[origAddressIndex]}, ${entry[cityIndex]}, ${entry[stateIndex]}`;
 
-      // TODO(awong): do some smarter throttle system.
-      num_lookups = num_lookups + 1
       console.debug(`Calling geocoder for entry: ${entry} on row: ${row_num} and address: ${address} `);
       promises.push(doGeocode(address, entry, row_num, needs_latlong));
     }
@@ -432,30 +424,6 @@ async function snapshotData(prefix, country) {
   return [data];
 }
 
-// Fetch lat & lng for the given address by making a call to the Google Maps API.
-// Returns an object with numeric lat and lng fields.
-async function getLatLng(address, client) {
-  const response = await client.geocode({
-    params: {
-      address: address,
-      key: GOOGLE_MAPS_API_KEY
-    },
-    timeout: 5000 // milliseconds
-  });
-
-  if (response.data.results && response.data.results.length > 0) {
-    const result = response.data.results[0];
-    const retval = {
-      canonical_address: result.formatted_address,
-      location: result.geometry.location
-    };
-    return retval;
-  } else {
-    console.error(response);
-    throw new Error(response);
-  }
-}
-
 function toDataByLocation(data) {
   const headers = data.values[1];
   const approvedIndex = headers.findIndex(e => e === 'approved');
@@ -494,7 +462,7 @@ function toDataByLocation(data) {
 module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
   const country = get_country_from_path(req);
   if (country === 'makers') {
-    loadMakerData(admin, req, res);
+    await loadMakerData(admin, req, res);
     return;
   }
 
