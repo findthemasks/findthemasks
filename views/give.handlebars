@@ -67,7 +67,7 @@
     <div class="locations-loading text-center">
       <div class="spinner-border" role="status"></div>
       {{#if (eq dataset "makers")}}
-      <div>Loading Maker Groups...</div>
+      <div class="i18n" data-i18n="ftm-makers-site-loading">Loading Maker Groups...</div>
       {{else}}
       <div class="i18n" data-i18n="ftm-donations-site-loading">Loading PPE request sites...</div>
       {{/if}}
@@ -89,11 +89,15 @@
       <div class='col-12'>
         {{#if (eq dataset "makers")}}
         <p>
-          <span>Made in collaboration with <a href="." target="_blank">#findthemasks</a> and <a
-              href="https://www.nationofmakers.us" target="_blank">Nation of Makers</a>.</span>
-          <span>Want to join the #findthemasks makers map? Need to update or remove info?</span>
-          Please <a href="./maker-form" target="_blank">
-            fill out this form</a>. We will review it as soon as possible.
+          <span class="i18n" data-i18n="[html]ftm-makers-collaboration-with">
+            Made in collaboration with <a href="." target="_blank">#findthemasks</a> and
+            <a href="https://www.nationofmakers.us" target="_blank">Nation of Makers</a>.
+          </span>
+          <span class="i18n" data-i18n="[html]ftm-makers-add-site-question">
+            Want to join the #findthemasks makers map? Need to update or remove info?
+            Please <a href="./maker-form" target="_blank">fill out this form</a>.
+            We will review it as soon as possible.
+          </span>
         </p>
         {{else}}
         <p>
