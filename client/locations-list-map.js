@@ -625,7 +625,7 @@ const MAP_INITIAL_VIEW = {
   it: { zoom: 5, center: { lat: 41.87194, lng: 12.56738 } },
   pl: { zoom: 5, center: { lat: 51.919438, lng: 19.145136 } },
   pt: { zoom: 6, center: { lat: 39.399872, lng: -8.224454 } },
-  us: { zoom: 4, center: { lat: 37.09024, lng: -95.712891 } },
+  us: { zoom: 3, center: { lat: 37.09024, lng: -95.712891 } },
   uk: { zoom: 5, center: { lat: 55.378051, lng: -3.435973 } },
 };
 
