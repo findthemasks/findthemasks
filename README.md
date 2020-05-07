@@ -27,7 +27,7 @@ Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-dtgs1qck
 
 ## How can I embed your map on my site?
 
-We'd love for anyone to embed our map to help fight the battle against coronavirus. Please go here for detailed instructions: https://github.com/findthemasks/findthemasks/wiki/Embedding-%23findthemasks-donation-sites-page
+We'd love for anyone to embed our map to help fight the battle against coronavirus. Please go here for detailed instructions: <https://github.com/findthemasks/findthemasks/wiki/Embedding-%23findthemasks-donation-sites-page>
 
 
 ## Adding Countries and Locales
