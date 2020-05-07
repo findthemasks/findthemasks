@@ -31,4 +31,5 @@ module.exports = {
 
     return newUrl;
   },
+  createCrossLink: (baseUrl, countryCode, localeCode) => (`${baseUrl}/${countryCode}?locale=${localeCode}`),
 };

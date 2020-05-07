@@ -110,13 +110,13 @@
       </li>
       <li class="nav-item">
         {{#if (eq dataset "makers")}}
-          <a href="https://findthemasks.com" class="xlink text-decoration-none">
+          <a href="{{createCrossLink 'https://findthemasks.com' countryCode activeLocale.localeCode}}" class="xlink text-decoration-none">
             <button class="btn btn-xlink my-2 my-sm-0" type="button">
               <div class="icon icon-ftm_logo_black"></div><span>Find The Masks</span>
             </button>
           </a>
         {{else}}
-          <a href="https://findthemakers.com" class="xlink text-decoration-none">
+          <a href="{{createCrossLink 'https://findthemakers.com' countryCode activeLocale.localeCode}}" class="xlink text-decoration-none">
             <button class="btn btn-xlink my-2 my-sm-0" type="button">
               <div class="icon icon-ftmakers_logo_black"></div><span>Find The Makers</span>
             </button>

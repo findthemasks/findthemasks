@@ -11,6 +11,7 @@ const handlebars = expressHandlebars.create({
     createCountryDropdownHref: navHelpers.createCountryDropdownHref,
     createLocaleDropdownHref: navHelpers.createLocaleDropdownHref,
     createNavbarItemHref: navHelpers.createNavbarItemHref,
+    createCrossLink: navHelpers.createCrossLink,
   },
 });
 
