@@ -1,5 +1,5 @@
 import toDataByLocation from './toDataByLocation.js';
-import countries from './countries.js';
+import countries from '../constants/countries.js';
 import { getCountry } from './getCountry.js';
 import { FtmUrl } from './utils.js';
 

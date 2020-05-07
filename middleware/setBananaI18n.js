@@ -1,5 +1,7 @@
 const fs = require('fs');
 const Banana = require('banana-i18n');
+const locales = require('../constants/locales');
+const countries = require('../constants/countries');
 
 const DEFAULT_LOCALE = 'en';
 
@@ -57,6 +59,50 @@ module.exports = (req, res, next) => {
     messages: config.messages,
   });
 
+  const translatedLocales = [];
+  let activeLocale;
+
+  locales.forEach((l) => {
+    const translatedLocale = {
+      localeCode: l.localeCode,
+      name: banana.i18n(l.i18nString),
+    };
+
+    if (translatedLocale.localeCode === locale) {
+      activeLocale = translatedLocale;
+    }
+
+    translatedLocales.push(translatedLocale);
+  });
+
+  const currentCountryCode = res.locals.countryCode;
+  let activeCountry;
+
+  const translatedCountries = [];
+
+  Object.keys(countries).forEach((countryCode) => {
+    const country = countries[countryCode];
+    const translatedCountry = {
+      name: banana.i18n(country.i18nString),
+      countryCode,
+      administrativeRegion: banana.i18n(country.administrativeRegionI18nString),
+    };
+
+    if (countryCode === currentCountryCode) {
+      activeCountry = translatedCountry;
+    }
+
+    translatedCountries.push(translatedCountry);
+  });
+
+  const sortedCountries = translatedCountries.sort((a, b) => (
+    a.name.localeCompare(b.name)
+  ));
+
+  res.locals.locales = translatedLocales;
+  res.locals.activeLocale = activeLocale;
+  res.locals.countries = sortedCountries;
+  res.locals.activeCountry = activeCountry;
   res.locals.locale = locale;
   res.locals.banana = banana;
 

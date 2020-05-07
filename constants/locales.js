@@ -1,4 +1,4 @@
-export default [
+module.exports = [
   {
     i18nString: 'ftm-english',
     localeCode: 'en',

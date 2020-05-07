@@ -1,0 +1,78 @@
+{
+  "root": true,
+  "parserOptions": {
+    // Required for certain syntax usages
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "promise"
+  ],
+  "extends": ["airbnb", "plugin:compat/recommended"],
+  "env": {
+    "browser": true,
+    "jquery": true
+  },
+  "rules": {
+    // Removed rule "disallow the use of console" from recommended eslint rules
+    "no-console": "off",
+
+    // Make line length longer.
+    "max-len": ["error", {
+      "code": 120,
+      "ignoreTemplateLiterals": true,
+      "ignoreUrls": true,
+      "ignoreStrings": true,
+      "ignoreRegExpLiterals": true
+    }],
+
+    // Most of our npm modules are for webpack and thus in devDependencies.
+    "import/no-extraneous-dependencies": "off",
+
+    // We use for..of loops and the rest of the airbnb disallowed syntax looks okay?
+    "no-restricted-syntax": 0,
+
+    // Client code is clearer with file extension.
+    "import/extensions": [2, "always"],
+
+    // Assigning into parameters isn't that hard to read in our code.
+    "no-param-reassign": "off",
+
+    // Nothing wrong with plusplus!
+    "no-plusplus": "off",
+
+    // Nothing wrong with continue either.
+    "no-continue": "off",
+
+    // Disable single-line statements (since we enforce curly braces for all)
+    "nonblock-statement-body-position": "off",
+
+    // All blocks require curly braces
+    "curly": [2, "all"],
+
+    "comma-dangle": [2, {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "never",
+      "exports": "never",
+      "functions": "never"
+    }],
+
+    "object-curly-newline": [2, {
+      "ObjectExpression": { "multiline": true, "consistent": true },
+      "ObjectPattern": { "multiline": true, "consistent": true },
+      "ImportDeclaration": { "multiline": true, "consistent": true },
+      "ExportDeclaration": { "multiline": true, "consistent": true }
+    }],
+
+    "object-property-newline": 2,
+
+    "function-paren-newline": [2, "multiline-arguments"]
+  },
+  "settings": {
+    "polyfills": [
+      "Object.assign",
+      "Object.entries"
+    ]
+  }
+}

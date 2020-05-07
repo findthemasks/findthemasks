@@ -4,7 +4,7 @@ const express = require('express');
 const https = require('https');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const applicationRoutes = require('./applicationRoutes');
-const countries = require('./client/countries.js'); // TODO: Move out of client.
+const countries = require('./constants/countries.js');
 
 const router = express.Router();
 
@@ -28,7 +28,6 @@ function sendDataJson(cache, countryCode, res) {
 }
 
 function sendDataJsonFromCache(cache, prefix, countryCode, res) {
-  console.log(prefix, countryCode);
   const now = new Date();
   if (countryCode in cache && cache[countryCode].expires_at > now) {
     sendDataJson(cache, countryCode, res);
@@ -50,6 +49,7 @@ function sendDataJsonFromCache(cache, prefix, countryCode, res) {
       if (dataRes.statusCode === 200) {
         // Cache for 5 mins.
         const newExpiresAt = new Date(now.getTime() + (5 * 60 * 1000));
+        // eslint-disable-next-line no-param-reassign
         cache[countryCode] = {
           expires_at: newExpiresAt,
           data: newData,
@@ -114,12 +114,12 @@ router.use('/:countryCode', (req, res, next) => {
     // Redirect to lower-cased path.
     if (req.params.countryCode !== lowerCased) {
       res.status(302).redirect(`/${lowerCased}`);
-      return;
+      return null;
     }
-    applicationRoutes(req, res, next);
-  } else {
-    next();
+    return applicationRoutes(req, res, next);
   }
+
+  return next();
 });
 
 router.use('/', (req, res, next) => {
