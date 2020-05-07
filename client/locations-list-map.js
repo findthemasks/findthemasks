@@ -290,19 +290,19 @@ function createMakerMarkerContent(entry, separator) {
     }
   };
 
-  addParagraph('Website', entry.website);
-  addParagraph('Contact', entry.public_contact);
-  addLine('Capabilities', addSpaceAfterComma(entry.capabilities));
-  addLine('Products', addSpaceAfterComma(entry.products));
-  addLine('Other Product', addSpaceAfterComma(entry.other_product));
-  addLine('Face Shield Type', addSpaceAfterComma(entry.face_shield_type));
-  addLine('Are you collecting?', entry.collecting_site);
-  addLine('Are you shipping?', entry.shipping);
-  addLine('Are you taking volunteers?', entry.accepting_volunteers);
-  addLine('Other Type of Space', entry.other_type_of_space);
-  addLine('Accepting PPE Requests', entry.accepting_ppe_requests);
-  addLine('Org Collaborations', addSpaceAfterComma(entry.org_collaboration));
-  addLine('Other Capabilities', addSpaceAfterComma(entry.other_capability));
+  addParagraph($.i18n('ftm-makers-website'), entry.website);
+  addParagraph($.i18n('ftm-makers-contact'), entry.public_contact);
+  addLine($.i18n('ftm-makers-capabilities'), addSpaceAfterComma(entry.capabilities));
+  addLine($.i18n('ftm-makers-products'), addSpaceAfterComma(entry.products));
+  addLine($.i18n('ftm-makers-other-product'), addSpaceAfterComma(entry.other_product));
+  addLine($.i18n('ftm-makers-face-shield-type'), addSpaceAfterComma(entry.face_shield_type));
+  addLine($.i18n('ftm-makers-collecting-question'), entry.collecting_site);
+  addLine($.i18n('ftm-makers-shipping-question'), entry.shipping);
+  addLine($.i18n('ftm-makers-volunteers-question'), entry.accepting_volunteers);
+  addLine($.i18n('ftm-makers-other-type-of-space'), entry.other_type_of_space);
+  addLine($.i18n('ftm-makers-accepting-ppe-requests'), entry.accepting_ppe_requests);
+  addLine($.i18n('ftm-makers-org-collaboration'), addSpaceAfterComma(entry.org_collaboration));
+  addLine($.i18n('ftm-makers-other-capability'), addSpaceAfterComma(entry.other_capability));
 
   return contentTags;
 }
@@ -610,7 +610,7 @@ function updateStats($elem, count) {
   $elem.show();
 
   if (gDataset === 'makers') {
-    $elem.html(`${prettyMarkerCount} Groups`);
+    $elem.html($.i18n('ftm-makers-count', prettyMarkerCount));
   } else {
     $elem.html($.i18n('ftm-requesters-count', prettyMarkerCount));
   }
@@ -832,20 +832,20 @@ function createMakerListItemEl(entry) {
     }
   };
 
-  addParagraph('Website', entry.website);
-  addParagraph('Contact', entry.public_contact);
-  addLine('Location', `${entry.city}, ${entry.state} ${entry.zip}`);
-  addLine('Capabilities', addSpaceAfterComma(entry.capabilities));
-  addLine('Products', addSpaceAfterComma(entry.products));
-  addLine('Other Product', addSpaceAfterComma(entry.other_product));
-  addLine('Face Shield Type', addSpaceAfterComma(entry.face_shield_type));
-  addLine('Are you collecting?', entry.collecting_site);
-  addLine('Are you shipping?', entry.shipping);
-  addLine('Are you taking volunteers?', entry.accepting_volunteers);
-  addLine('Other Type of Space', entry.other_type_of_space);
-  addLine('Accepting PPE Requests', entry.accepting_ppe_requests);
-  addLine('Org Collaborations', addSpaceAfterComma(entry.org_collaboration));
-  addLine('Other Capabilities', addSpaceAfterComma(entry.other_capability));
+  addParagraph($.i18n('ftm-makers-website'), entry.website);
+  addParagraph($.i18n('ftm-makers-contact'), entry.public_contact);
+  addLine($.i18n('ftm-makers-location'), `${entry.city}, ${entry.state} ${entry.zip}`);
+  addLine($.i18n('ftm-makers-capabilities'), addSpaceAfterComma(entry.capabilities));
+  addLine($.i18n('ftm-makers-products'), addSpaceAfterComma(entry.products));
+  addLine($.i18n('ftm-makers-other-product'), addSpaceAfterComma(entry.other_product));
+  addLine($.i18n('ftm-makers-face-shield-type'), addSpaceAfterComma(entry.face_shield_type));
+  addLine($.i18n('ftm-makers-collecting-question'), entry.collecting_site);
+  addLine($.i18n('ftm-makers-shipping-question'), entry.shipping);
+  addLine($.i18n('ftm-makers-volunteers-question'), entry.accepting_volunteers);
+  addLine($.i18n('ftm-makers-other-type-of-space'), entry.other_type_of_space);
+  addLine($.i18n('ftm-makers-accepting-ppe-requests'), entry.accepting_ppe_requests);
+  addLine($.i18n('ftm-makers-org-collaboration'), addSpaceAfterComma(entry.org_collaboration));
+  addLine($.i18n('ftm-makers-other-capability'), addSpaceAfterComma(entry.other_capability));
 }
 
 function createRequesterListItemEl(entry) {

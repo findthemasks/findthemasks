@@ -157,12 +157,6 @@ router.get('/maker-form', (req, res) => {
 // Recursively handle routes for makers overriding the dataset so the main
 // map functionality can be run in a different "mode" so to speak.
 router.use('/makers', (req, res, next) => {
-  const remainingUrl = req.originalUrl.substr(req.baseUrl.length);
-  if (remainingUrl && !remainingUrl.match(/\/(embed(\/)?)?/)) {
-    res.status(404).redirect('/');
-    return;
-  }
-
   // Override the dataset. Expect countryCode to be set at the top-level routing.
   res.locals.dataset = 'makers';
 
