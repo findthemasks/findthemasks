@@ -343,6 +343,15 @@ h3.city {
   text-align: center;
 }
 
+#map-info {
+  background-color: white;
+  border: 1px solid $text-color;
+  bottom: 30px;
+  padding: 1rem;
+  position: absolute;
+  left: 30px;
+}
+
 .donation-map-title {
   align-items: center;
   display: flex;
@@ -706,7 +715,7 @@ dl.faq-question {
     text-align: center;
   }
   #img-logo-canva {
-  width: 49%; //should be same as partner-logos-small size 
+  width: 49%; //should be same as partner-logos-small size
   }
 }
 

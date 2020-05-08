@@ -8,6 +8,8 @@ import { FILTER_ITEMS, ORG_TYPES, ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
+import stateCoords from './stateCoords.js';
+import ccvi from './ccvi.js';
 
 require('mobius1-selectr/src/selectr.css');
 
@@ -1360,6 +1362,85 @@ function initMap(data, filters) {
     }
   });
 
+  function createPolygonWithLabel(map, label, points) {
+    const ccviData = ccvi.find((state) => (
+      state.state.toLowerCase() === label.toLowerCase()
+    ));
+
+    function perc2color(perc) {
+      let r; let g; const
+        b = 0;
+      if (perc < 50) {
+        r = 255;
+        g = Math.round(5.1 * perc);
+      } else {
+        g = 255;
+        r = Math.round(510 - 5.10 * perc);
+      }
+      const h = r * 0x10000 + g * 0x100 + b * 0x1;
+      return `#${(`000000${h.toString(16)}`).slice(-6)}`;
+    }
+
+    let color;
+
+    if (ccviData) {
+      color = perc2color((1 - ccviData.score) * 100);
+    }
+
+    // The state outline polygon, drawn by coordinates..
+    const polygon = new google.maps.Polygon({
+      fillColor: color,
+      fillOpacity: 0.35,
+      map,
+      paths: points,
+      strokeColor: color,
+      strokeOpacity: 0.8,
+      strokeWeight: 3,
+    });
+
+    const labelPopoverContent = ce('div', null);
+    ac(labelPopoverContent, [
+      ce('div', null, ctn(label)),
+      ce('div', null, ctn(`Community Vulnerability Index Score: ${ccviData.score}`)),
+      ce('div', null, ctn('Higher = More Vulnerable')),
+    ]);
+
+    // When the mouse moves within the polygon, display the label and change the BG color.
+    google.maps.event.addListener(polygon, 'mousemove', (event) => {
+      const popover = document.getElementById('map-info');
+      popover.style.display = 'block';
+      popover.innerHTML = labelPopoverContent.innerHTML;
+      polygon.setOptions({
+        fillOpacity: 0.6,
+      });
+    });
+
+    // WHen the mouse moves out of the polygon, hide the label and change the BG color.
+    google.maps.event.addListener(polygon, 'mouseout', (event) => {
+      const popover = document.getElementById('map-info');
+      popover.style.display = 'none';
+
+      polygon.setOptions({
+        fillOpacity: 0.35,
+      });
+    });
+
+    return polygon;
+  }
+
+  for (let i = 0; i < stateCoords.length; i++) {
+    const coords = [];
+    const label = stateCoords[i][0];
+    const points = stateCoords[i][1];
+
+    for (let j = 0; j < points.length; j++) {
+      coords.push(
+        new google.maps.LatLng(points[j][0], points[j][1])
+      );
+    }
+    createPolygonWithLabel(gMap, label, coords);
+  }
+
   const mapBounds = gMap.getBounds();
 
   if (mapBounds) {
@@ -1391,7 +1472,7 @@ function loadMapScript(data, filters) {
   // API Key below is only enabled for *.findthemasks.com/* Message @susanashlock for more info.
   const apiKey = window.GOOGLE_MAPS_API_KEY || 'AIzaSyDSz0lnzPJIFeWM7SpSARHmV-snwrAXd2s';
   const languageRegion = getMapsLanguageRegion();
-  const scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry,places&callback=initMap&key=${apiKey}&language=${languageRegion.language}&region=${languageRegion.region}`;
+  const scriptSrc = `//maps.googleapis.com/maps/api/js?libraries=geometry,places,visualization&callback=initMap&key=${apiKey}&language=${languageRegion.language}&region=${languageRegion.region}`;
 
   scriptTag.setAttribute('src', scriptSrc);
   scriptTag.setAttribute('defer', '');
