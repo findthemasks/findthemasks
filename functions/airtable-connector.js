@@ -22,6 +22,8 @@ const FIELDS = [
       "accepting_ppe_requests", 
       "org_collaboration", 
       "other_capability", 
+      "group_type",
+      "min_request",
       "lat", 
       "lng",
 ];
