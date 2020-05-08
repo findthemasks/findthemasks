@@ -616,7 +616,7 @@ function updateStats($elem, count) {
   }
 }
 
-// Source for country center points: https://developers.google.com/public-data/docs/canonical/countries_csv
+// Source for country center points: https://developers.google.com/public-data/docs/canonical/countries_csv - tweak
 const MAP_INITIAL_VIEW = {
   at: { zoom: 6, center: { lat: 47.716231, lng: 13.90072 } },
   ca: { zoom: 4, center: { lat: 57.130366, lng: -99.346771 } },
@@ -628,7 +628,7 @@ const MAP_INITIAL_VIEW = {
   it: { zoom: 5, center: { lat: 41.87194, lng: 12.56738 } },
   pl: { zoom: 5, center: { lat: 51.919438, lng: 19.145136 } },
   pt: { zoom: 6, center: { lat: 39.399872, lng: -8.224454 } },
-  us: { zoom: 4, center: { lat: 37.09024, lng: -95.712891 } },
+  us: { zoom: 3, center: { lat: 46.616431, lng: -107.552917 } }, // Sumatra, MT. Canonical: 37.09024,-95.712891
   uk: { zoom: 5, center: { lat: 55.378051, lng: -3.435973 } },
 };
 
