@@ -354,7 +354,7 @@ function createRequesterMarkerContent(entry, separator) {
     const date = new Date(timestamp);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     contentTags.push(
-      ce('div', 'label', ctn($.i18n('ftm-date-added'))),
+      ce('div', 'label', ctn($.i18n('ftm-date-updated'))),
       ce('div', 'value', ctn(date.toLocaleDateString(undefined, options)))
     );
   }
@@ -946,7 +946,7 @@ function createRequesterListItemEl(entry) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
 
     ac(timestampContainer, [
-      ce('label', 'col-12 col-md-3', ctn($.i18n('ftm-date-added'))),
+      ce('label', 'col-12 col-md-3', ctn($.i18n('ftm-date-updated'))),
       ce('p', 'col-12 col-md-9', ctn(date.toLocaleDateString(undefined, options))),
     ]);
     ac(entry.domElem, timestampContainer);
