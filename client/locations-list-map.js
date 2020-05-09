@@ -353,9 +353,11 @@ function createRequesterMarkerContent(entry, separator) {
   if (timestamp) {
     const date = new Date(timestamp);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const userLocale = getMapsLanguageRegion();
+    const localeString = `${userLocale.language}-${userLocale.region}`;
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-date-updated'))),
-      ce('div', 'value', ctn(date.toLocaleDateString(undefined, options)))
+      ce('div', 'value', ctn(date.toLocaleDateString(localeString, options)))
     );
   }
 
@@ -944,10 +946,11 @@ function createRequesterListItemEl(entry) {
     const timestampContainer = ce('div', 'row');
     const date = new Date(entry.timestamp);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
-
+    const userLocale = getMapsLanguageRegion();
+    const localeString = `${userLocale.language}-${userLocale.region}`;
     ac(timestampContainer, [
       ce('label', 'col-12 col-md-3', ctn($.i18n('ftm-date-updated'))),
-      ce('p', 'col-12 col-md-9', ctn(date.toLocaleDateString(undefined, options))),
+      ce('p', 'col-12 col-md-9', ctn(date.toLocaleDateString(localeString, options))),
     ]);
     ac(entry.domElem, timestampContainer);
   }
