@@ -58,8 +58,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// Makers virutal host.
-app.use(vhost(/findthemakers.com|makers.local.findthemasks.com/, (req, res, next) => {
+// Makers virtual host.
+app.use(vhost(/findthemakers\.com|www\.findthemakers\.com|makers\.local\.findthemasks.com/, (req, res, next) => {
   res.locals.dataset = 'makers';
   rootRoutes(req, res, next);
 }));
