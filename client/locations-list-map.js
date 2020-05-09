@@ -1476,7 +1476,7 @@ $(() => {
   const renderListings = (result) => {
     const data = toDataByLocation(result);
     const showList = searchParams['hide-list'] !== 'true';
-    const showFilters = showList && searchParams['hide-filters'] !== 'true';
+    const showFilters = searchParams['hide-filters'] !== 'true';
     const showMap = searchParams['hide-map'] !== 'true';
 
     const $map = $('#map');
@@ -1508,14 +1508,13 @@ $(() => {
 
     $('.locations-loading').hide();
 
+    if (showFilters && areThereFilters(filters)) {
+      createFilterElements(data, filters);
+      $('.filters-container').show();
+    }
+
     if (showList) {
       $('.locations-container').show();
-
-      if (showFilters && areThereFilters(filters)) {
-        createFilterElements(data, filters);
-        $('.filters-container').show();
-      }
-
       refreshList(data, filters);
     }
   };
