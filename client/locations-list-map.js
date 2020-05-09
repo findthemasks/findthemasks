@@ -355,7 +355,7 @@ function createRequesterMarkerContent(entry, separator) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-date-added'))),
-      ce('div', 'value', ctn(date.toLocaleDateString(undefined, options))),
+      ce('div', 'value', ctn(date.toLocaleDateString(undefined, options)))
     );
   }
 
