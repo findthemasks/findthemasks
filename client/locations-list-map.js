@@ -322,6 +322,7 @@ function createRequesterMarkerContent(entry, separator) {
     accepting,
     open_box: openBox,
     rdi,
+    timestamp,
   } = entry;
 
   // Text to go into InfoWindow
@@ -346,6 +347,15 @@ function createRequesterMarkerContent(entry, separator) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
       ce('div', 'value', addressChildren)
+    );
+  }
+
+  if (timestamp) {
+    const date = new Date(timestamp);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    contentTags.push(
+      ce('div', 'label', ctn($.i18n('ftm-date-added'))),
+      ce('div', 'value', ctn(date.toLocaleDateString(undefined, options))),
     );
   }
 
@@ -928,6 +938,18 @@ function createRequesterListItemEl(entry) {
     ]);
 
     ac(entry.domElem, openPackagesContainer);
+  }
+
+  if (entry.timestamp) {
+    const timestampContainer = ce('div', 'row');
+    const date = new Date(entry.timestamp);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+
+    ac(timestampContainer, [
+      ce('label', 'col-12 col-md-3', ctn($.i18n('ftm-date-added'))),
+      ce('p', 'col-12 col-md-9', ctn(date.toLocaleDateString(undefined, options))),
+    ]);
+    ac(entry.domElem, timestampContainer);
   }
 
   if (entry.instructions) {
