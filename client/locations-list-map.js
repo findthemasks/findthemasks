@@ -8,6 +8,7 @@ import { FILTER_ITEMS, ORG_TYPES, ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
+import { createMapLink, getOneLineAddress, googleMapsUri } from './widgets.js'
 
 require('mobius1-selectr/src/selectr.css');
 
@@ -227,27 +228,6 @@ function translateEnumList(enumListString) {
   }
 
   return enumListString;
-}
-
-function getOneLineAddress(address) {
-  return address.trim().replace(/\n/g, ', ');
-}
-
-function googleMapsUri(address) {
-  return encodeURI(`https://www.google.com/maps/search/?api=1&query=${address}`);
-}
-
-function createMapLink(address) {
-  // setup google maps link
-  const mapLinkEl = ce('a', 'map-link');
-  const oneLineAddress = getOneLineAddress(address);
-  mapLinkEl.href = googleMapsUri(oneLineAddress);
-  mapLinkEl.target = '_blank';
-  mapLinkEl.addEventListener('click', () => {
-    sendEvent('map', 'clickAddress', oneLineAddress);
-  });
-  mapLinkEl.appendChild(ctn(oneLineAddress));
-  return mapLinkEl;
 }
 
 // Turns a string with embedded \n characters into an Array of text nodes separated by <br>
