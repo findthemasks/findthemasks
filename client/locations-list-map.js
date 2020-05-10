@@ -322,6 +322,7 @@ function createRequesterMarkerContent(entry, separator) {
     accepting,
     open_box: openBox,
     rdi,
+    timestamp,
   } = entry;
 
   // Text to go into InfoWindow
@@ -346,6 +347,17 @@ function createRequesterMarkerContent(entry, separator) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
       ce('div', 'value', addressChildren)
+    );
+  }
+
+  if (timestamp) {
+    const date = new Date(timestamp);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const userLocale = getMapsLanguageRegion();
+    const localeString = `${userLocale.language}-${userLocale.region}`;
+    contentTags.push(
+      ce('div', 'label', ctn($.i18n('ftm-date-updated'))),
+      ce('div', 'value', ctn(date.toLocaleDateString(localeString, options)))
     );
   }
 
@@ -928,6 +940,19 @@ function createRequesterListItemEl(entry) {
     ]);
 
     ac(entry.domElem, openPackagesContainer);
+  }
+
+  if (entry.timestamp) {
+    const timestampContainer = ce('div', 'row');
+    const date = new Date(entry.timestamp);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const userLocale = getMapsLanguageRegion();
+    const localeString = `${userLocale.language}-${userLocale.region}`;
+    ac(timestampContainer, [
+      ce('label', 'col-12 col-md-3', ctn($.i18n('ftm-date-updated'))),
+      ce('p', 'col-12 col-md-9', ctn(date.toLocaleDateString(localeString, options))),
+    ]);
+    ac(entry.domElem, timestampContainer);
   }
 
   if (entry.instructions) {
