@@ -77,8 +77,9 @@ router.get('/data(-:countryCode)?.json', (req, res) => {
 });
 
 router.get('/makers(-:countryCode)?.json', (req, res) => {
-  const countryCode = req.params.countryCode || 'us';
-  sendDataJsonFromCache(cachedMakersData, 'makers', countryCode, res);
+  // All make data is in one file right now. Currently calling it us, though
+  // "global" is probably the right name.
+  sendDataJsonFromCache(cachedMakersData, 'makers', 'us', res);
 });
 
 router.get('/data(-:countryCode)?.csv', createProxyMiddleware({
