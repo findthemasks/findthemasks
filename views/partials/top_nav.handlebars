@@ -2,18 +2,12 @@
   <ul class="navbar-nav navbar-brand">
     <li class="nav-item">
       {{#if (eq dataset "makers")}}
-      <div class="icon icon-ftmakers_logo"></div>
+      <a class="home-link icon-ftmakers_logo location-link" href="{{createNavbarItemHref ''}}"><span class="text">Find
+          The
+          Makers</span></a>
       {{else}}
-      <div class="icon icon-ftm_logo"></div>
-      {{/if}}
-    </li>
-    <li class="nav-item">
-      {{#if (eq dataset "makers")}}
-        <a class="home-link location-link" href="{{createNavbarItemHref ''}}"><span class="text">Find The
-            Makers</span></a>
-      {{else}}
-        <a class="home-link location-link" href="{{createNavbarItemHref ''}}"><span class="text">Find The
-            Masks</span></a>
+      <a class="home-link icon-ftm_logo location-link" href="{{createNavbarItemHref ''}}"><span class="text">Find The
+          Masks</span></a>
       {{/if}}
     </li>
   </ul>
@@ -31,7 +25,8 @@
         <div class="dropdown-menu dropdown-menu-left" aria-labelledby="countries-dropdown"
           id="countries-dropdown-selector">
           {{#each countries}}
-            <a href="{{createCountryDropdownHref this.countryCode}}" class="dropdown-item countries-dropdown-item" data-code="{{this.countryCode}}">{{this.name}}</a>
+          <a href="{{createCountryDropdownHref this.countryCode}}" class="dropdown-item countries-dropdown-item"
+            data-code="{{this.countryCode}}">{{this.name}}</a>
           {{/each}}
         </div>
       </li>
@@ -42,7 +37,8 @@
         </a>
         <div class="dropdown-menu dropdown-menu-left" aria-labelledby="locales-dropdown" id="locales-dropdown-selector">
           {{#each locales}}
-            <a href="{{createLocaleDropdownHref this.localeCode}}" class="dropdown-item locales-dropdown-item" data-code="{{this.localeCode}}">{{this.name}}</a>
+          <a href="{{createLocaleDropdownHref this.localeCode}}" class="dropdown-item locales-dropdown-item"
+            data-code="{{this.localeCode}}">{{this.name}}</a>
           {{/each}}
         </div>
       </li>
@@ -112,17 +108,19 @@
       </li>
       <li class="nav-item">
         {{#if (eq dataset "makers")}}
-          <a href="{{createCrossLink 'https://findthemasks.com' countryCode activeLocale.localeCode}}" class="xlink text-decoration-none">
-            <button class="btn btn-xlink my-2 my-sm-0" type="button">
-              <div class="icon icon-ftm_logo_black"></div><span>Find The Masks</span>
-            </button>
-          </a>
+        <a href="{{createCrossLink 'https://findthemasks.com' countryCode activeLocale.localeCode}}"
+          class="xlink text-decoration-none">
+          <button class="btn btn-xlink my-2 my-sm-0" type="button">
+            <div class="icon icon-ftm_logo_black"></div><span>Find The Masks</span>
+          </button>
+        </a>
         {{else}}
-          <a href="{{createCrossLink 'https://findthemakers.com' countryCode activeLocale.localeCode}}" class="xlink text-decoration-none">
-            <button class="btn btn-xlink my-2 my-sm-0" type="button">
-              <div class="icon icon-ftmakers_logo_black"></div><span>Find The Makers</span>
-            </button>
-          </a>
+        <a href="{{createCrossLink 'https://findthemakers.com' countryCode activeLocale.localeCode}}"
+          class="xlink text-decoration-none">
+          <button class="btn btn-xlink my-2 my-sm-0" type="button">
+            <div class="icon icon-ftmakers_logo_black"></div><span>Find The Makers</span>
+          </button>
+        </a>
         {{/if}}
       </li>
     </ul>
