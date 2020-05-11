@@ -437,6 +437,8 @@ function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
     gOpenInfoWindows.push(marker.infowindow);
   });
 
+  // assign marker so that entry click events can reference
+  entry.marker = marker;
   return marker;
 }
 
@@ -976,7 +978,7 @@ function getEntryEl(entry) {
       createRequesterListItemEl(entry);
     }
   }
-
+  $(entry.domElem).on('click', () => { zoomToMarker(entry.marker) });
   return entry.domElem;
 }
 
@@ -1263,6 +1265,17 @@ function centerMapToMarkersNearUser() {
       maximumAge: Infinity,
       timeout: 10000,
     });
+  }
+}
+
+function zoomToMarker(marker) {
+  if (marker) {
+    const bounds = new google.maps.LatLngBounds();
+    bounds.extend(marker.position);
+    fitMapToMarkersNearBounds(bounds);
+    google.maps.event.trigger(marker, 'click');
+  } else {
+    console.log('no marker to zoom to');
   }
 }
 

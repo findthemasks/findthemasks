@@ -247,9 +247,14 @@ h3.city {
 }
 
 .location {
+  cursor: pointer;
   border-bottom: 1px solid $border-gray;
   padding: 1.5rem 2rem;
   font-size: $font-size-small;
+
+  &:hover {
+    background-color: $gray;
+  }
 }
 
 .location label {
