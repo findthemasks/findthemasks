@@ -551,12 +551,6 @@ dl.faq-question {
   border: 0;
 }
 
-.navbar.ftm .navbar-brand .icon {
-  height: 42px;
-  width: 42px;
-  padding-right: 8px;
-}
-
 .navbar.ftm .navbar-brand .text {
   display: inline-block;
   font-weight: 700;
@@ -575,8 +569,13 @@ dl.faq-question {
   cursor: pointer;
   color: $text-light;
 
+  padding-left: 42px;
+  background-size: 42px;
+  line-height: 42px;
+  display: block;
+
   &:hover {
-    color: $text-light
+    color: $text-light;
   }
 }
 
@@ -706,7 +705,7 @@ dl.faq-question {
     text-align: center;
   }
   #img-logo-canva {
-  width: 49%; //should be same as partner-logos-small size 
+    width: 49%; //should be same as partner-logos-small size
   }
 }
 
