@@ -778,10 +778,19 @@ dl.faq-question {
     padding: 0 1rem 0.5rem 1rem;
   }
 
+  .navbar.ftm .xlink {
+    padding: 0 1rem 0.5rem 1rem;
+  }
+
   .navbar.ftm .btn-addplace {
     width: 100%;
     margin: 0;
   }
+
+  .navbar.ftm .btn-xlink {
+    width: 100%;
+    margin: 0;
+}
 }
 
 @media (max-width: $breakpoint-xs) {
