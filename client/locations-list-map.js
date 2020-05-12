@@ -396,6 +396,18 @@ function createMarkerContent(entry, separator) {
   );
 }
 
+// accepts a marker and sets its icon to either the
+// highlighted icon or the default icon depending on `isHighlighted` arg
+function setMarkerIcon(marker, isHighlighted) {
+  if (marker) {
+    if (isHighlighted) {
+      marker.setIcon('https://mt.google.com/vt/icon?psize=20&font=fonts/Roboto-Regular.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-blue.png&ax=44&ay=48&scale=1&text=%E2%80%A2');
+    } else {
+      marker.setIcon();
+    }
+  }
+}
+
 function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
   const location = { lat: latitude, lng: longitude };
   const options = {
@@ -435,6 +447,16 @@ function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
     }
     marker.infowindow.open(null, marker);
     gOpenInfoWindows.push(marker.infowindow);
+  });
+
+  marker.addListener('mouseover', () => {
+    setMarkerIcon(marker, true);
+    $(entry.domElem).addClass('highlighted');
+  });
+
+  marker.addListener('mouseout', () => {
+    setMarkerIcon(marker, false);
+    $(entry.domElem).removeClass('highlighted');
   });
 
   // assign marker so that entry click events can reference
@@ -969,6 +991,17 @@ function createRequesterListItemEl(entry) {
   }
 }
 
+// accepts a marker and zooms the map to that marker using our fitMapToMarkersNearBounds logic
+function zoomToMarker(marker) {
+  if (marker) {
+    const bounds = new google.maps.LatLngBounds();
+    bounds.extend(marker.position);
+    fitMapToMarkersNearBounds(bounds);
+  } else {
+    console.log('no marker to zoom to');
+  }
+}
+
 function getEntryEl(entry) {
   if (!entry.domElem) {
     // Adds the domElem field if it has not been created.
@@ -979,6 +1012,8 @@ function getEntryEl(entry) {
     }
   }
   $(entry.domElem).on('click', () => { zoomToMarker(entry.marker) });
+  $(entry.domElem).on('mouseenter', () => { setMarkerIcon(entry.marker, true); });
+  $(entry.domElem).on('mouseleave', () => { setMarkerIcon(entry.marker, false); });
   return entry.domElem;
 }
 
@@ -1265,17 +1300,6 @@ function centerMapToMarkersNearUser() {
       maximumAge: Infinity,
       timeout: 10000,
     });
-  }
-}
-
-function zoomToMarker(marker) {
-  if (marker) {
-    const bounds = new google.maps.LatLngBounds();
-    bounds.extend(marker.position);
-    fitMapToMarkersNearBounds(bounds);
-    google.maps.event.trigger(marker, 'click');
-  } else {
-    console.log('no marker to zoom to');
   }
 }
 

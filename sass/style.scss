@@ -252,7 +252,8 @@ h3.city {
   padding: 1.5rem 2rem;
   font-size: $font-size-small;
 
-  &:hover {
+  &:hover,
+  &.highlighted {
     background-color: $gray;
   }
 }
