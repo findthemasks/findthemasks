@@ -247,7 +247,6 @@ h3.city {
 }
 
 .location {
-  cursor: pointer;
   border-bottom: 1px solid $border-gray;
   padding: 1.5rem 2rem;
   font-size: $font-size-small;
@@ -255,6 +254,16 @@ h3.city {
   &:hover,
   &.highlighted {
     background-color: $gray;
+  }
+
+  .entry-zoom-link {
+    cursor: pointer;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-position: center;
+    vertical-align: middle;
+    padding: 0 1rem;
   }
 }
 

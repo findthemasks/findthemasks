@@ -837,8 +837,9 @@ function getFlatFilteredEntries(data, filters) {
 function createMakerListItemEl(entry) {
   entry.domElem = ce('div', 'location');
   const header = ce('div', 'd-flex');
+  const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
   const headerMakerspaceInfo = ce('div', 'flex-grow-1 grey-background');
-  ac(headerMakerspaceInfo, ce('h5', null, ctn(entry.name)));
+  ac(headerMakerspaceInfo, ce('h5', null, [ctn(entry.name), headerZoomLink]));
 
   ac(header, headerMakerspaceInfo);
   ac(entry.domElem, header);
@@ -892,8 +893,9 @@ function createRequesterListItemEl(entry) {
   entry.domElem = ce('div', 'location');
   const header = ce('div', 'd-flex');
   const headerHospitalInfo = ce('div', 'flex-grow-1');
+  const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
   const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
-  ac(headerHospitalInfo, ce('h5', null, ctn(entry.name)));
+  ac(headerHospitalInfo, ce('h5', null, [ctn(entry.name), headerZoomLink]));
 
   if (entry.org_type && entry.org_type.length) {
     ac(headerOrgType, [
@@ -928,7 +930,6 @@ function createRequesterListItemEl(entry) {
 
     ac(headerHospitalInfo, para);
   }
-
   ac(header, headerHospitalInfo);
   ac(header, headerOrgType);
   ac(entry.domElem, header);
@@ -1011,7 +1012,7 @@ function getEntryEl(entry) {
       createRequesterListItemEl(entry);
     }
   }
-  $(entry.domElem).on('click', () => { zoomToMarker(entry.marker) });
+  $(entry.domElem).find('.entry-zoom-link').on('click', () => { zoomToMarker(entry.marker) });
   $(entry.domElem).on('mouseenter', () => { setMarkerIcon(entry.marker, true); });
   $(entry.domElem).on('mouseleave', () => { setMarkerIcon(entry.marker, false); });
   return entry.domElem;
