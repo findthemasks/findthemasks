@@ -6,7 +6,7 @@ import toDataByLocation from './toDataByLocation.js';
 import countries from '../constants/countries.js';
 import { ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
-import { ac, ce, ctn, FtmUrl } from './utils.js';
+import { ac, ce, ctn, FtmUrl, htmlToElements } from './utils.js';
 import sendEvent from './sendEvent.js';
 
 require('mobius1-selectr/src/selectr.css');
@@ -137,10 +137,12 @@ const filtersByDataset = {
     acceptItems: {
       dataKey: 'accepting',
       searchParamKey: 'accepting',
+      placeholder: 'ftm-ppe-needed',
     },
     orgTypes: {
       dataKey: 'org_type',
       searchParamKey: 'orgType',
+      placeholder: 'ftm-facility-type',
     },
   },
 };
@@ -205,6 +207,7 @@ function updateFilters(filters) {
         applied[datasetFilterKey] = applied[datasetFilterKey] || {};
         applied[datasetFilterKey][item] = true;
       }
+      filters[datasetFilterKey].placeholder = datasetFilters[datasetFilterKey].placeholder;
     }
   });
 }
@@ -1062,77 +1065,52 @@ function onFilterChange(data, prefix, idx, selected, filters) {
   showMarkers(data, filters, false);
 }
 
+// Creates the <select> elements for filters.
 function createFilterElements(data, filters) {
-  const acceptedItems = [];
+  for (const f of Object.keys(filters)) {
+    if (f === 'applied') {
+      continue;
+    }
 
-  // remove filters with the same name
-  const selectedAcceptItemsFilters = {};
+    // All items available in the filter.
+    const selectItems = [];
 
-  // If name is same, do not add filter
-  // When filtering, check if matches any filters that match the name of the selected value
+    // Enums selected in the filter.
+    const selected = {};
 
-  for (const item of Object.keys(filters.acceptItems)) {
-    const itemFilter = filters.acceptItems[item];
-    selectedAcceptItemsFilters[itemFilter.name] = itemFilter;
-  }
 
-  for (const item of Object.keys(selectedAcceptItemsFilters)) {
-    const itemFilter = selectedAcceptItemsFilters[item];
+    for (const item of Object.keys(filters[f])) {
+      const itemFilter = filters[f][item];
+      selected[itemFilter.name] = itemFilter;
 
-    acceptedItems.push({
-      value: itemFilter.value,
-      text: itemFilter.name,
-      selected: itemFilter.isSet,
-    });
-  }
+      selectItems.push({
+        value: itemFilter.value,
+        text: itemFilter.name,
+        selected: itemFilter.isSet,
+      });
+    }
 
-  const ppeNeededSelect = new Selectr('#ppe-needed-select', {
-    customClass: 'ftm-select',
-    data: acceptedItems,
-    multiple: true,
-    searchable: false,
-    placeholder: $.i18n('ftm-ppe-needed'),
-  });
+    if (selectItems.length > 0) {
+      const div = htmlToElements(`<div class="col"><select id="filter-${f}"></select></div>`)[0];
+      document.getElementById('filter-container').appendChild(div);
 
-  ppeNeededSelect.on('selectr.select', (option) => {
-    onFilterChange(data, 'acceptItems', option.idx, true, filters);
-    sendEvent('filters', 'acceptItems', option.value);
-  });
+      const selectr = new Selectr(div.firstElementChild, {
+        customClass: 'ftm-select',
+        data: selectItems,
+        multiple: true,
+        searchable: false,
+        placeholder: $.i18n(filters[f].placeholder || ''),
+      });
 
-  ppeNeededSelect.on('selectr.deselect', (option) => {
-    onFilterChange(data, 'acceptItems', option.idx, false, filters);
-  });
+      selectr.on('selectr.select', (option) => {
+        onFilterChange(data, f, option.idx, true, filters);
+        sendEvent('filters', f, option.value);
+      });
 
-  const facilityTypes = [];
-
-  for (const item of Object.keys(filters.orgTypes)) {
-    const orgType = filters.orgTypes[item];
-    facilityTypes.push({
-      value: orgType.value,
-      text: orgType.name,
-      selected: orgType.isSet,
-    });
-  }
-
-  if (facilityTypes.length > 0) {
-    const facilityTypeSelect = new Selectr('#facility-type-select', {
-      customClass: 'ftm-select',
-      data: facilityTypes,
-      multiple: true,
-      searchable: false,
-      placeholder: $.i18n('ftm-facility-type'),
-    });
-
-    facilityTypeSelect.on('selectr.select', (option) => {
-      onFilterChange(data, 'orgTypes', option.idx, true, filters);
-      sendEvent('filters', 'orgTypes', option.value);
-    });
-
-    facilityTypeSelect.on('selectr.deselect', (option) => {
-      onFilterChange(data, 'orgTypes', option.idx, false, filters);
-    });
-  } else {
-    $('#facility-type-select').parent().remove();
+      selectr.on('selectr.deselect', (option) => {
+        onFilterChange(data, f, option.idx, false, filters);
+      });
+    }
   }
 }
 

@@ -1,3 +1,8 @@
+// Takes a string of HTML elements and returns an array of elements.
+export function htmlToElements(html) {
+  return document.createRange().createContextualFragment(html).children;
+}
+
 // Wrapper for Node.appendChild.
 // child (either a node or an array of nodes) is appended to the parent element
 export function ac(el, child) {
