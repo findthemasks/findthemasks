@@ -318,6 +318,7 @@ function createRequesterMarkerContent(entry, separator) {
     org_type: orgType,
     address,
     name,
+    encrypted_email,
     instructions,
     accepting,
     open_box: openBox,
@@ -347,6 +348,13 @@ function createRequesterMarkerContent(entry, separator) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-address-label'))),
       ce('div', 'value', addressChildren)
+    );
+  }
+
+  if (encrypted_email) {
+    contentTags.push(
+      ce('div', 'label', ctn($.i18n('ftm-email-contact'))),
+      ce('div', 'value', $(`<a href="#" data-toggle="modal" data-target="#contactModal" data-name="${name}" data-email="${encrypted_email}">${$.i18n('ftm-email-contact-org')}</a>`)[0]),
     );
   }
 
