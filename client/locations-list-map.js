@@ -995,9 +995,12 @@ function createRequesterListItemEl(entry) {
 // accepts a marker and zooms the map to that marker using our fitMapToMarkersNearBounds logic
 function zoomToMarker(marker) {
   if (marker) {
+    // we're getting a rough zoom calculation by using our existing fitMapToMarkersNearBounds
     const bounds = new google.maps.LatLngBounds();
     bounds.extend(marker.position);
     fitMapToMarkersNearBounds(bounds);
+    // but ultimately centering on the marker that was clicked
+    gMap.setCenter(marker.position);
   } else {
     console.log('no marker to zoom to');
   }
