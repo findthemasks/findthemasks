@@ -8,7 +8,7 @@ import { FILTER_ITEMS, ORG_TYPES, ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
-import { createMapLink, getOneLineAddress, googleMapsUri } from './widgets.js'
+import { createMapLinkEl, getOneLineAddress, googleMapsUri } from './widgets.js'
 
 require('mobius1-selectr/src/selectr.css');
 
@@ -315,7 +315,7 @@ function createRequesterMarkerContent(entry, separator) {
   }
 
   if (address) {
-    let addressChildren = [createMapLink(address)];
+    let addressChildren = [createMapLinkEl(address)];
     if (rdi === 'Residential') {
       addressChildren = addressChildren.concat([
         ctn(' \u25CF '),
