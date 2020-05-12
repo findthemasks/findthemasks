@@ -50,7 +50,7 @@ const SECONDARY_MARKER_OPTIONS = {
 };
 
 const PRIMARY_MARKER_OPTIONS = {
-  icon: null, // Use default
+  icon: 'https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_red.png',
   opacity: 1,
 };
 
@@ -401,9 +401,9 @@ function createMarkerContent(entry, separator) {
 function setMarkerIcon(marker, isHighlighted) {
   if (marker) {
     if (isHighlighted) {
-      marker.setIcon('https://mt.google.com/vt/icon?psize=20&font=fonts/Roboto-Regular.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-blue.png&ax=44&ay=48&scale=1&text=%E2%80%A2');
+      marker.setIcon('https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_blue.png');
     } else {
-      marker.setIcon();
+      marker.setIcon('https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_red.png');
     }
   }
 }
