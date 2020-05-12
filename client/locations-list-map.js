@@ -993,6 +993,29 @@ function createRequesterListItemEl(entry) {
   }
 }
 
+/**
+ * Fits map to bounds, expanding the bounds to include at least three markers as necessary.
+ */
+function fitMapToMarkersNearBounds(bounds) {
+  // get center of bounding box and use it to sort markers by distance
+  const center = bounds.getCenter();
+
+  const markersByDistance = getMarkersByDistanceFrom(center.lat(), center.lng(), 3);
+
+  // extend bounds to fit closest three markers
+  markersByDistance.forEach((marker) => {
+    bounds.extend(marker.position);
+  });
+
+  if (!bounds.getNorthEast().equals(bounds.getSouthWest())) {
+    // zoom to fit user loc + nearest markers
+    gMap.fitBounds(bounds);
+  } else {
+    // just has user loc - shift view without zooming
+    gMap.setCenter(center);
+  }
+}
+
 // accepts a marker and zooms the map to that marker using our fitMapToMarkersNearBounds logic
 function zoomToMarker(marker) {
   if (marker) {
@@ -1244,29 +1267,6 @@ function getMarkersByDistanceFrom(latitude, longitude, n = 3) {
   const distances = [...markerDistances.keys()].sort((a, b) => a - b);
   // return array of markers in order of distance ascending
   return distances.slice(0, n).map((distance) => markerDistances.get(distance));
-}
-
-/**
- * Fits map to bounds, expanding the bounds to include at least three markers as necessary.
- */
-function fitMapToMarkersNearBounds(bounds) {
-  // get center of bounding box and use it to sort markers by distance
-  const center = bounds.getCenter();
-
-  const markersByDistance = getMarkersByDistanceFrom(center.lat(), center.lng(), 3);
-
-  // extend bounds to fit closest three markers
-  markersByDistance.forEach((marker) => {
-    bounds.extend(marker.position);
-  });
-
-  if (!bounds.getNorthEast().equals(bounds.getSouthWest())) {
-    // zoom to fit user loc + nearest markers
-    gMap.fitBounds(bounds);
-  } else {
-    // just has user loc - shift view without zooming
-    gMap.setCenter(center);
-  }
 }
 
 function attemptGeocode(searchText) {
