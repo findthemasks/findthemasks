@@ -451,6 +451,7 @@ function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
 
   marker.addListener('mouseover', () => {
     setMarkerIcon(marker, true);
+    sendEvent('map', 'markerMouseover', entry.name);
     $(entry.domElem).addClass('highlighted');
   });
 
@@ -1015,8 +1016,14 @@ function getEntryEl(entry) {
       createRequesterListItemEl(entry);
     }
   }
-  $(entry.domElem).find('.entry-zoom-link').on('click', () => { zoomToMarker(entry.marker) });
-  $(entry.domElem).on('mouseenter', () => { setMarkerIcon(entry.marker, true); });
+  $(entry.domElem).find('.entry-zoom-link').on('click', () => {
+    sendEvent('listView', 'clickZoom', entry.name);
+    zoomToMarker(entry.marker);
+  });
+  $(entry.domElem).on('mouseenter', () => {
+    sendEvent('listView', 'mouseover', entry.name);
+    setMarkerIcon(entry.marker, true);
+  });
   $(entry.domElem).on('mouseleave', () => { setMarkerIcon(entry.marker, false); });
   return entry.domElem;
 }
