@@ -318,7 +318,7 @@ function createRequesterMarkerContent(entry, separator) {
     org_type: orgType,
     address,
     name,
-    encrypted_email,
+    encrypted_email: encryptedEmail,
     instructions,
     accepting,
     open_box: openBox,
@@ -351,10 +351,10 @@ function createRequesterMarkerContent(entry, separator) {
     );
   }
 
-  if (encrypted_email) {
+  if (encryptedEmail) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-email-contact'))),
-      ce('div', 'value', $(`<a href="#" data-toggle="modal" data-target="#contactModal" data-name="${name}" data-email="${encrypted_email}">${$.i18n('ftm-email-contact-org')}</a>`)[0]),
+      ce('div', 'value', $(`<a href="#" data-toggle="modal" data-target="#contactModal" data-name="${name}" data-email="${encryptedEmail}">${$.i18n('ftm-email-contact-org')}</a>`)[0])
     );
   }
 
