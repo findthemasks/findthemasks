@@ -50,7 +50,7 @@ const SECONDARY_MARKER_OPTIONS = {
 };
 
 const PRIMARY_MARKER_OPTIONS = {
-  icon: null, // Use default
+  icon: 'https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_red.png',
   opacity: 1,
 };
 
@@ -396,6 +396,18 @@ function createMarkerContent(entry, separator) {
   );
 }
 
+// accepts a marker and sets its icon to either the
+// highlighted icon or the default icon depending on `isHighlighted` arg
+function setMarkerIcon(marker, isHighlighted) {
+  if (marker) {
+    if (isHighlighted) {
+      marker.setIcon('https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_blue.png');
+    } else {
+      marker.setIcon('https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_red.png');
+    }
+  }
+}
+
 function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
   const location = { lat: latitude, lng: longitude };
   const options = {
@@ -437,6 +449,19 @@ function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
     gOpenInfoWindows.push(marker.infowindow);
   });
 
+  marker.addListener('mouseover', () => {
+    setMarkerIcon(marker, true);
+    sendEvent('map', 'markerMouseover', entry.name);
+    $(entry.domElem).addClass('highlighted');
+  });
+
+  marker.addListener('mouseout', () => {
+    setMarkerIcon(marker, false);
+    $(entry.domElem).removeClass('highlighted');
+  });
+
+  // assign marker so that entry click events can reference
+  entry.marker = marker;
   return marker;
 }
 
@@ -813,8 +838,10 @@ function getFlatFilteredEntries(data, filters) {
 function createMakerListItemEl(entry) {
   entry.domElem = ce('div', 'location');
   const header = ce('div', 'd-flex');
+  const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
+  headerZoomLink.setAttribute('aria-label', 'Zoom to marker');
   const headerMakerspaceInfo = ce('div', 'flex-grow-1 grey-background');
-  ac(headerMakerspaceInfo, ce('h5', null, ctn(entry.name)));
+  ac(headerMakerspaceInfo, ce('h5', null, [ctn(entry.name), headerZoomLink]));
 
   ac(header, headerMakerspaceInfo);
   ac(entry.domElem, header);
@@ -868,8 +895,10 @@ function createRequesterListItemEl(entry) {
   entry.domElem = ce('div', 'location');
   const header = ce('div', 'd-flex');
   const headerHospitalInfo = ce('div', 'flex-grow-1');
+  const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
+  headerZoomLink.setAttribute('aria-label', 'Zoom to marker');
   const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
-  ac(headerHospitalInfo, ce('h5', null, ctn(entry.name)));
+  ac(headerHospitalInfo, ce('h5', null, [ctn(entry.name), headerZoomLink]));
 
   if (entry.org_type && entry.org_type.length) {
     ac(headerOrgType, [
@@ -904,7 +933,6 @@ function createRequesterListItemEl(entry) {
 
     ac(headerHospitalInfo, para);
   }
-
   ac(header, headerHospitalInfo);
   ac(header, headerOrgType);
   ac(entry.domElem, header);
@@ -967,6 +995,20 @@ function createRequesterListItemEl(entry) {
   }
 }
 
+// accepts a marker and zooms the map to that marker using our fitMapToMarkersNearBounds logic
+function zoomToMarker(marker) {
+  if (marker) {
+    // we're getting a rough zoom calculation by using our existing fitMapToMarkersNearBounds
+    const bounds = new google.maps.LatLngBounds();
+    bounds.extend(marker.position);
+    fitMapToMarkersNearBounds(bounds);
+    // but ultimately centering on the marker that was clicked
+    gMap.setCenter(marker.position);
+  } else {
+    console.log('no marker to zoom to');
+  }
+}
+
 function getEntryEl(entry) {
   if (!entry.domElem) {
     // Adds the domElem field if it has not been created.
@@ -976,7 +1018,15 @@ function getEntryEl(entry) {
       createRequesterListItemEl(entry);
     }
   }
-
+  $(entry.domElem).find('.entry-zoom-link').on('click', () => {
+    sendEvent('listView', 'clickZoom', entry.name);
+    zoomToMarker(entry.marker);
+  });
+  $(entry.domElem).on('mouseenter', () => {
+    sendEvent('listView', 'mouseover', entry.name);
+    setMarkerIcon(entry.marker, true);
+  });
+  $(entry.domElem).on('mouseleave', () => { setMarkerIcon(entry.marker, false); });
   return entry.domElem;
 }
 
