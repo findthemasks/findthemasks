@@ -83,6 +83,11 @@ footer {
     font-weight: 600;
   }
 
+  &:hover,
+  &.highlighted {
+    background-color: $gray;
+  }
+
   .entry-zoom-link {
     cursor: pointer;
     display: inline-block;
