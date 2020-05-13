@@ -839,6 +839,7 @@ function createMakerListItemEl(entry) {
   entry.domElem = ce('div', 'location');
   const header = ce('div', 'd-flex');
   const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
+  headerZoomLink.setAttribute('aria-label', 'Zoom to marker');
   const headerMakerspaceInfo = ce('div', 'flex-grow-1 grey-background');
   ac(headerMakerspaceInfo, ce('h5', null, [ctn(entry.name), headerZoomLink]));
 
@@ -895,6 +896,7 @@ function createRequesterListItemEl(entry) {
   const header = ce('div', 'd-flex');
   const headerHospitalInfo = ce('div', 'flex-grow-1');
   const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
+  headerZoomLink.setAttribute('aria-label', 'Zoom to marker');
   const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
   ac(headerHospitalInfo, ce('h5', null, [ctn(entry.name), headerZoomLink]));
 
