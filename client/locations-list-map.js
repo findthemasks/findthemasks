@@ -1068,7 +1068,7 @@ function onFilterChange(data, prefix, idx, selected, filters) {
 // Creates the <select> elements for filters.
 function createFilterElements(data, filters) {
   for (const f of Object.keys(filters)) {
-    if (f === 'applied') {
+    if (f === 'applied' || f === 'states') {
       continue;
     }
 
