@@ -711,11 +711,11 @@ function showMarkers(data, filters, recenterMap = true) {
 
   const bounds = new google.maps.LatLngBounds();
   const applied = filters.applied || {};
-  const hasFilters = applied.states || applied.acceptItems || applied.orgTypes;
+  const hasFilters = Object.keys(applied).length > 0;
 
   const markers = getMarkers(data, applied, hasFilters && bounds);
 
-  if (applied.states || applied.acceptItems || applied.orgTypes) {
+  if (hasFilters) {
     gPrimaryMarkers = markers.inFilters;
     gSecondaryMarkers = markers.outOfFilters;
   } else {
