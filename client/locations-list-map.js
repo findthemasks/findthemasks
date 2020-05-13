@@ -134,15 +134,15 @@ function parseFiltersFromData(data, datasetFilters) {
 const filtersByDataset = {
   makers: {},
   requester: {
-    acceptItems: {
-      dataKey: 'accepting',
-      searchParamKey: 'accepting',
-      placeholder: 'ftm-ppe-needed',
-    },
     orgTypes: {
       dataKey: 'org_type',
       searchParamKey: 'orgType',
       placeholder: 'ftm-facility-type',
+    },
+    acceptItems: {
+      dataKey: 'accepting',
+      searchParamKey: 'accepting',
+      placeholder: 'ftm-ppe-needed',
     },
   },
 };
