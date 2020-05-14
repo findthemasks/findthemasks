@@ -124,7 +124,7 @@ router.get('/blog/2020-05-14-data-update', (req, res) => {
     ogTitle: 'FindTheMasks-US Data Update',
     ogUrl: `http://${req.hostname}${req.originalUrl}`,
     ogDescription: res.locals.banana.i18n('ftm-default-og-datablog-2'),
-    ogImage: 'https://findthemasks.com/images/needs20200514Preview.png',
+    ogImage: 'https://findthemasks.com/public/images/needs20200514Preview.png',
   });
 });
 
