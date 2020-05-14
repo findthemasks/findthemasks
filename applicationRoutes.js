@@ -117,6 +117,18 @@ router.get('/blog/2020-04-21-data-insights', (req, res) => {
   });
 });
 
+router.get('/blog/2020-05-14-data-update', (req, res) => {
+  res.render('blog/2020_05_14_data_update', {
+    layout: 'static',
+    title: 'FindTheMasks-US Data Update',
+    ogTitle: 'FindTheMasks-US Data Update',
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: res.locals.banana.i18n('ftm-default-og-datablog-2'),
+    ogImage: 'https://findthemasks.com/images/needs20200514Preview.png',
+  });
+});
+
+
 router.get(['/whoweare', '/whoweare.html'], (req, res) => {
   res.render('whoweare', {
     layout: 'static',
