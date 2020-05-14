@@ -117,8 +117,8 @@ router.get('/blog/2020-04-21-data-insights', (req, res) => {
   });
 });
 
-router.get('/blog/2020-05-14-data-insights', (req, res) => {
-  res.render('blog/2020_05_14_data_insights', {
+router.get('/blog/2020-05-14-data-update', (req, res) => {
+  res.render('blog/2020_05_14_data_update', {
     layout: 'static',
     title: 'FindTheMasks-US Data Update',
     ogTitle: 'FindTheMasks-US DataUpdate',
