@@ -110,7 +110,7 @@ function parseFiltersFromData(data, datasetFilters) {
           const { dataKey } = datasetFilters[datasetFilterKey];
 
           if (entry[dataKey]) {
-            entry[dataKey].split(/, (?![^(]*\))/).map((a) => a.trim()).forEach((i) => {
+            entry[dataKey].split(/,( |)(?![^(]*\))/).map((a) => a.trim()).forEach((i) => {
               const filterKey = i.toLowerCase();
               if (ENUM_MAPPINGS[filterKey] !== undefined && filters[datasetFilterKey][filterKey] === undefined) {
                 filters[datasetFilterKey][filterKey] = {
@@ -132,7 +132,18 @@ function parseFiltersFromData(data, datasetFilters) {
 // dataKey = key to lookup on entry
 // searchParamKey = search param used for filter
 const filtersByDataset = {
-  makers: {},
+  makers: {
+    capabilities: {
+      dataKey: 'capabilities',
+      searchParamKey: 'capabilities',
+      placeholder: 'ftm-makers-capabilities',
+    },
+    products: {
+      dataKey: 'products',
+      searchParamKey: 'products',
+      placeholder: 'ftm-makers-products',
+    },
+  },
   requester: {
     orgTypes: {
       dataKey: 'org_type',
@@ -481,8 +492,6 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
 
   const datasetFilters = filtersByDataset[gDataset];
 
-  // const filterAcceptKeys = appliedFilters.acceptItems && Object.keys(appliedFilters.acceptItems);
-  // const filterOrgTypeKeys = appliedFilters.orgTypes && Object.keys(appliedFilters.orgTypes);
   const hasStateFilter = Boolean(states);
 
   const inFiltersMarkers = [];
@@ -784,23 +793,32 @@ function showMarkers(data, filters, recenterMap = true) {
 function getFlatFilteredEntries(data, filters) {
   const entries = [];
   const applied = filters.applied || {};
-  const filterAcceptKeys = applied.acceptItems && Object.keys(applied.acceptItems);
-  const filterOrgTypeKeys = applied.orgTypes && Object.keys(applied.orgTypes);
+
+  const datasetFilters = filtersByDataset[gDataset];
   let listCount = 0; // TODO: hacky, see note below.
 
-  const onEntry = (entry, cityName, stateName) => {
-    if (filterAcceptKeys) {
-      const acc = (entry.accepting || '').toLowerCase();
-      if (!filterAcceptKeys.some((s) => acc.includes(s))) {
-        return;
-      }
-    }
+  const { states, ...otherFilters } = applied;
 
-    if (filterOrgTypeKeys) {
-      const acc = (entry.org_type || '').toLowerCase();
-      if (!filterOrgTypeKeys.some((s) => acc === s)) {
-        return;
+  const otherFilterKeys = otherFilters && Object.keys(otherFilters).reduce((acc, otherFilterKey) => {
+    acc[otherFilterKey] = Object.keys(otherFilters[otherFilterKey]);
+    return acc;
+  }, {});
+
+  const onEntry = (entry, cityName, stateName) => {
+    let notInFilters = false;
+
+    Object.keys(otherFilterKeys).forEach((otherFilterKey) => {
+      const otherFilterKeyValues = otherFilterKeys[otherFilterKey];
+      const { dataKey } = datasetFilters[otherFilterKey];
+      const acc = (entry[dataKey] || '').toLowerCase();
+
+      if (!otherFilterKeyValues.some((s) => acc.includes(s))) {
+        notInFilters = true;
       }
+    });
+
+    if (notInFilters) {
+      return;
     }
 
     if (entry.marker) {
@@ -818,7 +836,7 @@ function getFlatFilteredEntries(data, filters) {
   };
 
   for (const stateName of Object.keys(data).sort()) {
-    if (applied && applied.states && !applied.states[stateName]) {
+    if (states && !states[stateName]) {
       continue;
     }
 
