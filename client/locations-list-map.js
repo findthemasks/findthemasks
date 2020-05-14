@@ -354,7 +354,7 @@ function createRequesterMarkerContent(entry, separator) {
   if (encryptedEmail) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-email-contact'))),
-      ce('div', 'value', $(`<a href="#" data-toggle="modal" data-target="#contactModal" data-name="${name}" data-email="${encryptedEmail}">${$.i18n('ftm-email-contact-org')}</a>`)[0])
+      ce('div', 'value', $(`<a href="#" data-toggle="modal" data-target=".contact-modal" data-name="${name}" data-email="${encryptedEmail}">${$.i18n('ftm-email-contact-org')}</a>`)[0])
     );
   }
 
@@ -1339,6 +1339,66 @@ function initMapSearch(data, filters) {
   });
 }
 
+function initContactModal() {
+  let lastOrg = null;
+  $('.contact-modal').on('show.bs.modal', (event) => {
+    const el = $(event.relatedTarget);
+    const email = el.data('email');
+    const name = el.data('name');
+    const modal = $(document.fullscreenElement ? '#contactModalFullScreen' : '#contactModal');
+
+    if (lastOrg !== name) {
+      lastOrg = name;
+      $('#sender-name').val(null);
+      $('#sender-email').val(null);
+      $('#message-subject').val(null);
+      $('#message-text').val(null);
+    }
+
+    modal.find('.modal-title').text(`${$.i18n('ftm-email-form-title-label')} ${name}`);
+    modal.find('#message-recipient').val(email);
+  });
+
+  $('#contactModal #send-message').on('click', () => {
+    $('.contact-error').html('&nbsp;');
+    $('#send-message').prop('disabled', true);
+    sendEvent('contactOrganization', 'emailSendButtonClicked', $('#contactModal').find('.modal-title').val());
+
+    $.post(
+      'https://maskmailer.herokuapp.com/send',
+      {
+        name: $('#sender-name').val(),
+        from: $('#sender-email').val(),
+        subject: $('#message-subject').val(),
+        text: $('#message-text').val(),
+        introduction: $.i18n('ftm-email-introduction'),
+        to: $('#message-recipient').val(),
+        'g-recaptcha-response': window.grecaptcha.getResponse(),
+      }
+    ).done(() => {
+      $('.contact-form').css('display', 'none');
+      $('.contact-success').css('display', 'block');
+      $('#send-message').prop('disabled', false);
+      window.grecaptcha.reset();
+      sendEvent('contactOrganization', 'emailSent', $('#contactModal').find('.modal-title').val());
+
+      setTimeout(() => {
+        $('#contactModal').modal('hide');
+      }, 5000);
+    }).fail((result) => {
+      $('.contact-error').html($.i18n(`ftm-${result.responseJSON.message}`));
+      $('#send-message').prop('disabled', false);
+      window.grecaptcha.reset();
+    });
+  });
+
+  $('#contactModal').on('hidden.bs.modal', () => {
+    $('.contact-form').css('display', 'block');
+    $('.contact-success').css('display', 'none');
+    $('.contact-error').html('&nbsp;');
+  });
+}
+
 /**
  * Sets up map on initial page load.
  *
@@ -1395,6 +1455,28 @@ function initMap(data, filters) {
         lng: currentLng,
       };
     }
+
+    element.onfullscreenchange = () => {
+      const cloneId = 'contactModalFullScreen';
+      const mapControls = gMap.controls[google.maps.ControlPosition.TOP_LEFT];
+
+      if (document.fullscreenElement) {
+        // When moving to full screen mode, clone contact modal as map control.
+        const clone = document.getElementById('contactModal').cloneNode(true);
+        clone.id = cloneId;
+        mapControls.push(clone);
+        initContactModal();
+      } else {
+        // When leaving full screen mode, remove map control and destroy clone.
+        const index = mapControls.getArray().findIndex((control) => control.id === cloneId);
+
+        if (index >= 0) {
+          mapControls.removeAt(index).remove();
+        } else {
+          console.warn('Clone of contact modal was not found in map controls.');
+        }
+      }
+    };
   });
 
   const mapBounds = gMap.getBounds();
@@ -1433,66 +1515,6 @@ function loadMapScript(data, filters) {
   scriptTag.setAttribute('src', scriptSrc);
   scriptTag.setAttribute('defer', '');
   document.head.appendChild(scriptTag);
-}
-
-function initContactModal() {
-  let lastOrg = null;
-  $('#contactModal').on('show.bs.modal', (event) => {
-    const el = $(event.relatedTarget);
-    const email = el.data('email');
-    const name = el.data('name');
-    const modal = $('#contactModal');
-
-    if (lastOrg !== name) {
-      lastOrg = name;
-      $('#sender-name').val(null);
-      $('#sender-email').val(null);
-      $('#message-subject').val(null);
-      $('#message-text').val(null);
-    }
-
-    modal.find('.modal-title').text(`${$.i18n('ftm-email-form-title-label')} ${name}`);
-    modal.find('#message-recipient').val(email);
-  });
-
-  $('#contactModal #send-message').on('click', () => {
-    $('.contact-error').html('&nbsp;');
-    $('#send-message').prop('disabled', true);
-    sendEvent('contactOrganization', 'emailSendButtonClicked', $('#contactModal').find('.modal-title').val());
-
-    $.post(
-      'https://maskmailer.herokuapp.com/send',
-      {
-        name: $('#sender-name').val(),
-        from: $('#sender-email').val(),
-        subject: $('#message-subject').val(),
-        text: $('#message-text').val(),
-        introduction: $.i18n('ftm-email-introduction'),
-        to: $('#message-recipient').val(),
-        'g-recaptcha-response': window.grecaptcha.getResponse(),
-      }
-    ).done(() => {
-      $('.contact-form').css('display', 'none');
-      $('.contact-success').css('display', 'block');
-      $('#send-message').prop('disabled', false);
-      window.grecaptcha.reset();
-      sendEvent('contactOrganization', 'emailSent', $('#contactModal').find('.modal-title').val());
-
-      setTimeout(() => {
-        $('#contactModal').modal('hide');
-      }, 5000);
-    }).fail((result) => {
-      $('.contact-error').html($.i18n(`ftm-${result.responseJSON.message}`));
-      $('#send-message').prop('disabled', false);
-      window.grecaptcha.reset();
-    });
-  });
-
-  $('#contactModal').on('hidden.bs.modal', () => {
-    $('.contact-form').css('display', 'block');
-    $('.contact-success').css('display', 'none');
-    $('.contact-error').html('&nbsp;');
-  });
 }
 
 const applyFilterParams = ((params, filterSet) => {
