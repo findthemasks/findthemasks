@@ -117,6 +117,16 @@ router.get('/blog/2020-04-21-data-insights', (req, res) => {
   });
 });
 
+router.get('/blog/2020-05-14-data-insights', (req, res) => {
+  res.render('blog/2020_05_14_data_insights', {
+    layout: 'static',
+    title: 'FindTheMasks-US Data Update',
+    ogTitle: 'FindTheMasks-US DataUpdate',
+    ogUrl: `http://${req.hostname}${req.originalUrl}`,
+    ogDescription: res.locals.banana.i18n('ftm-default-og-description'),
+  });
+});
+
 router.get(['/whoweare', '/whoweare.html'], (req, res) => {
   res.render('whoweare', {
     layout: 'static',
