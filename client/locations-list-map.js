@@ -1339,63 +1339,63 @@ function initMapSearch(data, filters) {
   });
 }
 
-function initContactModal() {
-  let lastOrg = null;
-  $('.contact-modal').on('show.bs.modal', (event) => {
+function initContactModal(modalId) {
+  const modal = $(`#${modalId}`);
+
+  $(`#${modalId}`).on('show.bs.modal', (event) => {
     const el = $(event.relatedTarget);
     const email = el.data('email');
     const name = el.data('name');
-    const modal = $(document.fullscreenElement ? '#contactModalFullScreen' : '#contactModal');
 
-    if (lastOrg !== name) {
-      lastOrg = name;
-      $('#sender-name').val(null);
-      $('#sender-email').val(null);
-      $('#message-subject').val(null);
-      $('#message-text').val(null);
+    if (modal.find('.previous-organization').val() !== name) {
+      modal.find('.previous-organization').val(name);
+      modal.find('.sender-name').val(null);
+      modal.find('.sender-email').val(null);
+      modal.find('.message-subject').val(null);
+      modal.find('.message-text').val(null);
     }
 
     modal.find('.modal-title').text(`${$.i18n('ftm-email-form-title-label')} ${name}`);
-    modal.find('#message-recipient').val(email);
+    modal.find('.message-recipient').val(email);
   });
 
-  $('#contactModal #send-message').on('click', () => {
-    $('.contact-error').html('&nbsp;');
-    $('#send-message').prop('disabled', true);
-    sendEvent('contactOrganization', 'emailSendButtonClicked', $('#contactModal').find('.modal-title').val());
+  $(`#${modalId} .send-message`).on('click', () => {
+    modal.find('.contact-error').html('&nbsp;');
+    modal.find('.send-message').prop('disabled', true);
+    sendEvent('contactOrganization', 'emailSendButtonClicked', modal.find('.modal-title').val());
 
     $.post(
       'https://maskmailer.herokuapp.com/send',
       {
-        name: $('#sender-name').val(),
-        from: $('#sender-email').val(),
-        subject: $('#message-subject').val(),
-        text: $('#message-text').val(),
+        name: modal.find('.sender-name').val(),
+        from: modal.find('.sender-email').val(),
+        subject: modal.find('.message-subject').val(),
+        text: modal.find('.message-text').val(),
         introduction: $.i18n('ftm-email-introduction'),
-        to: $('#message-recipient').val(),
+        to: modal.find('.message-recipient').val(),
         'g-recaptcha-response': window.grecaptcha.getResponse(),
       }
     ).done(() => {
-      $('.contact-form').css('display', 'none');
-      $('.contact-success').css('display', 'block');
-      $('#send-message').prop('disabled', false);
+      modal.find('.contact-form').css('display', 'none');
+      modal.find('.contact-success').css('display', 'block');
+      modal.find('.send-message').prop('disabled', false);
       window.grecaptcha.reset();
-      sendEvent('contactOrganization', 'emailSent', $('#contactModal').find('.modal-title').val());
+      sendEvent('contactOrganization', 'emailSent', modal.find('.modal-title').val());
 
       setTimeout(() => {
-        $('#contactModal').modal('hide');
+        modal.modal('hide');
       }, 5000);
     }).fail((result) => {
-      $('.contact-error').html($.i18n(`ftm-${result.responseJSON.message}`));
-      $('#send-message').prop('disabled', false);
+      modal.find('.contact-error').html($.i18n(`ftm-${result.responseJSON.message}`));
+      modal.find('.send-message').prop('disabled', false);
       window.grecaptcha.reset();
     });
   });
 
-  $('#contactModal').on('hidden.bs.modal', () => {
-    $('.contact-form').css('display', 'block');
-    $('.contact-success').css('display', 'none');
-    $('.contact-error').html('&nbsp;');
+  $(`#${modalId}`).on('hidden.bs.modal', () => {
+    modal.find('.contact-form').css('display', 'block');
+    modal.find('.contact-success').css('display', 'none');
+    modal.find('.contact-error').html('&nbsp;');
   });
 }
 
@@ -1461,13 +1461,23 @@ function initMap(data, filters) {
       const mapControls = gMap.controls[google.maps.ControlPosition.TOP_LEFT];
 
       if (document.fullscreenElement) {
-        // When moving to full screen mode, clone contact modal as map control.
+        // When moving to full screen, clone contact modal for use as map control, per
+        //  https://stackoverflow.com/questions/47247907/google-map-in-fullscreen-with-bootstrap-modal.
         const clone = document.getElementById('contactModal').cloneNode(true);
         clone.id = cloneId;
         mapControls.push(clone);
-        initContactModal();
+        initContactModal(cloneId);
       } else {
-        // When leaving full screen mode, remove map control and destroy clone.
+        // When leaving full screen mode, transfer previous email info to regular modal ...
+        const modal = $('#contactModal');
+        const clone = $('#contactModalFullScreen');
+        const fields = ['.previous-organization', '.sender-name', '.sender-email', '.message-subject', '.message-text'];
+
+        for (const field of fields) {
+          modal.find(field).val(clone.find(field).val());
+        }
+
+        // ... remove map control and destroy clone.
         const index = mapControls.getArray().findIndex((control) => control.id === cloneId);
 
         if (index >= 0) {
@@ -1574,7 +1584,7 @@ $(() => {
     }
   };
 
-  initContactModal();
+  initContactModal('contactModal');
 
   $.getJSON(getDatasetFilename(gDataset, gCountryCode), (result) => {
     if (window.i18nReady) {

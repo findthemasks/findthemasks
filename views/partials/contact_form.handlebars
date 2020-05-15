@@ -11,24 +11,25 @@
         <div class="contact-form">
           <form>
             <div class="form-group">
-              <input type="text" class="form-control i18n" id="sender-name" placeholder="Your Name" data-i18n="[placeholder]ftm-email-form-name-placeholder">
+              <input type="text" class="form-control i18n sender-name" placeholder="Your Name" data-i18n="[placeholder]ftm-email-form-name-placeholder">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control i18n" id="sender-email" placeholder="Your Email" data-i18n="[placeholder]ftm-email-form-email-placeholder">
+              <input type="text" class="form-control i18n sender-email" placeholder="Your Email" data-i18n="[placeholder]ftm-email-form-email-placeholder">
             </div>
             <div class="form-group">
-              <input type="text" class="form-control i18n" id="message-subject" placeholder="Subject" data-i18n="[placeholder]ftm-email-form-subject-placeholder">
+              <input type="text" class="form-control i18n message-subject" placeholder="Subject" data-i18n="[placeholder]ftm-email-form-subject-placeholder">
             </div>
             <div class="form-group">
-              <textarea class="form-control i18n" id="message-text" placeholder="Your Message" data-i18n="[placeholder]ftm-email-form-message-placeholder"></textarea>
+              <textarea class="form-control i18n message-text" placeholder="Your Message" data-i18n="[placeholder]ftm-email-form-message-placeholder"></textarea>
             </div>
             <div class="g-recaptcha" data-sitekey="{{recaptchaSiteKey}}" data-size="compact"></div>
           </form>
           <div class="contact-error">&nbsp;</div>
-          <input type="hidden" id="message-recipient">
+          <input type="hidden" class="previous-organization">
+          <input type="hidden" class="message-recipient">
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="send-message">Send message</button>
+            <button type="button" class="btn btn-primary send-message">Send message</button>
           </div>
         </div>
       </div>
