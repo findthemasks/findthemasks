@@ -353,7 +353,7 @@ function createRequesterMarkerContent(entry, separator) {
 
   if (encryptedEmail) {
     contentTags.push(
-      ce('div', 'label', ctn($.i18n('ftm-email-contact'))),
+      ce('div', 'label', ctn($.i18n('ftm-info-window-email-contact'))),
       ce('div', 'value', $(`<a href="#" data-toggle="modal" data-target=".contact-modal" data-name="${name}" data-email="${encryptedEmail}">${$.i18n('ftm-email-contact-org')}</a>`)[0])
     );
   }
