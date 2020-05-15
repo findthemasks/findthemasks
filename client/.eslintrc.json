@@ -41,6 +41,8 @@
     // Nothing wrong with plusplus!
     "no-plusplus": "off",
 
+    "no-use-before-define": "off",
+
     // Nothing wrong with continue either.
     "no-continue": "off",
 

@@ -177,9 +177,77 @@ export const ORG_TYPES = {
   },
 };
 
+const MAKER_CAPABILITIES = {
+  '3d printing': {
+    name: 'ftm-makers-3d-printing',
+  },
+  'laser cutting': {
+    name: 'ftm-makers-laser-cutting',
+  },
+  'die cutting': {
+    name: 'ftm-makers-die-cutting',
+  },
+  'injection molding': {
+    name: 'ftm-makers-injection-molding',
+  },
+  'die casting': {
+    name: 'ftm-makers-die-casting',
+  },
+  'sewing or textiles': {
+    name: 'ftm-makers-sewing-textiles',
+  },
+  'community coordinator across regional efforts': {
+    name: 'ftm-makers-regional-community-coordinator',
+  },
+  'vacuum molding': {
+    name: 'ftm-makers-vacuum-molding',
+  },
+};
+
+const MAKER_PRODUCTS = {
+  'cloth masks': {
+    name: 'ftm-makers-cloth-masks',
+  },
+  'cloth gowns': {
+    name: 'ftm-makers-cloth-gowns',
+  },
+  'fabricated n95 mask': {
+    name: 'ftm-makers-fabricated-n95-mask',
+  },
+  'face shield': {
+    name: 'ftm-makers-face-shield',
+  },
+  'fabricated papr mask': {
+    name: 'ftm-makers-fabricated-papr-mask',
+  },
+  'cloth ear saver': {
+    name: 'ftm-makers-cloth-ear-saver',
+  },
+  'plastic-ear-saver': {
+    name: 'ftm-makers-plastic-ear-saver',
+  },
+  'ventilator part': {
+    name: 'ftm-makers-ventilator-part',
+  },
+  'intubation box/shield': {
+    name: 'ftm-makers-intubation-box-shield',
+  },
+  'sterilization equipment': {
+    name: 'ftm-makers-sterilization-equipment',
+  },
+  'door handles': {
+    name: 'ftm-makers-door-handles',
+  },
+  'spacer or diffuser': {
+    name: 'ftm-makers-spacer-diffuser',
+  },
+};
+
 export const ENUM_MAPPINGS = {
   ...FILTER_ITEMS,
   ...ORG_TYPES,
+  ...MAKER_CAPABILITIES,
+  ...MAKER_PRODUCTS,
   yes: {
     name: 'ftm-open-packages-yes',
   },

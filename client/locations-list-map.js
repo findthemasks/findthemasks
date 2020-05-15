@@ -4,9 +4,9 @@ import Selectr from 'mobius1-selectr';
 import MarkerClusterer from '@google/markerclustererplus';
 import toDataByLocation from './toDataByLocation.js';
 import countries from '../constants/countries.js';
-import { FILTER_ITEMS, ORG_TYPES, ENUM_MAPPINGS } from './formEnumLookups.js';
+import { ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
-import { ac, ce, ctn, FtmUrl } from './utils.js';
+import { ac, ce, ctn, FtmUrl, htmlToElements } from './utils.js';
 import sendEvent from './sendEvent.js';
 
 require('mobius1-selectr/src/selectr.css');
@@ -50,7 +50,7 @@ const SECONDARY_MARKER_OPTIONS = {
 };
 
 const PRIMARY_MARKER_OPTIONS = {
-  icon: null, // Use default
+  icon: 'https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_red.png',
   opacity: 1,
 };
 
@@ -96,45 +96,67 @@ function translatedFilterItems(filterItems) {
 // and returns the i18n keys from FILTER_ITEMS for accepting items that match
 //
 // NOTE: the incoming data structure is very brittle; if that changes at all, this will break
-function parseFiltersFromData(data) {
-  const acceptedItems = {};
-  const orgTypes = {};
+function parseFiltersFromData(data, datasetFilters) {
+  const filters = {};
+
+  Object.keys(datasetFilters).forEach((datasetFilterKey) => {
+    filters[datasetFilterKey] = {};
+  });
 
   Object.keys(data).forEach((state) => {
     Object.keys(data[state].cities).forEach((city) => {
       data[state].cities[city].entries.forEach((entry) => {
-        // split on commas except if comma is in parentheses
-        if (entry.accepting) {
-          entry.accepting.split(/, (?![^(]*\))/).map((a) => a.trim()).forEach((i) => {
-            const filterKey = i.toLowerCase();
-            if (FILTER_ITEMS[filterKey] !== undefined && acceptedItems[filterKey] === undefined) {
-              acceptedItems[filterKey] = {
-                ...FILTER_ITEMS[filterKey],
-                value: filterKey,
-              };
-            }
-          });
-        }
+        Object.keys(datasetFilters).forEach((datasetFilterKey) => {
+          const { dataKey } = datasetFilters[datasetFilterKey];
 
-        if (entry.org_type) {
-          const orgTypeKey = entry.org_type.toLowerCase();
-
-          if (ORG_TYPES[orgTypeKey] !== undefined && orgTypes[orgTypeKey] === undefined) {
-            orgTypes[orgTypeKey] = {
-              ...ORG_TYPES[orgTypeKey],
-              value: orgTypeKey,
-            };
+          if (entry[dataKey]) {
+            entry[dataKey].split(/,( |)(?![^(]*\))/).map((a) => a.trim()).forEach((i) => {
+              const filterKey = i.toLowerCase();
+              if (ENUM_MAPPINGS[filterKey] !== undefined && filters[datasetFilterKey][filterKey] === undefined) {
+                filters[datasetFilterKey][filterKey] = {
+                  ...ENUM_MAPPINGS[filterKey],
+                  value: filterKey,
+                };
+              }
+            });
           }
-        }
+        });
       });
     });
   });
 
-  return {
-    acceptedItems,
-    orgTypes,
-  };
+  return filters;
 }
+
+// Need a dataKey and filterKey for each item
+// dataKey = key to lookup on entry
+// searchParamKey = search param used for filter
+const filtersByDataset = {
+  makers: {
+    capabilities: {
+      dataKey: 'capabilities',
+      searchParamKey: 'capabilities',
+      placeholder: 'ftm-makers-capabilities',
+    },
+    products: {
+      dataKey: 'products',
+      searchParamKey: 'products',
+      placeholder: 'ftm-makers-products',
+    },
+  },
+  requester: {
+    orgTypes: {
+      dataKey: 'org_type',
+      searchParamKey: 'orgType',
+      placeholder: 'ftm-facility-type',
+    },
+    acceptItems: {
+      dataKey: 'accepting',
+      searchParamKey: 'accepting',
+      placeholder: 'ftm-ppe-needed',
+    },
+  },
+};
 
 // Builds the data structure for tracking which filters are set
 // If all values in a category are false, it's treated as no filter - all items are included
@@ -143,10 +165,10 @@ function parseFiltersFromData(data) {
 // If two or more values in a category are true, the filter is the union of those values
 // If multiple categories have set values, the result is the intersection of those categories
 function createFilters(data) {
+  const datasetFilters = filtersByDataset[gDataset];
+
   const filters = {
     states: {},
-    acceptItems: [],
-    orgTypes: [],
   };
 
   for (const state of Object.keys(data)) {
@@ -154,9 +176,10 @@ function createFilters(data) {
   }
 
   try {
-    const dataFilters = parseFiltersFromData(data);
-    filters.acceptItems = translatedFilterItems(dataFilters.acceptedItems);
-    filters.orgTypes = translatedFilterItems(dataFilters.orgTypes);
+    const dataFilters = parseFiltersFromData(data, datasetFilters);
+    Object.keys(datasetFilters).forEach((datasetFilterKey) => {
+      filters[datasetFilterKey] = translatedFilterItems(dataFilters[datasetFilterKey]);
+    });
   } catch (e) {
     console.error(e);
   }
@@ -166,15 +189,11 @@ function createFilters(data) {
 
 // Returns true if there are any filter values found in the data.
 function areThereFilters(filters) {
-  if ('acceptItems' in filters && Object.keys(filters.acceptItems).length > 0) {
-    return true;
-  }
+  const datasetFilters = filtersByDataset[gDataset];
 
-  if ('orgType' in filters && Object.keys(filters.orgType).length > 0) {
-    return true;
-  }
-
-  return false;
+  return Object.keys(datasetFilters).some((datasetFilterKey) => (
+    datasetFilterKey in filters && Object.keys(filters[datasetFilterKey]).length > 0
+  ));
 }
 
 // Creates an 'applied' property in filters with the subset of the 'states' and 'acceptItems'
@@ -191,19 +210,17 @@ function updateFilters(filters) {
     }
   }
 
-  for (const item of Object.keys(filters.acceptItems)) {
-    if (filters.acceptItems[item].isSet) {
-      applied.acceptItems = applied.acceptItems || {};
-      applied.acceptItems[item] = true;
-    }
-  }
+  const datasetFilters = filtersByDataset[gDataset];
 
-  for (const orgType of Object.keys(filters.orgTypes)) {
-    if (filters.orgTypes[orgType].isSet) {
-      applied.orgTypes = applied.orgTypes || {};
-      applied.orgTypes[orgType] = true;
+  Object.keys(datasetFilters).forEach((datasetFilterKey) => {
+    for (const item of Object.keys(filters[datasetFilterKey])) {
+      if (filters[datasetFilterKey][item].isSet) {
+        applied[datasetFilterKey] = applied[datasetFilterKey] || {};
+        applied[datasetFilterKey][item] = true;
+      }
+      filters[datasetFilterKey].placeholder = datasetFilters[datasetFilterKey].placeholder;
     }
-  }
+  });
 }
 
 function translateEnumValue(value) {
@@ -404,6 +421,18 @@ function createMarkerContent(entry, separator) {
   );
 }
 
+// accepts a marker and sets its icon to either the
+// highlighted icon or the default icon depending on `isHighlighted` arg
+function setMarkerIcon(marker, isHighlighted) {
+  if (marker) {
+    if (isHighlighted) {
+      marker.setIcon('https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_blue.png');
+    } else {
+      marker.setIcon('https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_red.png');
+    }
+  }
+}
+
 function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
   const location = { lat: latitude, lng: longitude };
   const options = {
@@ -445,21 +474,41 @@ function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
     gOpenInfoWindows.push(marker.infowindow);
   });
 
+  marker.addListener('mouseover', () => {
+    setMarkerIcon(marker, true);
+    sendEvent('map', 'markerMouseover', entry.name);
+    $(entry.domElem).addClass('highlighted');
+  });
+
+  marker.addListener('mouseout', () => {
+    setMarkerIcon(marker, false);
+    $(entry.domElem).removeClass('highlighted');
+  });
+
+  // assign marker so that entry click events can reference
+  entry.marker = marker;
   return marker;
 }
 
 function getMarkers(data, appliedFilters, bounds, markerOptions) {
-  const filterAcceptKeys = appliedFilters.acceptItems && Object.keys(appliedFilters.acceptItems);
-  const filterOrgTypeKeys = appliedFilters.orgTypes && Object.keys(appliedFilters.orgTypes);
-  const hasStateFilter = Boolean(appliedFilters.states);
+  const { states, ...otherFilters } = appliedFilters;
+
+  const otherFilterKeys = otherFilters && Object.keys(otherFilters).reduce((acc, otherFilterKey) => {
+    acc[otherFilterKey] = Object.keys(otherFilters[otherFilterKey]);
+    return acc;
+  }, {});
+
+  const datasetFilters = filtersByDataset[gDataset];
+
+  const hasStateFilter = Boolean(states);
 
   const inFiltersMarkers = [];
   const outOfFiltersMarkers = [];
 
   for (const stateName of Object.keys(data)) {
-    const inStateFilter = appliedFilters.states && appliedFilters.states[stateName];
+    const inStateFilter = states && states[stateName];
 
-    const hasFilters = !!filterAcceptKeys || !!filterOrgTypeKeys || hasStateFilter;
+    const hasFilters = Object.keys(otherFilterKeys).length > 0 || hasStateFilter;
 
     const state = data[stateName];
     const { cities } = state;
@@ -478,33 +527,27 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
       for (const entry of city.entries) {
         // filter out if not in state and state filter is applied
         // filter out if not in accept and accept filter is not applied
-        // filter out if not in org type and org type filter is not applied]
+        // filter out if not in org type and org type filter is not applied
 
         // add marker to primary if filters exist && marker matches
         // else add markers to secondary
 
         let secondaryFiltersApplied = false;
 
-        let inAcceptFilter = true;
-        if (filterAcceptKeys) {
-          const acc = (entry.accepting || '').toLowerCase();
-          if (!filterAcceptKeys.some((s) => acc.includes(s))) {
-            inAcceptFilter = false;
+        const inFilters = {};
+
+        Object.keys(otherFilterKeys).forEach((otherFilterKey) => {
+          const otherFilterKeyValues = otherFilterKeys[otherFilterKey];
+          const { dataKey } = datasetFilters[otherFilterKey];
+          const acc = (entry[dataKey] || '').toLowerCase();
+
+          if (!otherFilterKeyValues.some((s) => acc.includes(s))) {
+            inFilters[otherFilterKey] = false;
             secondaryFiltersApplied = true;
           }
-        }
+        });
 
-        let inOrgTypeFilter = true;
-
-        if (filterOrgTypeKeys) {
-          const orgTypeKey = (entry.org_type || '').toLowerCase();
-          if (!filterOrgTypeKeys.includes(orgTypeKey)) {
-            inOrgTypeFilter = false;
-            secondaryFiltersApplied = true;
-          }
-        }
-
-        const inSecondaryFilter = inAcceptFilter && inOrgTypeFilter;
+        const inSecondaryFilter = Object.keys(inFilters).every((inFilterKey) => inFilters[inFilterKey]);
         // state or secondary filter applied
         const filteredEntry = (hasStateFilter && !inStateFilter) || secondaryFiltersApplied;
 
@@ -710,11 +753,11 @@ function showMarkers(data, filters, recenterMap = true) {
 
   const bounds = new google.maps.LatLngBounds();
   const applied = filters.applied || {};
-  const hasFilters = applied.states || applied.acceptItems || applied.orgTypes;
+  const hasFilters = Object.keys(applied).length > 0;
 
   const markers = getMarkers(data, applied, hasFilters && bounds);
 
-  if (applied.states || applied.acceptItems || applied.orgTypes) {
+  if (hasFilters) {
     gPrimaryMarkers = markers.inFilters;
     gSecondaryMarkers = markers.outOfFilters;
   } else {
@@ -758,23 +801,32 @@ function showMarkers(data, filters, recenterMap = true) {
 function getFlatFilteredEntries(data, filters) {
   const entries = [];
   const applied = filters.applied || {};
-  const filterAcceptKeys = applied.acceptItems && Object.keys(applied.acceptItems);
-  const filterOrgTypeKeys = applied.orgTypes && Object.keys(applied.orgTypes);
+
+  const datasetFilters = filtersByDataset[gDataset];
   let listCount = 0; // TODO: hacky, see note below.
 
-  const onEntry = (entry, cityName, stateName) => {
-    if (filterAcceptKeys) {
-      const acc = (entry.accepting || '').toLowerCase();
-      if (!filterAcceptKeys.some((s) => acc.includes(s))) {
-        return;
-      }
-    }
+  const { states, ...otherFilters } = applied;
 
-    if (filterOrgTypeKeys) {
-      const acc = (entry.org_type || '').toLowerCase();
-      if (!filterOrgTypeKeys.some((s) => acc === s)) {
-        return;
+  const otherFilterKeys = otherFilters && Object.keys(otherFilters).reduce((acc, otherFilterKey) => {
+    acc[otherFilterKey] = Object.keys(otherFilters[otherFilterKey]);
+    return acc;
+  }, {});
+
+  const onEntry = (entry, cityName, stateName) => {
+    let notInFilters = false;
+
+    Object.keys(otherFilterKeys).forEach((otherFilterKey) => {
+      const otherFilterKeyValues = otherFilterKeys[otherFilterKey];
+      const { dataKey } = datasetFilters[otherFilterKey];
+      const acc = (entry[dataKey] || '').toLowerCase();
+
+      if (!otherFilterKeyValues.some((s) => acc.includes(s))) {
+        notInFilters = true;
       }
+    });
+
+    if (notInFilters) {
+      return;
     }
 
     if (entry.marker) {
@@ -792,7 +844,7 @@ function getFlatFilteredEntries(data, filters) {
   };
 
   for (const stateName of Object.keys(data).sort()) {
-    if (applied && applied.states && !applied.states[stateName]) {
+    if (states && !states[stateName]) {
       continue;
     }
 
@@ -821,8 +873,10 @@ function getFlatFilteredEntries(data, filters) {
 function createMakerListItemEl(entry) {
   entry.domElem = ce('div', 'location');
   const header = ce('div', 'd-flex');
+  const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
+  headerZoomLink.setAttribute('aria-label', 'Zoom to marker');
   const headerMakerspaceInfo = ce('div', 'flex-grow-1 grey-background');
-  ac(headerMakerspaceInfo, ce('h5', null, ctn(entry.name)));
+  ac(headerMakerspaceInfo, ce('h5', null, [ctn(entry.name), headerZoomLink]));
 
   ac(header, headerMakerspaceInfo);
   ac(entry.domElem, header);
@@ -876,8 +930,10 @@ function createRequesterListItemEl(entry) {
   entry.domElem = ce('div', 'location');
   const header = ce('div', 'd-flex');
   const headerHospitalInfo = ce('div', 'flex-grow-1');
+  const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
+  headerZoomLink.setAttribute('aria-label', 'Zoom to marker');
   const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
-  ac(headerHospitalInfo, ce('h5', null, ctn(entry.name)));
+  ac(headerHospitalInfo, ce('h5', null, [ctn(entry.name), headerZoomLink]));
 
   if (entry.org_type && entry.org_type.length) {
     ac(headerOrgType, [
@@ -912,7 +968,6 @@ function createRequesterListItemEl(entry) {
 
     ac(headerHospitalInfo, para);
   }
-
   ac(header, headerHospitalInfo);
   ac(header, headerOrgType);
   ac(entry.domElem, header);
@@ -975,6 +1030,20 @@ function createRequesterListItemEl(entry) {
   }
 }
 
+// accepts a marker and zooms the map to that marker using our fitMapToMarkersNearBounds logic
+function zoomToMarker(marker) {
+  if (marker) {
+    // we're getting a rough zoom calculation by using our existing fitMapToMarkersNearBounds
+    const bounds = new google.maps.LatLngBounds();
+    bounds.extend(marker.position);
+    fitMapToMarkersNearBounds(bounds);
+    // but ultimately centering on the marker that was clicked
+    gMap.setCenter(marker.position);
+  } else {
+    console.log('no marker to zoom to');
+  }
+}
+
 function getEntryEl(entry) {
   if (!entry.domElem) {
     // Adds the domElem field if it has not been created.
@@ -984,7 +1053,15 @@ function getEntryEl(entry) {
       createRequesterListItemEl(entry);
     }
   }
-
+  $(entry.domElem).find('.entry-zoom-link').on('click', () => {
+    sendEvent('listView', 'clickZoom', entry.name);
+    zoomToMarker(entry.marker);
+  });
+  $(entry.domElem).on('mouseenter', () => {
+    sendEvent('listView', 'mouseover', entry.name);
+    setMarkerIcon(entry.marker, true);
+  });
+  $(entry.domElem).on('mouseleave', () => { setMarkerIcon(entry.marker, false); });
   return entry.domElem;
 }
 
@@ -1064,77 +1141,52 @@ function onFilterChange(data, prefix, idx, selected, filters) {
   showMarkers(data, filters, false);
 }
 
+// Creates the <select> elements for filters.
 function createFilterElements(data, filters) {
-  const acceptedItems = [];
+  for (const f of Object.keys(filters)) {
+    if (f === 'applied' || f === 'states') {
+      continue;
+    }
 
-  // remove filters with the same name
-  const selectedAcceptItemsFilters = {};
+    // All items available in the filter.
+    const selectItems = [];
 
-  // If name is same, do not add filter
-  // When filtering, check if matches any filters that match the name of the selected value
+    // Enums selected in the filter.
+    const selected = {};
 
-  for (const item of Object.keys(filters.acceptItems)) {
-    const itemFilter = filters.acceptItems[item];
-    selectedAcceptItemsFilters[itemFilter.name] = itemFilter;
-  }
 
-  for (const item of Object.keys(selectedAcceptItemsFilters)) {
-    const itemFilter = selectedAcceptItemsFilters[item];
+    for (const item of Object.keys(filters[f])) {
+      const itemFilter = filters[f][item];
+      selected[itemFilter.name] = itemFilter;
 
-    acceptedItems.push({
-      value: itemFilter.value,
-      text: itemFilter.name,
-      selected: itemFilter.isSet,
-    });
-  }
+      selectItems.push({
+        value: itemFilter.value,
+        text: itemFilter.name,
+        selected: itemFilter.isSet,
+      });
+    }
 
-  const ppeNeededSelect = new Selectr('#ppe-needed-select', {
-    customClass: 'ftm-select',
-    data: acceptedItems,
-    multiple: true,
-    searchable: false,
-    placeholder: $.i18n('ftm-ppe-needed'),
-  });
+    if (selectItems.length > 0) {
+      const div = htmlToElements(`<div class="col"><select id="filter-${f}"></select></div>`)[0];
+      document.getElementById('filter-container').appendChild(div);
 
-  ppeNeededSelect.on('selectr.select', (option) => {
-    onFilterChange(data, 'acceptItems', option.idx, true, filters);
-    sendEvent('filters', 'acceptItems', option.value);
-  });
+      const selectr = new Selectr(div.firstElementChild, {
+        customClass: 'ftm-select',
+        data: selectItems,
+        multiple: true,
+        searchable: false,
+        placeholder: $.i18n(filters[f].placeholder || ''),
+      });
 
-  ppeNeededSelect.on('selectr.deselect', (option) => {
-    onFilterChange(data, 'acceptItems', option.idx, false, filters);
-  });
+      selectr.on('selectr.select', (option) => {
+        onFilterChange(data, f, option.idx, true, filters);
+        sendEvent('filters', f, option.value);
+      });
 
-  const facilityTypes = [];
-
-  for (const item of Object.keys(filters.orgTypes)) {
-    const orgType = filters.orgTypes[item];
-    facilityTypes.push({
-      value: orgType.value,
-      text: orgType.name,
-      selected: orgType.isSet,
-    });
-  }
-
-  if (facilityTypes.length > 0) {
-    const facilityTypeSelect = new Selectr('#facility-type-select', {
-      customClass: 'ftm-select',
-      data: facilityTypes,
-      multiple: true,
-      searchable: false,
-      placeholder: $.i18n('ftm-facility-type'),
-    });
-
-    facilityTypeSelect.on('selectr.select', (option) => {
-      onFilterChange(data, 'orgTypes', option.idx, true, filters);
-      sendEvent('filters', 'orgTypes', option.value);
-    });
-
-    facilityTypeSelect.on('selectr.deselect', (option) => {
-      onFilterChange(data, 'orgTypes', option.idx, false, filters);
-    });
-  } else {
-    $('#facility-type-select').parent().remove();
+      selectr.on('selectr.deselect', (option) => {
+        onFilterChange(data, f, option.idx, false, filters);
+      });
+    }
   }
 }
 
@@ -1528,7 +1580,7 @@ function loadMapScript(data, filters) {
 }
 
 const applyFilterParams = ((params, filterSet) => {
-  params.forEach((param) => {
+  params.filter((param) => param && param.trim().length > 0).forEach((param) => {
     const filter = filterSet[decodeURIComponent(param)];
 
     if (filter) {
@@ -1556,13 +1608,15 @@ $(() => {
     const states = (searchParams.state || '').toUpperCase().split(',');
     applyFilterParams(states, filters.states);
 
-    // Update filters to match any ?accepting= params
-    const accepting = (searchParams.accepting || '').toLowerCase().split(',');
-    applyFilterParams(accepting, filters.acceptItems);
+    const datasetFilters = filtersByDataset[gDataset];
 
-    // Update filters to match any ?orgType= params
-    const orgTypes = (searchParams.orgType || '').toLowerCase().split(',');
-    applyFilterParams(orgTypes, filters.orgTypes);
+    Object.keys(datasetFilters).forEach((datasetFilterKey) => {
+      const { searchParamKey } = datasetFilters[datasetFilterKey];
+
+      const values = (searchParams[searchParamKey] || '').toLowerCase().split(',');
+
+      applyFilterParams(values, filters[datasetFilterKey]);
+    });
 
     updateFilters(filters);
 

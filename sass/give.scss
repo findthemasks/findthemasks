@@ -83,6 +83,21 @@ footer {
     font-weight: 600;
   }
 
+  &:hover,
+  &.highlighted {
+    background-color: $gray;
+  }
+
+  .entry-zoom-link {
+    cursor: pointer;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-position: center;
+    vertical-align: middle;
+    padding: 0 1rem;
+  }
+
   .org-type {
     text-align: right;
   }
