@@ -84,6 +84,7 @@
   "ftm-maps-marker-accepting-label" : "수락 :",
   "ftm-maps-marker-org-type-label" : "조직 유형 :",
   "ftm-maps-marker-address-label" : "주소:",
+  "ftm-info-window-email-contact" : "이메일:",
   "ftm-maps-marker-instructions-label" : "명령:",
   "ftm-maps-marker-open-packages-label" : "오픈 패키지? :",
   "ftm-maps-search-placeholder" : "도시, 우편 번호 또는 주소로 검색",
