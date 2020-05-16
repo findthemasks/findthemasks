@@ -1514,22 +1514,18 @@ function initMap(data, filters) {
 
       if (document.fullscreenElement) {
         // When moving to full screen, clone contact modal for use as map control, per
-        //  https://stackoverflow.com/questions/47247907/google-map-in-fullscreen-with-bootstrap-modal.
-        const clone = document.getElementById('contactModal').cloneNode(true);
+        //  https://stackoverflow.com/questions/47247907/google-map-in-fullscreen-with-bootstrap-modal,
+        //  then move the dialog contents into the clone.
+        const clone = document.getElementById('contactModal').cloneNode();
         clone.id = cloneId;
+        $('#contactModalDialog').appendTo(clone);
         mapControls.push(clone);
         initContactModal(cloneId);
       } else {
-        // When leaving full screen mode, transfer previous email info to regular modal ...
-        const modal = $('#contactModal');
-        const clone = $('#contactModalFullScreen');
-        const fields = ['.previous-organization', '.sender-name', '.sender-email', '.message-subject', '.message-text'];
+        // When leaving full screen mode, move the dialog contents back into regular modal, 
+        //  remove map control, and destroy clone. 
+        $('#contactModalDialog').appendTo('#contactModal');
 
-        for (const field of fields) {
-          modal.find(field).val(clone.find(field).val());
-        }
-
-        // ... remove map control and destroy clone.
         const index = mapControls.getArray().findIndex((control) => control.id === cloneId);
 
         if (index >= 0) {
