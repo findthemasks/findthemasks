@@ -1391,63 +1391,63 @@ function initMapSearch(data, filters) {
   });
 }
 
-function initContactModal(modalId) {
-  const modal = $(`#${modalId}`);
-
-  $(`#${modalId}`).on('show.bs.modal', (event) => {
+function initContactModal() {
+  let lastOrg = null;
+  $('#contactModal').on('show.bs.modal', (event) => {
     const el = $(event.relatedTarget);
     const email = el.data('email');
     const name = el.data('name');
+    const modal = $('#contactModal');
 
-    if (modal.find('.previous-organization').val() !== name) {
-      modal.find('.previous-organization').val(name);
-      modal.find('.sender-name').val(null);
-      modal.find('.sender-email').val(null);
-      modal.find('.message-subject').val(null);
-      modal.find('.message-text').val(null);
+    if (lastOrg !== name) {
+      lastOrg = name;
+      $('#sender-name').val(null);
+      $('#sender-email').val(null);
+      $('#message-subject').val(null);
+      $('#message-text').val(null);
     }
 
     modal.find('.modal-title').text(`${$.i18n('ftm-email-form-title-label')} ${name}`);
-    modal.find('.message-recipient').val(email);
+    modal.find('#message-recipient').val(email);
   });
 
-  $(`#${modalId} .send-message`).on('click', () => {
-    modal.find('.contact-error').html('&nbsp;');
-    modal.find('.send-message').prop('disabled', true);
-    sendEvent('contactOrganization', 'emailSendButtonClicked', modal.find('.modal-title').val());
+  $('#send-message').on('click', () => {
+    $('.contact-error').html('&nbsp;');
+    $('#send-message').prop('disabled', true);
+    sendEvent('contactOrganization', 'emailSendButtonClicked', $('#contactModal').find('.modal-title').val());
 
     $.post(
       'https://maskmailer.herokuapp.com/send',
       {
-        name: modal.find('.sender-name').val(),
-        from: modal.find('.sender-email').val(),
-        subject: modal.find('.message-subject').val(),
-        text: modal.find('.message-text').val(),
+        name: $('#sender-name').val(),
+        from: $('#sender-email').val(),
+        subject: $('#message-subject').val(),
+        text: $('#message-text').val(),
         introduction: $.i18n('ftm-email-introduction'),
-        to: modal.find('.message-recipient').val(),
+        to: $('#message-recipient').val(),
         'g-recaptcha-response': window.grecaptcha.getResponse(),
       }
     ).done(() => {
-      modal.find('.contact-form').css('display', 'none');
-      modal.find('.contact-success').css('display', 'block');
-      modal.find('.send-message').prop('disabled', false);
+      $('.contact-form').css('display', 'none');
+      $('.contact-success').css('display', 'block');
+      $('#send-message').prop('disabled', false);
       window.grecaptcha.reset();
-      sendEvent('contactOrganization', 'emailSent', modal.find('.modal-title').val());
+      sendEvent('contactOrganization', 'emailSent', $('#contactModal').find('.modal-title').val());
 
       setTimeout(() => {
-        modal.modal('hide');
+        $('#contactModal').modal('hide');
       }, 5000);
     }).fail((result) => {
-      modal.find('.contact-error').html($.i18n(`ftm-${result.responseJSON.message}`));
-      modal.find('.send-message').prop('disabled', false);
+      $('.contact-error').html($.i18n(`ftm-${result.responseJSON.message}`));
+      $('#send-message').prop('disabled', false);
       window.grecaptcha.reset();
     });
   });
 
-  $(`#${modalId}`).on('hidden.bs.modal', () => {
-    modal.find('.contact-form').css('display', 'block');
-    modal.find('.contact-success').css('display', 'none');
-    modal.find('.contact-error').html('&nbsp;');
+  $('#contactModal').on('hidden.bs.modal', () => {
+    $('.contact-form').css('display', 'block');
+    $('.contact-success').css('display', 'none');
+    $('.contact-error').html('&nbsp;');
   });
 }
 
@@ -1508,31 +1508,17 @@ function initMap(data, filters) {
       };
     }
 
+    // A custom map control will allow contact modal to appear over fullscreen map.
+    // See https://stackoverflow.com/questions/47247907/google-map-in-fullscreen-with-bootstrap-modal
+    gMap.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('contactModalFullscreenContainer'));
+
     element.onfullscreenchange = () => {
-      const cloneId = 'contactModalFullScreen';
-      const mapControls = gMap.controls[google.maps.ControlPosition.TOP_LEFT];
-
       if (document.fullscreenElement) {
-        // When moving to full screen, clone contact modal for use as map control, per
-        //  https://stackoverflow.com/questions/47247907/google-map-in-fullscreen-with-bootstrap-modal,
-        //  then move the dialog contents into the clone.
-        const clone = document.getElementById('contactModal').cloneNode();
-        clone.id = cloneId;
-        $('#contactModalDialog').appendTo(clone);
-        mapControls.push(clone);
-        initContactModal(cloneId);
+        // When map goes full screen, move contact modal into custom map control.
+        $('#contactModal').appendTo('#contactModalFullscreenContainer');
       } else {
-        // When leaving full screen mode, move the dialog contents back into regular modal, 
-        //  remove map control, and destroy clone. 
-        $('#contactModalDialog').appendTo('#contactModal');
-
-        const index = mapControls.getArray().findIndex((control) => control.id === cloneId);
-
-        if (index >= 0) {
-          mapControls.removeAt(index).remove();
-        } else {
-          console.warn('Clone of contact modal was not found in map controls.');
-        }
+        // When map leaves full screen, move contact modal back to normal container.
+        $('#contactModal').appendTo('#contactModalContainer');
       }
     };
   });
@@ -1634,7 +1620,7 @@ $(() => {
     }
   };
 
-  initContactModal('contactModal');
+  initContactModal();
 
   $.getJSON(getDatasetFilename(gDataset, gCountryCode), (result) => {
     if (window.i18nReady) {
