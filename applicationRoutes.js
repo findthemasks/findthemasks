@@ -2,6 +2,7 @@
 
 const express = require('express');
 const formatFbLocale = require('./utils/formatFbLocale');
+const setDataset = require('./utils/setDataset');
 const getDonationFormUrl = require('./viewHelpers/getDonationFormUrl.js');
 const localizePartialPath = require('./viewHelpers/localizePartialPath');
 const getLocalContactEmail = require('./viewHelpers/getLocalContactEmail');
@@ -168,7 +169,7 @@ router.get('/maker-form', (req, res) => {
 // map functionality can be run in a different "mode" so to speak.
 router.use('/makers', (req, res, next) => {
   // Override the dataset. Expect countryCode to be set at the top-level routing.
-  res.locals.dataset = 'makers';
+  res.locals.dataset = setDataset(req.query, 'makers');
 
   router(req, res, next);
 });

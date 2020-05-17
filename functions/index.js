@@ -34,7 +34,7 @@ const SHEETS = {
   it: '1YHt6G1ghcXrRqXflevxHAwg2XOXmG2Cym6nSS5vXe7Q',
   pl: '10EsvvozwLTQpn0ejvPjZSWt9lve3fnMHBHltW-v_zkY',
   pt: '1QnyjUUBT_P476dEl0WfQwVnW15Ie7ogty7DiOkMhHLo',
-  us: '1GwP7Ly6iaqgcms0T80QGCNW4y2gJ7tzVND2CktFqnXM'
+  us: '1GwP7Ly6iaqgcms0T80QGCNW4y2gJ7tzVND2CktFqnXM',
 };
 
 if (functions.config().googleapi !== undefined) {
@@ -229,12 +229,17 @@ async function annotateGeocode(data, sheet_id, client) {
   }
 }
 
-async function getSpreadsheet(country, client) {
+async function getSpreadsheet(prefix, country, client) {
   const sheets = google.sheets('v4');
   const request = {
     spreadsheetId: SHEETS[country],
     range: 'Combined'
   };
+
+  if (prefix === 'getusppe-affiliates') {
+   request.spreadsheetId = '1WJC_08ajFT77C5peWPTnYyWARIU3PT8BXAxoGk90bdA';
+  }
+
   request.auth = client;
 
   let response = await sheets.spreadsheets.values.get(request);
@@ -291,11 +296,10 @@ const ENCRYPTED_EMAIL_HEADER_NAME = 'Encrypted Email';
 const ENCRYPTED_EMAIL_COL_LABEL = 'encrypted_email';
 
 
-async function snapshotData(country) {
-  const base_filename = `data-${country}`;
+async function snapshotData(prefix, country) {
+  const base_filename = `${prefix}-${country}`;
   const csv_filename = `${base_filename}.csv`;
   const json_filename = `${base_filename}.json`;
-  const html_snippet_filename = `data_snippet-${country}.html`;
 
   // Talk to sheets.
   const client = await getAuthorizedClient();
@@ -303,7 +307,7 @@ async function snapshotData(country) {
   let csvDataValues = [];
 
   try {
-    data = await getSpreadsheet(country, client);
+    data = await getSpreadsheet(prefix, country, client);
 
     if (data.values.length < 2) {
       throw new Error("Too few rows. Is row 2 a the column labels?");
@@ -423,19 +427,8 @@ async function snapshotData(country) {
   });
 
   const data_by_location = toDataByLocation(data);
-  const html_snippets = toHtmlSnippets(data_by_location);
 
-  const htmlSnippetfileRef = admin.storage().bucket().file(html_snippet_filename);
-  await htmlSnippetfileRef.save(html_snippets, {
-    gzip: true,
-    metadata: {
-      cacheControl: "public, max-age=20",
-      contentType: "text/html"
-    },
-    predefinedAcl: "publicRead"
-  });
-
-  return [data, html_snippets];
+  return [data];
 }
 
 // Fetch lat & lng for the given address by making a call to the Google Maps API.
@@ -497,73 +490,6 @@ function toDataByLocation(data) {
   return data_by_location;
 }
 
-function toHtmlSnippets(data_by_location) {
-  let padding = 0;
-  const lines = [];
-  let addLine = str => lines.push(' '.repeat(padding) + str);
-
-  addLine('<article>');
-  padding += 2;
-
-  // Output each entry by state.
-  for (const state of Object.keys(data_by_location).sort()) {
-    addLine(`<section data-state="${state}">`);
-    padding += 2;
-
-    addLine(`<h2>${state}</h2>`);
-
-    const cities = data_by_location[state];
-    for (const city of Object.keys(cities).sort()) {
-      addLine(`<section data-city="${city}">`);
-      padding += 2;
-
-      addLine(`<h3 data-state="${city}">${city}</h3>`);
-
-      for (const entry of cities[city]) {
-        const name = entry['name'];
-        const address = entry['address'] || '';
-        const instructions = entry['instructions'];
-        const accepting = entry['accepting'];
-        const lat = entry['lat'];
-        const lng = entry['lng'];
-        const open_box = entry['open_box'];
-
-        addLine(`<article data-entry=${JSON.stringify(name)} data-accepting=${JSON.stringify(accepting)} data-lat=${JSON.stringify(lat)} data-lng=${JSON.stringify(lng)} data-open-box=${JSON.stringify(open_box)}>`);
-        padding += 2;
-        addLine(`<h4 class="marginBottomZero">${name}</h4>`);
-
-        addLine('<label>Address</label>')
-        addLine(`<p class="marginTopZero medEmph">${address.replace(/\n/g, '<br>')}</p>`);
-
-        if (instructions !== "") {
-          addLine('<label>Instructions</label>')
-          addLine(`<p>${instructions}</p>`);
-        }
-        if (accepting !== "") {
-          addLine('<label>Accepting</label>')
-          addLine(`<p>${accepting}</p>`);
-        }
-        if (open_box !== "") {
-          addLine('<label>Open packages?</label>')
-          addLine(`<p>${open_box}</p>`);
-        }
-
-        padding -= 2;
-        addLine(`</article>`);
-      }
-
-      padding -= 2;
-      addLine(`</section>`);
-    }
-
-    padding -= 2;
-    addLine(`</section>`);
-  }
-  padding -= 2;
-  addLine('</article>');
-  return lines.join("\n");
-}
-
 module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
   const country = get_country_from_path(req);
   if (country === 'makers') {
@@ -571,13 +497,18 @@ module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
     return;
   }
 
-  if (!(country in SHEETS)) {
-    res.status(400).send(`invalid country: ${country} for ${req.path}`);
-    return;
+  let data = null;
+  if (country === 'getusppe-affiliates') {
+    [data] = await snapshotData('getusppe-affiliates', 'us');
+  } else  {
+    if (!(country in SHEETS)) {
+      res.status(400).send(`invalid country: ${country} for ${req.path}`);
+      return;
+    }
+    [data] = await snapshotData(data, country);
   }
 
-  const [data, html_snippets] = await snapshotData(country);
-  res.status(200).send(html_snippets);
+  res.status(200).send(`<pre>${JSON.stringify(data, null, 2)}</pre>`);
 });
 
 async function updateSheetWithGeocodes(country) {

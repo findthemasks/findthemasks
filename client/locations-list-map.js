@@ -156,6 +156,7 @@ const filtersByDataset = {
       placeholder: 'ftm-ppe-needed',
     },
   },
+  'getusppe-affiliates': {},
 };
 
 // Builds the data structure for tracking which filters are set
@@ -340,6 +341,7 @@ function createRequesterMarkerContent(entry, separator) {
     open_box: openBox,
     rdi,
     timestamp,
+    website,
   } = entry;
 
   // Text to go into InfoWindow
@@ -375,6 +377,13 @@ function createRequesterMarkerContent(entry, separator) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-date-updated'))),
       ce('div', 'value', ctn(date.toLocaleDateString(localeString, options)))
+    );
+  }
+
+  if (website) {
+    contentTags.push(
+      ce('div', 'label', ctn('Website')),
+      linkifyElement(ce('div', 'value', website))
     );
   }
 
@@ -927,6 +936,8 @@ function createRequesterListItemEl(entry) {
   const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
   ac(headerHospitalInfo, ce('h5', null, [ctn(entry.name), headerZoomLink]));
 
+  const { website } = entry;
+
   if (entry.org_type && entry.org_type.length) {
     ac(headerOrgType, [
       ce('span', 'org-type', ctn(translateEnumValue(entry.org_type))),
@@ -1008,6 +1019,15 @@ function createRequesterListItemEl(entry) {
       ce('p', 'col-12 col-md-9', ctn(date.toLocaleDateString(localeString, options))),
     ]);
     ac(entry.domElem, timestampContainer);
+  }
+
+  if (website) {
+    const websiteContainer = ce('div', 'row');
+    ac(websiteContainer, [
+      ce('label', 'col-12 col-md-3', ctn('Website')),
+      linkifyElement(ce('p', 'col-12 col-md-9', ctn(website))),
+    ]);
+    ac(entry.domElem, websiteContainer);
   }
 
   if (entry.instructions) {
@@ -1209,7 +1229,7 @@ function getDatasetFilename(dataset, countryCode) {
 }
 
 function loadOtherCountries() {
-  if (gDataset === 'makers') {
+  if (gDataset !== 'requester') {
     return;
   }
 

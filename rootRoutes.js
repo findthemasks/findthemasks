@@ -10,6 +10,7 @@ const router = express.Router();
 
 const cachedData = {};
 const cachedMakersData = {};
+const cachedGupData = {};
 
 function sendDataJson(cache, countryCode, res) {
   const HEADERS = {
@@ -74,6 +75,10 @@ router.use(express.static('public'));
 router.get('/data(-:countryCode)?.json', (req, res) => {
   const countryCode = req.params.countryCode || 'us';
   sendDataJsonFromCache(cachedData, 'data', countryCode, res);
+});
+
+router.get('/getusppe-affiliates(-:countryCode)?.json', (req, res) => {
+  sendDataJsonFromCache(cachedGupData, 'getusppe-affiliates', 'us', res);
 });
 
 router.get('/makers(-:countryCode)?.json', (req, res) => {
