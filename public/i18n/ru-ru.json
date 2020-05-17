@@ -84,6 +84,7 @@
   "ftm-maps-marker-accepting-label" : "Прием:",
   "ftm-maps-marker-org-type-label" : "Тип организации:",
   "ftm-maps-marker-address-label" : "Адрес:",
+  "ftm-info-window-email-contact" : "Электронное письмо:",
   "ftm-maps-marker-instructions-label" : "Инструкции:",
   "ftm-maps-marker-open-packages-label" : "Открытые пакеты ?:",
   "ftm-maps-search-placeholder" : "Поиск по городу, почтовому индексу или адресу",
