@@ -87,7 +87,7 @@
   "ftm-info-window-email-contact" : "Email:",
   "ftm-maps-marker-instructions-label" : "Instructions:",
   "ftm-maps-marker-open-packages-label" : "Paquets ouverts?:",
-  "ftm-maps-search-placeholder" : "Entrer un code postal",
+  "ftm-maps-search-placeholder" : "Recherche par lieu",
   "ftm-maps-search-reset" : "Réinitialiser la liste de la carte &",
   "ftm-maps-search-use-location" : "Utiliser ma localisation",
   "ftm-open-packages" : "Ouvrir les packages OK?",
