@@ -87,7 +87,7 @@
   "ftm-info-window-email-contact" : "이메일:",
   "ftm-maps-marker-instructions-label" : "명령:",
   "ftm-maps-marker-open-packages-label" : "오픈 패키지? :",
-  "ftm-maps-search-placeholder" : "도시, 우편 번호 또는 주소로 검색",
+  "ftm-maps-search-placeholder" : "위치로 검색",
   "ftm-maps-search-reset" : "지도 & 목록 재설정",
   "ftm-maps-search-use-location" : "내 위치 사용",
   "ftm-open-packages" : "패키지 열기 OK?",
