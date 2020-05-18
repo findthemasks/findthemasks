@@ -596,6 +596,10 @@ dl.faq-question {
   }
 }
 
+.navbar.ftm .nav-item {
+  white-space: nowrap;
+}
+
 .navbar.ftm .nav-item.show,
 .navbar.ftm .nav-item.show .nav-link:hover {
   background: #3f5cbb;
@@ -628,7 +632,6 @@ dl.faq-question {
   background: $pink;
   white-space: nowrap;
   font-weight: 600;
-  margin-left: 1rem;
   padding-left: 1rem;
   padding-right: 1.4rem;
 }
@@ -661,7 +664,6 @@ dl.faq-question {
   background: #fdc276;
   white-space: nowrap;
   font-weight: 600;
-  margin-left: 1rem;
   padding-left: 1rem;
   padding-right: 1.4rem;
 }
@@ -941,4 +943,20 @@ div.figure img {
 
 .contact-modal #message-text {
   height: 120px;
+}
+
+/****************************************************************
+  * NAVBAR LARGE TABLET / SMALL DESKTOP SIZE TRANSITIONAL STUFF *
+ ****************************************************************/
+
+@media (max-width: 1265px) and (min-width: $breakpoint-md) {
+  .navbar.ftm .navbar-nav .nav-link {
+    font-size: 10.5px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  .navbar.ftm .btn-xlink, .navbar.ftm .btn-addplace {
+    font-size: 10.5px;
+  }
 }
