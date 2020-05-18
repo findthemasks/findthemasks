@@ -22,6 +22,7 @@ let EMAIL_ENCRYPTION_KEY = '';
 let SMARTY_STREETS_AUTH_ID = '';
 let SMARTY_STREETS_AUTH_TOKEN = '';
 
+const GETUSPPE_AFFILIATES_SHEET_ID = '1WJC_08ajFT77C5peWPTnYyWARIU3PT8BXAxoGk90bdA';
 const SHEETS = {
   at: '19gKSyKmT4yU7F32R3lBM6p0rmMJXusX_uMYDq1CMTIo',
   ca: '1STjEiAZVZncXMCUBkfLumRNk1PySLSmkvZuPqflQ1Yk',
@@ -237,7 +238,7 @@ async function getSpreadsheet(prefix, country, client) {
   };
 
   if (prefix === 'getusppe-affiliates') {
-   request.spreadsheetId = '1WJC_08ajFT77C5peWPTnYyWARIU3PT8BXAxoGk90bdA';
+   request.spreadsheetId = GETUSPPE_AFFILIATES_SHEET_ID;
   }
 
   request.auth = client;
@@ -511,13 +512,13 @@ module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
   res.status(200).send(`<pre>${JSON.stringify(data, null, 2)}</pre>`);
 });
 
-async function updateSheetWithGeocodes(country) {
+async function updateSheetWithGeocodes(spreadsheetId) {
   const client = await getAuthorizedClient();
 
   // Open relevant sheet
   const sheets = google.sheets('v4');
   const request = {
-    spreadsheetId: SHEETS[country],
+    spreadsheetId,
     range: 'Combined'
   };
   request.auth = client;
@@ -527,17 +528,22 @@ async function updateSheetWithGeocodes(country) {
   // Find rows that have been approved but not geocoded.
   // Call geocoder.
   // Fill in cells with lat, lng
-  await annotateGeocode(response.data, SHEETS[country], client);
+  await annotateGeocode(response.data, spreadsheetId, client);
 }
 
 module.exports.geocode = functions.https.onRequest(async (req, res) => {
   const country = get_country_from_path(req);
-  if (!(country in SHEETS)) {
+  let spreadsheetId = null;
+  if (country === 'getusppe-affiliates') {
+    spreadsheetId = GETUSPPE_AFFILIATES_SHEET_ID;
+  } else if (country in SHEETS) {
+    spreadsheetId = SHEETS[country];
+  } else {
     res.status(400).send(`invalid country: ${country} for ${req.path}`);
     return;
   }
 
-  await updateSheetWithGeocodes(country);
+  await updateSheetWithGeocodes(spreadsheetId);
   res.status(200).send("Geocoded and updated spreadsheet successfully");
 });
 
