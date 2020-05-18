@@ -87,6 +87,7 @@
   "ftm-maps-marker-accepting-label": "Accepting:",
   "ftm-maps-marker-org-type-label": "Organization Type:",
   "ftm-maps-marker-address-label": "Address:",
+  "ftm-info-window-email-contact": "Email:",
   "ftm-maps-marker-instructions-label": "Instructions:",
   "ftm-maps-marker-open-packages-label": "Open Packages?:",
   "ftm-maps-search-placeholder": "Search by city, zip, or address",

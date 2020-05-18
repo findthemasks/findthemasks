@@ -3,6 +3,7 @@ const expressHandlebars = require('express-handlebars');
 const vhost = require('vhost');
 const rootRoutes = require('./rootRoutes');
 const navHelpers = require('./viewHelpers/navHelpers');
+const setDataset = require('./utils/setDataset');
 require('dotenv').config();
 require('handlebars-helpers')();
 
@@ -60,12 +61,12 @@ app.use((req, res, next) => {
 
 // Makers virtual host.
 app.use(vhost(/findthemakers\.com|www\.findthemakers\.com|makers\.local\.findthemasks.com/, (req, res, next) => {
-  res.locals.dataset = 'makers';
+  res.locals.dataset = setDataset(req.query, 'makers');
   rootRoutes(req, res, next);
 }));
 
 app.use('/', (req, res, next) => {
-  res.locals.dataset = 'requester';
+  res.locals.dataset = setDataset(req.query, 'requester');
   rootRoutes(req, res, next);
 });
 
