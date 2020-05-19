@@ -40,6 +40,7 @@
               Community FAQ.
             </p>
           </dd>
+          {{#unless (eq dataset "makers")}}
           <dt class="btn-link" id="ftm-faq-who-donating-to">
             <h5 class="i18n" data-i18n="ftm-faq-who-donating-to">Who am I donating to?</h5>
           </dt>
@@ -63,6 +64,7 @@
               before
               publishing it to our site.</p>
           </dd>
+          {{/unless}}
           <dt class="btn-link" id="ftm-add-donation-site-question">
             <h5 class="i18n" data-i18n="ftm-add-donation-site-question">
               Do you work in a hospital or clinic and need PPE? Want to update or remove information?
@@ -110,6 +112,7 @@
             </ol>
           </dd>
           {{> (lookup . 'maskMatchPartialPath') }}
+          {{#unless (eq dataset "makers")}}
           <dt class="btn-link" id="ftm-faq-open-packages">
             <h5 class="i18n" data-i18n="ftm-faq-open-packages">What if I have open packages of PPE?</h5>
           </dt>
@@ -134,6 +137,7 @@
               </li>
             </ul>
           </dd>
+          {{/unless}}
           {{> (lookup . 'largeDonationSitesPartialPath') }}
           <dt class="btn-link" id="ftm-faq-how-decide-location">
             <h5 class="i18n" data-i18n="ftm-faq-how-decide-location">
@@ -157,6 +161,8 @@
               choose!
             </p>
           </dd>
+          {{#unless (eq dataset "makers")}}
+
           <dt class="btn-link" id="ftm-cant-find-donation-site-question">
             <h5 class="i18n" data-i18n="ftm-cant-find-donation-site-question">
               Can't find a donation site near you?
@@ -168,6 +174,7 @@
               accepts mail-in donations, and follow the instructions for that site.
             </p>
           </dd>
+          {{/unless}}
           <dt class="btn-link" id="ftm-faq-how-to-help">
             <h5 class="i18n" data-i18n="ftm-faq-how-to-help">How else can I help?</h5>
           </dt>
@@ -187,6 +194,8 @@
       <section>
         <h4 class="i18n faq-header" data-i18n="ftm-faq-ppe-recipients-header">FAQs for PPE Recipients</h4>
         <dl class="faq-question">
+          {{#unless (eq dataset "makers")}}
+
           <dt class="btn-link" id="ftm-faq-request-processing-length">
             <h5 class="i18n" data-i18n="ftm-faq-request-processing-length">
               How long will it take for my request to be processed?
@@ -200,6 +209,7 @@
               hours for a listing to be published.
             </p>
           </dd>
+          {{/unless}}
           <dt class="btn-link" id="ftm-faq-my-data">
             <h5 class="i18n" data-i18n="ftm-faq-my-data">
               What happens to my data? Who owns the data that I submit?
