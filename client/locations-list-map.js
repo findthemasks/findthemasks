@@ -1605,11 +1605,9 @@ $(() => {
     // we can't just use `result.values.length - 2` because the makers dataset
     // has some entries that do not have valid lat/lng, so we want to count the entries
     // after we've cleaned the data
-    totalEntries = Object.keys(data).reduce((accumulator, currVal) => {
-      return accumulator + Object.keys(data[currVal].cities).reduce((accum, curr) => {
-        return accum + data[currVal].cities[curr].entries.length
-      }, 0);
-    }, 0);
+    totalEntries = Object.keys(data)
+      .reduce((accumulator, currVal) => (accumulator + Object.keys(data[currVal].cities)
+        .reduce((accum, curr) => (accum + data[currVal].cities[curr].entries.length), 0)), 0);
 
     const showList = searchParams['hide-list'] !== 'true';
     const showFilters = searchParams['hide-filters'] !== 'true';
