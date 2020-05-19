@@ -7,6 +7,9 @@
       <h1 class="i18n page-title" data-i18n="ftm-faqs-header">Frequently Asked Questions (FAQ)</h1>
     </div>
     <div class="col-12 col-lg-8">
+      {{#if (eq dataset "makers")}}
+      {{> 'makers_faq' }}
+      {{/if}}
       <section>
         <h4 class="i18n faq-header" data-i18n="ftm-faq-basic-faqs-header">Basic FAQs</h4>
         <dl class="faq-question">
@@ -97,7 +100,7 @@
                 they accept and how to drop it off.
               </li>
               <li class="i18n" data-i18n="[html]ftm-what-to-do-3"><b>If you are donating opened
-                packages</b>,
+                  packages</b>,
                 please put them in a ziploc bag with a note saying whether they have been used, whether
                 anyone
                 in your household has been sick or travelled outside the country, and the expiration
@@ -213,7 +216,7 @@
             </p>
             <p class="i18n" data-i18n="[html]ftm-faq-my-data-answer-2">
               For more information, please see our<a href="https://findthemasks.com/privacy-policy">Privacy
-              Policy</a>
+                Policy</a>
             </p>
           </dd>
           <dt class="btn-link" id="ftm-faq-listing-not-shown">
@@ -230,100 +233,16 @@
           </dd>
         </dl>
       </section>
-      <section id="section-makers">
-        <h4 class="i18n faq-header" data-i18n="ftm-faq-makerspace-header">Makerspace Community FAQs</h4>
-        <dl class="faq-question">
-          <dt class="btn-link" id="ftm-faq-makerspace-how-to-help">
-            <h5 class="i18n" data-i18n="ftm-faq-makerspace-how-to-help">
-              I make handmade masks, 3D-print face shields, or am part of a makerspace community! How
-              can I help?
-            </h5>
-          </dt>
-          <dd class="collapse">
-            <p class="i18n" data-i18n="ftm-faq-makerspace-how-to-help-answer-1">
-              First of all, amazing! Thank you for taking the time to make new PPE supplies!
-            </p>
-            <p class="i18n" data-i18n="ftm-faq-makerspace-how-to-help-answer-2">
-              Please use our map to help you identify frontline sites requesting PPE that allow non-medical grade
-              donations. You can use our "PPE needed" filter to select "homemade" or "makerspace" items, which will
-              show
-              you the locations that can receive your items.
-            </p>
-          </dd>
-          <dt class="btn-link" id="ftm-faq-sites-non-medical-grade">
-            <h5 class="i18n" data-i18n="ftm-faq-sites-non-medical-grade">Why don't all sites allow non-medical grade
-              items?</h5>
-          </dt>
-          <dd class="collapse">
-            <p class="i18n" data-i18n="ftm-faq-sites-non-medical-grade-answer-1">
-              As much as our recipients need PPE, they must also manage the risk incurred by using
-              non-medical grade items. Many institutions do not have the resources to vet all of the
-              contributions they receive from various donors, and some are more comfortable only using
-              the medical-grade items that they are familiar with and know they can rely on.
-            </p>
-            <p class="i18n" data-i18n="ftm-faq-sites-non-medical-grade-answer-2">
-              To ensure that your contributions are not wasted, please filter healthcare providers by "handmade" or
-              "makerspace" items to locate the ones that can use your contribution!
-            </p>
-          </dd>
-          <dt class="btn-link" id="ftm-faq-makerspace-partners">
-            <h5 class="i18n" data-i18n="ftm-faq-makerspace-partners">Who are #findthemasks Makers
-              partners?</h5>
-          </dt>
-          <dd class="collapse">
-            <p class="i18n" data-i18n="[html]ftm-faq-makerspace-partners-answer-1">
-              Our <a href="https://findthemakers.com">#findthemakers</a> is in partnership with
-              <a href="https://www.nationofmakers.us/">Nation of Makers</a>. Nation of Makers is
-              a national nonprofit supporting America’s maker organizations through community
-              building, resource sharing, and advocacy, within the maker movement and beyond. Nation
-              of Makers is supporting maker organizations during the COVID-19 crisis by connecting
-              them to facilities that need PPE, identifying suppliers (and discounts) for maker
-              groups fabricating PPE, and identifying funding sources for groups producing PPE. They
-              are also collating <a href="https://www.nationofmakers.us/covid-19-maker-response">
-              resources for makers responding to COVID-19</a>.
-            </p>
-            <p class="i18n" data-i18n="[html]ftm-faq-makerspace-partners-answer-2">
-              #findthemasks works with <a href="https://shield-net.org/">Shield Net</a>, a group
-              that matches organizations in need of medical face shields with manufacturers that
-              produce them. They have amassed a wide network of university makerspaces and
-              commercial manufacturers who are making face shields based on their
-              <a href="https://making.engr.wisc.edu/shield/">open-source design</a>.
-            </p>
-          </dd>
-          <dt class="btn-link" id="ftm-faq-independent-makerspace">
-            <h5 class="i18n" data-i18n="ftm-faq-independent-makerspace">
-              I'm an independent maker, how do I join a Maker Group or network?
-            </h5>
-          </dt>
-          <dd class="collapse">
-            <p class="i18n" data-i18n="[html]ftm-faq-independent-makerspace-answer-1">
-              If you are a makerspace of any size, join their face shield network
-              <a
-                href="https://docs.google.com/forms/d/e/1FAIpQLSei2ti1aSj4e6Ky4TcPaLFfp8aa2n8TOHItIFKsD-DritAZeg/viewform">here</a>.
-            </p>
-            <p class="i18n" data-i18n="[html]ftm-faq-independent-makerspace-answer-2">
-              If you would like to purchase face shields at-cost, fill out their request form
-              <a
-                href="https://docs.google.com/forms/d/e/1FAIpQLSeDHmXGMf4VGZApVmMNd733DyaekIcWVMasadRvDGovMOdNMA/viewform">here</a>.
-            </p>
-            <p class="i18n" data-i18n="[html]ftm-faq-independent-makerspace-answer-3">
-              Shield Net only supplies face shields; for other PPE needs, fill out our #findthemasks
-              <a class="add-donation-site-form">PPE request form</a>.
-            </p>
-            <p class="i18n" data-i18n="[html]ftm-faq-independent-makerspace-answer-4">
-              <strong>CA Only</strong>: Find the Masks Canada also collaborates with #thePPEDrive’s
-              call for <a href="https://theppedrive.com/3d-printed-visor">3D printers</a>. Join
-              their network to donate 3D-printed face shields.
-            </p>
-          </dd>
-        </dl>
-      </section>
+      {{#unless (eq dataset "makers")}}
+      {{> 'makers_faq' }}
+      {{/unless}}
     </div>
     <div class="col-12 col-lg-3 offset-lg-1">
       <h5 class="page-subhead" data-i18n="ftm-faq-still-have-questions">Still have questions?</h5>
       <p>
         <strong class="18n" data-i18n="ftm-faq-still-have-questions-answer">Get in touch!</strong>
-        <span class="i18n" data-i18n="ftm-faq-still-have-questions-subheader">Our volunteer team is here to answer your questions.</span>
+        <span class="i18n" data-i18n="ftm-faq-still-have-questions-subheader">Our volunteer team is here to answer your
+          questions.</span>
       </p>
       <dl>
         <dt class="i18n" data-i18n="ftm-faq-inquiries">Inquiries</dt>
@@ -335,7 +254,7 @@
         </dt>
         <dd>
           <a class="i18n" data-i18n="ftm-nav-volunteer" href="javascript:;"
-             onclick="window.location='volunteer'+window.location.search;">
+            onclick="window.location='volunteer'+window.location.search;">
             Join Us
           </a>
         </dd>
