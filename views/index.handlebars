@@ -8,7 +8,7 @@
   {{> top_nav }}
 
   <div class="row flex-lg-row no-gutters">
-    <div class="col-12 col-lg-6 search-filter-container">
+    <div id="filter-div" class="col-12 col-lg-6 search-filter-container">
       <div class="bg-white ">
         <div class="bg-dark-blue text-light">
 
@@ -70,7 +70,7 @@
       </div>
     </div>
 
-    <div class="col-12 col-lg-6">
+    <div id="map-div" class="col-12 col-lg-6">
       <div class="map-container">
         <div class="locations-loading text-center">
           <img src="/images/icons/loader.svg" alt="loading" class="load-spinner" />
@@ -81,6 +81,9 @@
           {{/if}}
         </div>
         <div id="map"></div>
+        <button id="customFullscreenButton" draggable="false" title="Toggle fullscreen view" type="button" style="display: none; background: none rgb(255, 255, 255); border: 0px; margin: 10px; padding: 0px; position: absolute; cursor: pointer; user-select: none; border-radius: 2px; height: 40px; width: 40px; box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px; overflow: hidden; top: 0px; right: 0px;">
+          <img id="customFullscreenImage" src="/images/icons/growMap.svg" style="height: 18px; width: 18px;">
+        </button>
       </div>
     </div>
 
@@ -97,7 +100,7 @@
       <div class="locations-container row no-gutters" style="display: none;">
         <div id="locations-list" class="locations-list col"></div>
       </div>
-      {{> contact_form}}
     </div>
   </div>
+  {{> contact_form}}
 </div>

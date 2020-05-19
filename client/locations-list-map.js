@@ -373,7 +373,7 @@ function createRequesterMarkerContent(entry, separator) {
   if (encryptedEmail) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-info-window-email-contact'))),
-      ce('div', 'value', $(`<a href="#" data-toggle="modal" data-target=".contact-modal" data-name="${name}" data-email="${encryptedEmail}">${$.i18n('ftm-email-contact-org')}</a>`)[0])
+      ce('div', 'value', $(`<a href="#" data-toggle="modal" data-target="#contactModal" data-name="${name}" data-email="${encryptedEmail}">${$.i18n('ftm-email-contact-org')}</a>`)[0])
     );
   }
 
@@ -1486,7 +1486,7 @@ function initMap(data, filters) {
 
   $('.map-container').show();
 
-  gMap = new google.maps.Map(element);
+  gMap = new google.maps.Map(element, { fullscreenControl: false });
   gSecondaryCluster = new MarkerClusterer(gMap, [], {
     clusterClass: 'secondarycluster',
     imagePath: '/images/markercluster/m',
@@ -1527,20 +1527,6 @@ function initMap(data, filters) {
         lng: currentLng,
       };
     }
-
-    // A custom map control will allow contact modal to appear over fullscreen map.
-    // See https://stackoverflow.com/questions/47247907/google-map-in-fullscreen-with-bootstrap-modal
-    gMap.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('contactModalFullscreenContainer'));
-
-    element.onfullscreenchange = () => {
-      if (document.fullscreenElement) {
-        // When map goes full screen, move contact modal into custom map control.
-        $('#contactModal').appendTo('#contactModalFullscreenContainer');
-      } else {
-        // When map leaves full screen, move contact modal back to normal container.
-        $('#contactModal').appendTo('#contactModalContainer');
-      }
-    };
   });
 
   const mapBounds = gMap.getBounds();
@@ -1559,6 +1545,54 @@ function initMap(data, filters) {
   initMapSearch(data, filters);
 
   loadOtherCountries();
+
+  // Add map control for custom fullscreen behavior.
+  // (Regular fullsceen behavior of Google maps messes up Bootstrap modals, popovers, etc.)
+  gMap.controls[google.maps.ControlPosition.TOP_RIGHT].push(document.getElementById('customFullscreenButton'));
+  $('#customFullscreenButton').show();
+
+  $('#customFullscreenButton').on('click', () => {
+    // From https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_fullscreen2
+    if (document.fullscreenElement) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) { /* Firefox */
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { /* IE/Edge */
+        document.msExitFullscreen();
+      }
+    } else {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.mozRequestFullScreen) { /* Firefox */
+        elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { /* IE/Edge */
+        elem.msRequestFullscreen();
+      }
+    }
+  });
+
+  document.documentElement.onfullscreenchange = () => {
+    if (document.fullscreenElement) {
+      // When browser goes full screen, show only nav bar and map.
+      $('#filter-div').hide();
+      $('#locations-div').hide();
+      $('#map-div').width('100vw');
+      $('#map').width('100vw');
+      $('#customFullscreenImage').attr('src', '/images/icons/shrinkMap.svg');
+    } else {
+      // When browser leaves full screen, show everything.
+      $('#filter-div').show();
+      $('#locations-div').show();
+      $('#map').width('100%');
+      $('#customFullscreenImage').attr('src', '/images/icons/growMap.svg');
+    }
+  };
 }
 
 // Lazy-loads the Google maps script once we know we need it. Sets up
