@@ -66,6 +66,10 @@ let gLastLocationRendered = -1;
 
 const searchParams = new FtmUrl(window.location.href).searchparams;
 
+// tracks number of entries in dataset
+// gets set when we retrieve the dataset
+let totalEntries;
+
 // Converts a string from 'a,b,c' to 'a, b, c'
 function addSpaceAfterComma(str) {
   if (str) {
@@ -678,15 +682,17 @@ function numberFormat(number, decimalPlaces, decSeparator, thouSeparator) {
  *
  * @param   $elem   jQuery selector for the stats element
  * @param   count   The number for render
+ * @param   total   The total number of entries in the dataset
  */
-function updateStats($elem, count) {
+function updateStats($elem, count, total) {
   const prettyMarkerCount = numberFormat(count, 0);
+  const prettyTotalCount = numberFormat(total, 0);
   $elem.show();
 
   if (gDataset === 'makers') {
-    $elem.html($.i18n('ftm-makers-count', prettyMarkerCount));
+    $elem.html($.i18n('ftm-makers-count', prettyMarkerCount, prettyTotalCount));
   } else {
-    $elem.html($.i18n('ftm-requesters-count', prettyMarkerCount));
+    $elem.html($.i18n('ftm-requesters-count', prettyMarkerCount, prettyTotalCount));
   }
 }
 
@@ -793,7 +799,7 @@ function showMarkers(data, filters, recenterMap = true) {
   updateClusters(gPrimaryCluster, gSecondaryCluster);
 
   const $mapStats = $('#map-stats');
-  updateStats($mapStats, markers.inFilters.length + markers.outOfFilters.length);
+  updateStats($mapStats, markers.inFilters.length + markers.outOfFilters.length, totalEntries);
 
   // HACK. On some browsers, the markercluster freaks out if it gets a bunch of new markers
   // immediately followed by a map view change. Making the view change async works around
@@ -873,7 +879,7 @@ function getFlatFilteredEntries(data, filters) {
   if (gMap) {
     // if the map hasn't loaded yet, don't update requester count - otherwise it'll flash once
     // the map uploads (depending on zoom level)
-    updateStats($('#list-stats'), listCount);
+    updateStats($('#list-stats'), listCount, totalEntries);
   }
 
   return entries;
@@ -1628,6 +1634,15 @@ const applyFilterParams = ((params, filterSet) => {
 $(() => {
   const renderListings = (result) => {
     const data = toDataByLocation(result);
+
+    // calculates total entries from parsed dataset
+    // we can't just use `result.values.length - 2` because the makers dataset
+    // has some entries that do not have valid lat/lng, so we want to count the entries
+    // after we've cleaned the data
+    totalEntries = Object.keys(data)
+      .reduce((accumulator, currVal) => (accumulator + Object.keys(data[currVal].cities)
+        .reduce((accum, curr) => (accum + data[currVal].cities[curr].entries.length), 0)), 0);
+
     const showList = searchParams['hide-list'] !== 'true';
     const showFilters = searchParams['hide-filters'] !== 'true';
     const showMap = searchParams['hide-map'] !== 'true';
