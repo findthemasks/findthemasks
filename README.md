@@ -8,7 +8,7 @@ This repo hosts the code for findthemasks.com which also provides an embeddable 
 
 ## New volunteer?
 
-Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-dtgs1qck-imUSOaWBZmBMFgnwy5uVqw>
+Join the slack! <https://join.slack.com/t/findthemasks/shared_invite/zt-ejpx15bn-6H7K51xGCWp7FEXMn1nQqw>
 
 - new dev? please look at issues and comment on something to grab it!
     - Check out the [Getting Started](getting_started.md) doc
