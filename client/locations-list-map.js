@@ -313,6 +313,7 @@ function createMakerMarkerContent(entry, separator) {
   };
 
   addParagraph($.i18n('ftm-makers-website'), entry.website);
+  addParagraph($.i18n('ftm-makers-description'), entry.description);
   addParagraph($.i18n('ftm-makers-contact'), entry.public_contact);
   addLine($.i18n('ftm-makers-group-type'), addSpaceAfterComma(entry.group_type));
   addLine($.i18n('ftm-makers-capabilities'), addSpaceAfterComma(entry.capabilities));
@@ -924,9 +925,10 @@ function createMakerListItemEl(entry) {
   };
 
   addParagraph($.i18n('ftm-makers-website'), entry.website);
+  addParagraph($.i18n('ftm-makers-description'), entry.description);
   addParagraph($.i18n('ftm-makers-contact'), entry.public_contact);
-  addLine($.i18n('ftm-makers-location'), `${entry.city}, ${entry.state} ${entry.zip}`);
   addLine($.i18n('ftm-makers-group-type'), addSpaceAfterComma(entry.group_type));
+  addLine($.i18n('ftm-makers-location'), entry.address);
   addLine($.i18n('ftm-makers-capabilities'), addSpaceAfterComma(entry.capabilities));
   addLine($.i18n('ftm-makers-products'), addSpaceAfterComma(entry.products));
   addLine($.i18n('ftm-makers-other-product'), addSpaceAfterComma(entry.other_product));
