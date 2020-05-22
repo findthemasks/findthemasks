@@ -136,24 +136,6 @@ async function writeMakerJson(entries, admin, req, res) {
   return res.status(200).send(`<body>loaded: ${JSON.stringify(data, null, 2)}</body>`);
 }
 
-const OSMS_FIELD_MAP = {
-  'ID': '',
-  'Your Facebook Group (or other) Name': 'name',
-  'City': 'city',
-  'Country': 'country',
-  'State/Region': 'state',
-  'Zip Code': 'zip',
-  'URL': 'website',
-  'Description': '',
-  'PPE Items Produced': 'products',
-  'If "Other" PPE Items produced, please fill in:': 'other_product',
-  'Face Shield Type': 'face_shield_type',
-  'Type of Organization': '',
-  'Type of Org - Other': '',
-  'Public Contact Info': '',
-  'Nation of Makers List': 'is_from_nom',
-};
-
 function geocodeEntry(entry) {
   let address = "";
   if (entry.zip) {
@@ -177,7 +159,7 @@ function geocodeEntry(entry) {
 }
 
 async function loadOsmsData() {
-  const OSMS_SHARED_VIEW = 'https://airtable.com/shrjbq5Lc5GfY1XxC/tbl2MGCIVfMuZA5Am';
+  const OSMS_SHARED_VIEW = "https://airtable.com/shr3ztpGfdigyTkBI";
 
   const values = [];
 
@@ -186,11 +168,12 @@ async function loadOsmsData() {
   const geocodePromises = [];
 
   for (const entry of dataRows) {
+    if (entry['Nation of Makers List']) {
+      continue;
+    }
+    entry.website = entry.url;
+
     values.push(entry);
-
-    // OSMS id column is the name.
-    entry.name = entry.airtable_id;
-
     geocodePromises.push(geocodeEntry(entry));
   }
 

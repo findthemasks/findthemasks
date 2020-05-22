@@ -78,12 +78,11 @@ function parseAirtableData(airtableData) {
     for (const [key, value] of Object.entries(row.cellValuesByColumnId)) {
       if (key in columnNames) {
         const column = columnNames[key];
+        entry['row'] = row.id;
         if (column.ftm_name) {
           entry[column.ftm_name] = column.valueTranslator(value);
-          entry['row'] = row.id;
-        } else if (column.name === 'ID') {
-          // Always encode the airtable primary key.
-          entry['airtable_id'] = value;
+        } else {
+          entry[column.name] = column.valueTranslator(value);
         }
       }
     }
