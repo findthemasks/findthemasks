@@ -65,6 +65,8 @@ let gLocationsListEntries = [];
 let gLastLocationRendered = -1;
 
 const searchParams = new FtmUrl(window.location.href).searchparams;
+const showList = searchParams['hide-list'] !== 'true';
+const showMap = searchParams['hide-map'] !== 'true';
 
 // tracks number of entries in dataset
 // gets set when we retrieve the dataset
@@ -679,20 +681,36 @@ function numberFormat(number, decimalPlaces, decSeparator, thouSeparator) {
 
 /**
  * Adjusts stats in header above map to call out number of markers currently being rendered.
- *
- * @param   $elem   jQuery selector for the stats element
- * @param   count   The number for render
- * @param   total   The total number of entries in the dataset
  */
-function updateStats($elem, count, total) {
-  const prettyMarkerCount = numberFormat(count, 0);
-  const prettyTotalCount = numberFormat(total, 0);
-  $elem.show();
+function updateStats() {
+  // Start with count of location list rows ...
+  let countShown = gLocationsListEntries.length;
+
+  if (showMap) {
+    if (!gMap) {
+      return;
+    }
+
+    const mapBounds = gMap.getBounds();
+    if (!mapBounds) {
+      return;
+    }
+
+    // ... but defer to count of markers in map bounds, when applicable.
+    const countInBounds = (count, marker) => count + mapBounds.contains(marker.getPosition());
+    countShown = gPrimaryMarkers.reduce(countInBounds, 0);
+    countShown += gSecondaryMarkers.reduce(countInBounds, 0);
+  }
+
+  const prettyMarkerCount = numberFormat(countShown, 0);
+  const prettyTotalCount = numberFormat(totalEntries, 0);
+  const stats = $('#list-stats');
+  stats.show();
 
   if (gDataset === 'makers') {
-    $elem.html($.i18n('ftm-makers-count', prettyMarkerCount, prettyTotalCount));
+    stats.html($.i18n('ftm-makers-count', prettyMarkerCount, prettyTotalCount));
   } else {
-    $elem.html($.i18n('ftm-requesters-count', prettyMarkerCount, prettyTotalCount));
+    stats.html($.i18n('ftm-requesters-count', prettyMarkerCount, prettyTotalCount));
   }
 }
 
@@ -798,8 +816,7 @@ function showMarkers(data, filters, recenterMap = true) {
 
   updateClusters(gPrimaryCluster, gSecondaryCluster);
 
-  const $mapStats = $('#map-stats');
-  updateStats($mapStats, markers.inFilters.length + markers.outOfFilters.length, totalEntries);
+  updateStats(); // filters have possibly changed
 
   // HACK. On some browsers, the markercluster freaks out if it gets a bunch of new markers
   // immediately followed by a map view change. Making the view change async works around
@@ -818,8 +835,6 @@ function getFlatFilteredEntries(data, filters) {
   const applied = filters.applied || {};
 
   const datasetFilters = filtersByDataset[gDataset];
-  let listCount = 0; // TODO: hacky, see note below.
-
   const { states, ...otherFilters } = applied;
 
   const otherFilterKeys = otherFilters && Object.keys(otherFilters).reduce((acc, otherFilterKey) => {
@@ -852,7 +867,6 @@ function getFlatFilteredEntries(data, filters) {
       }
     }
 
-    listCount++;
     entry.cityName = cityName;
     entry.stateName = stateName;
     entries.push(entry);
@@ -871,15 +885,6 @@ function getFlatFilteredEntries(data, filters) {
       const sortedEntries = city.entries.sort((a, b) => a.name.localeCompare(b.name));
       sortedEntries.forEach((entry) => onEntry(entry, cityName, stateName));
     }
-  }
-
-  // TODO: This is hacky since technically this function should ONLY be responsible for generating
-  // HTML snippets, not updating stats; however this is the quickest method for updating filter
-  // stats as well.
-  if (gMap) {
-    // if the map hasn't loaded yet, don't update requester count - otherwise it'll flash once
-    // the map uploads (depending on zoom level)
-    updateStats($('#list-stats'), listCount, totalEntries);
   }
 
   return entries;
@@ -1130,9 +1135,14 @@ function initializeEmbedLocationCollapse() {
 }
 
 function refreshList(data, filters) {
+  if (!showList) {
+    return;
+  }
+
   gLocationsListEntries = getFlatFilteredEntries(data, filters);
   gLastLocationRendered = -1;
   $('.locations-list').empty();
+  updateStats(); // number of locations in list has (probably) changed
   renderNextListPage();
   // initializes collapse logic on locations table if this is the embed
   if (isEmbed) {
@@ -1163,8 +1173,14 @@ function onFilterChange(data, prefix, idx, selected, filters) {
   });
 
   updateFilters(filters);
-  refreshList(data, filters);
-  showMarkers(data, filters, false);
+
+  if (showList) {
+    refreshList(data, filters);
+  }
+
+  if (showMap) {
+    showMarkers(data, filters, false);
+  }
 }
 
 // Creates the <select> elements for filters.
@@ -1524,14 +1540,22 @@ function initMap(data, filters) {
       const currentLat = mapBounds.getCenter().lat();
       const currentLng = mapBounds.getCenter().lng();
 
-      if (currentLat !== gCurrentViewportCenter.lat || currentLng !== gCurrentViewportCenter.lng) {
-        refreshList(data, filters);
+      if (showList) {
+        // When "changing" to initial bounds, the location list is already in sync,
+        //  *unless* the URL specified coordinates.
+        if ((gCurrentViewportCenter.lat && gCurrentViewportCenter.lat !== currentLat)
+          || (gCurrentViewportCenter.lng && gCurrentViewportCenter.lng !== currentLng)
+          || searchParams.coords) {
+          refreshList(data, filters);
+        }
       }
 
       gCurrentViewportCenter = {
         lat: currentLat,
         lng: currentLng,
       };
+
+      updateStats(); // number of markers in map bounds has (probably) changed
     }
   });
 
@@ -1643,9 +1667,7 @@ $(() => {
       .reduce((accumulator, currVal) => (accumulator + Object.keys(data[currVal].cities)
         .reduce((accum, curr) => (accum + data[currVal].cities[curr].entries.length), 0)), 0);
 
-    const showList = searchParams['hide-list'] !== 'true';
     const showFilters = searchParams['hide-filters'] !== 'true';
-    const showMap = searchParams['hide-map'] !== 'true';
 
     const $map = $('#map');
     // Second, allow an override from ?hide-search=[bool].
