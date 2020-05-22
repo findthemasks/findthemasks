@@ -949,8 +949,10 @@ function createRequesterListItemEl(entry) {
   const headerHospitalInfo = ce('div', 'flex-grow-1');
   const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
   headerZoomLink.setAttribute('aria-label', 'Zoom to marker');
+  const headerExternalLink = ce('div', 'icon icon-search entry-external-link');
+  headerExternalLink.setAttribute('aria-label', 'External call to action');
   const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
-  ac(headerHospitalInfo, ce('h5', null, [ctn(entry.name), headerZoomLink]));
+  ac(headerHospitalInfo, ce('h5', null, [ctn(entry.name), headerZoomLink, headerExternalLink]));
 
   const { website } = entry;
 
@@ -1084,6 +1086,18 @@ function getEntryEl(entry) {
   $(entry.domElem).find('.entry-zoom-link').on('click', () => {
     sendEvent('listView', 'clickZoom', entry.name);
     zoomToMarker(entry.marker);
+  });
+  $(entry.domElem).find('.entry-external-link').on('click', () => {
+    $.post(
+      'https://httpbin.org/post',
+      {
+        row: entry.row,
+        name: entry.name
+      }
+    ).done((response) => {
+      alert(`The external site processed your request concerning row ${response.form.row}, ${response.form.name}`)
+    }).fail((result) => {
+    });
   });
   $(entry.domElem).on('mouseenter', () => {
     sendEvent('listView', 'mouseover', entry.name);
