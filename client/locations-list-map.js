@@ -704,13 +704,13 @@ function updateStats() {
 
   const prettyMarkerCount = numberFormat(countShown, 0);
   const prettyTotalCount = numberFormat(totalEntries, 0);
-  const stats = $('#list-stats');
-  stats.show();
+  const $stats = $('#list-stats');
+  $stats.show();
 
   if (gDataset === 'makers') {
-    stats.html($.i18n('ftm-makers-count', prettyMarkerCount, prettyTotalCount));
+    $stats.html($.i18n('ftm-makers-count', prettyMarkerCount, prettyTotalCount));
   } else {
-    stats.html($.i18n('ftm-requesters-count', prettyMarkerCount, prettyTotalCount));
+    $stats.html($.i18n('ftm-requesters-count', prettyMarkerCount, prettyTotalCount));
   }
 }
 
@@ -1135,10 +1135,6 @@ function initializeEmbedLocationCollapse() {
 }
 
 function refreshList(data, filters) {
-  if (!showList) {
-    return;
-  }
-
   gLocationsListEntries = getFlatFilteredEntries(data, filters);
   gLastLocationRendered = -1;
   $('.locations-list').empty();
