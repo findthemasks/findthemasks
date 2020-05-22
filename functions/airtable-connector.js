@@ -1,8 +1,5 @@
 const Airtable = require('airtable');
 const functions = require('firebase-functions');
-const csv = require('csv-parse');
-const fs = require('fs');
-const zipcodes = require('zipcodes');
 const { geocodeAddress } = require('./geocode.js');
 const { readAirtableSharedView, parseAirtableData } = require('./airtable-shared-view.js');
 
