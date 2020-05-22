@@ -108,10 +108,11 @@ function loadNomData(admin) {
       // Missing lat/lng. Geocode it.
       if (!entry.lat || !entry.lng) {
         let geocode = geocodeEntry(entry);
+        // eslint-disable-next-line promise/no-nesting
         geocodePromises.push(geocode.then(e => {
           record.set('[lat]', geocode.latitude);
           record.set('[lng]', geocode.longitude);
-          saves.push(record.save());
+          return saves.push(record.save());
         }));
       }
     }
