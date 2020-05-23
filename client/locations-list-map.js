@@ -1719,10 +1719,21 @@ $(() => {
     }
   });
 
-  const footerHeight = 40; // small buffer near bottom of window
-  $(window).scroll(() => {
-    if ($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
-      renderNextListPage();
+  if (showList) {
+    const footerHeight = 40; // small buffer near bottom of window
+
+    if (isEmbed) {
+      $('#locations-list').scroll(() => {
+        if ($('#locations-list').scrollTop() + $('#locations-list').innerHeight() > $('#locations-list')[0].scrollHeight - footerHeight) {
+          renderNextListPage();
+        }
+      });
+    } else {
+      $(window).scroll(() => {
+        if ($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
+          renderNextListPage();
+        }
+      });
     }
-  });
+  }
 });
