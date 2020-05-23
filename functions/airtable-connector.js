@@ -61,19 +61,16 @@ function toDataJson(entries) {
       if (entry[field] !== undefined) {
         row.push(entry[field]);
       } else {
-        if (field === 'approved') {
-          row.push('x');
-        } else {
-          row.push('');
-        }
+        row.push('');
       }
     }
   }
+  const approvedIndex = FIELDS.findIndex(e => e === 'approved');
   return {
     values: [
       FIELDS,
       FIELDS,
-      ...values,
+      ...values.filter(e => e[approvedIndex].toLowerCase() === 'x'),
     ]
   };
 }
@@ -102,6 +99,11 @@ function loadNomData(admin) {
             entry[stable_header] = value;
           }
         }
+      }
+
+      // Only publish approved entries.
+      if (!entry.approved || entry.approved.toLowerCase() !== 'x') {
+        continue;
       }
       entries.push(entry);
 
@@ -171,7 +173,10 @@ async function loadOsmsData() {
     if (entry['Nation of Makers List']) {
       continue;
     }
+
+    // Correct data field naming.
     entry.website = entry.url;
+    entry.approved = 'x';
 
     values.push(entry);
     geocodePromises.push(geocodeEntry(entry));

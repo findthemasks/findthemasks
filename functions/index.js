@@ -373,7 +373,7 @@ async function snapshotData(prefix, country) {
       throw new Error("sheet missing expected columns. Ensure row 2 headers are sane?");
     }
 
-    const approved_rows = trimmed_values.filter(e => e[approvedIndex] === "x");
+    const approved_rows = trimmed_values.filter(e => e[approvedIndex].toLowerCase() === "x");
 
     const approvedCSVRows = approved_rows.map((row) => (
       row.filter((_, colNumber) => colNumber !== resultEmailIndex)
@@ -419,44 +419,7 @@ async function snapshotData(prefix, country) {
     }
   });
 
-  const data_by_location = toDataByLocation(data);
-
   return [data];
-}
-
-function toDataByLocation(data) {
-  const headers = data.values[1];
-  const approvedIndex = headers.findIndex(e => e === 'approved');
-  const stateIndex = headers.findIndex(e => e === 'state');
-  const cityIndex = headers.findIndex(e => e === 'city');
-  const data_by_location = {};
-
-  const published_entries = data.values.slice(1).filter((entry) => entry[approvedIndex] === "x");
-
-  published_entries.forEach(async (entry) => {
-    let entry_array;
-    const state = entry[stateIndex];
-    const city = entry[cityIndex];
-    if (!(state in data_by_location) || !(city in data_by_location[state])) {
-      entry_array = [];
-      if (state in data_by_location) {
-        data_by_location[state][city] = entry_array;
-      } else {
-        data_by_location[state] = { [city]: entry_array };
-      }
-    } else {
-      entry_array = data_by_location[state][city];
-    }
-    const entry_obj = {};
-    headers.forEach((value, index) => {
-      if (entry[index] !== "") {
-        entry_obj[value] = (typeof entry[index]) === 'string' ? entry[index].trim() : entry[index];
-      }
-    });
-    entry_array.push(entry_obj);
-  });
-
-  return data_by_location;
 }
 
 module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
