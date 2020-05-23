@@ -22,6 +22,7 @@
     "firebase-functions": "^3.3.0",
     "google-auth-library": "^5.10.1",
     "googleapis": "^48.0.0",
+    "url-safe-base64": "^1.1.1",
     "zipcodes": "^8.0.0"
   },
   "devDependencies": {

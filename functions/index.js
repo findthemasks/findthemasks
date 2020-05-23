@@ -5,6 +5,7 @@ const { request } = require('gaxios');
 const crypto = require('crypto');
 const { loadMakerData } = require('./airtable-connector.js');
 const { geocodeAddress, makeAddress } = require('./geocode.js');
+const urlsafeBase64 = require('url-safe-base64');
 
 admin.initializeApp();
 
@@ -18,6 +19,7 @@ const { google } = require('googleapis');
 let CONFIG_CLIENT_ID = '';
 let CONFIG_CLIENT_SECRET = '';
 let EMAIL_ENCRYPTION_KEY = '';
+let MAIL_LINK_ENCRYPTION_KEY = '';
 let SMARTY_STREETS_AUTH_ID = '';
 let SMARTY_STREETS_AUTH_TOKEN = '';
 
@@ -41,6 +43,7 @@ if (functions.config().googleapi !== undefined) {
   CONFIG_CLIENT_ID = functions.config().googleapi.client_id
   CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
   EMAIL_ENCRYPTION_KEY = functions.config().findthemasks.email_encryption_key;
+  MAIL_LINK_ENCRYPTION_KEY = functions.config().findthemasks.mail_link_encryption_key;
   SMARTY_STREETS_AUTH_ID = functions.config().findthemasks.smarty_streets_auth_id;
   SMARTY_STREETS_AUTH_TOKEN = functions.config().findthemasks.smarty_streets_auth_token
 }
@@ -49,7 +52,9 @@ const COLUMNS = [
   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
   'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
   'AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK', 'AL', 'AM',
-  'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ'
+  'AN', 'AO', 'AP', 'AQ', 'AR', 'AS', 'AT', 'AU', 'AV', 'AW', 'AX', 'AY', 'AZ',
+  'BA', 'BB', 'BC', 'BD', 'BE', 'BF', 'BG', 'BH', 'BI', 'BJ', 'BK', 'BL', 'BM',
+  'BN', 'BO', 'BP', 'BQ', 'BR', 'BS', 'BT', 'BU', 'BV', 'BW', 'BX', 'BY', 'BZ',
 ];
 const COMBINED_WRITEBACK_SHEET = "'Combined'";
 const SMARTY_STREETS_OUTPUT_SHEET = "'Smarty Street Output'";
@@ -267,6 +272,20 @@ async function getSpreadsheet(prefix, country, client) {
   }
 
   return data;
+}
+
+// Takes an object and returns an base64 encoded encyrption of the JSON
+// stringification.
+function encrypt(key, data) {
+  if (!key) {
+    throw `Invalid key ${key}`;
+  }
+  const json = JSON.stringify(data);
+  const iv = crypto.randomBytes(16);
+  const cipher = crypto.createCipheriv('aes-256-gcm', EMAIL_ENCRYPTION_KEY, iv);
+  let ciphertext = cipher.update(json, 'utf-8', 'base64');
+  ciphertext += cipher.final('base64');
+  return urlsafeBase64.encode(ciphertext);
 }
 
 const encryptEmail = (email) => {
@@ -688,4 +707,88 @@ module.exports.smarty_streets_analysis = functions.https.onRequest(async (req, r
 
   await annotateSmartyStreetsAddresses(country);
   res.status(200).send("Smarty Streets Output tab updated successfully!");
+});
+
+async function writeCommandLinks(country) {
+  const client = await getAuthorizedClient();
+
+  const sheetId = SHEETS[country];
+
+  // Open relevant sheet
+  const sheets = google.sheets('v4');
+  const request = {
+    spreadsheetId: sheetId,
+    range: 'Combined'
+  };
+  request.auth = client;
+
+  const response = await sheets.spreadsheets.values.get(request);
+  const data = response.data;
+
+  const upperCaseCountry = country.toUpperCase();
+
+  const headers = data.values[1];
+  const [header_values, col_labels, real_values] = splitValues(data);
+
+  const rowIdIndex = headers.findIndex(e => e === 'row_id');
+  const lgtmLinkIndex = headers.findIndex(e => e === 'lgtm_link');
+  const removeLinkIndex = headers.findIndex(e => e === 'remove_link');
+  if (rowIdIndex === -1 || lgtmLinkIndex === -1 || removeLinkIndex === -1) {
+    console.error('No row_id or lgtm_link or remove_link');
+    return;
+  }
+
+  const lgtmLinkColumn = COLUMNS[lgtmLinkIndex];
+  const removeLinkColumn = COLUMNS[removeLinkIndex];
+
+  const writeData = [];
+  const writeRequest = {
+    spreadsheetId: sheetId,
+    resource: {
+      valueInputOption: 'USER_ENTERED',
+      data: writeData
+    }
+  };
+  writeRequest.auth = client;
+  const date = (new Date()).toISOString().split('T')[0];
+  real_values.forEach((entry, index) => {
+    const row_id = entry[rowIdIndex];
+
+    // Row numbers start at 1.  First 2 rows are headers, so we need to add 2.
+    const row_num = index + 1 + 2;
+
+    const command = { i: row_id, d: date, c: 'g' };
+    const commandUrl = 'https://findthemasks.com/api/command/';
+    // Commands:
+    //   g = still good
+    //   r = remove
+    writeData.push({
+      range: `${COMBINED_WRITEBACK_SHEET}!${lgtmLinkColumn}${row_num}`,
+      values: [[commandUrl + encrypt(MAIL_LINK_ENCRYPTION_KEY, command)]]
+    });
+
+    command.c = 'r';
+    writeData.push({
+      range: `${COMBINED_WRITEBACK_SHEET}!${removeLinkColumn}${row_num}`,
+      values: [[commandUrl + encrypt(MAIL_LINK_ENCRYPTION_KEY, command)]]
+    });
+  });
+
+  await google.sheets('v4').spreadsheets.values.batchUpdate(writeRequest);
+}
+
+module.exports.make_command_links = functions.https.onRequest(async (req, res) => {
+  const country = get_country_from_path(req);
+  if (!(country in SHEETS)) {
+    res.status(400).send(`invalid country: ${country} for ${req.path}`);
+    return;
+  }
+
+  try {
+    await writeCommandLinks(country);
+    res.status(200).send("Write back mail links");
+  } catch (e) {
+    console.log(e);
+    res.status(500).send("Failed to write back email links");
+  }
 });
