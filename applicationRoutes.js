@@ -48,7 +48,11 @@ const linkPartners = [
 ];
 
 router.get(['/give', '/give.html', '/embed'], (req, res) => {
-  res.locals.partnerSite = linkPartners.find((element) => req.header.referer.startsWith(element));
+  if (req.headers.referer) {
+    res.locals.partnerSite = linkPartners.find(
+      (element) => req.headers.referer.startsWith(element),
+    );
+  }
 
   const isMaker = res.locals.dataset === 'makers';
   res.render('give', {
