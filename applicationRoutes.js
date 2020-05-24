@@ -43,7 +43,13 @@ router.get('/faq', (req, res) => {
   });
 });
 
+const linkPartners = [
+  'https://dewv.net/', // TODO build real site list; this is for testing (Steve Mattingly's site)
+];
+
 router.get(['/give', '/give.html', '/embed'], (req, res) => {
+  res.locals.partnerSite = linkPartners.find((element) => req.header.referer.startsWith(element));
+
   const isMaker = res.locals.dataset === 'makers';
   res.render('give', {
     version: herokuVersion,

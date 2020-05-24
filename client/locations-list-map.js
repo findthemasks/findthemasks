@@ -952,12 +952,16 @@ function createRequesterListItemEl(entry) {
   entry.domElem = ce('div', 'location');
   const header = ce('div', 'd-flex');
   const headerHospitalInfo = ce('div', 'flex-grow-1');
+  const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
   const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
   headerZoomLink.setAttribute('aria-label', 'Zoom to marker');
-  const headerExternalLink = ce('div', 'icon icon-search entry-external-link');
-  headerExternalLink.setAttribute('aria-label', 'External call to action');
-  const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
-  ac(headerHospitalInfo, ce('h5', null, [ctn(entry.name), headerZoomLink, headerExternalLink]));
+  const children = [ctn(entry.name), headerZoomLink];
+  if (document.body.dataset.partnerSite) {
+    const headerPartnerLink = ce('div', 'icon icon-search entry-partner-link'); // TODO replace icon
+    headerPartnerLink.setAttribute('aria-label', 'Partner site call to action');
+    children.push(headerPartnerLink);
+  }
+  ac(headerHospitalInfo, ce('h5', null, children));
 
   const { website } = entry;
 
@@ -1092,17 +1096,8 @@ function getEntryEl(entry) {
     sendEvent('listView', 'clickZoom', entry.name);
     zoomToMarker(entry.marker);
   });
-  $(entry.domElem).find('.entry-external-link').on('click', () => {
-    $.post(
-      'https://httpbin.org/post',
-      {
-        row: entry.row,
-        name: entry.name
-      }
-    ).done((response) => {
-      alert(`The external site processed your request concerning row ${response.form.row}, ${response.form.name}`)
-    }).fail((result) => {
-    });
+  $(entry.domElem).find('.entry-partner-link').on('click', () => {
+    window.open(`${document.body.dataset.partnerSite}ftm?id=${entry.row}`, '_blank');
   });
   $(entry.domElem).on('mouseenter', () => {
     sendEvent('listView', 'mouseover', entry.name);
