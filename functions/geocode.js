@@ -31,17 +31,40 @@ async function geocodeAddress(address) {
     timeout: 5000 // milliseconds
   }));
 
-  if (response.data.results && response.data.results.length > 0) {
-    const result = response.data.results[0];
-    const retval = {
-      canonical_address: result.formatted_address,
-      location: result.geometry.location
-    };
-    return retval;
+  const retval = {
+    canonical_address: "",
+    location: {lat: undefined, lng: undefined}
+  };
+  if (response.status === 'OK') {
+    if (response.data.results && response.data.results.length > 0) {
+      const result = response.data.results[0];
+      retval.canonical_address = result.formatted_address;
+      retval.location = result.geometry.location;
+    }
   } else {
     console.error(response);
-    throw new Error(response);
+    throw new Error(JSON.stringify(response));
   }
+  return retval;
 }
 
-module.exports = { geocodeAddress }
+function makeAddress(street, city, state, zip, country) {
+  let address = country;
+  if (entry.zip) {
+    address = `${entry.zip}, ${address}`;
+  }
+  if (entry.state) {
+    address = `${entry.state} ${address}`;
+    if (entry.city) {
+      address = `${entry.city}, ${address}`;
+    }
+  }
+
+  if (street) {
+    address = `${entry.street} ${address}`;
+  }
+
+  return address;
+}
+
+module.exports = { geocodeAddress, makeAddress }

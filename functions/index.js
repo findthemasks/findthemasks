@@ -4,7 +4,7 @@ const csv_stringify = require('csv-stringify');
 const { request } = require('gaxios');
 const crypto = require('crypto');
 const { loadMakerData } = require('./airtable-connector.js');
-const { geocodeAddress } = require('./geocode.js');
+const { geocodeAddress, makeAddress } = require('./geocode.js');
 
 admin.initializeApp();
 
@@ -139,6 +139,9 @@ async function annotateGeocode(data, sheet_id, client) {
   const to_write_back = [];
   const promises = [];
   const doGeocode = (address, entry, row_num, do_latlong) => {
+    if (!address.trim()) {
+      return;
+    }
     return geocodeAddress(address).then(geocode => {
       if (entry[addressIndex]) {
         // Do not overwrite if there is already an address listed.
@@ -175,8 +178,7 @@ async function annotateGeocode(data, sheet_id, client) {
     const missing_lat_lng = (entry.length < (latIndex + 1)) || !entry[latIndex] || !entry[lngIndex];
 
     if (!final_address || (needs_latlong && missing_lat_lng)) {
-      console.log("Doing soemthing");
-      const address = final_address || `${entry[origAddressIndex]}, ${entry[cityIndex]}, ${entry[stateIndex]}`;
+      const address = final_address || makeAddress(entry[origAddressIndex], entry[cityIndex], entry[stateIndex]);
 
       console.debug(`Calling geocoder for entry: ${entry} on row: ${row_num} and address: ${address} `);
       promises.push(doGeocode(address, entry, row_num, needs_latlong));
