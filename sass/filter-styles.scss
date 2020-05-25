@@ -54,11 +54,19 @@
 
 .filter-collapse {
   padding: 1rem 1.25rem;
-}
 
-.filter-label {
-  font-weight: 600;
-  font-size: $font-size-small;
+  .filter-label {
+    font-weight: 600;
+    font-size: $font-size-small;
+  }
+
+  &.embed-filter {
+    padding: 0.5rem 1rem;
+
+    .filter-label {
+      color: $text-light;
+    }
+  }
 }
 
 @media(min-width: $breakpoint-sm) {
