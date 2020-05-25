@@ -4,7 +4,7 @@ const csv_stringify = require('csv-stringify');
 const { request } = require('gaxios');
 const crypto = require('crypto');
 const { loadMakerData } = require('./airtable-connector.js');
-const { geocodeAddress } = require('./geocode.js');
+const { geocodeAddress, makeAddress } = require('./geocode.js');
 
 admin.initializeApp();
 
@@ -175,11 +175,12 @@ async function annotateGeocode(data, sheet_id, client) {
     const missing_lat_lng = (entry.length < (latIndex + 1)) || !entry[latIndex] || !entry[lngIndex];
 
     if (!final_address || (needs_latlong && missing_lat_lng)) {
-      console.log("Doing soemthing");
-      const address = final_address || `${entry[origAddressIndex]}, ${entry[cityIndex]}, ${entry[stateIndex]}`;
+      const address = final_address || makeAddress(entry[origAddressIndex], entry[cityIndex], entry[stateIndex]);
 
       console.debug(`Calling geocoder for entry: ${entry} on row: ${row_num} and address: ${address} `);
-      promises.push(doGeocode(address, entry, row_num, needs_latlong));
+      if (address) {
+        promises.push(doGeocode(address, entry, row_num, needs_latlong));
+      }
     }
   });
 
@@ -290,6 +291,9 @@ const ENCRYPTED_EMAIL_COL_LABEL = 'encrypted_email';
 
 
 async function snapshotData(prefix, country) {
+  if (!prefix || !country) {
+    throw new Error(`Invalid prefix '${prefix}'or country '${country}'`);
+  }
   const base_filename = `${prefix}-${country}`;
   const csv_filename = `${base_filename}.csv`;
   const json_filename = `${base_filename}.json`;
@@ -429,7 +433,7 @@ module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
     return;
   }
 
-  let data = null;
+  let data = 'data';
   if (country === 'getusppe-affiliates') {
     [data] = await snapshotData('getusppe-affiliates', 'us');
   } else  {
