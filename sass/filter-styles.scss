@@ -62,10 +62,22 @@
 
   &.embed-filter {
     padding: 0.5rem 1rem;
+  }
+}
 
-    .filter-label {
-      color: $text-light;
-    }
+#filter-container {
+  position: absolute;
+  z-index: 1;
+  background: $blue-light;
+  width: 100%;
+  left: 0;
+  padding: 1rem 2rem;
+}
+
+.embed-filter {
+  #filter-container {
+    padding: 0.5rem 1rem;
+    top: 38px;
   }
 }
 

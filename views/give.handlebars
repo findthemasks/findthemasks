@@ -43,23 +43,27 @@
           </div>
         </div>
       </div>
-      <div class="col-12 col-md-6 list-stats-reset d-flex align-items-center mt-1 mt-md-0">
-        <span id="list-stats" style="display: none;"></span>&nbsp;
-        <a href="javascript:;" class="map-action-link" id="reset-map">
-          <span class="i18n" data-i18n="ftm-maps-search-reset">Reset map & list</span>
-        </a>
+      <div class="col-12 col-md-6 list-stats-reset d-flex align-items-center justify-content-start justify-content-md-end mt-1 mt-md-0">
+        <span id="list-stats" style="display: none;"></span>
       </div>
     </div>
     <div class="row">
       <div class="col filter-collapse embed-filter">
-        <a class="map-action-link dropdown-toggle text-light i18n"
-           data-i18n="ftm-filter-toggle"
-           data-toggle="collapse"
-           href="#filter-container" role="button" aria-expanded="false"
-           aria-controls="filter-container">
-          Toggle filter options
-        </a>
-        <div id='filter-container' class="collapse row filters-container mb-1 mb-lg-0">
+        <div class="d-flex">
+          <a class="map-action-link dropdown-toggle text-light flex-grow-1 i18n"
+             data-i18n="ftm-filter-toggle"
+             data-toggle="collapse"
+             href="#filter-container" role="button" aria-expanded="false"
+             aria-controls="filter-container">
+            Toggle filter options
+          </a>
+          <div class="flex-grow-1 d-flex justify-content-end">
+            <a href="javascript:;" class="map-action-link" id="reset-map">
+              <span class="i18n text-light" data-i18n="ftm-maps-search-reset">Reset map & list</span>
+            </a>
+          </div>
+        </div>
+        <div id='filter-container' class="collapse filters-container mb-1 mb-lg-0">
         </div>
       </div>
     </div>

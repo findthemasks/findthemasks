@@ -1208,7 +1208,7 @@ function createFilterElements(data, filters) {
 
     if (selectItems.length > 0) {
       const placeholderLabel = $.i18n(filters[f].placeholder || '');
-      const div = htmlToElements(`<div class="col-12 mb-2"><label class="filter-label" for="filter-${f}">${placeholderLabel}</label><select id="filter-${f}"></select></div>`)[0];
+      const div = htmlToElements(`<div class="mb-2"><label class="filter-label" for="filter-${f}">${placeholderLabel}</label><select id="filter-${f}"></select></div>`)[0];
       document.getElementById('filter-container').appendChild(div);
 
       const selectr = new Selectr(div.lastElementChild, {

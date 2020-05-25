@@ -51,12 +51,7 @@ footer {
     top: 0;
   }
 
-  #list-stats:after {
-    content: " -";
-  }
-
   .list-stats-reset {
-    font-size: $font-size-small;
     color: $text-light;
     font-weight: 600;
 
