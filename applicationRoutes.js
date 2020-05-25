@@ -8,6 +8,7 @@ const localizePartialPath = require('./viewHelpers/localizePartialPath');
 const getLocalContactEmail = require('./viewHelpers/getLocalContactEmail');
 const setBananaI18n = require('./middleware/setBananaI18n.js');
 const setCurrentUrl = require('./middleware/setCurrentUrl.js');
+const linkPartners = require('./linkPartners.js');
 
 const herokuVersion = process.env.HEROKU_RELEASE_VERSION;
 
@@ -43,15 +44,14 @@ router.get('/faq', (req, res) => {
   });
 });
 
-const linkPartners = [
-  'https://dewv.net/', // TODO build real site list; this is for testing (Steve Mattingly's site)
-];
-
 router.get(['/give', '/give.html', '/embed'], (req, res) => {
+  // Set up partner links, when applicable.
+  // req.headers.referer = "https://dewv.net/ftm/test.html"
   if (req.headers.referer) {
-    res.locals.partnerSite = linkPartners.find(
-      (element) => req.headers.referer.startsWith(element),
-    );
+    const referer = new URL(req.headers.referer);
+    if (linkPartners[referer.hostname]) {
+      res.locals.partnerSite = `${referer.origin}${linkPartners[referer.hostname]}`;
+    }
   }
 
   const isMaker = res.locals.dataset === 'makers';

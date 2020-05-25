@@ -1097,7 +1097,7 @@ function getEntryEl(entry) {
     zoomToMarker(entry.marker);
   });
   $(entry.domElem).find('.entry-partner-link').on('click', () => {
-    window.open(`${document.body.dataset.partnerSite}ftm?id=${entry.row}`, '_blank');
+    window.open(`${document.body.dataset.partnerSite}?id=${entry.row}`, '_blank');
   });
   $(entry.domElem).on('mouseenter', () => {
     sendEvent('listView', 'mouseover', entry.name);
