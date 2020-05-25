@@ -4,6 +4,7 @@ const express = require('express');
 const https = require('https');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const applicationRoutes = require('./applicationRoutes');
+const apiRoutes = require('./apiRoutes.js');
 const countries = require('./constants/countries.js');
 
 const router = express.Router();
@@ -71,6 +72,10 @@ function sendDataJsonFromCache(cache, prefix, countryCode, res) {
 }
 
 router.use(express.static('public'));
+
+router.use('/api', (req, res, next) => {
+  return apiRoutes(req, res, next);
+});
 
 router.get('/data(-:countryCode)?.json', (req, res) => {
   const countryCode = req.params.countryCode || 'us';

@@ -3,6 +3,7 @@ const admin = require('firebase-admin');
 const csv_stringify = require('csv-stringify');
 const { request } = require('gaxios');
 const crypto = require('crypto');
+const ftmEncrypt = require('./ftm-encrypt.js');
 const { loadMakerData } = require('./airtable-connector.js');
 const { geocodeAddress, makeAddress } = require('./geocode.js');
 const urlsafeBase64 = require('url-safe-base64');
@@ -18,8 +19,6 @@ const { google } = require('googleapis');
 // googleapi.sheet_id = Google Sheet id (long string in middle of sheet URL)
 let CONFIG_CLIENT_ID = '';
 let CONFIG_CLIENT_SECRET = '';
-let EMAIL_ENCRYPTION_KEY = '';
-let MAIL_LINK_ENCRYPTION_KEY = '';
 let SMARTY_STREETS_AUTH_ID = '';
 let SMARTY_STREETS_AUTH_TOKEN = '';
 
@@ -42,8 +41,6 @@ const SHEETS = {
 if (functions.config().googleapi !== undefined) {
   CONFIG_CLIENT_ID = functions.config().googleapi.client_id
   CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
-  EMAIL_ENCRYPTION_KEY = functions.config().findthemasks.email_encryption_key;
-  MAIL_LINK_ENCRYPTION_KEY = functions.config().findthemasks.mail_link_encryption_key;
   SMARTY_STREETS_AUTH_ID = functions.config().findthemasks.smarty_streets_auth_id;
   SMARTY_STREETS_AUTH_TOKEN = functions.config().findthemasks.smarty_streets_auth_token
 }
@@ -272,20 +269,6 @@ async function getSpreadsheet(prefix, country, client) {
   }
 
   return data;
-}
-
-// Takes an object and returns an base64 encoded encyrption of the JSON
-// stringification.
-function encrypt(key, data) {
-  if (!key) {
-    throw `Invalid key ${key}`;
-  }
-  const json = JSON.stringify(data);
-  const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv('aes-256-gcm', EMAIL_ENCRYPTION_KEY, iv);
-  let ciphertext = cipher.update(json, 'utf-8', 'base64');
-  ciphertext += cipher.final('base64');
-  return urlsafeBase64.encode(ciphertext);
 }
 
 const encryptEmail = (email) => {
@@ -764,13 +747,13 @@ async function writeCommandLinks(country) {
     //   r = remove
     writeData.push({
       range: `${COMBINED_WRITEBACK_SHEET}!${lgtmLinkColumn}${row_num}`,
-      values: [[commandUrl + encrypt(MAIL_LINK_ENCRYPTION_KEY, command)]]
+      values: [[commandUrl + ftmEncrypt.encryptCommand(command)]]
     });
 
     command.c = 'r';
     writeData.push({
       range: `${COMBINED_WRITEBACK_SHEET}!${removeLinkColumn}${row_num}`,
-      values: [[commandUrl + encrypt(MAIL_LINK_ENCRYPTION_KEY, command)]]
+      values: [[commandUrl + ftmEncrypt.encryptCommand(command)]]
     });
   });
 
@@ -791,4 +774,7 @@ module.exports.make_command_links = functions.https.onRequest(async (req, res) =
     console.log(e);
     res.status(500).send("Failed to write back email links");
   }
+});
+
+module.exports.exec = functions.https.onRequest(async (req, res) => {
 });
