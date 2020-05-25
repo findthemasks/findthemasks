@@ -31,17 +31,47 @@ async function geocodeAddress(address) {
     timeout: 5000 // milliseconds
   }));
 
-  if (response.data.results && response.data.results.length > 0) {
-    const result = response.data.results[0];
-    const retval = {
-      canonical_address: result.formatted_address,
-      location: result.geometry.location
-    };
-    return retval;
+  const retval = {
+    canonical_address: "",
+    location: {lat: undefined, lng: undefined}
+  };
+  if (response.status === 200 && response.data.status === 'OK') {
+    if (response.data.results && response.data.results.length > 0) {
+      const result = response.data.results[0];
+      retval.canonical_address = result.formatted_address;
+      retval.location = result.geometry.location;
+    }
   } else {
     console.error(response);
-    throw new Error(response);
+    throw new Error(JSON.stringify(response));
   }
+  return retval;
 }
 
-module.exports = { geocodeAddress }
+function makeAddress(street, city, state, zip, country) {
+  let address = country || '';
+  if (zip) {
+    address = `${zip}, ${address}`;
+  }
+  if (state) {
+    address = `${state} ${address}`;
+  }
+
+  if (city) {
+    address = `${city}, ${address}`;
+  }
+
+  if (street) {
+    address = `${street} ${address}`;
+  }
+
+  address = address.trim();
+  // remove triling commas
+  while (address && address.charAt(address.length - 1) === ',') {
+    address = address.slice(0, address.length - 1)
+  }
+
+  return address;
+}
+
+module.exports = { geocodeAddress, makeAddress }

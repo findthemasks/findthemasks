@@ -1,6 +1,6 @@
 const Airtable = require('airtable');
 const functions = require('firebase-functions');
-const { geocodeAddress } = require('./geocode.js');
+const { geocodeAddress, makeAddress } = require('./geocode.js');
 const { readAirtableSharedView, parseAirtableData } = require('./airtable-shared-view.js');
 
 const FIELDS = [
@@ -139,21 +139,9 @@ async function writeMakerJson(entries, admin, req, res) {
 }
 
 function geocodeEntry(entry) {
-  let address = "";
-  if (entry.zip) {
-    address = `${entry.zip}`;
-  } else if (entry.country) {
-    address = `${entry.country}`;
-    if (entry.state) {
-      address = `${entry.state} ${address}`;
-      if (entry.city) {
-        address = `${entry.city}, ${address}`;
-      }
-    }
-  }
-  entry.address = address;
+  entry.address = makeAddress(null, entry.city, entry.state, entry.country);
 
-  return geocodeAddress(address).then(geocode => {
+  return geocodeAddress(entry.address).then(geocode => {
     entry.lat = geocode.location.lat;
     entry.lng = geocode.location.lng;
     return entry;
