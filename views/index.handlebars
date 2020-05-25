@@ -34,7 +34,7 @@
             </p>
           {{/if}}
 
-          <div class="input-group mb-3">
+          <div class="input-group">
             <div class="input-group-prepend">
             <span class="input-group-text bg-white border-0 search-icon-wrap">
               <img class="search-icon" src="/images/icons/search.svg">
@@ -52,19 +52,27 @@
             </span>
             </div>
           </div>
-
-          <div id='filter-container' class="filters-container row text-dark" style="display: none;">
+        </div>
+        <div class="filter-collapse">
+          <div class="d-flex">
+            <a class="map-action-link dropdown-toggle flex-grow-1 i18n"
+               data-i18n="ftm-filter-toggle" data-toggle="collapse" href="#filter-container"
+               role="button" aria-expanded="false" aria-controls="filter-container">
+              Toggle filter options
+            </a>
+            <div class="flex-grow-1 d-flex justify-content-end">
+              <a href="javascript:;" class="map-action-link" id="reset-map">
+                <span class="i18n" data-i18n="ftm-maps-search-reset">Reset map & list</span>
+              </a>
+            </div>
+          </div>
+          <div id='filter-container' class="collapse filters-container row text-dark mt-2">
           </div>
         </div>
 
         <div class="d-flex align-items-center locations-list-header">
           <div class="flex-grow-1">
             <span class="icon icon-requester-pin"></span><span id="list-stats"></span>
-          </div>
-          <div class="d-flex justify-content-end flex-grow-1">
-            <a href="javascript:;" class="map-action-link" id="reset-map">
-              <span class="i18n" data-i18n="ftm-maps-search-reset">Reset map & list</span>
-            </a>
           </div>
         </div>
       </div>

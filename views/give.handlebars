@@ -22,16 +22,18 @@
         {{/if}}
       </div>
     </div>
-    <div id='filter-container' class="row filters-container mb-1 mb-lg-0">
-      <div class="{{#if hideFilters}}col-12{{else}}col-lg-6{{/if}}">
-        <div class="input-group mb-1">
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <div class="input-group">
           <div class="input-group-prepend">
             <span class="input-group-text bg-white border-0 search-icon-wrap">
               <img class="search-icon" src="/images/icons/search.svg">
             </span>
           </div>
-          <input type="search" name="map-search" id="map-search" class="i18n form-control border-0"
-            placeholder="Search by location" data-i18n="[placeholder]ftm-maps-search-placeholder">
+          <input type="search" name="map-search" id="map-search"
+                 class="i18n form-control border-0"
+                 placeholder="Search by location"
+                 data-i18n="[placeholder]ftm-maps-search-placeholder">
           <div class="input-group-append">
             <span class="input-group-text bg-white border-0">
               <a href="javascript:;" class="map-action-link" id="use-location">
@@ -41,17 +43,26 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="row">
-      <div class="col-12 list-stats-reset mb-1">
-        <span id="list-stats" style="display: none;"></span>
+      <div class="col-12 col-md-6 list-stats-reset d-flex align-items-center mt-1 mt-md-0">
+        <span id="list-stats" style="display: none;"></span>&nbsp;
         <a href="javascript:;" class="map-action-link" id="reset-map">
           <span class="i18n" data-i18n="ftm-maps-search-reset">Reset map & list</span>
         </a>
       </div>
     </div>
-
+    <div class="row">
+      <div class="col filter-collapse">
+        <a class="map-action-link dropdown-toggle text-light i18n"
+           data-i18n="ftm-filter-toggle"
+           data-toggle="collapse"
+           href="#filter-container" role="button" aria-expanded="false"
+           aria-controls="filter-container">
+          Toggle filter options
+        </a>
+        <div id='filter-container' class="collapse row filters-container mb-1 mb-lg-0">
+        </div>
+      </div>
+    </div>
   </header>
 
   <div class="row embed-main flex-lg-row no-gutters">

@@ -1,3 +1,5 @@
+@import "breakpoints";
+
 .search-filter-container .form-control {
   height: auto;
   font-size: $font-size-small;
@@ -48,4 +50,19 @@
 
 .selectr-selected {
   border: none;
+}
+
+.filter-collapse {
+  padding: 1rem 1.25rem;
+}
+
+.filter-label {
+  font-weight: 600;
+  font-size: $font-size-small;
+}
+
+@media(min-width: $breakpoint-sm) {
+  .filter-collapse {
+    padding: 1rem 2rem;
+  }
 }

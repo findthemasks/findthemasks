@@ -1207,15 +1207,16 @@ function createFilterElements(data, filters) {
     }
 
     if (selectItems.length > 0) {
-      const div = htmlToElements(`<div class="col"><select id="filter-${f}"></select></div>`)[0];
+      const placeholderLabel = $.i18n(filters[f].placeholder || '');
+      const div = htmlToElements(`<div class="col-12 mb-2"><label class="filter-label" for="filter-${f}">${placeholderLabel}</label><select id="filter-${f}"></select></div>`)[0];
       document.getElementById('filter-container').appendChild(div);
 
-      const selectr = new Selectr(div.firstElementChild, {
+      const selectr = new Selectr(div.lastElementChild, {
         customClass: 'ftm-select',
         data: selectItems,
         multiple: true,
         searchable: false,
-        placeholder: $.i18n(filters[f].placeholder || ''),
+        placeholder: placeholderLabel,
       });
 
       selectr.on('selectr.select', (option) => {
@@ -1700,7 +1701,6 @@ $(() => {
 
     if (showFilters && areThereFilters(filters)) {
       createFilterElements(data, filters);
-      $('.filters-container').show();
     }
 
     if (showList) {
