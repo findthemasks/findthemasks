@@ -35,7 +35,7 @@ async function geocodeAddress(address) {
     canonical_address: "",
     location: {lat: undefined, lng: undefined}
   };
-  if (response.status === 'OK') {
+  if (response.status === 200 && response.data.status === 'OK') {
     if (response.data.results && response.data.results.length > 0) {
       const result = response.data.results[0];
       retval.canonical_address = result.formatted_address;
@@ -49,19 +49,26 @@ async function geocodeAddress(address) {
 }
 
 function makeAddress(street, city, state, zip, country) {
-  let address = country;
-  if (entry.zip) {
-    address = `${entry.zip}, ${address}`;
+  let address = country || '';
+  if (zip) {
+    address = `${zip}, ${address}`;
   }
-  if (entry.state) {
-    address = `${entry.state} ${address}`;
-    if (entry.city) {
-      address = `${entry.city}, ${address}`;
-    }
+  if (state) {
+    address = `${state} ${address}`;
+  }
+
+  if (city) {
+    address = `${city}, ${address}`;
   }
 
   if (street) {
-    address = `${entry.street} ${address}`;
+    address = `${street} ${address}`;
+  }
+
+  address = address.trim();
+  // remove triling commas
+  while (address && address.charAt(address.length - 1) === ',') {
+    address = address.slice(0, address.length - 1)
   }
 
   return address;

@@ -139,9 +139,6 @@ async function annotateGeocode(data, sheet_id, client) {
   const to_write_back = [];
   const promises = [];
   const doGeocode = (address, entry, row_num, do_latlong) => {
-    if (!address.trim()) {
-      return;
-    }
     return geocodeAddress(address).then(geocode => {
       if (entry[addressIndex]) {
         // Do not overwrite if there is already an address listed.
@@ -181,7 +178,9 @@ async function annotateGeocode(data, sheet_id, client) {
       const address = final_address || makeAddress(entry[origAddressIndex], entry[cityIndex], entry[stateIndex]);
 
       console.debug(`Calling geocoder for entry: ${entry} on row: ${row_num} and address: ${address} `);
-      promises.push(doGeocode(address, entry, row_num, needs_latlong));
+      if (address) {
+        promises.push(doGeocode(address, entry, row_num, needs_latlong));
+      }
     }
   });
 
@@ -292,6 +291,9 @@ const ENCRYPTED_EMAIL_COL_LABEL = 'encrypted_email';
 
 
 async function snapshotData(prefix, country) {
+  if (!prefix || !country) {
+    throw new Error(`Invalid prefix '${prefix}'or country '${country}'`);
+  }
   const base_filename = `${prefix}-${country}`;
   const csv_filename = `${base_filename}.csv`;
   const json_filename = `${base_filename}.json`;
@@ -431,7 +433,7 @@ module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
     return;
   }
 
-  let data = null;
+  let data = 'data';
   if (country === 'getusppe-affiliates') {
     [data] = await snapshotData('getusppe-affiliates', 'us');
   } else  {
