@@ -957,7 +957,7 @@ function createRequesterListItemEl(entry) {
   headerZoomLink.setAttribute('aria-label', 'Zoom to marker');
   const children = [ctn(entry.name), headerZoomLink];
   if (document.body.dataset.partnerSite) {
-    const headerPartnerLink = ce('div', 'icon icon-search entry-partner-link'); // TODO replace icon
+    const headerPartnerLink = ce('div', `icon entry-partner-link ${document.body.dataset.partnerStyleClass}`);
     headerPartnerLink.setAttribute('aria-label', 'Partner site call to action');
     children.push(headerPartnerLink);
   }

@@ -46,11 +46,11 @@ router.get('/faq', (req, res) => {
 
 router.get(['/give', '/give.html', '/embed'], (req, res) => {
   // Set up partner links, when applicable.
-  // req.headers.referer = "https://dewv.net/ftm/test.html"
   if (req.headers.referer) {
     const referer = new URL(req.headers.referer);
     if (linkPartners[referer.hostname]) {
       res.locals.partnerSite = `${referer.origin}${linkPartners[referer.hostname]}`;
+      res.locals.partnerStyleClass = `icon-${referer.hostname}`;
     }
   }
 
