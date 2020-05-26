@@ -1,12 +1,16 @@
-/* 
+/*
 #findthemasks provides this file for partners to style their "callback" links.
 
 Each partner should define a CSS class named .icon-DOMAIN where DOMAIN is the same string used in
-linkPartners.js. Note that dots in the domain must be escaped with a single backslash.
+linkPartners.js.
 
-The example below configures callback links for example.com to use the Bootstrap emoji-sunglasses
+Note that dots in the domain must be escaped with a single backslash.
+
+The example below configures callback links for dewv.net to use the Bootstrap emoji-sunglasses
 icon. The <svg> provided at https://icons.getbootstrap.com/icons/emoji-sunglasses/ is URL-encoded,
 then set as the background-image.
+
+To see a full working example, see https://dewv.net/ftm/test.html
 */
 
 .icon-dewv\.net {
