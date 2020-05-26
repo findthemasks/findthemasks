@@ -44,13 +44,29 @@ let gSecondaryCluster = null;
 
 let gCurrentViewportCenter = {};
 
+const gDatasetMarkers = {
+  requester: {
+    standard: '/images/markers/requester_marker.svg',
+    hover: '/images/markers/requester_marker_hover.svg',
+  },
+  makers: {
+    standard: '/images/markers/makers_marker.svg',
+    hover: '/images/markers/makers_marker_hover.svg',
+  },
+  'getusppe-affiliates': {
+    standard: '/images/markers/getusppe-affiliates.png',
+    hover: '/images/markers/getusppe-affiliates.png',
+  },
+};
+
+const SECONDARY_MARKER_ICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Ccircle cx='4' cy='4' r='4' style='fill:red'/%3E%3C/svg%3E";
 const SECONDARY_MARKER_OPTIONS = {
-  icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Ccircle cx='4' cy='4' r='4' style='fill:red'/%3E%3C/svg%3E",
+  icon: SECONDARY_MARKER_ICON,
   opacity: 0.4,
 };
 
 const PRIMARY_MARKER_OPTIONS = {
-  icon: 'https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_red.png',
+  icon: gDatasetMarkers[gDataset].standard,
   opacity: 1,
 };
 
@@ -438,13 +454,17 @@ function createMarkerContent(entry, separator) {
 }
 
 // accepts a marker and sets its icon to either the
-// highlighted icon or the default icon depending on `isHighlighted` arg
+// highlighted icon, secondary icon, or the default icon depending on `isHighlighted` arg
 function setMarkerIcon(marker, isHighlighted) {
   if (marker) {
-    if (isHighlighted) {
-      marker.setIcon('https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_blue.png');
+    const isSecondary = !!gSecondaryCluster.getMarkers().find((m) => m === marker);
+
+    if (isSecondary) {
+      marker.setIcon(SECONDARY_MARKER_ICON);
+    } else if (isHighlighted) {
+      marker.setIcon(gDatasetMarkers[gDataset].hover);
     } else {
-      marker.setIcon('https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_red.png');
+      marker.setIcon(gDatasetMarkers[gDataset].standard);
     }
   }
 }
@@ -1103,7 +1123,9 @@ function getEntryEl(entry) {
     sendEvent('listView', 'mouseover', entry.name);
     setMarkerIcon(entry.marker, true);
   });
-  $(entry.domElem).on('mouseleave', () => { setMarkerIcon(entry.marker, false); });
+  $(entry.domElem).on('mouseleave', () => {
+    setMarkerIcon(entry.marker, false);
+  });
   return entry.domElem;
 }
 
