@@ -8,6 +8,7 @@ const localizePartialPath = require('./viewHelpers/localizePartialPath');
 const getLocalContactEmail = require('./viewHelpers/getLocalContactEmail');
 const setBananaI18n = require('./middleware/setBananaI18n.js');
 const setCurrentUrl = require('./middleware/setCurrentUrl.js');
+const linkPartners = require('./linkPartners.js');
 
 const herokuVersion = process.env.HEROKU_RELEASE_VERSION;
 
@@ -44,6 +45,15 @@ router.get('/faq', (req, res) => {
 });
 
 router.get(['/give', '/give.html', '/embed'], (req, res) => {
+  // Set up partner links, when applicable.
+  if (req.headers.referer) {
+    const referer = new URL(req.headers.referer);
+    if (linkPartners[referer.hostname]) {
+      res.locals.partnerSite = `${referer.origin}${linkPartners[referer.hostname]}`;
+      res.locals.partnerStyleClass = `icon-${referer.hostname}`;
+    }
+  }
+
   const isMaker = res.locals.dataset === 'makers';
   res.render('give', {
     version: herokuVersion,

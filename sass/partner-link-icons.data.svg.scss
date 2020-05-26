@@ -1,0 +1,19 @@
+/*
+#findthemasks provides this file for partners to style their "callback" links.
+
+Each partner should define a CSS class named .icon-DOMAIN where DOMAIN is the same string used in
+linkPartners.js.
+
+Note that dots in the domain must be escaped with a single backslash.
+
+The example below configures callback links for dewv.net to use the Bootstrap emoji-sunglasses
+icon. The <svg> provided at https://icons.getbootstrap.com/icons/emoji-sunglasses/ is URL-encoded,
+then set as the background-image.
+
+To see a full working example, see https://dewv.net/ftm/test.html
+*/
+
+.icon-dewv\.net {
+  background-image: url("data:image/svg+xml,%3Csvg%20class%3D%22bi%20bi-emoji-sunglasses%22%20width%3D%221em%22%20height%3D%221em%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22currentColor%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%20%20%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M8%2015A7%207%200%201%200%208%201a7%207%200%200%200%200%2014zm0%201A8%208%200%201%200%208%200a8%208%200%200%200%200%2016z%22%2F%3E%0A%20%20%3Cpath%20fill-rule%3D%22evenodd%22%20d%3D%22M4.285%209.567a.5.5%200%200%201%20.683.183A3.498%203.498%200%200%200%208%2011.5a3.498%203.498%200%200%200%203.032-1.75.5.5%200%201%201%20.866.5A4.498%204.498%200%200%201%208%2012.5a4.498%204.498%200%200%201-3.898-2.25.5.5%200%200%201%20.183-.683zM6.5%206.497V6.5h-1c0-.568.447-.947.862-1.154C6.807%205.123%207.387%205%208%205s1.193.123%201.638.346c.415.207.862.586.862%201.154h-1v-.003l-.003-.01a.213.213%200%200%200-.036-.053.86.86%200%200%200-.27-.194C8.91%206.1%208.49%206%208%206c-.491%200-.912.1-1.19.24a.86.86%200%200%200-.271.194.213.213%200%200%200-.036.054l-.003.01z%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M2.31%205.243A1%201%200%200%201%203.28%204H6a1%201%200%200%201%201%201v1a2%202%200%200%201-2%202h-.438a2%202%200%200%201-1.94-1.515L2.31%205.243zM9%205a1%201%200%200%201%201-1h2.72a1%201%200%200%201%20.97%201.243l-.311%201.242A2%202%200%200%201%2011.439%208H11a2%202%200%200%201-2-2V5z%22%2F%3E%0A%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+}
