@@ -15,6 +15,7 @@
   "ftm-accepting" : "принимающий",
   "ftm-ppe-needed" : "СИЗ необходимы",
   "ftm-facility-type" : "Тип объекта",
+  "ftm-filter-toggle" : "Переключить фильтры",
   "ftm-accepts-open-boxes" : "Принимает открытые коробки / сумки",
   "ftm-ack-data-sources" : "Этот сайт также содержит данные <a href=\"https://tinyurl.com/hospitals-needing-ppe\"> https://tinyurl.com/hospitals-needing-ppe </a> , проекта:",
   "ftm-add-donation-site-question" : "Хотите присоединиться к карте #findthemasks? Нужно обновить или удалить информацию?",
