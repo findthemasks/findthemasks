@@ -66,7 +66,6 @@ let gLastLocationRendered = -1;
 
 const searchParams = new FtmUrl(window.location.href).searchparams;
 const showList = searchParams['hide-list'] !== 'true';
-const showMap = searchParams['hide-map'] !== 'true';
 
 // tracks number of entries in dataset
 // gets set when we retrieve the dataset
@@ -687,21 +686,19 @@ function updateStats() {
   // Start with count of location list rows ...
   let countShown = gLocationsListEntries.length;
 
-  if (showMap) {
-    if (!gMap) {
-      return;
-    }
-
-    const mapBounds = gMap.getBounds();
-    if (!mapBounds) {
-      return;
-    }
-
-    // ... but defer to count of markers in map bounds, when applicable.
-    const countInBounds = (count, marker) => count + mapBounds.contains(marker.getPosition());
-    countShown = gPrimaryMarkers.reduce(countInBounds, 0);
-    countShown += gSecondaryMarkers.reduce(countInBounds, 0);
+  if (!gMap) {
+    return;
   }
+
+  const mapBounds = gMap.getBounds();
+  if (!mapBounds) {
+    return;
+  }
+
+  // ... but defer to count of markers in map bounds, when applicable.
+  const countInBounds = (count, marker) => count + mapBounds.contains(marker.getPosition());
+  countShown = gPrimaryMarkers.reduce(countInBounds, 0);
+  countShown += gSecondaryMarkers.reduce(countInBounds, 0);
 
   const prettyMarkerCount = numberFormat(countShown, 0);
   const prettyTotalCount = numberFormat(totalEntries, 0);
@@ -1185,9 +1182,7 @@ function onFilterChange(data, prefix, idx, selected, filters) {
     refreshList(data, filters);
   }
 
-  if (showMap) {
-    showMarkers(data, filters, false);
-  }
+  showMarkers(data, filters, false);
 }
 
 // Creates the <select> elements for filters.
@@ -1701,10 +1696,8 @@ $(() => {
 
     updateFilters(filters);
 
-    if (showMap) {
-      $map.show();
-      loadMapScript(data, filters);
-    }
+    $map.show();
+    loadMapScript(data, filters);
 
     $('.locations-loading').hide();
 
