@@ -1507,7 +1507,7 @@ function initMap(data, filters) {
 
   $('.map-container').show();
 
-  gMap = new google.maps.Map(element, { fullscreenControl: false });
+  gMap = new google.maps.Map(element, { fullscreenControl: false , mapTypeControl: false});
   gSecondaryCluster = new MarkerClusterer(gMap, [], {
     clusterClass: 'secondarycluster',
     imagePath: '/images/markercluster/m',
