@@ -4,6 +4,17 @@
 @import "filter-styles";
 @import "breakpoints";
 
+.legend-container {
+  background: $text-light;
+  padding: 0.5rem;
+  margin: 0.25rem;
+  font: normal normal normal #{$font-size-default}/ 1.55 #{$font-stack-default};
+
+  input {
+    margin-right: 0.25rem;
+  }
+}
+
 html {
   height: 100%;
   width: 100%;
@@ -254,7 +265,7 @@ h3.city {
   &.highlighted {
     background-color: $gray;
   }
-  
+
   .entry-external-link,
   .entry-zoom-link {
     cursor: pointer;

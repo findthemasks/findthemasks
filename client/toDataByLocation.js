@@ -1,4 +1,4 @@
-export default function toDataByLocation(data) {
+export default function toDataByLocation(data, datasetKey) {
   const headers = data.values[1];
   const approvedIndex = headers.indexOf('approved');
   const stateIndex = headers.indexOf('state');
@@ -29,6 +29,7 @@ export default function toDataByLocation(data) {
         entryObj[value] = '';
       }
     });
+    entryObj.datasetKey = datasetKey;
     entryArray.push(entryObj);
   });
 
