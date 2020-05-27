@@ -1701,6 +1701,21 @@ $(() => {
 
     updateFilters(filters);
 
+    // Translate ?id= param to ?coords= param.
+    const { id } = searchParams;
+    if (id) {
+      const headers = result.values[1];
+      const rowIdIndex = headers.indexOf('row_id');
+      const latIndex = headers.indexOf('lat');
+      const lngIndex = headers.indexOf('lng');
+      const entry = result.values.find((element) => element[rowIdIndex] === id);
+      if (entry) {
+        searchParams.coords = `${entry[latIndex]},${entry[lngIndex]}`;
+      } else {
+        console.warn(`Found no row with id ${id}.`);
+      }
+    }
+
     if (showMap) {
       $map.show();
       loadMapScript(data, filters);
