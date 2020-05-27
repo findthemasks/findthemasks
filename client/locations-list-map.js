@@ -1088,9 +1088,9 @@ function zoomToMarker(marker) {
 }
 
 function findAndZoomToMarker(testFunction) {
-  const marker = gPrimaryMarkers.find(testFunction) ||
-    gSecondaryMarkers.find(testFunction) ||
-    gOtherMarkers.find(testFunction);
+  const marker = gPrimaryMarkers.find(testFunction)
+    || gSecondaryMarkers.find(testFunction)
+    || gOtherMarkers.find(testFunction);
 
   if (marker) {
     zoomToMarker(marker);
@@ -1576,8 +1576,8 @@ function initMap(data, filters) {
         if (showList && (searchParams.id || searchParams.coords)) {
           refreshList(data, filters);
         }
-      } else if (gCurrentViewportCenter.lat !== currentLat ||
-        gCurrentViewportCenter.lng !== currentLng) {
+      } else if (gCurrentViewportCenter.lat !== currentLat
+        || gCurrentViewportCenter.lng !== currentLng) {
         // Re-sync list with new map bounds.
         if (showList) {
           refreshList(data, filters);
