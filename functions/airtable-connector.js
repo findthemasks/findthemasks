@@ -174,9 +174,19 @@ async function loadOsmsData() {
   return values;
 }
 
+async function logAndIgnoreException(f) {
+  try {
+    return await f() || [];
+  } catch (e) {
+    console.error(e);
+  }
+
+  return [];
+}
+
 async function loadMakerData(admin, req, res) {
-  const nomData = await loadNomData();
-  const osmsData = await loadOsmsData();
+  const nomData = await logAndIgnoreException(loadNomData);
+  const osmsData = await logAndIgnoreException(loadOsmsData);
 
   await writeMakerJson([...nomData, ...osmsData], admin, req, res);
 }
