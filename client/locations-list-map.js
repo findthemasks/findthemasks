@@ -94,7 +94,6 @@ let gLastLocationRendered = -1;
 
 const searchParams = new FtmUrl(window.location.href).searchparams;
 const showList = searchParams['hide-list'] !== 'true';
-const showMap = searchParams['hide-map'] !== 'true';
 
 // tracks number of entries in dataset
 // gets set when we retrieve the dataset
@@ -487,6 +486,10 @@ function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
   };
   const marker = new google.maps.Marker(options);
 
+  if (entry.row_id) {
+    marker.set('row_id', entry.row_id);
+  }
+
   marker.addListener('click', () => {
     sendEvent('map', 'click', 'marker');
 
@@ -716,26 +719,23 @@ function updateStats() {
   // Start with count of location list rows ...
   let countShown = gLocationsListEntries.length;
 
-  if (showMap) {
-    if (!gMap) {
-      return;
-    }
-
-    const mapBounds = gMap.getBounds();
-    if (!mapBounds) {
-      return;
-    }
-
-    // ... but defer to count of markers in map bounds, when applicable.
-    const countInBounds = (count, marker) => count + mapBounds.contains(marker.getPosition());
-    countShown = gPrimaryMarkers.filter((marker) => marker.datasetKey === gDataset).reduce(countInBounds, 0);
-    countShown += gSecondaryMarkers.filter((marker) => marker.datasetKey === gDataset).reduce(countInBounds, 0);
+  if (!gMap) {
+    return;
   }
+
+  const mapBounds = gMap.getBounds();
+  if (!mapBounds) {
+    return;
+  }
+
+  // ... but defer to count of markers in map bounds, when applicable.
+  const countInBounds = (count, marker) => count + mapBounds.contains(marker.getPosition());
+  countShown = gPrimaryMarkers.filter((marker) => marker.datasetKey === gDataset).reduce(countInBounds, 0);
+  countShown += gSecondaryMarkers.filter((marker) => marker.datasetKey === gDataset).reduce(countInBounds, 0);
 
   const prettyMarkerCount = numberFormat(countShown, 0);
   const prettyTotalCount = numberFormat(totalEntries, 0);
   const $stats = $('#list-stats');
-  $stats.show();
 
   if (gDataset === 'makers') {
     $stats.html($.i18n('ftm-makers-count', prettyMarkerCount, prettyTotalCount));
@@ -1112,6 +1112,18 @@ function zoomToMarker(marker) {
   }
 }
 
+function findAndZoomToMarker(testFunction) {
+  const marker = gPrimaryMarkers.find(testFunction)
+    || gSecondaryMarkers.find(testFunction)
+    || gOtherMarkers.find(testFunction);
+
+  if (marker) {
+    zoomToMarker(marker);
+  } else {
+    console.warn('Found no marker to zoom to.');
+  }
+}
+
 function getEntryEl(entry) {
   if (!entry.domElem) {
     // Adds the domElem field if it has not been created.
@@ -1216,9 +1228,7 @@ function onFilterChange(data, prefix, idx, selected, filters) {
     refreshList(data, filters);
   }
 
-  if (showMap) {
-    showMarkers(data, filters, false);
-  }
+  showMarkers(data, filters, false);
 }
 
 // Creates the <select> elements for filters.
@@ -1577,8 +1587,6 @@ function initMap(data, filters) {
     return;
   }
 
-  $('.map-container').show();
-
   gMap = new google.maps.Map(element, { fullscreenControl: false, mapTypeControl: false });
   gSecondaryCluster = new MarkerClusterer(gMap, [], {
     clusterClass: 'secondarycluster',
@@ -1611,12 +1619,22 @@ function initMap(data, filters) {
       const currentLat = mapBounds.getCenter().lat();
       const currentLng = mapBounds.getCenter().lng();
 
-      if (showList) {
-        // When "changing" to initial bounds, the location list is already in sync,
-        //  *unless* the URL specified coordinates.
-        if ((gCurrentViewportCenter.lat && gCurrentViewportCenter.lat !== currentLat)
-          || (gCurrentViewportCenter.lng && gCurrentViewportCenter.lng !== currentLng)
-          || searchParams.coords) {
+      if (!gCurrentViewportCenter.lat && !gCurrentViewportCenter.lng) {
+        // Bounds are "changing" to initial values on first display.
+
+        // Zoom to the marker for any ?id= param.
+        if (searchParams.id) {
+          findAndZoomToMarker((marker) => marker.get('row_id') === searchParams.id);
+        }
+
+        // Locations are in sync, unless params have adjusted default map bounds.
+        if (showList && (searchParams.id || searchParams.coords)) {
+          refreshList(data, filters);
+        }
+      } else if (gCurrentViewportCenter.lat !== currentLat
+        || gCurrentViewportCenter.lng !== currentLng) {
+        // Re-sync list with new map bounds.
+        if (showList) {
           refreshList(data, filters);
         }
       }
@@ -1701,54 +1719,54 @@ function initMap(data, filters) {
 
   gMap.controls[google.maps.ControlPosition.TOP_LEFT].push(legend);
 
-  // Add map control for custom fullscreen behavior.
-  // (Regular fullsceen behavior of Google maps messes up Bootstrap modals, popovers, etc.)
-  gMap.controls[google.maps.ControlPosition.TOP_RIGHT].push(document.getElementById('customFullscreenButton'));
+  if (!isEmbed) {
+    // Add map control for custom fullscreen behavior.
+    // (Regular fullsceen behavior of Google maps messes up Bootstrap modals, popovers, etc.)
+    gMap.controls[google.maps.ControlPosition.TOP_RIGHT].push(document.getElementById('customFullscreenButton'));
 
-  $('#customFullscreenButton').show();
-
-  $('#customFullscreenButton').on('click', () => {
-    // From https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_fullscreen2
-    if (document.fullscreenElement) {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.mozCancelFullScreen) { /* Firefox */
-        document.mozCancelFullScreen();
-      } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
-        document.webkitExitFullscreen();
-      } else if (document.msExitFullscreen) { /* IE/Edge */
-        document.msExitFullscreen();
+    $('#customFullscreenButton').on('click', () => {
+      // From https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_fullscreen2
+      if (document.fullscreenElement) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) { /* Firefox */
+          document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE/Edge */
+          document.msExitFullscreen();
+        }
+      } else {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) { /* Firefox */
+          elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+          elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE/Edge */
+          elem.msRequestFullscreen();
+        }
       }
-    } else {
-      const elem = document.documentElement;
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-      } else if (elem.mozRequestFullScreen) { /* Firefox */
-        elem.mozRequestFullScreen();
-      } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-        elem.webkitRequestFullscreen();
-      } else if (elem.msRequestFullscreen) { /* IE/Edge */
-        elem.msRequestFullscreen();
-      }
-    }
-  });
+    });
 
-  document.documentElement.onfullscreenchange = () => {
-    if (document.fullscreenElement) {
-      // When browser goes full screen, show only nav bar and map.
-      $('#filter-div').hide();
-      $('#locations-div').hide();
-      $('#map-div').width('100vw');
-      $('#map').width('100vw');
-      $('#customFullscreenImage').attr('src', '/images/icons/shrinkMap.svg');
-    } else {
-      // When browser leaves full screen, show everything.
-      $('#filter-div').show();
-      $('#locations-div').show();
-      $('#map').width('100%');
-      $('#customFullscreenImage').attr('src', '/images/icons/growMap.svg');
-    }
-  };
+    document.documentElement.onfullscreenchange = () => {
+      if (document.fullscreenElement) {
+        // When browser goes full screen, show only nav bar and map.
+        $('#filter-div').hide();
+        $('#locations-div').hide();
+        $('#map-div').width('100vw');
+        $('#map').width('100vw');
+        $('#customFullscreenImage').attr('src', '/images/icons/shrinkMap.svg');
+      } else {
+        // When browser leaves full screen, show everything.
+        $('#filter-div').show();
+        $('#locations-div').show();
+        $('#map').width('100%');
+        $('#customFullscreenImage').attr('src', '/images/icons/growMap.svg');
+      }
+    };
+  }
 }
 
 // Lazy-loads the Google maps script once we know we need it. Sets up
@@ -1795,7 +1813,6 @@ $(() => {
 
     const showFilters = searchParams['hide-filters'] !== 'true';
 
-    const $map = $('#map');
     // Second, allow an override from ?hide-search=[bool].
     if (searchParams['hide-search'] !== null) {
       gShowMapSearch = searchParams['hide-search'] !== 'true';
@@ -1819,10 +1836,7 @@ $(() => {
 
     updateFilters(filters);
 
-    if (showMap) {
-      $map.show();
-      loadMapScript(data, filters);
-    }
+    loadMapScript(data, filters);
 
     $('.locations-loading').hide();
 
@@ -1831,8 +1845,9 @@ $(() => {
     }
 
     if (showList) {
-      $('.locations-container').show();
       refreshList(data, filters);
+    } else {
+      $('.locations-container').hide();
     }
   };
 
