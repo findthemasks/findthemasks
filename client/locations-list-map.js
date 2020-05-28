@@ -909,11 +909,17 @@ function getFlatFilteredEntries(data, filters) {
   return entries;
 }
 
+function createZoomToMarkerIcon() {
+  const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
+  headerZoomLink.setAttribute('aria-label', 'Zoom to marker');
+  headerZoomLink.setAttribute('title', 'zoom to marker');
+  return headerZoomLink;
+}
+
 function createMakerListItemEl(entry) {
   entry.domElem = ce('div', 'location');
   const header = ce('div', 'd-flex');
-  const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
-  headerZoomLink.setAttribute('aria-label', 'Zoom to marker');
+  const headerZoomLink = createZoomToMarkerIcon();
   const headerMakerspaceInfo = ce('div', 'flex-grow-1 grey-background');
   ac(headerMakerspaceInfo, ce('h5', null, [ctn(entry.name), headerZoomLink]));
 
@@ -971,8 +977,8 @@ function createRequesterListItemEl(entry) {
   const header = ce('div', 'd-flex');
   const headerHospitalInfo = ce('div', 'flex-grow-1');
   const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
-  const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
-  headerZoomLink.setAttribute('aria-label', 'Zoom to marker');
+  const headerZoomLink = createZoomToMarkerIcon();
+
   const children = [ctn(entry.name), headerZoomLink];
   if (document.body.dataset.partnerSite) {
     const headerPartnerLink = ce('div', `icon entry-partner-link ${document.body.dataset.partnerStyleClass}`);
@@ -1110,13 +1116,21 @@ function getEntryEl(entry) {
       createRequesterListItemEl(entry);
     }
   }
-  $(entry.domElem).find('.entry-zoom-link').on('click', () => {
-    sendEvent('listView', 'clickZoom', entry.name);
-    zoomToMarker(entry.marker);
-  });
+
+  $(entry.domElem).find('.entry-zoom-link').tooltip()
+    .on('click', (e) => {
+      sendEvent('listView', 'clickZoom', entry.name);
+      zoomToMarker(entry.marker);
+      // a bit weird, but bootstrap tooltips seem to have problems when also associated with click events
+      // this was the only solution I could find that didn't leave a tooltip sitting around after click
+      $(e.target).tooltip('hide');
+
+    });
+
   $(entry.domElem).find('.entry-partner-link').on('click', () => {
     window.open(`${document.body.dataset.partnerSite}?id=${entry.row}`, '_blank');
   });
+
   $(entry.domElem).on('mouseenter', () => {
     sendEvent('listView', 'mouseover', entry.name);
     setMarkerIcon(entry.marker, true);
