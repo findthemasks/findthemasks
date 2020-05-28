@@ -1124,7 +1124,6 @@ function getEntryEl(entry) {
       // a bit weird, but bootstrap tooltips seem to have problems when also associated with click events
       // this was the only solution I could find that didn't leave a tooltip sitting around after click
       $(e.target).tooltip('hide');
-
     });
 
   $(entry.domElem).find('.entry-partner-link').on('click', () => {
@@ -1136,6 +1135,7 @@ function getEntryEl(entry) {
     setMarkerIcon(entry.marker, true);
   });
   $(entry.domElem).on('mouseleave', () => { setMarkerIcon(entry.marker, false); });
+
   return entry.domElem;
 }
 
