@@ -65,7 +65,6 @@ router.get(['/give', '/give.html', '/embed'], (req, res) => {
     googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY,
     recaptchaSiteKey: process.env.RECAPTCHA_SITE_KEY,
     hideList: req.query['hide-list'] === 'true',
-    hideMap: req.query['hide-map'] === 'true',
     hideFilters: req.query['hide-filters'] === 'true',
   });
 });
