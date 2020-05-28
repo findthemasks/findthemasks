@@ -64,10 +64,12 @@ const gDatasetMarkers = {
 const ALL_DATASETS = [
   {
     key: 'requester',
+    i18n: 'ftm-dataset-requesters',
     checked: gDataset === 'requester',
   },
   {
     key: 'makers',
+    i18n: 'ftm-dataset-makers',
     checked: gDataset === 'makers',
   },
 ].filter((dataset) => dataset.key !== gDataset);
@@ -1488,7 +1490,7 @@ function initMapSearch(data, filters) {
 const generateGMapDatasetLegend = (onChange) => {
   const legend = ce('div', 'legend-container');
   legend.index = 1;
-  const legendHeader = ce('h5', null, ctn('Add datasets'));
+  const legendHeader = ce('h5', null, ctn($.i18n('ftm-legend-add-datasets')));
   ac(legend, legendHeader);
 
   ALL_DATASETS.forEach((dataset) => {
@@ -1506,7 +1508,7 @@ const generateGMapDatasetLegend = (onChange) => {
     input.addEventListener('change', onChange.bind(this, dataset));
 
     ac(label, input);
-    ac(label, ctn(dataset.key));
+    ac(label, ctn($.i18n(dataset.i18n)));
     ac(datasetCheckboxContainer, label);
     ac(legend, datasetCheckboxContainer);
   });
