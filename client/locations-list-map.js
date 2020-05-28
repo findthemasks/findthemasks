@@ -755,6 +755,24 @@ function getMapInitialView() {
     }
   }
 
+  if (searchParams.id) {
+    const rowIdMatch = (marker) => marker.get('row_id') === searchParams.id;
+    const idMarker = gPrimaryMarkers.find(rowIdMatch)
+      || gSecondaryMarkers.find(rowIdMatch)
+      || gOtherMarkers.find(rowIdMatch);
+
+    if (idMarker) {
+      return {
+        zoom: 15,
+        center: {
+          lat: idMarker.position.lat(),
+          lng: idMarker.position.lng(),
+        },
+      };
+    }
+    console.warn(`Found no marker for row_id ${searchParams.id}`);
+  }
+
   return MAP_INITIAL_VIEW[gCountryCode];
 }
 
@@ -1083,18 +1101,6 @@ function zoomToMarker(marker) {
   }
 }
 
-function findAndZoomToMarker(testFunction) {
-  const marker = gPrimaryMarkers.find(testFunction)
-    || gSecondaryMarkers.find(testFunction)
-    || gOtherMarkers.find(testFunction);
-
-  if (marker) {
-    zoomToMarker(marker);
-  } else {
-    console.warn('Found no marker to zoom to.');
-  }
-}
-
 function getEntryEl(entry) {
   if (!entry.domElem) {
     // Adds the domElem field if it has not been created.
@@ -1163,6 +1169,7 @@ function refreshList(data, filters) {
   $('.locations-list').empty();
   updateStats(); // number of locations in list has (probably) changed
   renderNextListPage();
+  $('.locations-loading').hide();
   // initializes collapse logic on locations table if this is the embed
   if (isEmbed) {
     initializeEmbedLocationCollapse();
@@ -1556,24 +1563,9 @@ function initMap(data, filters) {
       const currentLat = mapBounds.getCenter().lat();
       const currentLng = mapBounds.getCenter().lng();
 
-      if (!gCurrentViewportCenter.lat && !gCurrentViewportCenter.lng) {
-        // Bounds are "changing" to initial values on first display.
-
-        // Zoom to the marker for any ?id= param.
-        if (searchParams.id) {
-          findAndZoomToMarker((marker) => marker.get('row_id') === searchParams.id);
-        }
-
-        // Locations are in sync, unless params have adjusted default map bounds.
-        if (showList && (searchParams.id || searchParams.coords)) {
-          refreshList(data, filters);
-        }
-      } else if (gCurrentViewportCenter.lat !== currentLat
-        || gCurrentViewportCenter.lng !== currentLng) {
-        // Re-sync list with new map bounds.
-        if (showList) {
-          refreshList(data, filters);
-        }
+      // Re-sync locations list with new map bounds.
+      if (showList) {
+        refreshList(data, filters);
       }
 
       gCurrentViewportCenter = {
@@ -1721,15 +1713,12 @@ $(() => {
 
     loadMapScript(data, filters);
 
-    $('.locations-loading').hide();
-
     if (showFilters && areThereFilters(filters)) {
       createFilterElements(data, filters);
     }
 
-    if (showList) {
-      refreshList(data, filters);
-    } else {
+    if (!showList) {
+      $('.locations-loading').hide();
       $('.locations-container').hide();
     }
   };
