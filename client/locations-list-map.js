@@ -457,6 +457,10 @@ function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
   };
   const marker = new google.maps.Marker(options);
 
+  if (entry.row_id) {
+    marker.set('row_id', entry.row_id);
+  }
+
   marker.addListener('click', () => {
     sendEvent('map', 'click', 'marker');
 
@@ -1079,6 +1083,18 @@ function zoomToMarker(marker) {
   }
 }
 
+function findAndZoomToMarker(testFunction) {
+  const marker = gPrimaryMarkers.find(testFunction)
+    || gSecondaryMarkers.find(testFunction)
+    || gOtherMarkers.find(testFunction);
+
+  if (marker) {
+    zoomToMarker(marker);
+  } else {
+    console.warn('Found no marker to zoom to.');
+  }
+}
+
 function getEntryEl(entry) {
   if (!entry.domElem) {
     // Adds the domElem field if it has not been created.
@@ -1540,12 +1556,22 @@ function initMap(data, filters) {
       const currentLat = mapBounds.getCenter().lat();
       const currentLng = mapBounds.getCenter().lng();
 
-      if (showList) {
-        // When "changing" to initial bounds, the location list is already in sync,
-        //  *unless* the URL specified coordinates.
-        if ((gCurrentViewportCenter.lat && gCurrentViewportCenter.lat !== currentLat)
-          || (gCurrentViewportCenter.lng && gCurrentViewportCenter.lng !== currentLng)
-          || searchParams.coords) {
+      if (!gCurrentViewportCenter.lat && !gCurrentViewportCenter.lng) {
+        // Bounds are "changing" to initial values on first display.
+
+        // Zoom to the marker for any ?id= param.
+        if (searchParams.id) {
+          findAndZoomToMarker((marker) => marker.get('row_id') === searchParams.id);
+        }
+
+        // Locations are in sync, unless params have adjusted default map bounds.
+        if (showList && (searchParams.id || searchParams.coords)) {
+          refreshList(data, filters);
+        }
+      } else if (gCurrentViewportCenter.lat !== currentLat
+        || gCurrentViewportCenter.lng !== currentLng) {
+        // Re-sync list with new map bounds.
+        if (showList) {
           refreshList(data, filters);
         }
       }
