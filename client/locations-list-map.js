@@ -911,8 +911,16 @@ function getFlatFilteredEntries(data, filters) {
 
 function createZoomToMarkerIcon() {
   const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
-  headerZoomLink.setAttribute('aria-label', 'Zoom to marker');
-  headerZoomLink.setAttribute('title', 'zoom to marker');
+  let tooltipText;
+  if (gDataset === 'makers') {
+    tooltipText = $.i18n('ftm-makers-zoom-tooltip');
+  } else if (gDataset === 'requesters') {
+    tooltipText = $.i18n('ftm-requesters-zoom-tooltip');
+  } else {
+    tooltipText = $.i18n('ftm-default-zoom-tooltip');
+  }
+  headerZoomLink.setAttribute('aria-label', tooltipText);
+  headerZoomLink.setAttribute('title', tooltipText);
   return headerZoomLink;
 }
 
