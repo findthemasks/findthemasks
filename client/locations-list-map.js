@@ -786,6 +786,24 @@ function getMapInitialView() {
     }
   }
 
+  if (searchParams.id) {
+    const rowIdMatch = (marker) => marker.get('row_id') === searchParams.id;
+    const idMarker = gPrimaryMarkers.find(rowIdMatch)
+      || gSecondaryMarkers.find(rowIdMatch)
+      || gOtherMarkers.find(rowIdMatch);
+
+    if (idMarker) {
+      return {
+        zoom: 15,
+        center: {
+          lat: idMarker.position.lat(),
+          lng: idMarker.position.lng(),
+        },
+      };
+    }
+    console.warn(`Found no marker for row_id ${searchParams.id}`);
+  }
+
   return MAP_INITIAL_VIEW[gCountryCode];
 }
 
@@ -922,11 +940,25 @@ function getFlatFilteredEntries(data, filters) {
   return entries;
 }
 
+function createZoomToMarkerIcon() {
+  const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
+  let tooltipText;
+  if (gDataset === 'makers') {
+    tooltipText = $.i18n('ftm-makers-zoom-tooltip');
+  } else if (gDataset === 'requester') {
+    tooltipText = $.i18n('ftm-requesters-zoom-tooltip');
+  } else {
+    tooltipText = $.i18n('ftm-default-zoom-tooltip');
+  }
+  headerZoomLink.setAttribute('aria-label', tooltipText);
+  headerZoomLink.setAttribute('title', tooltipText);
+  return headerZoomLink;
+}
+
 function createMakerListItemEl(entry) {
   entry.domElem = ce('div', 'location');
   const header = ce('div', 'd-flex');
-  const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
-  headerZoomLink.setAttribute('aria-label', 'Zoom to marker');
+  const headerZoomLink = createZoomToMarkerIcon();
   const headerMakerspaceInfo = ce('div', 'flex-grow-1 grey-background');
   ac(headerMakerspaceInfo, ce('h5', null, [ctn(entry.name), headerZoomLink]));
 
@@ -984,8 +1016,8 @@ function createRequesterListItemEl(entry) {
   const header = ce('div', 'd-flex');
   const headerHospitalInfo = ce('div', 'flex-grow-1');
   const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
-  const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
-  headerZoomLink.setAttribute('aria-label', 'Zoom to marker');
+  const headerZoomLink = createZoomToMarkerIcon();
+
   const children = [ctn(entry.name), headerZoomLink];
   if (document.body.dataset.partnerSite) {
     const headerPartnerLink = ce('div', `icon entry-partner-link ${document.body.dataset.partnerStyleClass}`);
@@ -1114,18 +1146,6 @@ function zoomToMarker(marker) {
   }
 }
 
-function findAndZoomToMarker(testFunction) {
-  const marker = gPrimaryMarkers.find(testFunction)
-    || gSecondaryMarkers.find(testFunction)
-    || gOtherMarkers.find(testFunction);
-
-  if (marker) {
-    zoomToMarker(marker);
-  } else {
-    console.warn('Found no marker to zoom to.');
-  }
-}
-
 function getEntryEl(entry) {
   if (!entry.domElem) {
     // Adds the domElem field if it has not been created.
@@ -1135,13 +1155,20 @@ function getEntryEl(entry) {
       createRequesterListItemEl(entry);
     }
   }
-  $(entry.domElem).find('.entry-zoom-link').on('click', () => {
-    sendEvent('listView', 'clickZoom', entry.name);
-    zoomToMarker(entry.marker);
-  });
+
+  $(entry.domElem).find('.entry-zoom-link').tooltip()
+    .on('click', (e) => {
+      sendEvent('listView', 'clickZoom', entry.name);
+      zoomToMarker(entry.marker);
+      // a bit weird, but bootstrap tooltips seem to have problems when also associated with click events
+      // this was the only solution I could find that didn't leave a tooltip sitting around after click
+      $(e.target).tooltip('hide');
+    });
+
   $(entry.domElem).find('.entry-partner-link').on('click', () => {
     window.open(`${document.body.dataset.partnerSite}?id=${entry.row}`, '_blank');
   });
+
   $(entry.domElem).on('mouseenter', () => {
     sendEvent('listView', 'mouseover', entry.name);
     setMarkerIcon(entry.marker, true);
@@ -1196,6 +1223,7 @@ function refreshList(data, filters) {
   $('.locations-list').empty();
   updateStats(); // number of locations in list has (probably) changed
   renderNextListPage();
+  $('.locations-loading').hide();
   // initializes collapse logic on locations table if this is the embed
   if (isEmbed) {
     initializeEmbedLocationCollapse();
@@ -1621,24 +1649,9 @@ function initMap(data, filters) {
       const currentLat = mapBounds.getCenter().lat();
       const currentLng = mapBounds.getCenter().lng();
 
-      if (!gCurrentViewportCenter.lat && !gCurrentViewportCenter.lng) {
-        // Bounds are "changing" to initial values on first display.
-
-        // Zoom to the marker for any ?id= param.
-        if (searchParams.id) {
-          findAndZoomToMarker((marker) => marker.get('row_id') === searchParams.id);
-        }
-
-        // Locations are in sync, unless params have adjusted default map bounds.
-        if (showList && (searchParams.id || searchParams.coords)) {
-          refreshList(data, filters);
-        }
-      } else if (gCurrentViewportCenter.lat !== currentLat
-        || gCurrentViewportCenter.lng !== currentLng) {
-        // Re-sync list with new map bounds.
-        if (showList) {
-          refreshList(data, filters);
-        }
+      // Re-sync locations list with new map bounds.
+      if (showList) {
+        refreshList(data, filters);
       }
 
       gCurrentViewportCenter = {
@@ -1840,15 +1853,12 @@ $(() => {
 
     loadMapScript(data, filters);
 
-    $('.locations-loading').hide();
-
     if (showFilters && areThereFilters(filters)) {
       createFilterElements(data, filters);
     }
 
-    if (showList) {
-      refreshList(data, filters);
-    } else {
+    if (!showList) {
+      $('.locations-loading').hide();
       $('.locations-container').hide();
     }
   };
