@@ -912,9 +912,10 @@ function getFlatFilteredEntries(data, filters) {
 function createZoomToMarkerIcon() {
   const headerZoomLink = ce('div', 'icon icon-search entry-zoom-link');
   let tooltipText;
+  console.log(gDataset);
   if (gDataset === 'makers') {
     tooltipText = $.i18n('ftm-makers-zoom-tooltip');
-  } else if (gDataset === 'requesters') {
+  } else if (gDataset === 'requester') {
     tooltipText = $.i18n('ftm-requesters-zoom-tooltip');
   } else {
     tooltipText = $.i18n('ftm-default-zoom-tooltip');
