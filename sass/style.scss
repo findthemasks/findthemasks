@@ -3,6 +3,7 @@
 @import "icons.data.svg";
 @import "filter-styles";
 @import "breakpoints";
+@import "legend";
 
 html {
   height: 100%;
@@ -254,7 +255,7 @@ h3.city {
   &.highlighted {
     background-color: $gray;
   }
-  
+
   .entry-external-link,
   .entry-zoom-link {
     cursor: pointer;

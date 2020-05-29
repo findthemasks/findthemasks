@@ -21,6 +21,8 @@ require('../sass/style.scss');
 const countryData = {};
 const gCountryCode = document.body.dataset.country;
 const gDataset = document.body.dataset.dataset;
+// Additional dataset data object, indexed by dataset name
+const datasetData = {};
 
 const isEmbed = document.body.dataset.embed;
 
@@ -44,13 +46,41 @@ let gSecondaryCluster = null;
 
 let gCurrentViewportCenter = {};
 
+const gDatasetMarkers = {
+  requester: {
+    standard: '/images/markers/requester_marker.svg',
+    hover: '/images/markers/requester_marker_hover.svg',
+  },
+  makers: {
+    standard: '/images/markers/makers_marker.svg',
+    hover: '/images/markers/makers_marker_hover.svg',
+  },
+  'getusppe-affiliates': {
+    standard: '/images/markers/getusppe-affiliates.png',
+    hover: '/images/markers/getusppe-affiliates.png',
+  },
+};
+
+const ALL_DATASETS = [
+  {
+    key: 'requester',
+    i18n: 'ftm-dataset-requesters',
+    checked: gDataset === 'requester',
+  },
+  {
+    key: 'makers',
+    i18n: 'ftm-dataset-makers',
+    checked: gDataset === 'makers',
+  },
+].filter((dataset) => dataset.key !== gDataset);
+
 const SECONDARY_MARKER_OPTIONS = {
-  icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Ccircle cx='4' cy='4' r='4' style='fill:red'/%3E%3C/svg%3E",
+  icon: gDatasetMarkers[gDataset].standard,
   opacity: 0.4,
 };
 
 const PRIMARY_MARKER_OPTIONS = {
-  icon: 'https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_red.png',
+  icon: gDatasetMarkers[gDataset].standard,
   opacity: 1,
 };
 
@@ -426,7 +456,8 @@ function createRequesterMarkerContent(entry, separator) {
 }
 
 function createMarkerContent(entry, separator) {
-  if (gDataset === 'makers') {
+  // If entry's dataset = makers
+  if (entry.marker.datasetKey === 'makers') {
     return createMakerMarkerContent(entry, separator);
   }
 
@@ -437,13 +468,13 @@ function createMarkerContent(entry, separator) {
 }
 
 // accepts a marker and sets its icon to either the
-// highlighted icon or the default icon depending on `isHighlighted` arg
+// highlighted icon, secondary icon, or the default icon depending on `isHighlighted` arg
 function setMarkerIcon(marker, isHighlighted) {
   if (marker) {
     if (isHighlighted) {
-      marker.setIcon('https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_blue.png');
+      marker.setIcon(gDatasetMarkers[marker.datasetKey].hover);
     } else {
-      marker.setIcon('https://raw.githubusercontent.com/Concept211/Google-Maps-Markers/master/images/marker_red.png');
+      marker.setIcon(gDatasetMarkers[marker.datasetKey].standard);
     }
   }
 }
@@ -701,8 +732,8 @@ function updateStats() {
 
   // ... but defer to count of markers in map bounds, when applicable.
   const countInBounds = (count, marker) => count + mapBounds.contains(marker.getPosition());
-  countShown = gPrimaryMarkers.reduce(countInBounds, 0);
-  countShown += gSecondaryMarkers.reduce(countInBounds, 0);
+  countShown = gPrimaryMarkers.filter((marker) => marker.datasetKey === gDataset).reduce(countInBounds, 0);
+  countShown += gSecondaryMarkers.filter((marker) => marker.datasetKey === gDataset).reduce(countInBounds, 0);
 
   const prettyMarkerCount = numberFormat(countShown, 0);
   const prettyTotalCount = numberFormat(totalEntries, 0);
@@ -807,7 +838,7 @@ function showMarkers(data, filters, recenterMap = true) {
   const applied = filters.applied || {};
   const hasFilters = Object.keys(applied).length > 0;
 
-  const markers = getMarkers(data, applied, hasFilters && bounds);
+  const markers = getMarkers(data, applied, hasFilters && bounds, { datasetKey: gDataset });
 
   if (hasFilters) {
     gPrimaryMarkers = markers.inFilters;
@@ -1142,8 +1173,9 @@ function getEntryEl(entry) {
     sendEvent('listView', 'mouseover', entry.name);
     setMarkerIcon(entry.marker, true);
   });
-  $(entry.domElem).on('mouseleave', () => { setMarkerIcon(entry.marker, false); });
-
+  $(entry.domElem).on('mouseleave', () => {
+    setMarkerIcon(entry.marker, false);
+  });
   return entry.domElem;
 }
 
@@ -1289,7 +1321,10 @@ function loadDataFile(url, dataToStore) {
       // opacity value matches what's in css for the .secondarycluster class -
       // can set a css class for the clusters, but not for individual pins.
       gOtherMarkers.push(
-        ...getMarkers(dataToStore, {}, null, SECONDARY_MARKER_OPTIONS).outOfFilters
+        ...getMarkers(dataToStore, {}, null, {
+          ...SECONDARY_MARKER_OPTIONS,
+          datasetKey: gDataset,
+        }).outOfFilters
       );
       updateClusters(null, gSecondaryCluster);
     }
@@ -1480,6 +1515,35 @@ function initMapSearch(data, filters) {
   });
 }
 
+const generateGMapDatasetLegend = (onChange) => {
+  const legend = ce('div', 'legend-container');
+  legend.index = 1;
+  const legendHeader = ce('h5', null, ctn($.i18n('ftm-legend-add-datasets')));
+  ac(legend, legendHeader);
+
+  ALL_DATASETS.forEach((dataset) => {
+    // TODO: also include selected datasets
+    const datasetCheckboxContainer = ce('div', null);
+    const label = ce('label', null);
+    const id = `layer-${dataset.key}`;
+    label.for = id;
+
+    const input = ce('input', null);
+    input.id = id;
+    input.type = 'checkbox';
+    input.checked = dataset.checked;
+
+    input.addEventListener('change', onChange.bind(this, dataset));
+
+    ac(label, input);
+    ac(label, ctn($.i18n(dataset.i18n)));
+    ac(datasetCheckboxContainer, label);
+    ac(legend, datasetCheckboxContainer);
+  });
+
+  return legend;
+};
+
 function initContactModal() {
   let lastOrg = null;
   $('#contactModal').on('show.bs.modal', (event) => {
@@ -1616,6 +1680,60 @@ function initMap(data, filters) {
 
   loadOtherCountries();
 
+  // Add map control for adding additional datasets
+  const onChange = (dataset, event) => {
+    const { checked } = event.target;
+    dataset.checked = checked;
+
+    if (checked) {
+      if (datasetData[dataset.key]) {
+        gSecondaryMarkers.push(
+          ...datasetData[dataset.key].markers
+        );
+        updateClusters(null, gSecondaryCluster);
+      } else {
+        $.getJSON(
+          getDatasetFilename(dataset.key, gCountryCode),
+          (result) => {
+            const markerOptions = {
+              icon: gDatasetMarkers[dataset.key].standard,
+              opacity: 1,
+              datasetKey: dataset.key,
+            };
+
+            const formattedDataset = toDataByLocation(result, dataset.key);
+
+            Object.assign(
+              datasetData,
+              {
+                [dataset.key]: {
+                  data,
+                  markers: getMarkers(formattedDataset, {}, null, markerOptions).outOfFilters,
+                },
+              }
+            );
+
+            gSecondaryMarkers.push(
+              ...datasetData[dataset.key].markers
+            );
+            gSecondaryCluster.setClusterClass('');
+            updateClusters(null, gSecondaryCluster);
+          }
+        );
+      }
+    } else {
+      gSecondaryMarkers = gSecondaryMarkers.filter((marker) => (
+        !datasetData[dataset.key].markers.includes(marker)
+      ));
+      gSecondaryCluster.setClusterClass('secondarycluster');
+      updateClusters(null, gSecondaryCluster);
+    }
+  };
+
+  const legend = generateGMapDatasetLegend(onChange);
+
+  gMap.controls[google.maps.ControlPosition.TOP_LEFT].push(legend);
+
   if (!isEmbed) {
     // Add map control for custom fullscreen behavior.
     // (Regular fullsceen behavior of Google maps messes up Bootstrap modals, popovers, etc.)
@@ -1698,7 +1816,7 @@ const applyFilterParams = ((params, filterSet) => {
 
 $(() => {
   const renderListings = (result) => {
-    const data = toDataByLocation(result);
+    const data = toDataByLocation(result, gDataset);
 
     // calculates total entries from parsed dataset
     // we can't just use `result.values.length - 2` because the makers dataset

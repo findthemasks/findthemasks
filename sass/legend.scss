@@ -1,0 +1,12 @@
+.legend-container {
+  background: white;
+  padding: 0.5rem;
+  margin: 0.25rem;
+  font: normal normal normal #{$font-size-default}/ 1.55 #{$font-stack-default};
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+  border-radius: 3px;
+
+  input {
+    margin-right: 0.25rem;
+  }
+}
