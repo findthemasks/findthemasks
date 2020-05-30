@@ -42,8 +42,7 @@ async function geocodeAddress(address) {
       retval.location = result.geometry.location;
     }
   } else {
-    console.error(response);
-    throw new Error(JSON.stringify(response));
+    throw new Error(`status: ${response.status} req: ${response.config.url} ${JSON.stringify(response.config.params)} result: ${response.data}`);
   }
   return retval;
 }

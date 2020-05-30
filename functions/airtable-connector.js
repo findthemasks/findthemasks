@@ -83,7 +83,6 @@ function loadNomData(admin) {
     view: "Public Map Export"
   }).all().then(async records => {
     const entries = [];
-    const saves = [];
     const geocodePromises = [];
     for (const record of records) {
       const entry = {};
@@ -111,15 +110,12 @@ function loadNomData(admin) {
       if (!entry.lat || !entry.lng) {
         let geocode = geocodeEntry(entry);
         // eslint-disable-next-line promise/no-nesting
-        geocodePromises.push(geocode.then(e => {
-          record.set('[lat]', geocode.latitude);
-          record.set('[lng]', geocode.longitude);
-          return saves.push(record.save());
+        geocodePromises.push(geocode.then(async e => {
+          return await record.patchUpdate({ '[lat]': e.lat, '[lng]': e.lng, });
         }));
       }
     }
     await Promise.all(geocodePromises);
-    await Promise.all(saves);
     return entries;
   });
 }
@@ -145,7 +141,10 @@ function geocodeEntry(entry) {
     entry.lat = geocode.location.lat;
     entry.lng = geocode.location.lng;
     return entry;
-  }).catch(e => console.error(e))
+  }).catch(e => {
+    console.error(e);
+    return entry;
+  })
 }
 
 async function loadOsmsData() {
