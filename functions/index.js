@@ -24,6 +24,7 @@ const CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
 const SMARTY_STREETS_AUTH_ID = functions.config().findthemasks.smarty_streets_auth_id;
 const SMARTY_STREETS_AUTH_TOKEN = functions.config().findthemasks.smarty_streets_auth_token;
 const APPSCRIPT_AUTH_SECRET = functions.config().findthemasks.appscript_auth_secret;
+const EMAIL_ENCRYPTION_KEY = functions.config().findthemasks.email_encryption_key;
 
 const COLUMNS = [
   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -721,7 +722,7 @@ async function writeCommandLinks(country) {
     const row_num = index + 1 + 2;
 
     const command = { i: row_id, d: date, a: 'g', c: country };
-    const commandUrl = 'https://findthemasks.com/api/command/';
+    const commandUrl = 'https://findthemasks.com/api/exec?cmd=';
     // Commands:
     //   g = still good
     //   r = remove
@@ -762,6 +763,16 @@ module.exports.exec = functions.https.onRequest(async (req, res) => {
     return;
   }
 
+  let cmd = null;
+  try {
+    cmd = ftmEncrypt.decryptCommand(req.query.cmd);
+    console.log(cmd);
+  } catch(e) {
+    console.error(e);
+    res.status(403).send("Invalid command");
+    return;
+  }
+
   const scriptId = "MQPwW8kpoHYv45_afG7B_v2XJ7hljrEEe";
 
   // Call the Apps Script API run method
@@ -769,10 +780,7 @@ module.exports.exec = functions.https.onRequest(async (req, res) => {
   //   'resource' describes the run request body (with the function name
   //              to execute)
   const script = google.script('v1');
-  const command = {
-    action: JSON.parse(req.query.cmd),
-    ts: (new Date()).getTime()
-  };
+  const command = { action: cmd, ts: (new Date()).getTime() };
   const cmdJson = JSON.stringify(command);
   const signature = crypto.createHmac("sha256", APPSCRIPT_AUTH_SECRET).update(cmdJson).digest("base64");
 
@@ -789,5 +797,17 @@ module.exports.exec = functions.https.onRequest(async (req, res) => {
   const client = await getAuthorizedClient();
   request.auth = client;
   const scriptResp = await script.scripts.run(request);
-  res.status(200).send(JSON.stringify(scriptResp.data, null, 2));
+  if (!scriptResp.data.done) {
+    console.error(`appscript hung? ${JSON.stringify(scriptResp)}`);
+    res.status(500).send(`server is hung ${JSON.stringify(scriptResp)}`);
+    return;
+  }
+
+  const result = scriptResp.data.response.result;
+  if (result.status !== 200) {
+    console.error(`error: ${JSON.stringify(scriptResp.data)}`);
+    res.status(result.status).send('error');
+    return;
+  }
+  res.status(200).send(result.msg);
 });

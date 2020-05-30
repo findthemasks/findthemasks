@@ -2,8 +2,7 @@ const functions = require('firebase-functions');
 const crypto = require('crypto');
 const urlsafeBase64 = require('url-safe-base64');
 
-const MAIL_LINK_ENCRYPTION_KEY = functions.config().findthemasks.mail_link_encryption_key;
-const EMAIL_ENCRYPTION_KEY = functions.config().findthemasks.email_encryption_key;
+const MAIL_LINK_ENCRYPTION_KEY = Buffer.from(functions.config().findthemasks.mail_link_encryption_key, 'base64');
 
 const CIPHER = 'aes-256-gcm';
 
@@ -29,7 +28,7 @@ function decrypt(key, ciphertextB64) {
   }
   const ciphertextAndIv = Buffer.from(ciphertextB64, 'base64');
   const iv = ciphertextAndIv.slice(0,16);
-  const authTag = ciphertextAndIv.slice(16, 16);
+  const authTag = ciphertextAndIv.slice(16, 32);
   const ciphertext = ciphertextAndIv.slice(32);
   const decipher = crypto.createDecipheriv(CIPHER, key, iv);
   decipher.setAuthTag(authTag);
@@ -42,8 +41,8 @@ function encryptCommand(obj) {
   return encrypt(MAIL_LINK_ENCRYPTION_KEY, obj);
 }
 
-function decryptCommand(obj) {
-  return decrypt(MAIL_LINK_ENCRYPTION_KEY, obj);
+function decryptCommand(ciphertext) {
+  return decrypt(MAIL_LINK_ENCRYPTION_KEY, ciphertext);
 }
 
 module.exports = { encryptCommand, decryptCommand };
