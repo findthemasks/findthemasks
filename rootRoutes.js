@@ -74,7 +74,7 @@ function sendDataJsonFromCache(cache, prefix, countryCode, res) {
 router.use(express.static('public'));
 
 router.use('/api', (req, res, next) => {
-  return apiRoutes(req, res, next);
+  apiRoutes(req, res, next);
 });
 
 router.get('/data(-:countryCode)?.json', (req, res) => {
