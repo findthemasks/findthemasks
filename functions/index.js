@@ -1,12 +1,13 @@
-const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const csv_stringify = require('csv-stringify');
-const { request } = require('gaxios');
+const constants = require('./constants.js');
 const crypto = require('crypto');
+const csv_stringify = require('csv-stringify');
 const ftmEncrypt = require('./ftm-encrypt.js');
-const { loadMakerData } = require('./airtable-connector.js');
-const { geocodeAddress, makeAddress } = require('./geocode.js');
+const functions = require('firebase-functions');
 const urlsafeBase64 = require('url-safe-base64');
+const { geocodeAddress, makeAddress } = require('./geocode.js');
+const { loadMakerData } = require('./airtable-connector.js');
+const { request } = require('gaxios');
 
 admin.initializeApp();
 
@@ -17,33 +18,12 @@ const { google } = require('googleapis');
 // googleapi.client_id = Google API client ID,
 // googleapi.client_secret = client secret, and
 // googleapi.sheet_id = Google Sheet id (long string in middle of sheet URL)
-let CONFIG_CLIENT_ID = '';
-let CONFIG_CLIENT_SECRET = '';
-let SMARTY_STREETS_AUTH_ID = '';
-let SMARTY_STREETS_AUTH_TOKEN = '';
-
-const GETUSPPE_AFFILIATES_SHEET_ID = '1WJC_08ajFT77C5peWPTnYyWARIU3PT8BXAxoGk90bdA';
-const SHEETS = {
-  at: '19gKSyKmT4yU7F32R3lBM6p0rmMJXusX_uMYDq1CMTIo',
-  ca: '1STjEiAZVZncXMCUBkfLumRNk1PySLSmkvZuPqflQ1Yk',
-  ch: '1mFbEzrWW8XLfrkAL0eCzGd1pCVNl6-QUxkoeubtdbPI',
-  de: '1qiR4JRvPrbOwlPnEXCoUFWpfZtV9xadjBTCOhVy-dJM',
-  es: '1S3FO5gmXUvQdsGXjC0hBSUxBJZoaUzy1ctylTjUGOlM',
-  fr: '1YGWlGPOfJFEsUP6VTFCVohlsHxKMYA5HppatbLwNBVk',
-  uk: '1qPUdGOEZl-c8sQ6Vlm7h48OZScBOVGjzz88AyGCQvEc',
-  in: '1w6tm1IvVeR3g_4SvXQRlFHAtudgHvldUFEJlj1p4WDk',
-  it: '1YHt6G1ghcXrRqXflevxHAwg2XOXmG2Cym6nSS5vXe7Q',
-  pl: '10EsvvozwLTQpn0ejvPjZSWt9lve3fnMHBHltW-v_zkY',
-  pt: '1QnyjUUBT_P476dEl0WfQwVnW15Ie7ogty7DiOkMhHLo',
-  us: '1GwP7Ly6iaqgcms0T80QGCNW4y2gJ7tzVND2CktFqnXM',
-};
-
-if (functions.config().googleapi !== undefined) {
-  CONFIG_CLIENT_ID = functions.config().googleapi.client_id
-  CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
-  SMARTY_STREETS_AUTH_ID = functions.config().findthemasks.smarty_streets_auth_id;
-  SMARTY_STREETS_AUTH_TOKEN = functions.config().findthemasks.smarty_streets_auth_token
-}
+//
+const CONFIG_CLIENT_ID = functions.config().googleapi.client_id;
+const CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
+const SMARTY_STREETS_AUTH_ID = functions.config().findthemasks.smarty_streets_auth_id;
+const SMARTY_STREETS_AUTH_TOKEN = functions.config().findthemasks.smarty_streets_auth_token;
+const APPSCRIPT_AUTH_SECRET = functions.config().findthemasks.appscript_auth_secret;
 
 const COLUMNS = [
   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -228,12 +208,12 @@ async function annotateGeocode(data, sheet_id, client) {
 async function getSpreadsheet(prefix, country, client) {
   const sheets = google.sheets('v4');
   const request = {
-    spreadsheetId: SHEETS[country],
+    spreadsheetId: constants.SHEETS[country],
     range: 'Combined'
   };
 
   if (prefix === 'getusppe-affiliates') {
-   request.spreadsheetId = GETUSPPE_AFFILIATES_SHEET_ID;
+   request.spreadsheetId = constants.GETUSPPE_AFFILIATES_SHEET_ID;
   }
 
   request.auth = client;
@@ -439,7 +419,7 @@ module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
   if (country === 'getusppe-affiliates') {
     [data] = await snapshotData('getusppe-affiliates', 'us');
   } else  {
-    if (!(country in SHEETS)) {
+    if (!(country in constants.SHEETS)) {
       res.status(400).send(`invalid country: ${country} for ${req.path}`);
       return;
     }
@@ -472,9 +452,9 @@ module.exports.geocode = functions.https.onRequest(async (req, res) => {
   const country = get_country_from_path(req);
   let spreadsheetId = null;
   if (country === 'getusppe-affiliates') {
-    spreadsheetId = GETUSPPE_AFFILIATES_SHEET_ID;
-  } else if (country in SHEETS) {
-    spreadsheetId = SHEETS[country];
+    spreadsheetId = constants.GETUSPPE_AFFILIATES_SHEET_ID;
+  } else if (country in constants.SHEETS) {
+    spreadsheetId = constants.SHEETS[country];
   } else {
     res.status(400).send(`invalid country: ${country} for ${req.path}`);
     return;
@@ -511,7 +491,7 @@ const makeSmartyStreetRequest = async (url) => {
 const annotateSmartyStreetsAddresses = async (country) => {
   const client = await getAuthorizedClient();
 
-  const sheetId = SHEETS[country];
+  const sheetId = constants.SHEETS[country];
 
   // Open relevant sheet
   const sheets = google.sheets('v4');
@@ -683,7 +663,7 @@ const annotateSmartyStreetsAddresses = async (country) => {
 
 module.exports.smarty_streets_analysis = functions.https.onRequest(async (req, res) => {
   const country = get_country_from_path(req);
-  if (!(country in SHEETS)) {
+  if (!(country in constants.SHEETS)) {
     res.status(400).send(`invalid country: ${country} for ${req.path}`);
     return;
   }
@@ -695,7 +675,7 @@ module.exports.smarty_streets_analysis = functions.https.onRequest(async (req, r
 async function writeCommandLinks(country) {
   const client = await getAuthorizedClient();
 
-  const sheetId = SHEETS[country];
+  const sheetId = constants.SHEETS[country];
 
   // Open relevant sheet
   const sheets = google.sheets('v4');
@@ -733,14 +713,14 @@ async function writeCommandLinks(country) {
     }
   };
   writeRequest.auth = client;
-  const date = (new Date()).toISOString().split('T')[0];
+  const date = (new Date()).getTime();
   real_values.forEach((entry, index) => {
     const row_id = entry[rowIdIndex];
 
     // Row numbers start at 1.  First 2 rows are headers, so we need to add 2.
     const row_num = index + 1 + 2;
 
-    const command = { i: row_id, d: date, c: 'g' };
+    const command = { i: row_id, d: date, a: 'g', c: country };
     const commandUrl = 'https://findthemasks.com/api/command/';
     // Commands:
     //   g = still good
@@ -750,7 +730,7 @@ async function writeCommandLinks(country) {
       values: [[commandUrl + ftmEncrypt.encryptCommand(command)]]
     });
 
-    command.c = 'r';
+    command.a = 'r';
     writeData.push({
       range: `${COMBINED_WRITEBACK_SHEET}!${removeLinkColumn}${row_num}`,
       values: [[commandUrl + ftmEncrypt.encryptCommand(command)]]
@@ -762,7 +742,7 @@ async function writeCommandLinks(country) {
 
 module.exports.make_command_links = functions.https.onRequest(async (req, res) => {
   const country = get_country_from_path(req);
-  if (!(country in SHEETS)) {
+  if (!(country in constants.SHEETS)) {
     res.status(400).send(`invalid country: ${country} for ${req.path}`);
     return;
   }
@@ -777,4 +757,37 @@ module.exports.make_command_links = functions.https.onRequest(async (req, res) =
 });
 
 module.exports.exec = functions.https.onRequest(async (req, res) => {
+  if (!req.query.cmd) {
+    res.status(400).send("Missing command");
+    return;
+  }
+
+  const scriptId = "MQPwW8kpoHYv45_afG7B_v2XJ7hljrEEe";
+
+  // Call the Apps Script API run method
+  //   'scriptId' is the URL parameter that states what script to run
+  //   'resource' describes the run request body (with the function name
+  //              to execute)
+  const script = google.script('v1');
+  const command = {
+    action: JSON.parse(req.query.cmd),
+    ts: (new Date()).getTime()
+  };
+  const cmdJson = JSON.stringify(command);
+  const signature = crypto.createHmac("sha256", APPSCRIPT_AUTH_SECRET).update(cmdJson).digest("base64");
+
+  const request = {
+    scriptId,
+    resource: {
+      function: 'executeCommand',
+      parameters: [
+        cmdJson,
+        signature,
+      ],
+    }
+  };
+  const client = await getAuthorizedClient();
+  request.auth = client;
+  const scriptResp = await script.scripts.run(request);
+  res.status(200).send(JSON.stringify(scriptResp.data, null, 2));
 });
