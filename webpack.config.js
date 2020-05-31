@@ -47,9 +47,22 @@ const config = {
       },
       {
         test: /\.m?js$/,
-        exclude: /node_modules/,
+        exclude: '/node_modules',
         use: {
           loader: 'babel-loader',
+          options: {
+            presets: [
+              ['@babel/preset-env', {
+                targets: {
+                  chrome: 60,
+                  ie: 11,
+                },
+                modules: false,
+                useBuiltIns: false,
+              }],
+            ],
+            plugins: ['@babel/plugin-transform-destructuring'],
+          },
         },
       },
     ],

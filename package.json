@@ -31,6 +31,7 @@
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-destructuring": "^7.10.1",
     "@babel/preset-env": "^7.9.5",
     "@google/markerclustererplus": "^5.0.3",
     "@googlemaps/js-api-loader": "^1.0.0",
