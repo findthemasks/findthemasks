@@ -6,7 +6,7 @@ import toDataByLocation from './toDataByLocation.js';
 import countries from '../constants/countries.js';
 import { ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
-import { ac, ce, ctn, FtmUrl, htmlToElements } from './utils.js';
+import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
 
 require('mobius1-selectr/src/selectr.css');
@@ -1288,10 +1288,9 @@ function createFilterElements(data, filters) {
 
     if (selectItems.length > 0) {
       const placeholderLabel = $.i18n(filters[f].placeholder || '');
-      const div = htmlToElements(`<div class="mb-2"><label class="filter-label" for="filter-${f}">${placeholderLabel}</label><select id="filter-${f}"></select></div>`)[0];
-      document.getElementById('filter-container').appendChild(div);
-
-      const selectr = new Selectr(div.lastElementChild, {
+      const html = `<div class="mb-2"><label class="filter-label" for="filter-${f}">${placeholderLabel}</label><select id="filter-${f}"></select></div>`;
+      $('#filter-container').append(html);
+      const selectr = new Selectr(document.getElementById('filter-container').lastElementChild.lastElementChild, {
         customClass: 'ftm-select',
         data: selectItems,
         multiple: true,
