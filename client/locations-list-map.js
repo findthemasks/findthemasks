@@ -6,7 +6,7 @@ import toDataByLocation from './toDataByLocation.js';
 import countries from '../constants/countries.js';
 import { ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
-import { ac, ce, ctn, FtmUrl, htmlToElements } from './utils.js';
+import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
 
 require('mobius1-selectr/src/selectr.css');
@@ -75,12 +75,10 @@ const ALL_DATASETS = [
 ].filter((dataset) => dataset.key !== gDataset);
 
 const SECONDARY_MARKER_OPTIONS = {
-  icon: gDatasetMarkers[gDataset].standard,
   opacity: 0.4,
 };
 
 const PRIMARY_MARKER_OPTIONS = {
-  icon: gDatasetMarkers[gDataset].standard,
   opacity: 1,
 };
 
@@ -467,15 +465,21 @@ function createMarkerContent(entry, separator) {
   );
 }
 
+function getIcon(url) {
+  return {
+    url,
+    size: new google.maps.Size(41, 41),
+    scaledSize: new google.maps.Size(41, 41),
+  };
+}
+
 // accepts a marker and sets its icon to either the
 // highlighted icon, secondary icon, or the default icon depending on `isHighlighted` arg
 function setMarkerIcon(marker, isHighlighted) {
   if (marker) {
-    if (isHighlighted) {
-      marker.setIcon(gDatasetMarkers[marker.datasetKey].hover);
-    } else {
-      marker.setIcon(gDatasetMarkers[marker.datasetKey].standard);
-    }
+    marker.setIcon(getIcon(
+      isHighlighted ? gDatasetMarkers[marker.datasetKey].hover : gDatasetMarkers[marker.datasetKey].standard
+    ));
   }
 }
 
@@ -484,6 +488,7 @@ function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
   const options = {
     position: location,
     title: entry.name,
+    optimized: false,
     ...markerOptions || {},
   };
   const marker = new google.maps.Marker(options);
@@ -838,7 +843,10 @@ function showMarkers(data, filters, recenterMap = true) {
   const applied = filters.applied || {};
   const hasFilters = Object.keys(applied).length > 0;
 
-  const markers = getMarkers(data, applied, hasFilters && bounds, { datasetKey: gDataset });
+  const markers = getMarkers(data, applied, hasFilters && bounds, {
+    icon: getIcon(gDatasetMarkers[gDataset].standard),
+    datasetKey: gDataset,
+  });
 
   if (hasFilters) {
     gPrimaryMarkers = markers.inFilters;
@@ -857,11 +865,17 @@ function showMarkers(data, filters, recenterMap = true) {
   }
 
   for (const marker of gPrimaryMarkers) {
-    marker.setOptions(PRIMARY_MARKER_OPTIONS);
+    marker.setOptions({
+      icon: getIcon(gDatasetMarkers[gDataset].standard),
+      ...PRIMARY_MARKER_OPTIONS,
+    });
   }
 
   for (const marker of gSecondaryMarkers) {
-    marker.setOptions(SECONDARY_MARKER_OPTIONS);
+    marker.setOptions({
+      icon: getIcon(gDatasetMarkers[gDataset].standard),
+      ...SECONDARY_MARKER_OPTIONS,
+    });
   }
 
   updateClusters(gPrimaryCluster, gSecondaryCluster);
@@ -1288,10 +1302,9 @@ function createFilterElements(data, filters) {
 
     if (selectItems.length > 0) {
       const placeholderLabel = $.i18n(filters[f].placeholder || '');
-      const div = htmlToElements(`<div class="mb-2"><label class="filter-label" for="filter-${f}">${placeholderLabel}</label><select id="filter-${f}"></select></div>`)[0];
-      document.getElementById('filter-container').appendChild(div);
-
-      const selectr = new Selectr(div.lastElementChild, {
+      const html = `<div class="mb-2"><label class="filter-label" for="filter-${f}">${placeholderLabel}</label><select id="filter-${f}"></select></div>`;
+      $('#filter-container').append(html);
+      const selectr = new Selectr(document.getElementById('filter-container').lastElementChild.lastElementChild, {
         customClass: 'ftm-select',
         data: selectItems,
         multiple: true,
@@ -1322,6 +1335,7 @@ function loadDataFile(url, dataToStore) {
       // can set a css class for the clusters, but not for individual pins.
       gOtherMarkers.push(
         ...getMarkers(dataToStore, {}, null, {
+          icon: getIcon(gDatasetMarkers[gDataset].standard),
           ...SECONDARY_MARKER_OPTIONS,
           datasetKey: gDataset,
         }).outOfFilters
@@ -1696,7 +1710,7 @@ function initMap(data, filters) {
           getDatasetFilename(dataset.key, gCountryCode),
           (result) => {
             const markerOptions = {
-              icon: gDatasetMarkers[dataset.key].standard,
+              icon: getIcon(gDatasetMarkers[dataset.key].standard),
               opacity: 1,
               datasetKey: dataset.key,
             };
