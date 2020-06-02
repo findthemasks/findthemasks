@@ -8,7 +8,7 @@ import { ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
-import { getInstance } from './localStorageUtils';
+import { getInstance } from './localStorageUtils.js';
 
 const localStorageInstance = getInstance();
 
