@@ -351,5 +351,8 @@
   "ftm-mailer-decrypt-failed" : "收件人地址解密失敗",
   "ftm-residential-location" : "住宅",
   "ftm-residential-popover-title" : "為什麼要住宅？",
-  "ftm-residential-popover-content" : "我們約有15％的收件人列出了家庭住址。這可能是因為捐贈者在辦公地點的時間有限，或者因為他們在使PPE上班方面遇到困難，所以更安全/更容易將捐贈者送到附近的地方。如果您希望直接向醫療機構捐款，請從我們成千上萬需要幫助的接收者中選擇另一個條目！"
+  "ftm-residential-popover-content" : "我們約有15％的收件人列出了家庭住址。這可能是因為捐贈者在辦公地點的時間有限，或者因為他們在使PPE上班方面遇到困難，所以更安全/更容易將捐贈者送到附近的地方。如果您希望直接向醫療機構捐款，請從我們成千上萬需要幫助的接收者中選擇另一個條目！",
+  "ftm-alert-systemic-racism-1" : "“發現面具”認識到社區對系統種族主義的反應必不可少&不能等待COVID-19通過。我們已經看到社區圍繞全球個人防護設備短缺而建立&我們相信面對COVID-19和社會動盪，我們可以保持團結。",
+  "ftm-alert-systemic-racism-2" : "儘管COVID-19並不是影響社區安全的唯一因素，但它也沒有消失。 FTM支持社會行動&希望幫助人們盡可能安全地參與。",
+  "ftm-alert-systemic-racism-3" : "請穿著個人防護裝備，以限制自己和他人的危險。如果您正在參加清理或抗議活動，請檢查<a href=\"https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0\" target=\"_blank\" rel=\"noopener noreferrer\">此資源</a>由合作夥伴放在一起<a href=\"https://opensourcemedicalsupplies.org/\" target=\"_blank\" rel=\"noopener noreferrer\"> OSMS </a> 。"
 }
