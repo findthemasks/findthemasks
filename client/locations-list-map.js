@@ -1836,10 +1836,13 @@ const initGlobalAlert = () => {
 
   alerts.each((index, alert) => {
     const dataName = alert.getAttribute('data-alert-name');
-    if (!localStorageInstance.getItem(dataName)) {
+    const alertData = localStorageInstance.getItem(dataName);
+    const alertShownDate = alertData ? new Date(alertData) : null;
+    const twelveHoursMs = 60 * 60 * 12 * 1000;
+    if (!alertShownDate || ((new Date()) - alertShownDate) > twelveHoursMs) {
       alert.classList.remove('d-none');
       $(alert).on('close.bs.alert', () => {
-        localStorageInstance.setItem(dataName, true);
+        localStorageInstance.setItem(dataName, new Date());
       });
     }
   });
