@@ -8,6 +8,9 @@ import { ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
+import { getInstance } from './localStorageUtils';
+
+const localStorageInstance = getInstance();
 
 require('mobius1-selectr/src/selectr.css');
 
@@ -1828,6 +1831,20 @@ const applyFilterParams = ((params, filterSet) => {
   });
 });
 
+const initGlobalAlert = () => {
+  const alerts = $('.alert-dismissable');
+
+  alerts.each((index, alert) => {
+    const dataName = alert.getAttribute('data-alert-name');
+    if (!localStorageInstance.getItem(dataName)) {
+      alert.classList.remove('d-none');
+      $(alert).on('close.bs.alert', () => {
+        localStorageInstance.setItem(dataName, true);
+      });
+    }
+  });
+};
+
 $(() => {
   const renderListings = (result) => {
     const data = toDataByLocation(result, gDataset);
@@ -1878,6 +1895,7 @@ $(() => {
   };
 
   initContactModal();
+  initGlobalAlert();
 
   $.getJSON(getDatasetFilename(gDataset, gCountryCode), (result) => {
     if (window.i18nReady) {
