@@ -10,5 +10,8 @@ Partners should also edit /scss/partner-link-icons.data.svg.scss to style their 
 */
 
 module.exports = {
-  'dewv.net': '/ftm',
+  'dewv.net': {
+    linkUrl: 'https://dewv.net/ftm',
+    tooltip: 'Donate to this requester',
+  },
 };

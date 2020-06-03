@@ -382,8 +382,15 @@ function createRequesterMarkerContent(entry, separator) {
     website,
   } = entry;
 
+  const header = separator ? ce('h5', 'separator', ctn(name)) : ce('h5', null, ctn(name));
+  const headerPartnerLink = createPartnerLinkIcon(entry.row_id);
+
+  if (headerPartnerLink) {
+    ac(header, headerPartnerLink);
+  }
+
   // Text to go into InfoWindow
-  const contentTags = separator ? [ce('h5', 'separator', ctn(name))] : [ce('h5', null, ctn(name))];
+  const contentTags = [header];
 
   if (orgType && orgType.length) {
     contentTags.push(
@@ -972,6 +979,22 @@ function createZoomToMarkerIcon() {
   return headerZoomLink;
 }
 
+function createPartnerLinkIcon(rowId) {
+  const { partnerDomain, partnerLinkUrl, partnerStyleClass, partnerTooltip } = document.body.dataset;
+  if (partnerLinkUrl) {
+    const partnerLink = ce('div', `icon entry-partner-link ${partnerStyleClass}`);
+    const tooltipText = $.i18n(`ftm-link-partners-tooltip-${partnerDomain}`) || partnerTooltip;
+    partnerLink.setAttribute('aria-label', tooltipText);
+    partnerLink.setAttribute('title', tooltipText);
+    partnerLink.addEventListener('click', () => {
+      window.open(`${partnerLinkUrl}?id=${rowId}`, '_blank');
+    });
+    return partnerLink;
+  }
+
+  return null;
+}
+
 function createMakerListItemEl(entry) {
   entry.domElem = ce('div', 'location');
   const header = ce('div', 'd-flex');
@@ -1036,11 +1059,12 @@ function createRequesterListItemEl(entry) {
   const headerZoomLink = createZoomToMarkerIcon();
 
   const children = [ctn(entry.name), headerZoomLink];
-  if (document.body.dataset.partnerSite) {
-    const headerPartnerLink = ce('div', `icon entry-partner-link ${document.body.dataset.partnerStyleClass}`);
-    headerPartnerLink.setAttribute('aria-label', 'Partner site call to action');
+  const headerPartnerLink = createPartnerLinkIcon(entry.row_id);
+
+  if (headerPartnerLink) {
     children.push(headerPartnerLink);
   }
+
   ac(headerHospitalInfo, ce('h5', null, children));
 
   const { website } = entry;
@@ -1181,10 +1205,6 @@ function getEntryEl(entry) {
       // this was the only solution I could find that didn't leave a tooltip sitting around after click
       $(e.target).tooltip('hide');
     });
-
-  $(entry.domElem).find('.entry-partner-link').on('click', () => {
-    window.open(`${document.body.dataset.partnerSite}?id=${entry.row}`, '_blank');
-  });
 
   $(entry.domElem).on('mouseenter', () => {
     sendEvent('listView', 'mouseover', entry.name);

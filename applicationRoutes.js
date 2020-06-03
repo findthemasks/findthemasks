@@ -49,8 +49,10 @@ router.get(['/give', '/give.html', '/embed'], (req, res) => {
   if (req.headers.referer) {
     const referer = new URL(req.headers.referer);
     if (linkPartners[referer.hostname]) {
-      res.locals.partnerSite = `${referer.origin}${linkPartners[referer.hostname]}`;
+      res.locals.partnerDomain = referer.hostname;
+      res.locals.partnerLinkUrl = `${linkPartners[referer.hostname].linkUrl}`;
       res.locals.partnerStyleClass = `icon-${referer.hostname}`;
+      res.locals.partnerTooltip = `${linkPartners[referer.hostname].tooltip}`;
     }
   }
 
