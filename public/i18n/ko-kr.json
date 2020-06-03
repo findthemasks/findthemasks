@@ -351,5 +351,8 @@
   "ftm-mailer-decrypt-failed" : "받는 사람 주소 해독에 실패했습니다",
   "ftm-residential-location" : "주거",
   "ftm-residential-popover-title" : "왜 주거입니까?",
-  "ftm-residential-popover-content" : "수신자 중 약 15 %가 집 주소를 표시합니다. 기증자가 가까운 위치에서 퇴근하는 것이 더 안전하고 더 쉬워 지거나 근무 시간이 제한되어 있거나 직장에서 PPE를받는 데 어려움이 있기 때문일 수 있습니다. 의료 기관에 직접 기부하는 것을 선호하는 경우 도움이 필요한 수천 명의 수신자 중에서 다른 항목을 선택하십시오!"
+  "ftm-residential-popover-content" : "수신자 중 약 15 %가 집 주소를 표시합니다. 기증자가 가까운 위치에서 퇴근하는 것이 더 안전하고 더 쉬워 지거나 근무 시간이 제한되어 있거나 직장에서 PPE를받는 데 어려움이 있기 때문일 수 있습니다. 의료 기관에 직접 기부하는 것을 선호하는 경우 도움이 필요한 수천 명의 수신자 중에서 다른 항목을 선택하십시오!",
+  "ftm-alert-systemic-racism-1" : "마스크는 체계적인 인종주의에 대한 커뮤니티의 반응이 필수적이라는 것을 인식합니다. & COVID-19가 통과 할 때까지 기다릴 수 없습니다. 우리는 글로벌 PPE 부족 주변 지역 빌드를 본 & 우리가 COVID-19 대유행과 사회 불안의 얼굴에 연대를 유지할 수 있다고 생각합니다.",
+  "ftm-alert-systemic-racism-2" : "COVID-19가 커뮤니티 안전에 영향을 미치는 유일한 것은 아니지만 사라지지 않았습니다. FTM은 사회 활동을 지원합니다. & 사람들이 가능한 한 안전하게 참여하도록 돕고 싶습니다.",
+  "ftm-alert-systemic-racism-3" : "자신과 타인에게 위험을 줄이려면 PPE를 착용하십시오. 확인 <a href=\"https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0\" target=\"_blank\" rel=\"noopener noreferrer\"> 이 자원 </a> 파트너에 의해 함께 넣어 <a href=\"https://opensourcemedicalsupplies.org/\" target=\"_blank\" rel=\"noopener noreferrer\"> OSMS </a> 깨끗 업에 참여하거나 항의하는 경우."
 }

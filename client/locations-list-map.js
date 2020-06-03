@@ -8,6 +8,9 @@ import { ENUM_MAPPINGS } from './formEnumLookups.js';
 import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
+import { getInstance } from './localStorageUtils.js';
+
+const localStorageInstance = getInstance();
 
 require('mobius1-selectr/src/selectr.css');
 
@@ -1828,6 +1831,23 @@ const applyFilterParams = ((params, filterSet) => {
   });
 });
 
+const initGlobalAlert = () => {
+  const alerts = $('.alert-dismissable');
+
+  alerts.each((index, alert) => {
+    const dataName = alert.getAttribute('data-alert-name');
+    const alertData = localStorageInstance.getItem(dataName);
+    const alertShownDate = alertData ? new Date(alertData) : null;
+    const twelveHoursMs = 60 * 60 * 12 * 1000;
+    if (!alertShownDate || ((new Date()) - alertShownDate) > twelveHoursMs) {
+      alert.classList.remove('d-none');
+      $(alert).on('close.bs.alert', () => {
+        localStorageInstance.setItem(dataName, new Date());
+      });
+    }
+  });
+};
+
 $(() => {
   const renderListings = (result) => {
     const data = toDataByLocation(result, gDataset);
@@ -1878,6 +1898,7 @@ $(() => {
   };
 
   initContactModal();
+  initGlobalAlert();
 
   $.getJSON(getDatasetFilename(gDataset, gCountryCode), (result) => {
     if (window.i18nReady) {
