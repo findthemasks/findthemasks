@@ -55,6 +55,18 @@ a {
   color: white;
 }
 
+div.col-8, div.col-10, div.col-12, div.maketitle, .ie-top-margin {
+  -ms-transform: translateY(50px); /* increase top margin for IE11 */
+}
+
+.hide-from-ie {
+  -ms-transform: scale(0, 0); /* "hide" an element for IE11 */
+}
+
+.search-filter-container {
+  z-index: 1;
+}
+
 @media screen and (min-width: 800px) and (min-height: 700px) {
   .search-filter-container {
     position: -webkit-sticky; /* Safari */
@@ -320,6 +332,7 @@ h3.city {
   position: relative;
   height: calc(100vh - 58px);
   width: 100%;
+  -ms-transform: translateY(50px); /* increase top margin for IE11 */
 }
 
 #map {
@@ -532,6 +545,11 @@ dl.faq-question {
 .navbar.ftm {
   background: $blue;
   padding: 0 0.75rem;
+   /* The following are needed because IE11 does not support `position: sticky;` */
+  width: 100%;
+  top: 0px;
+  z-index: 1000;
+  position: -ms-device-fixed;
 }
 
 .navbar.ftm .nav-link,
@@ -628,6 +646,7 @@ dl.faq-question {
   font-weight: 600;
   padding-left: 1rem;
   padding-right: 1.4rem;
+  -ms-transform: translateY(25%); /* Increase top margin for IE11. */
 }
 
 .navbar.ftm .btn-addplace:hover {
@@ -660,6 +679,7 @@ dl.faq-question {
   font-weight: 600;
   padding-left: 1rem;
   padding-right: 1.4rem;
+  -ms-transform: translateY(25%); /* Increase top margin for IE11. */
 }
 
 .navbar.ftm .btn-xlink:hover {
