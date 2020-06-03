@@ -256,18 +256,18 @@ h3.city {
   &.highlighted {
     background-color: $gray;
   }
+}
 
-  .entry-external-link,
-  .entry-zoom-link,
-  .entry-copy-link {
-    cursor: pointer;
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    background-position: center;
-    vertical-align: middle;
-    padding: 0 1rem;
-  }
+.entry-external-link,
+.entry-zoom-link,
+.entry-copy-link {
+  cursor: pointer;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-position: center;
+  vertical-align: middle;
+  padding: 0 1rem;
 }
 
 .location label {

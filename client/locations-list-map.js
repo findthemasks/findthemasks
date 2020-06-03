@@ -317,7 +317,15 @@ function multilineStringToNodes(input) {
 
 function createMakerMarkerContent(entry, separator) {
   // Text to go into InfoWindow
-  const contentTags = [ce('h5', separator ? 'separator' : null, ctn(entry.name))];
+  const contentTags = [];
+  const title = ce('h5', separator ? 'separator' : null, ctn(entry.name));
+
+  if (entry.row_id) {
+    const headerCopyEntryLink = createLinkToListItemIcon(entry.row_id, true);
+    ac(title, headerCopyEntryLink);
+  }
+
+  contentTags.push(title);
 
   // TODO: Dedupe with addParagraph() in createMakerListItemEl().
   const addParagraph = (name, value) => {
@@ -368,6 +376,16 @@ const initResidentialPopover = () => {
   $('[data-toggle="popover"]').popover();
 };
 
+const initCopyLinkTooltip = () => {
+  $('.entry-copy-link').tooltip()
+    .on('click', (e) => {
+      copyLinkToClipboard(e.target.dataset.rowId);
+      $(e.target).attr('title', $.i18n('ftm-default-link-copied-tooltip'))
+        .tooltip('_fixTitle')
+        .tooltip('show');
+    })
+}
+
 function createRequesterMarkerContent(entry, separator) {
   const {
     org_type: orgType,
@@ -380,11 +398,19 @@ function createRequesterMarkerContent(entry, separator) {
     rdi,
     timestamp,
     website,
+    row_id
   } = entry;
 
   // Text to go into InfoWindow
-  const contentTags = separator ? [ce('h5', 'separator', ctn(name))] : [ce('h5', null, ctn(name))];
+  const contentTags = [];
+  const title = separator ? ce('h5', 'separator', ctn(name)) : ce('h5', null, ctn(name));
 
+  if (row_id) {
+    const headerCopyEntryLink = createLinkToListItemIcon(row_id, true);
+    ac(title, headerCopyEntryLink);
+  }
+
+  contentTags.push(title);
   if (orgType && orgType.length) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-org-type-label'))),
@@ -524,6 +550,7 @@ function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
 
       google.maps.event.addListener(info, 'domready', () => {
         initResidentialPopover();
+        initCopyLinkTooltip();
       });
 
       marker.infowindow = info;
@@ -972,11 +999,13 @@ function createZoomToMarkerIcon() {
   return headerZoomLink;
 }
 
-function createLinkToListItemIcon() {
-  const linkToItem = ce('div', 'icon icon-file-link entry-copy-link');
+function createLinkToListItemIcon(rowId, isMapPopup=false) {
+  const iconClass = isMapPopup ? 'icon-paperclip-link' : 'icon-file-link';
+  const linkToItem = ce('div', `icon ${iconClass} entry-copy-link`);
   const tooltipText = $.i18n('ftm-default-copy-link-tooltip');
   linkToItem.setAttribute('aria-label', tooltipText);
   linkToItem.setAttribute('title', tooltipText);
+  linkToItem.dataset.rowId = rowId;
   return linkToItem;
 }
 
@@ -988,7 +1017,7 @@ function createMakerListItemEl(entry) {
   const children = [ctn(entry.name), headerZoomLink];
 
   if (entry.row_id) {
-    const headerCopyEntryLink = createLinkToListItemIcon();
+    const headerCopyEntryLink = createLinkToListItemIcon(entry.row_id, false);
     children.push(headerCopyEntryLink);
   }
   ac(headerMakerspaceInfo, ce('h5', null, children));
@@ -1051,7 +1080,7 @@ function createRequesterListItemEl(entry) {
   const children = [ctn(entry.name), headerZoomLink]
 
   if (entry.row_id) {
-    const headerCopyEntryLink = createLinkToListItemIcon();
+    const headerCopyEntryLink = createLinkToListItemIcon(entry.row_id, false);
     children.push(headerCopyEntryLink);
   }
 
@@ -1183,7 +1212,7 @@ function zoomToMarker(marker) {
 }
 
 // copies the direct URL for a given entry to clipboard
-function copyLinkToClipboard(entry) {
+function copyLinkToClipboard(rowId) {
   const textArea = document.createElement("textarea");
   Object.assign(textArea.style, {
     position: 'fixed',
@@ -1199,7 +1228,7 @@ function copyLinkToClipboard(entry) {
   });
 
   const url = new FtmUrl(window.location.href);
-  url.searchparams.id = entry.row_id;
+  url.searchparams.id = rowId;
 
   textArea.value = url.toString();
   document.body.appendChild(textArea);
@@ -1232,14 +1261,6 @@ function getEntryEl(entry) {
       $(e.target).tooltip('hide');
     });
 
-  $(entry.domElem).find('.entry-copy-link').tooltip()
-    .on('click', (e) => {
-      sendEvent('listView', 'clickCopyLink', entry.name);
-      copyLinkToClipboard(entry);
-      $(e.target).attr('title', $.i18n('ftm-default-link-copied-tooltip'))
-        .tooltip('_fixTitle')
-        .tooltip('show');
-    })
 
   $(entry.domElem).find('.entry-partner-link').on('click', () => {
     window.open(`${document.body.dataset.partnerSite}?id=${entry.row}`, '_blank');
@@ -1272,6 +1293,7 @@ function renderNextListPage() {
   ac(el, children);
   gLastLocationRendered = renderLocation - 1;
   initResidentialPopover();
+  initCopyLinkTooltip();
 }
 
 function initializeEmbedLocationCollapse() {
