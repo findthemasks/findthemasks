@@ -1,17 +1,15 @@
 /*
 #findthemasks provides this file for partners to style their "callback" links.
 
-Each partner should define a CSS class named .icon-DOMAIN where DOMAIN is the same string used in
+Each partner should define a CSS class named .icon-NAME where NAME is the same name used in
 linkPartners.js.
 
-Note that dots in the domain must be escaped with a single backslash.
-
-The example below configures callback links for dewv.net to display that site's favicon.
+The entry below configures callback links for the example partner to display dewv.net's favicon.
 
 See a full working example at https://dewv.net/ftm/test.html
 */
 
-.icon-dewv\.net {
+.icon-example {
   background-image: url("https://dewv.net/favicon.ico");
   background-repeat: no-repeat;
   background-size: 24px 24px;

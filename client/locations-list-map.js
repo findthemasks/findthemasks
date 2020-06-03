@@ -980,10 +980,10 @@ function createZoomToMarkerIcon() {
 }
 
 function createPartnerLinkIcon(rowId) {
-  const { partnerDomain, partnerLinkUrl, partnerStyleClass, partnerTooltip } = document.body.dataset;
+  const { partnerName, partnerLinkUrl, partnerTooltip } = document.body.dataset;
   if (partnerLinkUrl) {
-    const partnerLink = ce('div', `icon entry-partner-link ${partnerStyleClass}`);
-    const tooltipText = $.i18n(`ftm-link-partners-tooltip-${partnerDomain}`) || partnerTooltip;
+    const partnerLink = ce('div', `icon entry-partner-link icon-${partnerName}`);
+    const tooltipText = $.i18n(`ftm-link-partners-tooltip-${partnerName}`) || partnerTooltip;
     partnerLink.setAttribute('aria-label', tooltipText);
     partnerLink.setAttribute('title', tooltipText);
     partnerLink.addEventListener('click', () => {

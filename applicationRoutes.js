@@ -48,11 +48,12 @@ router.get(['/give', '/give.html', '/embed'], (req, res) => {
   // Set up partner links, when applicable.
   if (req.headers.referer) {
     const referer = new URL(req.headers.referer);
-    if (linkPartners[referer.hostname]) {
-      res.locals.partnerDomain = referer.hostname;
-      res.locals.partnerLinkUrl = `${linkPartners[referer.hostname].linkUrl}`;
-      res.locals.partnerStyleClass = `icon-${referer.hostname}`;
-      res.locals.partnerTooltip = `${linkPartners[referer.hostname].tooltip}`;
+    const partner = linkPartners.find((element) => element.domain === referer.hostname);
+    if (partner) {
+      res.locals.partnerDomain = partner.domain;
+      res.locals.partnerLinkUrl = partner.linkUrl;
+      res.locals.partnerName = partner.name;
+      res.locals.partnerTooltip = partner.tooltip;
     }
   }
 
