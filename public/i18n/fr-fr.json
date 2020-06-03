@@ -324,6 +324,8 @@
   "ftm-makers-zoom-tooltip" : "zoom sur le créateur",
   "ftm-requesters-zoom-tooltip" : "zoom pour demander",
   "ftm-default-zoom-tooltip" : "zoomer sur le marqueur",
+  "ftm-default-copy-link-tooltip" : "Copier le lien",
+  "ftm-default-link-copied-tooltip" : "copié!",
   "ftm-partners-og-title" : "#findthemasks | Les partenaires",
   "ftm-partners-title" : "Sponsors, Collaborateurs & Média",
   "ftm-partners-info" : "Nous remercions nos sponsors et collaborateurs pour leur soutien à notre mission de connecter les travailleurs de la santé aux EPI dont ils ont besoin pour rester en sécurité. Pour vous associer à nous, contactez contact@findthemasks.com.",
