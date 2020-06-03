@@ -972,12 +972,26 @@ function createZoomToMarkerIcon() {
   return headerZoomLink;
 }
 
+function createLinkToListItemIcon() {
+  const linkToItem = ce('div', 'icon icon-file-link entry-copy-link');
+  const tooltipText = $.i18n('ftm-default-copy-link-tooltip');
+  linkToItem.setAttribute('aria-label', tooltipText);
+  linkToItem.setAttribute('title', tooltipText);
+  return linkToItem;
+}
+
 function createMakerListItemEl(entry) {
   entry.domElem = ce('div', 'location');
   const header = ce('div', 'd-flex');
   const headerZoomLink = createZoomToMarkerIcon();
   const headerMakerspaceInfo = ce('div', 'flex-grow-1 grey-background');
-  ac(headerMakerspaceInfo, ce('h5', null, [ctn(entry.name), headerZoomLink]));
+  const children = [ctn(entry.name), headerZoomLink];
+
+  if (entry.row_id) {
+    const headerCopyEntryLink = createLinkToListItemIcon();
+    children.push(headerCopyEntryLink);
+  }
+  ac(headerMakerspaceInfo, ce('h5', null, children));
 
   ac(header, headerMakerspaceInfo);
   ac(entry.domElem, header);
@@ -1034,8 +1048,13 @@ function createRequesterListItemEl(entry) {
   const headerHospitalInfo = ce('div', 'flex-grow-1');
   const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
   const headerZoomLink = createZoomToMarkerIcon();
+  const children = [ctn(entry.name), headerZoomLink]
 
-  const children = [ctn(entry.name), headerZoomLink];
+  if (entry.row_id) {
+    const headerCopyEntryLink = createLinkToListItemIcon();
+    children.push(headerCopyEntryLink);
+  }
+
   if (document.body.dataset.partnerSite) {
     const headerPartnerLink = ce('div', `icon entry-partner-link ${document.body.dataset.partnerStyleClass}`);
     headerPartnerLink.setAttribute('aria-label', 'Partner site call to action');
@@ -1163,6 +1182,37 @@ function zoomToMarker(marker) {
   }
 }
 
+// copies the direct URL for a given entry to clipboard
+function copyLinkToClipboard(entry) {
+  const textArea = document.createElement("textarea");
+  Object.assign(textArea.style, {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '2em',
+    height: '2em',
+    padding: 0,
+    border: 'none',
+    outline: 'none',
+    boxShadow: 'none',
+    background: 'transparent'
+  });
+
+  const url = new FtmUrl(window.location.href);
+  url.searchparams.id = entry.row_id;
+
+  textArea.value = url.toString();
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+  try {
+    document.execCommand('copy');
+  } catch (err) {
+    console.log('error: could not copy');
+  }
+  document.body.removeChild(textArea);
+}
+
 function getEntryEl(entry) {
   if (!entry.domElem) {
     // Adds the domElem field if it has not been created.
@@ -1181,6 +1231,15 @@ function getEntryEl(entry) {
       // this was the only solution I could find that didn't leave a tooltip sitting around after click
       $(e.target).tooltip('hide');
     });
+
+  $(entry.domElem).find('.entry-copy-link').tooltip()
+    .on('click', (e) => {
+      sendEvent('listView', 'clickCopyLink', entry.name);
+      copyLinkToClipboard(entry);
+      $(e.target).attr('title', $.i18n('ftm-default-link-copied-tooltip'))
+        .tooltip('_fixTitle')
+        .tooltip('show');
+    })
 
   $(entry.domElem).find('.entry-partner-link').on('click', () => {
     window.open(`${document.body.dataset.partnerSite}?id=${entry.row}`, '_blank');

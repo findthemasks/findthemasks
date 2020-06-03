@@ -327,6 +327,8 @@
   "ftm-makers-zoom-tooltip": "zoom to maker",
   "ftm-requesters-zoom-tooltip": "zoom to request",
   "ftm-default-zoom-tooltip": "zoom to marker",
+  "ftm-default-copy-link-tooltip": "copy link",
+  "ftm-default-link-copied-tooltip": "copied!",
   "ftm-partners-og-title": "#findthemasks | Partners",
   "ftm-partners-title": "Sponsors, Collaborators & Media",
   "ftm-partners-info": "We thank our sponsors and collaborators for their support of our mission to connect health care workers with the PPE they need to stay safe. To partner with us, reach out to contact@findthemasks.com.",
