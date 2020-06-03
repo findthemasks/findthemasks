@@ -383,8 +383,8 @@ const initCopyLinkTooltip = () => {
       $(e.target).attr('title', $.i18n('ftm-default-link-copied-tooltip'))
         .tooltip('_fixTitle')
         .tooltip('show');
-    })
-}
+    });
+};
 
 function createRequesterMarkerContent(entry, separator) {
   const {
@@ -398,15 +398,15 @@ function createRequesterMarkerContent(entry, separator) {
     rdi,
     timestamp,
     website,
-    row_id
   } = entry;
+  const rowId = entry.row_id;
 
   // Text to go into InfoWindow
   const contentTags = [];
   const title = separator ? ce('h5', 'separator', ctn(name)) : ce('h5', null, ctn(name));
 
-  if (row_id) {
-    const headerCopyEntryLink = createLinkToListItemIcon(row_id, true);
+  if (rowId) {
+    const headerCopyEntryLink = createLinkToListItemIcon(rowId, true);
     ac(title, headerCopyEntryLink);
   }
 
@@ -999,7 +999,7 @@ function createZoomToMarkerIcon() {
   return headerZoomLink;
 }
 
-function createLinkToListItemIcon(rowId, isMapPopup=false) {
+function createLinkToListItemIcon(rowId, isMapPopup = false) {
   const iconClass = isMapPopup ? 'icon-paperclip-link' : 'icon-file-link';
   const linkToItem = ce('div', `icon ${iconClass} entry-copy-link`);
   const tooltipText = $.i18n('ftm-default-copy-link-tooltip');
@@ -1077,7 +1077,7 @@ function createRequesterListItemEl(entry) {
   const headerHospitalInfo = ce('div', 'flex-grow-1');
   const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
   const headerZoomLink = createZoomToMarkerIcon();
-  const children = [ctn(entry.name), headerZoomLink]
+  const children = [ctn(entry.name), headerZoomLink];
 
   if (entry.row_id) {
     const headerCopyEntryLink = createLinkToListItemIcon(entry.row_id, false);
@@ -1213,7 +1213,7 @@ function zoomToMarker(marker) {
 
 // copies the direct URL for a given entry to clipboard
 function copyLinkToClipboard(rowId) {
-  const textArea = document.createElement("textarea");
+  const textArea = document.createElement('textarea');
   Object.assign(textArea.style, {
     position: 'fixed',
     top: 0,
@@ -1224,7 +1224,7 @@ function copyLinkToClipboard(rowId) {
     border: 'none',
     outline: 'none',
     boxShadow: 'none',
-    background: 'transparent'
+    background: 'transparent',
   });
 
   const url = new FtmUrl(window.location.href);
