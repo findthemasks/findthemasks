@@ -398,14 +398,17 @@ function createRequesterMarkerContent(entry, separator) {
     rdi,
     timestamp,
     website,
+    row_id: rowId,
   } = entry;
-  const rowId = entry.row_id;
 
   // Text to go into InfoWindow
   const contentTags = [];
   const title = separator ? ce('h5', 'separator', ctn(name)) : ce('h5', null, ctn(name));
 
-  if (rowId) {
+  // US entries don't have country set
+  const country = entry.country ? entry.country.toLowerCase() : 'us';
+  // only display the link for primary dataset entries
+  if (rowId && country === gCountryCode) {
     const headerCopyEntryLink = createLinkToListItemIcon(rowId, true);
     ac(title, headerCopyEntryLink);
   }
