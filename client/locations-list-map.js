@@ -320,7 +320,8 @@ function createMakerMarkerContent(entry, separator) {
   const contentTags = [];
   const title = ce('h5', separator ? 'separator' : null, ctn(entry.name));
 
-  if (entry.row_id) {
+  // only show the link copier if the main dataset is makers
+  if (entry.row_id && gDataset === 'makers') {
     const headerCopyEntryLink = createLinkToListItemIcon(entry.row_id, true);
     ac(title, headerCopyEntryLink);
   }
@@ -408,7 +409,7 @@ function createRequesterMarkerContent(entry, separator) {
   // US entries don't have country set
   const country = entry.country ? entry.country.toLowerCase() : 'us';
   // only display the link for primary dataset entries
-  if (rowId && country === gCountryCode) {
+  if (rowId && country === gCountryCode && gDataset === 'requester') {
     const headerCopyEntryLink = createLinkToListItemIcon(rowId, true);
     ac(title, headerCopyEntryLink);
   }
