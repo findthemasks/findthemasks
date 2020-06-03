@@ -55,11 +55,11 @@ a {
   color: white;
 }
 
-div.col-8, div.col-10, div.col-12, div.maketitle, .ie-top-margin {
-  -ms-transform: translateY(50px); /* increase top margin for IE11 */
+.ie-fix-vertical, div.col-8, div.col-10, div.col-12, div.maketitle {
+  -ms-transform: translateY(50px); /* modify IE11 vertical placement to correct for fixed navbar */
 }
 
-.hide-from-ie {
+.ie-hidden {
   -ms-transform: scale(0, 0); /* "hide" an element for IE11 */
 }
 
