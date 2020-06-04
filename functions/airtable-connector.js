@@ -116,6 +116,7 @@ function loadNomData(admin) {
         }));
       }
     }
+    console.log(`NoM Performing ${geocodePromises.length} geocodes`);
     await Promise.all(geocodePromises);
     return entries;
   });
@@ -170,6 +171,7 @@ async function loadOsmsData() {
     geocodePromises.push(geocodeEntry(entry));
   }
 
+  console.log(`OSMS Performing ${geocodePromises.length} geocodes`);
   await Promise.all(geocodePromises);
   return values;
 }
