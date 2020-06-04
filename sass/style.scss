@@ -55,14 +55,6 @@ a {
   color: white;
 }
 
-.ie-fix-vertical, div.col-8, div.col-10, div.col-12, div.maketitle {
-  -ms-transform: translateY(50px); /* modify IE11 vertical placement to correct for fixed navbar */
-}
-
-.ie-hidden {
-  -ms-transform: scale(0, 0); /* "hide" an element for IE11 */
-}
-
 .search-filter-container {
   z-index: 1;
 }
@@ -332,7 +324,6 @@ h3.city {
   position: relative;
   height: calc(100vh - 58px);
   width: 100%;
-  -ms-transform: translateY(50px); /* increase top margin for IE11 */
 }
 
 #map {
@@ -545,11 +536,26 @@ dl.faq-question {
 .navbar.ftm {
   background: $blue;
   padding: 0 0.75rem;
-   /* The following are needed because IE11 does not support `position: sticky;` */
-  width: 100%;
-  top: 0px;
-  z-index: 1000;
-  position: -ms-device-fixed;
+
+  /* For IE10+, but *not Edge* ... */
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    /* ... need to implement pseudo "sticky" navbar */
+    width: 100%;
+    top: 0px;
+    z-index: 900;
+    position: fixed;
+  }
+}
+
+/* For IE10+, but *not Edge* ... */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .ie-hidden {
+    display: none; /* need to hide some problematic, non-essential elements */
+  }
+
+  .ie-spacer {
+    height: 54px; /* need an offset to account for navbar */
+  }
 }
 
 .navbar.ftm .nav-link,
@@ -639,6 +645,13 @@ dl.faq-question {
   background: $blue;
 }
 
+/* For IE10+, but *not Edge* ... */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .btn-addplace, .btn-xlink {
+  transform: translateY(25%); /* ... need to adjust vertical position. */
+  }
+}
+
 .navbar.ftm .btn-addplace {
   color: #fff;
   background: $pink;
@@ -646,7 +659,6 @@ dl.faq-question {
   font-weight: 600;
   padding-left: 1rem;
   padding-right: 1.4rem;
-  -ms-transform: translateY(25%); /* Increase top margin for IE11. */
 }
 
 .navbar.ftm .btn-addplace:hover {
@@ -679,7 +691,6 @@ dl.faq-question {
   font-weight: 600;
   padding-left: 1rem;
   padding-right: 1.4rem;
-  -ms-transform: translateY(25%); /* Increase top margin for IE11. */
 }
 
 .navbar.ftm .btn-xlink:hover {
