@@ -167,6 +167,7 @@ async function annotateGeocode(data, sheet_id, client) {
     }
   });
 
+  console.log(`Performing ${promises.length} geocodes`);
   await Promise.all(promises);
   // Attempt to write back now.
   if (to_write_back.length > 0) {
@@ -204,6 +205,8 @@ async function annotateGeocode(data, sheet_id, client) {
     });
     const write_response = await google.sheets('v4').spreadsheets.values.batchUpdate(write_request);
   }
+
+  return {numGeocodes: promises.length, numWritebacks: to_write_back.length};
 }
 
 async function getSpreadsheet(prefix, country, client) {
@@ -411,6 +414,7 @@ async function snapshotData(prefix, country) {
 
 module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
   const country = get_country_from_path(req);
+  console.log(`reloadsheetdata for ${country}`);
   if (country === 'makers') {
     await loadMakerData(admin, req, res);
     return;
@@ -446,11 +450,12 @@ async function updateSheetWithGeocodes(spreadsheetId) {
   // Find rows that have been approved but not geocoded.
   // Call geocoder.
   // Fill in cells with lat, lng
-  await annotateGeocode(response.data, spreadsheetId, client);
+  return await annotateGeocode(response.data, spreadsheetId, client);
 }
 
 module.exports.geocode = functions.https.onRequest(async (req, res) => {
   const country = get_country_from_path(req);
+  console.log(`geocode for ${country}`);
   let spreadsheetId = null;
   if (country === 'getusppe-affiliates') {
     spreadsheetId = constants.GETUSPPE_AFFILIATES_SHEET_ID;
@@ -461,8 +466,10 @@ module.exports.geocode = functions.https.onRequest(async (req, res) => {
     return;
   }
 
-  await updateSheetWithGeocodes(spreadsheetId);
-  res.status(200).send("Geocoded and updated spreadsheet successfully");
+  const stats = await updateSheetWithGeocodes(spreadsheetId);
+  res.status(200).send(
+    'Geocoded and updated spreadsheet successfully. ' +
+      `${stats.numGeocodes} geocodes and ${stats.numWritebacks} writebacks`);
 });
 
 
@@ -664,6 +671,7 @@ const annotateSmartyStreetsAddresses = async (country) => {
 
 module.exports.smarty_streets_analysis = functions.https.onRequest(async (req, res) => {
   const country = get_country_from_path(req);
+  console.log(`smarty_streets_analysis for ${country}`);
   if (!(country in constants.SHEETS)) {
     res.status(400).send(`invalid country: ${country} for ${req.path}`);
     return;
@@ -743,6 +751,7 @@ async function writeCommandLinks(country) {
 
 module.exports.make_command_links = functions.https.onRequest(async (req, res) => {
   const country = get_country_from_path(req);
+  console.log(`make_command_links for ${country}`);
   if (!(country in constants.SHEETS)) {
     res.status(400).send(`invalid country: ${country} for ${req.path}`);
     return;
