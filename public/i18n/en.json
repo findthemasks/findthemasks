@@ -269,6 +269,9 @@
   "ftm-faq-ppe-recipients-header": "FAQs for PPE Recipients",
   "ftm-faq-request-processing-length": "How long will it take for my request to be processed?",
   "ftm-faq-request-processing-length-answer": "After you submit the PPE request form, our volunteer team of data moderators check every submission before publishing your request to our map and directory. In some cases, this can happen as quickly as a few minutes after submission! On average, it takes about two hours for a listing to be published.",
+  "ftm-faq-data-faqs-header": "Data FAQs",
+  "ftm-faq-who-owns-data": "Who owns the data?",
+  "ftm-faq-who-owns-data-answer": "Data seen on Find the Masks and Find the Makers is open and licensed under the <a href=\"https://creativecommons.org/licenses/by-sa/4.0/\">Creative Commons Sharealike 4.0 license</a>. Additionally, Find the Maker data is attributed to our collaboration with  <a href=\"https://www.nationofmakers.us/\">Nation of Makers</a> and <a href=\"https://opensourcemedicalsupplies.org/\">Open Source Medical Supplies</a>.",
   "ftm-faq-my-data": "What happens to my data? Who owns the data that I submit?",
   "ftm-faq-my-data-answer-1": "We collect the information that you provide to us when you fill out our PPE request form. The information regarding PPE recipient sites will be published on our public website for anyone to see and use. We also request an email and a phone number that we do not disclose publicly, so that we may contact the user in case we need to elaborate the post, seek feedback or request a collaboration. We may process your data or share personal information with vendors, consultants, or other third-party service providers.",
   "ftm-faq-my-data-answer-2": "For more information, please see our <a href=\"https://findthemasks.com/privacy-policy\">Privacy Policy</a>.",
@@ -355,6 +358,9 @@
   "ftm-mailer-message-sent": "Your message was sent",
   "ftm-mailer-decrypt-failed": "Recipient address decryption failed",
   "ftm-residential-location": "Residential",
+  "ftm-alert-systemic-racism-1": "Find the Masks recognizes community response to systemic racism is essential & cannot wait for COVID-19 to pass. We have seen communities build around global PPE shortages & believe we can maintain solidarity in the face of the COVID-19 pandemic and social unrest.",
+  "ftm-alert-systemic-racism-2": "Although COVID-19 is not the only thing affecting community safety, it has not disappeared either. FTM supports social action & wants to help people participate as safely as possible.",
+  "ftm-alert-systemic-racism-3": "Please wear PPE to limit risk to yourself and others. Check out <a href=\"https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0\" target=\"_blank\" rel=\"noopener noreferrer\">this resource</a> put together by partners <a href=\"https://opensourcemedicalsupplies.org/\" target=\"_blank\" rel=\"noopener noreferrer\">OSMS</a> if you are participating in clean-ups or protesting.",
   "ftm-residential-popover-title": "Why residential?",
   "ftm-residential-popover-content": "About 15% of our recipients list home addresses. This may be because it is safer/easier for donors to drop off at a nearby location, because their office hours are limited, or because they are having trouble getting PPE at work. If you prefer to donate directly to a healthcare institution, please select another entry from among our thousands of recipients in need!"
 }
