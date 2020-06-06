@@ -1529,6 +1529,7 @@ function initMapSearch(data, filters) {
     resetMap(data, filters);
     $search.val('');
     sendEvent('map', 'reset', 'default-location');
+    $('#layer-makers').prop('checked', false);
   });
 }
 
