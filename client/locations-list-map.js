@@ -1638,6 +1638,7 @@ function initMapSearch(data, filters) {
     document.getElementById('filter-container').lastElementChild.selectrReference.clear();
     document.getElementById('filter-container').lastElementChild.previousSibling.selectrReference.clear();
     sendEvent('map', 'reset', 'default-location');
+    $('#layer-makers').prop('checked', false);
   });
 }
 
