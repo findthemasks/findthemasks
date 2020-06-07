@@ -49,6 +49,9 @@ let gSecondaryCluster = null;
 
 let gCurrentViewportCenter = {};
 
+//New object that stores key:value pairs between a filter and its corresponding Selector object so we can clear them out when we reset the map
+let filter_selectors={};
+
 const gDatasetMarkers = {
   requester: {
     standard: '/images/markers/requester_marker.svg',
@@ -1247,12 +1250,18 @@ function refreshList(data, filters) {
   }
 }
 
-function onFilterChange(data, prefix, idx, selected, filters) {
+function onFilterChange(data, prefix, idx, selected, filters,selectr) {
   const primaryFilter = filters[prefix] && filters[prefix][Object.keys(filters[prefix])[idx]];
   if (!primaryFilter) {
     return;
   }
-
+  let temp = filters[prefix][Object.keys(filters[prefix])[idx]].name;
+  if (selected){
+    filter_selectors[temp]=selectr;
+  }
+  else{
+    delete filter_selectors[temp];
+  }
   // Also apply filters that have the same display name
   const matchingFilterKeys = Object.keys(filters[prefix]).filter((filterKey) => {
     const matchingFilter = filters[prefix][filterKey];
@@ -1316,12 +1325,12 @@ function createFilterElements(data, filters) {
       });
 
       selectr.on('selectr.select', (option) => {
-        onFilterChange(data, f, option.idx, true, filters);
+        onFilterChange(data, f, option.idx, true, filters,selectr);
         sendEvent('filters', f, option.value);
       });
 
       selectr.on('selectr.deselect', (option) => {
-        onFilterChange(data, f, option.idx, false, filters);
+        onFilterChange(data, f, option.idx, false, filters,selectr);
       });
     }
   }
@@ -1442,6 +1451,7 @@ function attemptGeocode(searchText) {
  */
 function resetMap(data, filters) {
   showMarkers(data, filters);
+  
 }
 
 /**
@@ -1528,8 +1538,9 @@ function initMapSearch(data, filters) {
     e.preventDefault();
     resetMap(data, filters);
     $search.val('');
-    $(".selectr-clear")[0].click();
-    $(".selectr-clear")[1].click();
+    Object.values(filter_selectors).forEach((current)=>{
+      current.clear();
+    });
     sendEvent('map', 'reset', 'default-location');
   });
 }
