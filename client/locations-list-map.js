@@ -1528,6 +1528,8 @@ function initMapSearch(data, filters) {
     e.preventDefault();
     resetMap(data, filters);
     $search.val('');
+    $(".selectr-clear")[0].click();
+    $(".selectr-clear")[1].click();
     sendEvent('map', 'reset', 'default-location');
   });
 }
