@@ -1536,7 +1536,7 @@ function initMapSearch(data, filters) {
     e.preventDefault();
     resetMap(data, filters);
     $search.val('');
-    Object.keys(filterSelectors).map((current) => {
+    Object.keys(filterSelectors).forEach((current) => {
       filterSelectors[current].clear();
     });
     sendEvent('map', 'reset', 'default-location');
