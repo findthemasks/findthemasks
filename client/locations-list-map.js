@@ -1257,7 +1257,7 @@ function onFilterChange(data, prefix, idx, selected, filters, selectr) {
   }
   const temp = filters[prefix][Object.keys(filters[prefix])[idx]].name;
   if (selected) {
-    filterSelectors[temp]=selectr;
+    filterSelectors[temp] = selectr;
   } else {
     delete filterSelectors[temp];
   }
@@ -1536,8 +1536,8 @@ function initMapSearch(data, filters) {
     e.preventDefault();
     resetMap(data, filters);
     $search.val('');
-    Object.values(filterSelectors).forEach((current)=>{
-      current.clear();
+    Object.keys(filterSelectors).map((current) => {
+      filterSelectors[current].clear();
     });
     sendEvent('map', 'reset', 'default-location');
   });
