@@ -49,8 +49,8 @@ let gSecondaryCluster = null;
 
 let gCurrentViewportCenter = {};
 
-//New object that stores key:value pairs between a filter and its corresponding Selector object so we can clear them out when we reset the map
-let filter_selectors={};
+// New object that stores key:value pairs between a filter and its corresponding Selector object
+const filterSelectors = {};
 
 const gDatasetMarkers = {
   requester: {
@@ -1250,17 +1250,16 @@ function refreshList(data, filters) {
   }
 }
 
-function onFilterChange(data, prefix, idx, selected, filters,selectr) {
+function onFilterChange(data, prefix, idx, selected, filters, selectr) {
   const primaryFilter = filters[prefix] && filters[prefix][Object.keys(filters[prefix])[idx]];
   if (!primaryFilter) {
     return;
   }
-  let temp = filters[prefix][Object.keys(filters[prefix])[idx]].name;
-  if (selected){
-    filter_selectors[temp]=selectr;
-  }
-  else{
-    delete filter_selectors[temp];
+  const temp = filters[prefix][Object.keys(filters[prefix])[idx]].name;
+  if (selected) {
+    filterSelectors[temp]=selectr;
+  } else {
+    delete filterSelectors[temp];
   }
   // Also apply filters that have the same display name
   const matchingFilterKeys = Object.keys(filters[prefix]).filter((filterKey) => {
@@ -1325,12 +1324,12 @@ function createFilterElements(data, filters) {
       });
 
       selectr.on('selectr.select', (option) => {
-        onFilterChange(data, f, option.idx, true, filters,selectr);
+        onFilterChange(data, f, option.idx, true, filters, selectr);
         sendEvent('filters', f, option.value);
       });
 
       selectr.on('selectr.deselect', (option) => {
-        onFilterChange(data, f, option.idx, false, filters,selectr);
+        onFilterChange(data, f, option.idx, false, filters, selectr);
       });
     }
   }
@@ -1451,7 +1450,6 @@ function attemptGeocode(searchText) {
  */
 function resetMap(data, filters) {
   showMarkers(data, filters);
-  
 }
 
 /**
@@ -1538,7 +1536,7 @@ function initMapSearch(data, filters) {
     e.preventDefault();
     resetMap(data, filters);
     $search.val('');
-    Object.values(filter_selectors).forEach((current)=>{
+    Object.values(filterSelectors).forEach((current)=>{
       current.clear();
     });
     sendEvent('map', 'reset', 'default-location');
