@@ -421,7 +421,6 @@ function createRequesterMarkerContent(entry, separator) {
 
   const contentTags = [header];
 
-  contentTags.push(title);
   if (orgType && orgType.length) {
     contentTags.push(
       ce('div', 'label', ctn($.i18n('ftm-maps-marker-org-type-label'))),
@@ -833,7 +832,7 @@ function getMapInitialView() {
   }
 
   if (searchParams.id) {
-    const rowIdMatch = (marker) => marker.get('row_id') == searchParams.id;
+    const rowIdMatch = (marker) => `${marker.get('row_id')}` === searchParams.id;
     const idMarker = gPrimaryMarkers.find(rowIdMatch)
       || gSecondaryMarkers.find(rowIdMatch)
       || gOtherMarkers.find(rowIdMatch);
@@ -1273,7 +1272,7 @@ function copyLinkToClipboard(rowId, callback) {
     return;
   }
 
-  navigator.clipboard.writeText(linkToCopy).then(callback, (err) => { console.log('could not copy'); });
+  navigator.clipboard.writeText(linkToCopy).then(callback, (err) => { console.log(`could not copy: ${err}`); });
 }
 
 function getEntryEl(entry) {
