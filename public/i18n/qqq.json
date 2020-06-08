@@ -125,5 +125,6 @@
   "ftm-mailer-subject-blank": "Subject is blank error message",
   "ftm-mailer-mail-failed": "Error message shown when email sending failed for reasons other than user error",
   "ftm-mailer-message-sent": "Email sent confirmation text",
-  "ftm-mailer-decrypt-failed": "Error message for when the encrypted recipient address is malformed or missing"
+  "ftm-mailer-decrypt-failed": "Error message for when the encrypted recipient address is malformed or missing",
+  "ftm-link-partners-tooltip-example": "Tooltip for example link partner; each partner tooltip ends -NAME"
 }

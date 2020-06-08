@@ -1,3 +1,4 @@
+const admin = require('firebase-admin');
 const Bottleneck = require('bottleneck');
 const Client = require("@googlemaps/google-maps-services-js").Client;
 const functions = require('firebase-functions');
@@ -20,10 +21,22 @@ const geocodeLimiter = new Bottleneck({
 
 const maps_client = new Client({});
 
+const GEOCODE_CACHE_PATH = '/geocode_cache';
+
 // Fetch lat & lng for the given address by making a call to the Google Maps API.
 // Returns an object with numeric lat and lng fields.
 async function geocodeAddress(address) {
-  const response = await geocodeLimiter.schedule(() => maps_client.geocode({
+  // Cache the result of the geocode in the realtime db since that is muuuch
+  // cheaper than the geocode api.
+  const base64Address = Buffer.from(address).toString('base64');
+  const geocodeCacheRef = admin.database().ref(`${GEOCODE_CACHE_PATH}/${base64Address}`);
+  const snapshot = await geocodeCacheRef.once('value');
+
+  let response = null;
+  if (snapshot.exists()) {
+    return snapshot.val().geocode;
+  }
+  response = await geocodeLimiter.schedule(() => maps_client.geocode({
     params: {
       address: address,
       key: GOOGLE_MAPS_API_KEY
@@ -44,6 +57,9 @@ async function geocodeAddress(address) {
   } else {
     throw new Error(`status: ${response.status} req: ${response.config.url} ${JSON.stringify(response.config.params)} result: ${response.data}`);
   }
+
+  // Store the unencoded address too so it's readable in the firebase data dumps.
+  await geocodeCacheRef.set({address, geocode: retval});
   return retval;
 }
 

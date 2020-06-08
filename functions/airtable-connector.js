@@ -4,30 +4,31 @@ const { geocodeAddress, makeAddress } = require('./geocode.js');
 const { readAirtableSharedView, parseAirtableData } = require('./airtable-shared-view.js');
 
 const FIELDS = [
-      "approved", 
-      "name", 
-      "website", 
-      "public_contact", 
-      "city", 
-      "state", 
-      "zip", 
-      "country", 
-      "capabilities", 
-      "products", 
-      "other_product", 
-      "face_shield_type", 
-      "collecting_site", 
-      "shipping", 
-      "accepting_volunteers", 
-      "other_type_of_space", 
-      "accepting_ppe_requests", 
-      "org_collaboration", 
-      "other_capability", 
+      "approved",
+      "name",
+      "website",
+      "public_contact",
+      "city",
+      "state",
+      "zip",
+      "country",
+      "capabilities",
+      "products",
+      "other_product",
+      "face_shield_type",
+      "collecting_site",
+      "shipping",
+      "accepting_volunteers",
+      "other_type_of_space",
+      "accepting_ppe_requests",
+      "org_collaboration",
+      "other_capability",
       "group_type",
       "min_request",
-      "lat", 
+      "lat",
       "lng",
       "description",
+      "row_id",
 ];
 
 let AIRTABLE_API_KEY = null;
@@ -115,6 +116,7 @@ function loadNomData(admin) {
         }));
       }
     }
+    console.log(`NoM Performing ${geocodePromises.length} geocodes`);
     await Promise.all(geocodePromises);
     return entries;
   });
@@ -169,6 +171,7 @@ async function loadOsmsData() {
     geocodePromises.push(geocodeEntry(entry));
   }
 
+  console.log(`OSMS Performing ${geocodePromises.length} geocodes`);
   await Promise.all(geocodePromises);
   return values;
 }

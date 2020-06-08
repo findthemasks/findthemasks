@@ -55,6 +55,10 @@ a {
   color: white;
 }
 
+.search-filter-container {
+  z-index: 1;
+}
+
 @media screen and (min-width: 800px) and (min-height: 700px) {
   .search-filter-container {
     position: -webkit-sticky; /* Safari */
@@ -533,6 +537,26 @@ dl.faq-question {
 .navbar.ftm {
   background: $blue;
   padding: 0 0.75rem;
+
+  /* For IE10+, but *not Edge* ... */
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    /* ... need to implement pseudo "sticky" navbar */
+    width: 100%;
+    top: 0px;
+    z-index: 900;
+    position: fixed;
+  }
+}
+
+/* For IE10+, but *not Edge* ... */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .ie-hidden {
+    display: none; /* need to hide some problematic, non-essential elements */
+  }
+
+  .ie-spacer {
+    height: 54px; /* need an offset to account for navbar */
+  }
 }
 
 .navbar.ftm .nav-link,
@@ -620,6 +644,13 @@ dl.faq-question {
 
 .navbar.ftm .dropdown-item:hover {
   background: $blue;
+}
+
+/* For IE10+, but *not Edge* ... */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .btn-addplace, .btn-xlink {
+  transform: translateY(25%); /* ... need to adjust vertical position. */
+  }
 }
 
 .navbar.ftm .btn-addplace {
