@@ -380,10 +380,11 @@ const initResidentialPopover = () => {
 const initCopyLinkTooltip = () => {
   $('.entry-copy-link').tooltip()
     .on('click', (e) => {
-      copyLinkToClipboard(e.target.dataset.rowId);
-      $(e.target).attr('title', $.i18n('ftm-default-link-copied-tooltip'))
-        .tooltip('_fixTitle')
-        .tooltip('show');
+      copyLinkToClipboard(e.target.dataset.rowId, () => {
+        $(e.target).attr('title', $.i18n('ftm-default-link-copied-tooltip'))
+          .tooltip('_fixTitle')
+          .tooltip('show');
+      });
     });
 };
 
@@ -1238,34 +1239,41 @@ function zoomToMarker(marker) {
 }
 
 // copies the direct URL for a given entry to clipboard
-function copyLinkToClipboard(rowId) {
-  const textArea = document.createElement('textarea');
-  Object.assign(textArea.style, {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '2em',
-    height: '2em',
-    padding: 0,
-    border: 'none',
-    outline: 'none',
-    boxShadow: 'none',
-    background: 'transparent',
-  });
-
+function copyLinkToClipboard(rowId, callback) {
   const url = new FtmUrl(window.location.href);
   url.searchparams.id = rowId;
+  const linkToCopy = url.toString();
 
-  textArea.value = url.toString();
-  document.body.appendChild(textArea);
-  textArea.focus();
-  textArea.select();
-  try {
-    document.execCommand('copy');
-  } catch (err) {
-    console.log('error: could not copy');
+  if (!navigator.clipboard) {
+    const textArea = document.createElement('textarea');
+    Object.assign(textArea.style, {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '2em',
+      height: '2em',
+      padding: 0,
+      border: 'none',
+      outline: 'none',
+      boxShadow: 'none',
+      background: 'transparent',
+    });
+
+    textArea.value = linkToCopy;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+    } catch (err) {
+      console.log('error: could not copy');
+    }
+    document.body.removeChild(textArea);
+    callback();
+    return;
   }
-  document.body.removeChild(textArea);
+
+  navigator.clipboard.writeText(linkToCopy).then(callback, (err) => { console.log('could not copy'); });
 }
 
 function getEntryEl(entry) {
