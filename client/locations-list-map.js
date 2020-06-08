@@ -833,7 +833,7 @@ function getMapInitialView() {
   }
 
   if (searchParams.id) {
-    const rowIdMatch = (marker) => marker.get('row_id') === searchParams.id;
+    const rowIdMatch = (marker) => marker.get('row_id') == searchParams.id;
     const idMarker = gPrimaryMarkers.find(rowIdMatch)
       || gSecondaryMarkers.find(rowIdMatch)
       || gOtherMarkers.find(rowIdMatch);
