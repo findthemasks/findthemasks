@@ -49,9 +49,6 @@ let gSecondaryCluster = null;
 
 let gCurrentViewportCenter = {};
 
-// New object that stores key:value pairs between a filter and its corresponding Selector object
-const filterSelectors = {};
-
 const gDatasetMarkers = {
   requester: {
     standard: '/images/markers/requester_marker.svg',
@@ -1250,16 +1247,10 @@ function refreshList(data, filters) {
   }
 }
 
-function onFilterChange(data, prefix, idx, selected, filters, selectr) {
+function onFilterChange(data, prefix, idx, selected, filters) {
   const primaryFilter = filters[prefix] && filters[prefix][Object.keys(filters[prefix])[idx]];
   if (!primaryFilter) {
     return;
-  }
-  const temp = filters[prefix][Object.keys(filters[prefix])[idx]].name;
-  if (selected) {
-    filterSelectors[temp] = selectr;
-  } else {
-    delete filterSelectors[temp];
   }
   // Also apply filters that have the same display name
   const matchingFilterKeys = Object.keys(filters[prefix]).filter((filterKey) => {
@@ -1322,14 +1313,13 @@ function createFilterElements(data, filters) {
         searchable: false,
         placeholder: placeholderLabel,
       });
-
+      document.getElementById('filter-container').lastElementChild.selectrReference = selectr;
       selectr.on('selectr.select', (option) => {
-        onFilterChange(data, f, option.idx, true, filters, selectr);
+        onFilterChange(data, f, option.idx, true, filters);
         sendEvent('filters', f, option.value);
       });
-
       selectr.on('selectr.deselect', (option) => {
-        onFilterChange(data, f, option.idx, false, filters, selectr);
+        onFilterChange(data, f, option.idx, false, filters);
       });
     }
   }
@@ -1536,9 +1526,8 @@ function initMapSearch(data, filters) {
     e.preventDefault();
     resetMap(data, filters);
     $search.val('');
-    Object.keys(filterSelectors).forEach((current) => {
-      filterSelectors[current].clear();
-    });
+    document.getElementById('filter-container').lastElementChild.selectrReference.clear();
+    document.getElementById('filter-container').lastElementChild.previousSibling.selectrReference.clear();
     sendEvent('map', 'reset', 'default-location');
   });
 }
