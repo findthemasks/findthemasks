@@ -260,17 +260,18 @@ h3.city {
   &.highlighted {
     background-color: $gray;
   }
+}
 
-  .entry-external-link,
-  .entry-zoom-link {
-    cursor: pointer;
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    background-position: center;
-    vertical-align: middle;
-    padding: 0 1rem;
-  }
+.entry-external-link,
+.entry-zoom-link,
+.entry-copy-link {
+  cursor: pointer;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-position: center;
+  vertical-align: middle;
+  padding: 0 1rem;
 }
 
 .location label {
@@ -770,7 +771,7 @@ dl.faq-question {
 
 /* Mobile first: Desktop breakpoint overrides below */
 
-@media(min-width: $breakpoint-sm) {
+@media (min-width: $breakpoint-sm) {
   .search-filter-container .bg-dark-blue {
     padding: 2rem;
   }
@@ -840,7 +841,7 @@ dl.faq-question {
   .navbar.ftm .btn-xlink {
     width: 100%;
     margin: 0;
-}
+  }
 }
 
 @media (max-width: $breakpoint-xs) {
@@ -981,7 +982,8 @@ div.figure img {
     padding-right: 0.5rem;
   }
 
-  .navbar.ftm .btn-xlink, .navbar.ftm .btn-addplace {
+  .navbar.ftm .btn-xlink,
+  .navbar.ftm .btn-addplace {
     font-size: 0.67rem;
   }
 }

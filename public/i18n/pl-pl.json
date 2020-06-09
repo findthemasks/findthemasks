@@ -340,6 +340,8 @@
   "ftm-makers-zoom-tooltip": "powiększ do ekspresu",
   "ftm-requesters-zoom-tooltip": "powiększ, aby poprosić",
   "ftm-default-zoom-tooltip": "powiększ do znacznika",
+  "ftm-default-copy-link-tooltip": "skopiuj link",
+  "ftm-default-link-copied-tooltip": "skopiowane!",
   "ftm-link-partners-tooltip-example": "Przekaż darowiznę temu żądającemu na dewv.net",
   "ftm-partners-og-title": "#findthemasks | Wzmacniacz",
   "ftm-partners-title": "Sponsorzy, współpracownicy & mediów",

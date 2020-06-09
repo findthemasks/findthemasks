@@ -340,6 +340,8 @@
   "ftm-makers-zoom-tooltip": "zoom to maker",
   "ftm-requesters-zoom-tooltip": "zoom to request",
   "ftm-default-zoom-tooltip": "zoom to marker",
+  "ftm-default-copy-link-tooltip": "copy link",
+  "ftm-default-link-copied-tooltip": "copied!",
   "ftm-link-partners-tooltip-example": "Donate to this requester at dewv.net",
   "ftm-partners-og-title": "#findthemasks | Partners",
   "ftm-partners-title": "Sponsors, Collaborators & Media",

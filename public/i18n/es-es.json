@@ -340,6 +340,8 @@
   "ftm-makers-zoom-tooltip": "acercar al fabricante",
   "ftm-requesters-zoom-tooltip": "zoom para solicitar",
   "ftm-default-zoom-tooltip": "acercar al marcador",
+  "ftm-default-copy-link-tooltip": "copiar link",
+  "ftm-default-link-copied-tooltip": "copiado!",
   "ftm-link-partners-tooltip-example": "Done a este solicitante en dewv.net",
   "ftm-partners-og-title": "#findthemasks | Socios",
   "ftm-partners-title": "Patrocinadores, Colaboradores & Medios",

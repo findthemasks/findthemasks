@@ -340,6 +340,8 @@
   "ftm-makers-zoom-tooltip": "메이커 확대",
   "ftm-requesters-zoom-tooltip": "요청 확대",
   "ftm-default-zoom-tooltip": "마커 확대",
+  "ftm-default-copy-link-tooltip": "링크 복사",
+  "ftm-default-link-copied-tooltip": "복사!",
   "ftm-link-partners-tooltip-example": "dewv.net에서이 요청자에게 기부하십시오",
   "ftm-partners-og-title": "#findthemasks | 파트너",
   "ftm-partners-title": "스폰서, 협력자 & 미디어",

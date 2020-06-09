@@ -340,6 +340,8 @@
   "ftm-makers-zoom-tooltip": "निर्माता को ज़ूम करें",
   "ftm-requesters-zoom-tooltip": "अनुरोध करने के लिए ज़ूम करें",
   "ftm-default-zoom-tooltip": "मार्कर पर ज़ूम करें",
+  "ftm-default-copy-link-tooltip": "प्रतिरूप जोड़ना",
+  "ftm-default-link-copied-tooltip": "प्रतिलिपि बनाई गई!",
   "ftm-link-partners-tooltip-example": "इस अनुरोधकर्ता को dewv.net पर दान करें",
   "ftm-partners-og-title": "#findthemasks | भागीदारों",
   "ftm-partners-title": "प्रायोजक, सहयोगी & मीडिया",

@@ -340,6 +340,8 @@
   "ftm-makers-zoom-tooltip": "縮放至製造商",
   "ftm-requesters-zoom-tooltip": "縮放以請求",
   "ftm-default-zoom-tooltip": "縮放到標記",
+  "ftm-default-copy-link-tooltip": "複製鏈接",
+  "ftm-default-link-copied-tooltip": "複製！",
   "ftm-link-partners-tooltip-example": "捐贈給dewv.net的請求者",
   "ftm-partners-og-title": "#findthemasks |夥伴",
   "ftm-partners-title": "贊助者，合作者&媒體",

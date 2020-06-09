@@ -340,6 +340,8 @@
   "ftm-makers-zoom-tooltip": "увеличить до создателя",
   "ftm-requesters-zoom-tooltip": "увеличить запрос",
   "ftm-default-zoom-tooltip": "увеличить до маркера",
+  "ftm-default-copy-link-tooltip": "копировать ссылку",
+  "ftm-default-link-copied-tooltip": "скопировано!",
   "ftm-link-partners-tooltip-example": "Пожертвуйте этому заказчику на dewv.net",
   "ftm-partners-og-title": "#findthemasks | партнеры",
   "ftm-partners-title": "Спонсоры, сотрудники & СМИ",

@@ -340,6 +340,8 @@
   "ftm-makers-zoom-tooltip": "تكبير لصانع",
   "ftm-requesters-zoom-tooltip": "تكبير الطلب",
   "ftm-default-zoom-tooltip": "تكبير لعلامة",
+  "ftm-default-copy-link-tooltip": "انسخ الرابط",
+  "ftm-default-link-copied-tooltip": "نسخ!",
   "ftm-link-partners-tooltip-example": "تبرع لهذا الطالب في dewv.net",
   "ftm-partners-og-title": "#findthemasks | شركاء",
   "ftm-partners-title": "الرعاة ، المتعاونون & الوسائط",
