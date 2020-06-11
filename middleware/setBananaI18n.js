@@ -62,11 +62,9 @@ module.exports = (req, res, next) => {
   let activeLocale;
 
   locales.forEach((l) => {
-
     if (l.localeCode === locale) {
       activeLocale = l;
     }
-    
   });
 
   const currentCountryCode = res.locals.countryCode;

@@ -9,7 +9,7 @@ module.exports = [
   },
   {
     localeCode: 'de',
-    name: 'Deutsch'
+    name: 'Deutsch',
   },
   {
     localeCode: 'it',
