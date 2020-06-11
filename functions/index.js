@@ -729,21 +729,34 @@ async function writeCommandLinks(country) {
     // Row numbers start at 1.  First 2 rows are headers, so we need to add 2.
     const row_num = index + 1 + 2;
 
-    const command = { i: row_id, d: date, a: 'g', c: country };
-    const commandUrl = 'https://findthemasks.com/api/exec?cmd=';
-    // Commands:
-    //   g = still good
-    //   r = remove
-    writeData.push({
-      range: `${COMBINED_WRITEBACK_SHEET}!${lgtmLinkColumn}${row_num}`,
-      values: [[commandUrl + ftmEncrypt.encryptCommand(command)]]
-    });
+    if (row_id.trim()) {
+      const command = { i: row_id, d: date, a: 'g', c: country };
+      const commandUrl = 'https://findthemasks.com/api/exec?cmd=';
+      // Commands:
+      //   g = still good
+      //   r = remove
+      writeData.push({
+        range: `${COMBINED_WRITEBACK_SHEET}!${lgtmLinkColumn}${row_num}`,
+        values: [[commandUrl + ftmEncrypt.encryptCommand(command)]]
+      });
 
-    command.a = 'r';
-    writeData.push({
-      range: `${COMBINED_WRITEBACK_SHEET}!${removeLinkColumn}${row_num}`,
-      values: [[commandUrl + ftmEncrypt.encryptCommand(command)]]
-    });
+      command.a = 'r';
+      writeData.push({
+        range: `${COMBINED_WRITEBACK_SHEET}!${removeLinkColumn}${row_num}`,
+        values: [[commandUrl + ftmEncrypt.encryptCommand(command)]]
+      });
+    } else {
+      // There isn't a sensible row_id. Erase the links.
+      writeData.push({
+        range: `${COMBINED_WRITEBACK_SHEET}!${lgtmLinkColumn}${row_num}`,
+        values: [['']]
+      });
+
+      writeData.push({
+        range: `${COMBINED_WRITEBACK_SHEET}!${removeLinkColumn}${row_num}`,
+        values: [['']]
+      });
+    }
   });
 
   await google.sheets('v4').spreadsheets.values.batchUpdate(writeRequest);
