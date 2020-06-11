@@ -61,11 +61,11 @@ module.exports = (req, res, next) => {
 
   const translatedLocales = [];
   let activeLocale;
-
+  //Do we still need this part of the code in this JS not that we are not translating anything for the locale options?
   locales.forEach((l) => {
     const translatedLocale = {
       localeCode: l.localeCode,
-      name: banana.i18n(l.i18nString),
+      name: l.nativeLang,
     };
 
     if (translatedLocale.localeCode === locale) {
