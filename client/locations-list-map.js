@@ -317,7 +317,16 @@ function multilineStringToNodes(input) {
 
 function createMakerMarkerContent(entry, separator) {
   // Text to go into InfoWindow
-  const contentTags = [ce('h5', separator ? 'separator' : null, ctn(entry.name))];
+  const contentTags = [];
+  const title = ce('h5', separator ? 'separator' : null, ctn(entry.name));
+
+  // only show the link copier if the main dataset is makers
+  if (entry.row_id && gDataset === 'makers') {
+    const headerCopyEntryLink = createLinkToListItemIcon(entry.row_id, true);
+    ac(title, headerCopyEntryLink);
+  }
+
+  contentTags.push(title);
 
   // TODO: Dedupe with addParagraph() in createMakerListItemEl().
   const addParagraph = (name, value) => {
@@ -368,6 +377,17 @@ const initResidentialPopover = () => {
   $('[data-toggle="popover"]').popover();
 };
 
+const initCopyLinkTooltip = () => {
+  $('.entry-copy-link').tooltip()
+    .on('click', (e) => {
+      copyLinkToClipboard(e.target.dataset.rowId, () => {
+        $(e.target).attr('title', $.i18n('ftm-default-link-copied-tooltip'))
+          .tooltip('_fixTitle')
+          .tooltip('show');
+      });
+    });
+};
+
 function createRequesterMarkerContent(entry, separator) {
   const {
     org_type: orgType,
@@ -380,10 +400,26 @@ function createRequesterMarkerContent(entry, separator) {
     rdi,
     timestamp,
     website,
+    row_id: rowId,
   } = entry;
 
-  // Text to go into InfoWindow
-  const contentTags = separator ? [ce('h5', 'separator', ctn(name))] : [ce('h5', null, ctn(name))];
+  const header = separator ? ce('h5', 'separator', ctn(name)) : ce('h5', null, ctn(name));
+  const headerPartnerLink = createPartnerLinkIcon(entry.row_id);
+
+  if (headerPartnerLink) {
+    ac(header, headerPartnerLink);
+  }
+
+
+  // US entries don't have country set
+  const country = entry.country ? entry.country.toLowerCase() : 'us';
+  // only display the link for primary dataset entries
+  if (rowId && country === gCountryCode && gDataset === 'requester') {
+    const headerCopyEntryLink = createLinkToListItemIcon(rowId, true);
+    ac(header, headerCopyEntryLink);
+  }
+
+  const contentTags = [header];
 
   if (orgType && orgType.length) {
     contentTags.push(
@@ -524,6 +560,7 @@ function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
 
       google.maps.event.addListener(info, 'domready', () => {
         initResidentialPopover();
+        initCopyLinkTooltip();
       });
 
       marker.infowindow = info;
@@ -795,7 +832,7 @@ function getMapInitialView() {
   }
 
   if (searchParams.id) {
-    const rowIdMatch = (marker) => marker.get('row_id') === searchParams.id;
+    const rowIdMatch = (marker) => `${marker.get('row_id')}` === searchParams.id;
     const idMarker = gPrimaryMarkers.find(rowIdMatch)
       || gSecondaryMarkers.find(rowIdMatch)
       || gOtherMarkers.find(rowIdMatch);
@@ -972,12 +1009,44 @@ function createZoomToMarkerIcon() {
   return headerZoomLink;
 }
 
+function createLinkToListItemIcon(rowId, isMapPopup = false) {
+  const iconClass = isMapPopup ? 'icon-paperclip-link' : 'icon-file-link';
+  const linkToItem = ce('div', `icon ${iconClass} entry-copy-link`);
+  const tooltipText = $.i18n('ftm-default-copy-link-tooltip');
+  linkToItem.setAttribute('aria-label', tooltipText);
+  linkToItem.setAttribute('title', tooltipText);
+  linkToItem.dataset.rowId = rowId;
+  return linkToItem;
+}
+
+function createPartnerLinkIcon(rowId) {
+  const { partnerName, partnerLinkUrl, partnerTooltip } = document.body.dataset;
+  if (partnerLinkUrl) {
+    const partnerLink = ce('div', `icon entry-partner-link icon-${partnerName}`);
+    const tooltipText = $.i18n(`ftm-link-partners-tooltip-${partnerName}`) || partnerTooltip;
+    partnerLink.setAttribute('aria-label', tooltipText);
+    partnerLink.setAttribute('title', tooltipText);
+    partnerLink.addEventListener('click', () => {
+      window.open(`${partnerLinkUrl}?id=${rowId}`, '_blank');
+    });
+    return partnerLink;
+  }
+
+  return null;
+}
+
 function createMakerListItemEl(entry) {
   entry.domElem = ce('div', 'location');
   const header = ce('div', 'd-flex');
   const headerZoomLink = createZoomToMarkerIcon();
   const headerMakerspaceInfo = ce('div', 'flex-grow-1 grey-background');
-  ac(headerMakerspaceInfo, ce('h5', null, [ctn(entry.name), headerZoomLink]));
+  const children = [ctn(entry.name), headerZoomLink];
+
+  if (entry.row_id) {
+    const headerCopyEntryLink = createLinkToListItemIcon(entry.row_id, false);
+    children.push(headerCopyEntryLink);
+  }
+  ac(headerMakerspaceInfo, ce('h5', null, children));
 
   ac(header, headerMakerspaceInfo);
   ac(entry.domElem, header);
@@ -1034,13 +1103,18 @@ function createRequesterListItemEl(entry) {
   const headerHospitalInfo = ce('div', 'flex-grow-1');
   const headerOrgType = ce('div', 'flex-grow-1 d-flex justify-content-end text-pink');
   const headerZoomLink = createZoomToMarkerIcon();
-
   const children = [ctn(entry.name), headerZoomLink];
-  if (document.body.dataset.partnerSite) {
-    const headerPartnerLink = ce('div', `icon entry-partner-link ${document.body.dataset.partnerStyleClass}`);
-    headerPartnerLink.setAttribute('aria-label', 'Partner site call to action');
+
+  if (entry.row_id) {
+    const headerCopyEntryLink = createLinkToListItemIcon(entry.row_id, false);
+    children.push(headerCopyEntryLink);
+  }
+
+  const headerPartnerLink = createPartnerLinkIcon(entry.row_id);
+  if (headerPartnerLink) {
     children.push(headerPartnerLink);
   }
+
   ac(headerHospitalInfo, ce('h5', null, children));
 
   const { website } = entry;
@@ -1163,6 +1237,44 @@ function zoomToMarker(marker) {
   }
 }
 
+// copies the direct URL for a given entry to clipboard
+function copyLinkToClipboard(rowId, callback) {
+  const url = new FtmUrl(window.location.href);
+  url.searchparams.id = rowId;
+  const linkToCopy = url.toString();
+
+  if (!navigator.clipboard) {
+    const textArea = document.createElement('textarea');
+    Object.assign(textArea.style, {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '2em',
+      height: '2em',
+      padding: 0,
+      border: 'none',
+      outline: 'none',
+      boxShadow: 'none',
+      background: 'transparent',
+    });
+
+    textArea.value = linkToCopy;
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    try {
+      document.execCommand('copy');
+    } catch (err) {
+      console.log('error: could not copy');
+    }
+    document.body.removeChild(textArea);
+    callback();
+    return;
+  }
+
+  navigator.clipboard.writeText(linkToCopy).then(callback, (err) => { console.log(`could not copy: ${err}`); });
+}
+
 function getEntryEl(entry) {
   if (!entry.domElem) {
     // Adds the domElem field if it has not been created.
@@ -1181,10 +1293,6 @@ function getEntryEl(entry) {
       // this was the only solution I could find that didn't leave a tooltip sitting around after click
       $(e.target).tooltip('hide');
     });
-
-  $(entry.domElem).find('.entry-partner-link').on('click', () => {
-    window.open(`${document.body.dataset.partnerSite}?id=${entry.row}`, '_blank');
-  });
 
   $(entry.domElem).on('mouseenter', () => {
     sendEvent('listView', 'mouseover', entry.name);
@@ -1213,6 +1321,7 @@ function renderNextListPage() {
   ac(el, children);
   gLastLocationRendered = renderLocation - 1;
   initResidentialPopover();
+  initCopyLinkTooltip();
 }
 
 function initializeEmbedLocationCollapse() {
@@ -1252,6 +1361,7 @@ function onFilterChange(data, prefix, idx, selected, filters) {
   if (!primaryFilter) {
     return;
   }
+
   // Also apply filters that have the same display name
   const matchingFilterKeys = Object.keys(filters[prefix]).filter((filterKey) => {
     const matchingFilter = filters[prefix][filterKey];
@@ -1313,11 +1423,12 @@ function createFilterElements(data, filters) {
         searchable: false,
         placeholder: placeholderLabel,
       });
-      document.getElementById('filter-container').lastElementChild.selectrReference = selectr;
+
       selectr.on('selectr.select', (option) => {
         onFilterChange(data, f, option.idx, true, filters);
         sendEvent('filters', f, option.value);
       });
+
       selectr.on('selectr.deselect', (option) => {
         onFilterChange(data, f, option.idx, false, filters);
       });
@@ -1526,8 +1637,6 @@ function initMapSearch(data, filters) {
     e.preventDefault();
     resetMap(data, filters);
     $search.val('');
-    document.getElementById('filter-container').lastElementChild.selectrReference.clear();
-    document.getElementById('filter-container').lastElementChild.previousSibling.selectrReference.clear();
     sendEvent('map', 'reset', 'default-location');
   });
 }

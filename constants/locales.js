@@ -12,7 +12,7 @@ module.exports = [
   {
     i18nString: 'ftm-german',
     localeCode: 'de',
-    nativeLang: 'Deutsch'
+    nativeLang: 'Deutsch',
   },
   {
     i18nString: 'ftm-italian',

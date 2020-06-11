@@ -61,7 +61,7 @@ module.exports = (req, res, next) => {
 
   const translatedLocales = [];
   let activeLocale;
-  //Do we still need this part of the code in this JS not that we are not translating anything for the locale options?
+  // Do we still need the for loop?
   locales.forEach((l) => {
     const translatedLocale = {
       localeCode: l.localeCode,
