@@ -59,20 +59,12 @@ module.exports = (req, res, next) => {
     messages: config.messages,
   });
 
-  const translatedLocales = [];
   let activeLocale;
 
   locales.forEach((l) => {
-    const translatedLocale = {
-      localeCode: l.localeCode,
-      name: banana.i18n(l.i18nString),
-    };
-
-    if (translatedLocale.localeCode === locale) {
-      activeLocale = translatedLocale;
+    if (l.localeCode === locale) {
+      activeLocale = l;
     }
-
-    translatedLocales.push(translatedLocale);
   });
 
   const currentCountryCode = res.locals.countryCode;
@@ -99,7 +91,7 @@ module.exports = (req, res, next) => {
     a.name.localeCompare(b.name)
   ));
 
-  res.locals.locales = translatedLocales;
+  res.locals.locales = locales;
   res.locals.activeLocale = activeLocale;
   res.locals.countries = sortedCountries;
   res.locals.activeCountry = activeCountry;

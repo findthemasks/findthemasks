@@ -1,34 +1,34 @@
 module.exports = [
   {
-    i18nString: 'ftm-english',
     localeCode: 'en',
+    name: 'English',
   },
   {
-    i18nString: 'ftm-french',
     localeCode: 'fr',
+    name: 'Français',
   },
   {
-    i18nString: 'ftm-german',
     localeCode: 'de',
+    name: 'Deutsch',
   },
   {
-    i18nString: 'ftm-italian',
     localeCode: 'it',
+    name: 'Italiano',
   },
   {
-    i18nString: 'ftm-polish',
     localeCode: 'pl',
+    name: 'Polski',
   },
   {
-    i18nString: 'ftm-portuguese',
     localeCode: 'pt',
+    name: 'Português',
   },
   {
-    i18nString: 'ftm-spanish',
     localeCode: 'es',
+    name: 'Español',
   },
   {
-    i18nString: 'ftm-chinese-traditional',
     localeCode: 'zh-TW',
+    name: '繁體中文',
   },
 ];
