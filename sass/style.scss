@@ -73,7 +73,7 @@ a {
 }
 
 .search-filter-container p {
-  font-size: 1rem;
+  font-size: $font-size-default;
 }
 
 .search-filter-container .input-group-text {
@@ -509,7 +509,7 @@ a {
   }
 
   .nav-link {
-    font-size: 0.7rem;
+    font-size: $font-size-xs;
   }
 }
 /****************
@@ -543,13 +543,13 @@ div.figure img {
 
 @media (max-width: 1265px) and (min-width: $breakpoint-md) {
   .navbar.ftm .navbar-nav .nav-link {
-    font-size: 0.67rem;
+    font-size: $font-size-xs;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }
 
   .navbar.ftm .btn-xlink,
   .navbar.ftm .btn-addplace {
-    font-size: 0.67rem;
+    font-size: $font-size-xs;
   }
 }
