@@ -17,17 +17,6 @@
   width: 17px;
 }
 
-.search-controls {
-  display: flex;
-  padding-top: 7px;
-}
-
-.search-control-separator {
-  padding: 0px 8px;
-  color: #ccc;
-  font-size: 14px;
-}
-
 .map-action-link {
   white-space: nowrap;
   font-size: $font-size-small;
@@ -81,7 +70,7 @@
   }
 }
 
-@media(min-width: $breakpoint-sm) {
+@media (min-width: $breakpoint-sm) {
   .filter-collapse {
     padding: 1rem 2rem;
   }

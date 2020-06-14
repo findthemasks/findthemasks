@@ -1,0 +1,171 @@
+/*********************
+ * Static page styles *
+   *********************/
+
+.page-title {
+  text-transform: uppercase;
+  font-size: $heading-size-1;
+  font-weight: 700;
+  margin-bottom: 2.5rem;
+}
+
+.email-button {
+  border: $pink;
+  background: $pink;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+ul.volunteer-list {
+  list-style-type: none;
+}
+
+dl.volunteer-list {
+  dt,
+  dd {
+    margin-bottom: 0;
+  }
+}
+
+.regional-team:not(:last-child) {
+  border-bottom: 1px solid;
+  margin-bottom: 1rem;
+}
+
+/*********************
+  * Join Us Icons *
+  *********************/
+.volunteer-needs {
+  background-repeat: no-repeat;
+  background-position: left top;
+  padding-left: 3rem;
+  background-size: 2rem 2rem;
+
+  &.translation {
+    background-image: $icon-translation;
+  }
+
+  &.tech {
+    background-image: $icon-tech;
+  }
+
+  &.internationalization {
+    background-image: $icon-internationalization;
+  }
+
+  &.moderators {
+    background-image: $icon-moderators;
+  }
+
+  &.outreach {
+    background-image: $icon-outreach;
+  }
+
+  &.social-media {
+    background-image: $icon-social-media;
+  }
+}
+
+/*********************
+  * FAQ STYLES *
+  *********************/
+
+.faq-header {
+  font-size: $heading-size-3;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+dl.faq-question {
+  .btn-link {
+    cursor: pointer;
+  }
+
+  & dt {
+    &:not(:first-child) {
+      border-top: 2px solid $gray;
+      padding-top: 0.75rem;
+    }
+
+    padding-bottom: 0.75rem;
+
+    h5 {
+      font-size: $font-size-default;
+      margin: 0;
+      background-position: left;
+      font-weight: 600;
+      padding-left: 1.75rem;
+      background-size: 1.5rem 1.5rem;
+      background-image: url(/images/icons/dash.svg);
+      background-repeat: no-repeat;
+      background-position: 0px -3px;
+    }
+
+    &:not(.open) h5 {
+      background-image: url(/images/icons/plus.svg);
+    }
+  }
+}
+
+/*********************
+  * PARTNERS STYLES *
+  *********************/
+
+.content section {
+  margin-bottom: 2rem;
+}
+
+.page-subhead {
+  font-size: $heading-size-3;
+  background-color: $yellow;
+  padding: 5px 8px;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.partner-logos {
+  width: 100%;
+}
+
+.partner-logos-large {
+  .partner-logo-container {
+    text-align: center;
+  }
+  #img-logo-canva {
+    width: 49%; //should be same as partner-logos-small size
+  }
+}
+
+.partner-logos-small {
+  .partner-logo-container {
+    width: 49%;
+  }
+}
+
+.partner-logo-container {
+  display: inline-block;
+  padding: 1.5rem;
+
+  img {
+    width: 100%;
+  }
+}
+
+@media (min-width: $breakpoint-md) {
+  /*********************
+  * PARTNERS STYLES *
+  *********************/
+
+  .partner-logos-large {
+    .partner-logo-container {
+      width: 33%;
+      text-align: center;
+    }
+  }
+
+  .partner-logos-small {
+    .partner-logo-container {
+      width: 19.6%;
+    }
+  }
+}
