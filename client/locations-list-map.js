@@ -1361,7 +1361,6 @@ function onFilterChange(data, prefix, idx, selected, filters) {
   if (!primaryFilter) {
     return;
   }
-
   // Also apply filters that have the same display name
   const matchingFilterKeys = Object.keys(filters[prefix]).filter((filterKey) => {
     const matchingFilter = filters[prefix][filterKey];
@@ -1423,12 +1422,11 @@ function createFilterElements(data, filters) {
         searchable: false,
         placeholder: placeholderLabel,
       });
-
+      document.getElementById('filter-container').lastElementChild.selectrReference = selectr;
       selectr.on('selectr.select', (option) => {
         onFilterChange(data, f, option.idx, true, filters);
         sendEvent('filters', f, option.value);
       });
-
       selectr.on('selectr.deselect', (option) => {
         onFilterChange(data, f, option.idx, false, filters);
       });
@@ -1637,6 +1635,8 @@ function initMapSearch(data, filters) {
     e.preventDefault();
     resetMap(data, filters);
     $search.val('');
+    document.getElementById('filter-container').lastElementChild.selectrReference.clear();
+    document.getElementById('filter-container').lastElementChild.previousSibling.selectrReference.clear();
     sendEvent('map', 'reset', 'default-location');
   });
 }
