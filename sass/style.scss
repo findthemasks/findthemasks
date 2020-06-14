@@ -1,7 +1,7 @@
 @import "colors";
 @import "typography";
 @import "icons.data.svg";
-@import "filter-styles";
+@import "shared-styles";
 @import "breakpoints";
 @import "legend";
 @import "globalAlert";
@@ -153,31 +153,12 @@ a {
   }
 }
 
-.entry-external-link,
-.entry-zoom-link,
-.entry-copy-link {
-  cursor: pointer;
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  background-position: center;
-  vertical-align: middle;
-  padding: 0 1rem;
-}
-
 .location label {
   font-weight: 600;
 }
 
 .map-container {
-  position: relative;
   height: calc(100vh - 58px);
-  width: 100%;
-}
-
-#map {
-  width: 100%;
-  height: 100%;
 }
 
 #map .separator {
@@ -193,32 +174,13 @@ a {
 #map .label {
   font-family: $font-stack-default;
   color: $text-color;
-  font-size: $font-size-small;
   font-weight: 600;
-  padding: 6px 0 2px 0;
 }
 
 #map .value {
   font-family: $font-stack-default;
-  font-weight: 400;
   font-size: $font-size-small;
   padding-bottom: 6px;
-}
-
-.map-link {
-  color: $blue;
-  text-decoration: underline;
-
-  &:not([href]) {
-    color: $blue;
-    text-decoration: underline;
-
-    &:hover {
-      text-decoration: underline;
-      cursor: pointer;
-      color: #0056b3;
-    }
-  }
 }
 
 .locations-loading {
@@ -573,23 +535,6 @@ div.figure img {
   max-width: 800px;
   margin: 1rem auto 0 auto;
   display: block;
-}
-
-.contact-modal .contact-error {
-  font-size: 0.8em;
-  color: red;
-  text-align: right;
-  margin-right: 20px;
-}
-
-.contact-modal .contact-success {
-  display: none;
-  text-align: center;
-  height: 5em;
-}
-
-.contact-modal #message-text {
-  height: 120px;
 }
 
 /****************************************************************
