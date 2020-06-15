@@ -209,8 +209,9 @@ function createFilters(data) {
     entryAge:{},
   };
   filters.entryAge.placeholder = "Entry age";
-  filters.entryAge["14"] = {name: "<14 days", isSet: false, value: 14};
-  filters.entryAge["28"] = {name: "<28 days", isSet: false, value: 28};
+  filters.entryAge["7"] = {name: "1 week", isSet: false, value: 7};
+  filters.entryAge["14"] = {name: "2 weeks", isSet: false, value: 14};
+  filters.entryAge["21"] = {name: "3 weeks", isSet: false, value: 21};
 
   for (const state of Object.keys(data)) {
     filters.states[state] = { name: state, isSet: false };
@@ -966,8 +967,12 @@ function getFlatFilteredEntries(data, filters) {
 
   const onEntry = (entry, cityName, stateName) => {
     let notInFilters = false;
-    if (entryAge&&entry.entry_age>=14){
-      return;
+    if (entryAge){
+      Object.keys(otherFilterKeys).forEach((entryFilter) => {
+        if (entry.entry_age>=parseInt(entryFilter)){
+          return;
+        }
+      });
     }; 
     Object.keys(otherFilterKeys).forEach((otherFilterKey) => {
       const otherFilterKeyValues = otherFilterKeys[otherFilterKey];
