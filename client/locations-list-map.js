@@ -603,7 +603,6 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
     acc[otherFilterKey] = Object.keys(otherFilters[otherFilterKey]);
     return acc;
   }, {});
-  console.log(otherFilterKeys);
   const datasetFilters = filtersByDataset[gDataset];
 
   const hasStateFilter = Boolean(states);
