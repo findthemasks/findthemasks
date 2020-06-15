@@ -208,10 +208,10 @@ function createFilters(data) {
     states: {},
     entryAge:{},
   };
-  filters.entryAge.placeholder = "Entry age";
-  filters.entryAge["7"] = {name: "1 week", isSet: false, value: 7};
-  filters.entryAge["14"] = {name: "2 weeks", isSet: false, value: 14};
-  filters.entryAge["21"] = {name: "3 weeks", isSet: false, value: 21};
+  filters.entryAge.placeholder = 'Entry age';
+  filters.entryAge['7'] = { name: '1 week', isSet: false, value: 7 };
+  filters.entryAge['14'] = { name: '2 weeks', isSet: false, value: 14 };
+  filters.entryAge['21'] = { name: '3 weeks', isSet: false, value: 21 };
 
   for (const state of Object.keys(data)) {
     filters.states[state] = { name: state, isSet: false };
@@ -614,7 +614,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
   for (const stateName of Object.keys(data)) {
     const inStateFilter = states && states[stateName];
 
-    const hasFilters = Object.keys(otherFilterKeys).length > 0 ||hasEntryFilter|| hasStateFilter;
+    const hasFilters = Object.keys(otherFilterKeys).length > 0 || hasEntryFilter || hasStateFilter;
 
     const state = data[stateName];
     const { cities } = state;
@@ -648,18 +648,17 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
           const acc = (entry[dataKey] || '').toLowerCase();
 
           if (!otherFilterKeyValues.some((s) => acc.includes(s))) {
-            //Checks if the entry has at least one of the things they are looking for
             inFilters[otherFilterKey] = false;
             secondaryFiltersApplied = true;
           }
         });
         if (hasEntryFilter){
           Object.keys(entryAge).forEach((entryFilter) => {
-            if (entry.entry_age>parseInt(entryFilter)){
+            if (entry.entry_age > parseInt(entryFilter, 10)){
               inFilters[entryFilter] = false;
               secondaryFiltersApplied = true;
             }
-          })
+          });
         }
         const inSecondaryFilter = Object.keys(inFilters).every((inFilterKey) => inFilters[inFilterKey]);
         // state or secondary filter applied
@@ -969,11 +968,11 @@ function getFlatFilteredEntries(data, filters) {
     let notInFilters = false;
     if (entryAge){
       Object.keys(otherFilterKeys).forEach((entryFilter) => {
-        if (entry.entry_age>=parseInt(entryFilter)){
-          return;
+        if (entry.entry_age > parseInt(entryFilter, 10)) {
+          notInFilters = true;
         }
       });
-    }; 
+    }
     Object.keys(otherFilterKeys).forEach((otherFilterKey) => {
       const otherFilterKeyValues = otherFilterKeys[otherFilterKey];
       const { dataKey } = datasetFilters[otherFilterKey];
