@@ -206,7 +206,7 @@ function createFilters(data) {
 
   const filters = {
     states: {},
-    entryAge:{},
+    entryAge: {},
   };
   filters.entryAge.placeholder = 'Entry age';
   filters.entryAge['7'] = { name: '1 week', isSet: false, value: 7 };
@@ -652,9 +652,9 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
             secondaryFiltersApplied = true;
           }
         });
-        if (hasEntryFilter){
+        if (hasEntryFilter) {
           Object.keys(entryAge).forEach((entryFilter) => {
-            if (entry.entry_age > parseInt(entryFilter, 10)){
+            if (entry.entry_age > parseInt(entryFilter, 10)) {
               inFilters[entryFilter] = false;
               secondaryFiltersApplied = true;
             }
@@ -966,7 +966,7 @@ function getFlatFilteredEntries(data, filters) {
 
   const onEntry = (entry, cityName, stateName) => {
     let notInFilters = false;
-    if (entryAge){
+    if (entryAge) {
       Object.keys(otherFilterKeys).forEach((entryFilter) => {
         if (entry.entry_age > parseInt(entryFilter, 10)) {
           notInFilters = true;
