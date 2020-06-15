@@ -602,7 +602,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
     acc[otherFilterKey] = Object.keys(otherFilters[otherFilterKey]);
     return acc;
   }, {});
-
+  console.log(otherFilterKeys);
   const datasetFilters = filtersByDataset[gDataset];
 
   const hasStateFilter = Boolean(states);
@@ -647,11 +647,19 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
           const acc = (entry[dataKey] || '').toLowerCase();
 
           if (!otherFilterKeyValues.some((s) => acc.includes(s))) {
+            //Checks if the entry has at least one of the things they are looking for
             inFilters[otherFilterKey] = false;
             secondaryFiltersApplied = true;
           }
         });
-
+        if (hasEntryFilter){
+          Object.keys(entryAge).forEach((entryFilter) => {
+            if (entry.entry_age>parseInt(entryFilter)){
+              inFilters[entryFilter] = false;
+              secondaryFiltersApplied = true;
+            }
+          })
+        }
         const inSecondaryFilter = Object.keys(inFilters).every((inFilterKey) => inFilters[inFilterKey]);
         // state or secondary filter applied
         const filteredEntry = (hasStateFilter && !inStateFilter) || secondaryFiltersApplied;
