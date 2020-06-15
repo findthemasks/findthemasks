@@ -206,7 +206,11 @@ function createFilters(data) {
 
   const filters = {
     states: {},
+    entryAge:{},
   };
+  filters.entryAge.placeholder = "Entry age";
+  filters.entryAge["14"] = {name: "<14 days", isSet: false, value: 14};
+  filters.entryAge["28"] = {name: "<28 days", isSet: false, value: 28};
 
   for (const state of Object.keys(data)) {
     filters.states[state] = { name: state, isSet: false };
@@ -244,6 +248,12 @@ function updateFilters(filters) {
     if (filters.states[state].isSet) {
       applied.states = applied.states || {};
       applied.states[state] = true;
+    }
+  }
+  for (const date of Object.keys(filters.entryAge)) {
+    if (filters.entryAge[date].isSet) {
+      applied.entryAge = applied.entryAge || {};
+      applied.entryAge[date] = true;
     }
   }
 
@@ -586,7 +596,7 @@ function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
 }
 
 function getMarkers(data, appliedFilters, bounds, markerOptions) {
-  const { states, ...otherFilters } = appliedFilters;
+  const { states, entryAge, ...otherFilters } = appliedFilters;
 
   const otherFilterKeys = otherFilters && Object.keys(otherFilters).reduce((acc, otherFilterKey) => {
     acc[otherFilterKey] = Object.keys(otherFilters[otherFilterKey]);
@@ -596,14 +606,14 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
   const datasetFilters = filtersByDataset[gDataset];
 
   const hasStateFilter = Boolean(states);
-
+  const hasEntryFilter = Boolean(entryAge);
   const inFiltersMarkers = [];
   const outOfFiltersMarkers = [];
 
   for (const stateName of Object.keys(data)) {
     const inStateFilter = states && states[stateName];
 
-    const hasFilters = Object.keys(otherFilterKeys).length > 0 || hasStateFilter;
+    const hasFilters = Object.keys(otherFilterKeys).length > 0 ||hasEntryFilter|| hasStateFilter;
 
     const state = data[stateName];
     const { cities } = state;
@@ -939,7 +949,7 @@ function getFlatFilteredEntries(data, filters) {
   const applied = filters.applied || {};
 
   const datasetFilters = filtersByDataset[gDataset];
-  const { states, ...otherFilters } = applied;
+  const { states, entryAge, ...otherFilters } = applied;
 
   const otherFilterKeys = otherFilters && Object.keys(otherFilters).reduce((acc, otherFilterKey) => {
     acc[otherFilterKey] = Object.keys(otherFilters[otherFilterKey]);
@@ -948,7 +958,9 @@ function getFlatFilteredEntries(data, filters) {
 
   const onEntry = (entry, cityName, stateName) => {
     let notInFilters = false;
-
+    if (entryAge&&entry.entry_age>=14){
+      return;
+    }; 
     Object.keys(otherFilterKeys).forEach((otherFilterKey) => {
       const otherFilterKeyValues = otherFilterKeys[otherFilterKey];
       const { dataKey } = datasetFilters[otherFilterKey];
