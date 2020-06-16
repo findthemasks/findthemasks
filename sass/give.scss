@@ -79,6 +79,8 @@ footer {
   border-bottom: 1px solid $border-gray;
   label,
   h5 {
+    @include Font-20-24;
+
     font-weight: 600;
   }
 
