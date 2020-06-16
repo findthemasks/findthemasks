@@ -9,7 +9,6 @@ import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
 import { getInstance } from './localStorageUtils.js';
-import { filter } from '../constants/locales.js';
 
 const localStorageInstance = getInstance();
 
@@ -657,16 +656,13 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
           if (!Object.keys(entryAge).some((entryFilter) => {
             const rangeArray = entryFilter.split('-');
             const min = parseInt(rangeArray[0], 10);
-            if (rangeArray.length === 2) {
-              if (entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)) {
-                return true;
-              }
-            } else {
-              if (entry.entry_age >= min) {
-                return true;
-              }
-              return false;
+            if (rangeArray.length === 2 && entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)) {
+              return true;
+            } 
+            if (rangeArray.length === 1 && entry.entry_age >= min) {
+              return true;
             }
+            return false;
           })) {
             inFilters.entryAge = false;
             secondaryFiltersApplied = true;
@@ -982,16 +978,13 @@ function getFlatFilteredEntries(data, filters) {
       if (!Object.keys(entryAge).some((entryFilter) => {
         const rangeArray = entryFilter.split('-');
         const min = parseInt(rangeArray[0], 10);
-        if (rangeArray.length === 2) {
-          if (entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)) {
-            return true;
-          }
-        } else {
-          if (entry.entry_age >= min){
-            return true;
-          }
-          return false;
+        if (rangeArray.length === 2 && entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)) {
+          return true;
+        } 
+        if (rangeArray.length === 1 && entry.entry_age >= min) {
+          return true;
         }
+        return false;
       })) {
         notInFilters = true;
       }
