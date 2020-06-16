@@ -9,6 +9,7 @@ import { getMapsLanguageRegion } from './i18nUtils.js';
 import { ac, ce, ctn, FtmUrl } from './utils.js';
 import sendEvent from './sendEvent.js';
 import { getInstance } from './localStorageUtils.js';
+import { filter } from '../constants/locales.js';
 
 const localStorageInstance = getInstance();
 
@@ -208,10 +209,11 @@ function createFilters(data) {
     states: {},
     entryAge: {},
   };
-  filters.entryAge.placeholder = 'Entry age';
-  filters.entryAge['7'] = { name: '1 week', isSet: false, value: 7 };
-  filters.entryAge['14'] = { name: '2 weeks', isSet: false, value: 14 };
-  filters.entryAge['21'] = { name: '3 weeks', isSet: false, value: 21 };
+  filters.entryAge['1-7'] = { name: '1-7 days ago', isSet: false, value: '1-7' };
+  filters.entryAge['8-14'] = { name: '8-14 days ago', isSet: false, value: '8-14' };
+  filters.entryAge['15-21'] = { name: '15-21 days ago', isSet: false, value: '15-21' };
+  filters.entryAge['21+'] = { name : '21+ days ago', isSet: false, value: '21'};
+  filters.entryAge.placeholder = 'Last Updated';
 
   for (const state of Object.keys(data)) {
     filters.states[state] = { name: state, isSet: false };
@@ -652,12 +654,24 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
           }
         });
         if (hasEntryFilter) {
-          Object.keys(entryAge).forEach((entryFilter) => {
-            if (entry.entry_age > parseInt(entryFilter, 10)) {
-              inFilters[entryFilter] = false;
-              secondaryFiltersApplied = true;
+          if (!Object.keys(entryAge).some((entryFilter) => {
+            const rangeArray = entryFilter.split('-');
+            const min = parseInt(rangeArray[0], 10);
+            if (rangeArray.length === 2) {
+              if (entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)){
+                return true;
+              }
             }
-          });
+            else{
+              if (entry.entry_age >= min) {
+                return true;
+              }
+            }
+            return false;
+          })) {
+            inFilters['entryAge'] = false;
+            secondaryFiltersApplied = true;
+          }
         }
         const inSecondaryFilter = Object.keys(inFilters).every((inFilterKey) => inFilters[inFilterKey]);
         // state or secondary filter applied
@@ -966,11 +980,23 @@ function getFlatFilteredEntries(data, filters) {
   const onEntry = (entry, cityName, stateName) => {
     let notInFilters = false;
     if (entryAge) {
-      Object.keys(otherFilterKeys).forEach((entryFilter) => {
-        if (entry.entry_age > parseInt(entryFilter, 10)) {
-          notInFilters = true;
+      if (!Object.keys(entryAge).some((entryFilter) => {
+        const rangeArray = entryFilter.split('-');
+        const min = parseInt(rangeArray[0], 10);
+        if (rangeArray.length === 2) {
+          if (entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)){
+            return true;
+          }
         }
-      });
+        else{
+          if (entry.entry_age >= min){
+            return true;
+          }
+        }
+        return false;
+      })) {
+        notInFilters = true;
+      }
     }
     Object.keys(otherFilterKeys).forEach((otherFilterKey) => {
       const otherFilterKeyValues = otherFilterKeys[otherFilterKey];
@@ -1423,7 +1449,7 @@ function createFilterElements(data, filters) {
     const selected = {};
 
 
-    for (const item of Object.keys(filters[f])) {
+    for (const item of Object.keys(filters[f]).slice(0,-1)) {
       const itemFilter = filters[f][item];
       selected[itemFilter.name] = itemFilter;
 
