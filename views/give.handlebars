@@ -1,22 +1,22 @@
-<div class="translated-content">
+<div class="translated-content emb-embed">
   <header class="header-block container-fluid">
     <div class="row">
       <div class="navbar-brand col-12">
         {{#if (eq dataset "makers")}}
-        <a href="http://findthemakers.com" target="_blank">
-          <div class="icon icon-ftmakers_logo"></div>
-        </a>
+          <a href="http://findthemakers.com" target="_blank">
+            <div class="icon icon-ftmakers_logo"></div>
+          </a>
         {{else}}
-        <a href="http://findthemasks.com" target="_blank">
-          <div class="icon icon-ftm_logo"></div>
-        </a>
+          <a href="http://findthemasks.com" target="_blank">
+            <div class="icon icon-ftm_logo"></div>
+          </a>
         {{/if}}
         {{#if (eq dataset "makers")}}
-        <span class="home-link location-link text-light i18n" data-i18n='ftm-makers-embed-brand'>
+          <span class="home-link location-link text-light i18n" data-i18n='ftm-makers-embed-brand'>
           Maker Groups
         </span>
         {{else}}
-        <span class="makers-home-link location-link text-light i18n" data-i18n='ftm-embed-brand'>
+          <span class="makers-home-link location-link text-light i18n" data-i18n='ftm-embed-brand'>
           PPE Requesting Sites
         </span>
         {{/if}}
@@ -69,44 +69,59 @@
     </div>
   </header>
 
-  <div class="alert alert-danger ftm-global-alert alert-dismissable d-none" data-alert-name="ftm-alert-systemic-racism">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-    <p class="i18n" data-i18n="ftm-alert-systemic-racism-1">
-      Find the Masks recognizes community response to systemic racism is essential & cannot wait for
-      COVID-19 to pass. We have seen communities build around global PPE shortages & believe we can
-      maintain solidarity in the face of the COVID-19 and social unrest.
-    </p>
-    <p class="i18n" data-i18n="ftm-alert-systemic-racism-2">
-      Although COVID-19 is not the only thing affecting community safety, it has not disappeared
-      either. FTM supports social action & wants to help people participate as safely as possible.
-    </p>
-    <hr>
-    <p class="mb-0 i18n" data-i18n="[html]ftm-alert-systemic-racism-3">
-      Please wear PPE to limit risk to yourself and others. Check out <a href="https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0" target="_blank" rel="noopener noreferrer">this resource</a> put together by
-      partners <a href="https://opensourcemedicalsupplies.org/" target="_blank" rel="noopener noreferrer">OSMS</a> if you are participating in clean-ups or protesting.
-    </p>
-  </div>
+  <div class="row embed-main flex-lg-row no-gutters {{#unless hideList}}list-open{{/unless}}" id="js-EmbedContainer">
+    <div class="alert alert-danger ftm-global-alert alert-dismissable d-none" data-alert-name="ftm-alert-systemic-racism">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <p class="i18n" data-i18n="ftm-alert-systemic-racism-1">
+        Find the Masks recognizes community response to systemic racism is essential & cannot wait for
+        COVID-19 to pass. We have seen communities build around global PPE shortages & believe we can
+        maintain solidarity in the face of the COVID-19 and social unrest.
+      </p>
+      <p class="i18n" data-i18n="ftm-alert-systemic-racism-2">
+        Although COVID-19 is not the only thing affecting community safety, it has not disappeared
+        either. FTM supports social action & wants to help people participate as safely as possible.
+      </p>
+      <hr>
+      <p class="mb-0 i18n" data-i18n="[html]ftm-alert-systemic-racism-3">
+        Please wear PPE to limit risk to yourself and others. Check out <a href="https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0" target="_blank" rel="noopener noreferrer">this resource</a> put together by
+        partners <a href="https://opensourcemedicalsupplies.org/" target="_blank" rel="noopener noreferrer">OSMS</a> if you are participating in clean-ups or protesting.
+      </p>
+    </div>
 
-  <div class="row embed-main flex-lg-row no-gutters">
     <div class="locations-loading text-center">
       <div class="spinner-border" role="status"></div>
       {{#if (eq dataset "makers")}}
-      <div class="i18n" data-i18n="ftm-makers-site-loading">Loading Maker Groups...</div>
+        <div class="i18n" data-i18n="ftm-makers-site-loading">Loading Maker Groups...</div>
       {{else}}
-      <div class="i18n" data-i18n="ftm-donations-site-loading">Loading PPE request sites...</div>
+        <div class="i18n" data-i18n="ftm-donations-site-loading">Loading PPE request sites...</div>
       {{/if}}
     </div>
 
-    <div class="col-12 {{#unless hideList}}col-lg-8{{/unless}} order-lg-2 {{#if hideMap}}d-none{{/if}}">
-      <div class="map-container {{#if hideList}}w-100{{/if}}">
+    <div class="emb-col emb-col-list">
+      <div id="locations-list" class="locations-list"></div>
+
+      <button id="js-ToggleListButton" class="emb-toggleListButton btn-primary">
+        {{#if hideList}}
+          <span class="i18n" data-i18n="ftm-embed-toggle-open">Open list</span>
+        {{else}}
+          <span class="i18n" data-i18n="ftm-embed-toggle-close">Close list</span>
+        {{/if}}
+      </button>
+    </div>
+
+    <div class="emb-col emb-col-map">
+      <div class="map-container">
         <div id="map" data-enable-search="true"></div>
       </div>
     </div>
 
-    <div class="col-12 {{#unless hideMap}}col-lg-4{{/unless}} order-lg-1 locations-container">
-      <div id="locations-list" class="locations-list {{#if hideMap}}w-100{{/if}}"></div>
+    <div class="emb-mobileTopFooter">
+      <div class="emb-toggleButtons">
+        <button class="emb-toggleButton btn-secondary" data-active="true" data-type="list">List</button>
+        <button class="emb-toggleButton btn-primary" data-active="false" data-type="map">Map</button>
+      </div>§
     </div>
   </div>
 
@@ -114,29 +129,29 @@
     <div class="row">
       <div class='col-12'>
         {{#if (eq dataset "makers")}}
-        <p>
+          <p>
           <span class="i18n" data-i18n="[html]ftm-makers-collaboration-with">
             Made in collaboration with <a href="." target="_blank">#findthemasks</a>,
             <a href="https://www.nationofmakers.us" target="_blank">Nation of Makers</a>, and
             <a href="https://opensourcemedicalsupplies.org/" target="_blank">Open Source Medical Supplies</a>.
           </span>
-          <span class="i18n" data-i18n="[html]ftm-makers-add-site-question">
+            <span class="i18n" data-i18n="[html]ftm-makers-add-site-question">
             Want to join the #findthemasks makers map? Need to update or remove info?
             Please <a href="./maker-form" target="_blank">fill out this form</a>.
             We will review it as soon as possible.
           </span>
-        </p>
+          </p>
         {{else}}
-        <p>
+          <p>
           <span class="i18n" data-i18n="[html]ftm-collaboration-with">Made in
             collaboration with <a href="." target="_blank">#findthemasks</a>.</span>
-          <span class="i18n" data-i18n="[html]ftm-add-donation-site-question">Want to join the #findthemasks map?
+            <span class="i18n" data-i18n="[html]ftm-add-donation-site-question">Want to join the #findthemasks map?
             Need to update or remove info?</span>
-          <span class="i18n" data-i18n="[html]ftm-add-donation-site-answer">
+            <span class="i18n" data-i18n="[html]ftm-add-donation-site-answer">
             Please <a href="./donation-form">
               fill out this form</a>. We will review it as soon as possible.
           </span>
-        </p>
+          </p>
         {{/if}}
       </div>
     </div>

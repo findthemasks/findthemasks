@@ -96,7 +96,6 @@ let gLocationsListEntries = [];
 let gLastLocationRendered = -1;
 
 const searchParams = new FtmUrl(window.location.href).searchparams;
-const showList = searchParams['hide-list'] !== 'true';
 
 // tracks number of entries in dataset
 // gets set when we retrieve the dataset
@@ -1378,10 +1377,7 @@ function onFilterChange(data, prefix, idx, selected, filters) {
   });
 
   updateFilters(filters);
-
-  if (showList) {
-    refreshList(data, filters);
-  }
+  refreshList(data, filters);
 
   showMarkers(data, filters, false);
 }
@@ -1776,9 +1772,7 @@ function initMap(data, filters) {
       const currentLng = mapBounds.getCenter().lng();
 
       // Re-sync locations list with new map bounds.
-      if (showList) {
-        refreshList(data, filters);
-      }
+      refreshList(data, filters);
 
       gCurrentViewportCenter = {
         lat: currentLat,
@@ -1957,6 +1951,60 @@ const initGlobalAlert = () => {
   });
 };
 
+const initEmbedEventsListeners = () => {
+  // Web toggle button
+  document.getElementById('js-ToggleListButton').addEventListener('click', toggleEmbedList);
+
+  // Mobile view toggle buttons
+  const mobileViewButtons = document.getElementsByClassName('emb-toggleButton');
+
+  for (let i = 0; i < mobileViewButtons.length; i++) {
+    mobileViewButtons[i].addEventListener('click', () => toggleMobileView(i));
+  }
+};
+
+const toggleEmbedList = () => {
+  const button = document.getElementById('js-ToggleListButton');
+  const container = document.getElementById('js-EmbedContainer');
+
+  if (container.classList.contains('list-open')) {
+    button.innerText = 'Open list';
+  } else {
+    button.innerText = 'Close list';
+  }
+
+  container.classList.toggle('list-open');
+};
+
+const toggleMobileView = (index) => {
+  const container = document.getElementById('js-EmbedContainer');
+  const webButton = document.getElementById('js-ToggleListButton');
+
+  const mobileViewButtons = document.getElementsByClassName('emb-toggleButton');
+
+  // If the data type is list we toggle open the list
+  if (mobileViewButtons[index].dataset.type === 'list') {
+    container.classList.add('list-open');
+  } else {
+    container.classList.remove('list-open');
+  }
+
+  // Set the web button text as well in case they have shrunk the screen
+  if (container.classList.contains('list-open')) {
+    webButton.innerText = $.i18n('ftm-embed-toggle-open');
+  } else {
+    webButton.innerText = $.i18n('ftm-embed-toggle-close');
+  }
+
+  for (let i = 0; i < mobileViewButtons.length; i++) {
+    if (index !== i) {
+      mobileViewButtons[i].dataset.active = 'false';
+    } else {
+      mobileViewButtons[index].dataset.active = 'true';
+    }
+  }
+};
+
 $(() => {
   const renderListings = (result) => {
     const data = toDataByLocation(result, gDataset);
@@ -2000,13 +2048,11 @@ $(() => {
       createFilterElements(data, filters);
     }
 
-    if (!showList) {
-      $('.locations-loading').hide();
-      $('.locations-container').hide();
-    }
+    $('.locations-loading').hide();
   };
 
   initContactModal();
+  initEmbedEventsListeners();
   initGlobalAlert();
 
   $.getJSON(getDatasetFilename(gDataset, gCountryCode), (result) => {
@@ -2019,21 +2065,19 @@ $(() => {
     }
   });
 
-  if (showList) {
-    const footerHeight = 40; // small buffer near bottom of window
+  const footerHeight = 40; // small buffer near bottom of window
 
-    if (isEmbed) {
-      $('#locations-list').scroll(() => {
-        if ($('#locations-list').scrollTop() + $('#locations-list').innerHeight() > $('#locations-list')[0].scrollHeight - footerHeight) {
-          renderNextListPage();
-        }
-      });
-    } else {
-      $(window).scroll(() => {
-        if ($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
-          renderNextListPage();
-        }
-      });
-    }
+  if (isEmbed) {
+    $('#locations-list').scroll(() => {
+      if ($('#locations-list').scrollTop() + $('#locations-list').innerHeight() > $('#locations-list')[0].scrollHeight - footerHeight) {
+        renderNextListPage();
+      }
+    });
+  } else {
+    $(window).scroll(() => {
+      if ($(window).scrollTop() + $(window).height() > $(document).height() - footerHeight) {
+        renderNextListPage();
+      }
+    });
   }
 });
