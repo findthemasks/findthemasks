@@ -658,7 +658,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
             const min = parseInt(rangeArray[0], 10);
             if (rangeArray.length === 2 && entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)) {
               return true;
-            } 
+            }
             if (rangeArray.length === 1 && entry.entry_age >= min) {
               return true;
             }
@@ -980,7 +980,7 @@ function getFlatFilteredEntries(data, filters) {
         const min = parseInt(rangeArray[0], 10);
         if (rangeArray.length === 2 && entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)) {
           return true;
-        } 
+        }
         if (rangeArray.length === 1 && entry.entry_age >= min) {
           return true;
         }
