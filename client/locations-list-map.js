@@ -212,7 +212,7 @@ function createFilters(data) {
   filters.entryAge['1-7'] = { name: '1-7 days ago', isSet: false, value: '1-7' };
   filters.entryAge['8-14'] = { name: '8-14 days ago', isSet: false, value: '8-14' };
   filters.entryAge['15-21'] = { name: '15-21 days ago', isSet: false, value: '15-21' };
-  filters.entryAge['21+'] = { name : '21+ days ago', isSet: false, value: '21'};
+  filters.entryAge['21+'] = { name: '21+ days ago', isSet: false, value: '21' };
   filters.entryAge.placeholder = 'Last Updated';
 
   for (const state of Object.keys(data)) {
@@ -658,18 +658,18 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
             const rangeArray = entryFilter.split('-');
             const min = parseInt(rangeArray[0], 10);
             if (rangeArray.length === 2) {
-              if (entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)){
+              if (entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)) {
                 return true;
               }
-            }
-            else{
+              return false;
+            } else {
               if (entry.entry_age >= min) {
                 return true;
               }
+              return false;
             }
-            return false;
           })) {
-            inFilters['entryAge'] = false;
+            inFilters.entryAge = false;
             secondaryFiltersApplied = true;
           }
         }
@@ -984,16 +984,16 @@ function getFlatFilteredEntries(data, filters) {
         const rangeArray = entryFilter.split('-');
         const min = parseInt(rangeArray[0], 10);
         if (rangeArray.length === 2) {
-          if (entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)){
+          if (entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)) {
             return true;
           }
-        }
-        else{
+          return false;
+        } else {
           if (entry.entry_age >= min){
             return true;
           }
+          return false;
         }
-        return false;
       })) {
         notInFilters = true;
       }
@@ -1449,7 +1449,7 @@ function createFilterElements(data, filters) {
     const selected = {};
 
 
-    for (const item of Object.keys(filters[f]).slice(0,-1)) {
+    for (const item of Object.keys(filters[f]).slice(0, -1)) {
       const itemFilter = filters[f][item];
       selected[itemFilter.name] = itemFilter;
 
