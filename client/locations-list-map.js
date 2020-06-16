@@ -1675,8 +1675,9 @@ function initMapSearch(data, filters) {
     e.preventDefault();
     resetMap(data, filters);
     $search.val('');
-    document.getElementById('filter-container').lastElementChild.selectrReference.clear();
-    document.getElementById('filter-container').lastElementChild.previousSibling.selectrReference.clear();
+    for (const element of document.getElementById('filter-container').children) {
+      element.selectrReference.clear();
+    }
     sendEvent('map', 'reset', 'default-location');
   });
 }
