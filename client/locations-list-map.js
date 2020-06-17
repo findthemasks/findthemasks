@@ -206,7 +206,13 @@ function createFilters(data) {
 
   const filters = {
     states: {},
+    entryAge: {},
   };
+  filters.entryAge['1-7'] = { name: '1-7 days ago', isSet: false, value: '1-7' };
+  filters.entryAge['8-14'] = { name: '8-14 days ago', isSet: false, value: '8-14' };
+  filters.entryAge['15-21'] = { name: '15-21 days ago', isSet: false, value: '15-21' };
+  filters.entryAge['21+'] = { name: '21+ days ago', isSet: false, value: '21' };
+  filters.entryAge.placeholder = 'Last Updated';
 
   for (const state of Object.keys(data)) {
     filters.states[state] = { name: state, isSet: false };
@@ -244,6 +250,12 @@ function updateFilters(filters) {
     if (filters.states[state].isSet) {
       applied.states = applied.states || {};
       applied.states[state] = true;
+    }
+  }
+  for (const date of Object.keys(filters.entryAge)) {
+    if (filters.entryAge[date].isSet) {
+      applied.entryAge = applied.entryAge || {};
+      applied.entryAge[date] = true;
     }
   }
 
@@ -586,24 +598,23 @@ function createMarker(latitude, longitude, entry, markerOptions, otherEntries) {
 }
 
 function getMarkers(data, appliedFilters, bounds, markerOptions) {
-  const { states, ...otherFilters } = appliedFilters;
+  const { states, entryAge, ...otherFilters } = appliedFilters;
 
   const otherFilterKeys = otherFilters && Object.keys(otherFilters).reduce((acc, otherFilterKey) => {
     acc[otherFilterKey] = Object.keys(otherFilters[otherFilterKey]);
     return acc;
   }, {});
-
   const datasetFilters = filtersByDataset[gDataset];
 
   const hasStateFilter = Boolean(states);
-
+  const hasEntryFilter = Boolean(entryAge);
   const inFiltersMarkers = [];
   const outOfFiltersMarkers = [];
 
   for (const stateName of Object.keys(data)) {
     const inStateFilter = states && states[stateName];
 
-    const hasFilters = Object.keys(otherFilterKeys).length > 0 || hasStateFilter;
+    const hasFilters = Object.keys(otherFilterKeys).length > 0 || hasEntryFilter || hasStateFilter;
 
     const state = data[stateName];
     const { cities } = state;
@@ -641,7 +652,22 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
             secondaryFiltersApplied = true;
           }
         });
-
+        if (hasEntryFilter) {
+          if (!Object.keys(entryAge).some((entryFilter) => {
+            const rangeArray = entryFilter.split('-');
+            const min = parseInt(rangeArray[0], 10);
+            if (rangeArray.length === 2 && entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)) {
+              return true;
+            }
+            if (rangeArray.length === 1 && entry.entry_age >= min) {
+              return true;
+            }
+            return false;
+          })) {
+            inFilters.entryAge = false;
+            secondaryFiltersApplied = true;
+          }
+        }
         const inSecondaryFilter = Object.keys(inFilters).every((inFilterKey) => inFilters[inFilterKey]);
         // state or secondary filter applied
         const filteredEntry = (hasStateFilter && !inStateFilter) || secondaryFiltersApplied;
@@ -939,7 +965,7 @@ function getFlatFilteredEntries(data, filters) {
   const applied = filters.applied || {};
 
   const datasetFilters = filtersByDataset[gDataset];
-  const { states, ...otherFilters } = applied;
+  const { states, entryAge, ...otherFilters } = applied;
 
   const otherFilterKeys = otherFilters && Object.keys(otherFilters).reduce((acc, otherFilterKey) => {
     acc[otherFilterKey] = Object.keys(otherFilters[otherFilterKey]);
@@ -948,7 +974,21 @@ function getFlatFilteredEntries(data, filters) {
 
   const onEntry = (entry, cityName, stateName) => {
     let notInFilters = false;
-
+    if (entryAge) {
+      if (!Object.keys(entryAge).some((entryFilter) => {
+        const rangeArray = entryFilter.split('-');
+        const min = parseInt(rangeArray[0], 10);
+        if (rangeArray.length === 2 && entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)) {
+          return true;
+        }
+        if (rangeArray.length === 1 && entry.entry_age >= min) {
+          return true;
+        }
+        return false;
+      })) {
+        notInFilters = true;
+      }
+    }
     Object.keys(otherFilterKeys).forEach((otherFilterKey) => {
       const otherFilterKeyValues = otherFilterKeys[otherFilterKey];
       const { dataKey } = datasetFilters[otherFilterKey];
@@ -1400,7 +1440,7 @@ function createFilterElements(data, filters) {
     const selected = {};
 
 
-    for (const item of Object.keys(filters[f])) {
+    for (const item of Object.keys(filters[f]).slice(0, -1)) {
       const itemFilter = filters[f][item];
       selected[itemFilter.name] = itemFilter;
 
@@ -1635,8 +1675,9 @@ function initMapSearch(data, filters) {
     e.preventDefault();
     resetMap(data, filters);
     $search.val('');
-    document.getElementById('filter-container').lastElementChild.selectrReference.clear();
-    document.getElementById('filter-container').lastElementChild.previousSibling.selectrReference.clear();
+    for (const element of document.getElementById('filter-container').children) {
+      element.selectrReference.clear();
+    }
     sendEvent('map', 'reset', 'default-location');
     $('.dataset-toggle').prop('checked', false);
   });
