@@ -1,7 +1,7 @@
 @import "colors";
 @import "typography";
 @import "icons.data.svg";
-@import "filter-styles";
+@import "shared-styles";
 @import "breakpoints";
 @import "partner-link-icons.data.svg";
 @import "legend";
@@ -87,17 +87,6 @@ footer {
     background-color: $gray;
   }
 
-  .entry-zoom-link,
-  .entry-partner-link {
-    cursor: pointer;
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    background-position: center;
-    vertical-align: middle;
-    padding: 0 1rem;
-  }
-
   .org-type {
     text-align: right;
   }
@@ -118,48 +107,19 @@ footer {
       margin-bottom: 0.5rem;
     }
   }
-
-  .map-link {
-    color: $blue;
-    text-decoration: underline;
-
-    &:not([href]) {
-      color: $blue;
-      text-decoration: underline;
-
-      &:hover {
-        text-decoration: underline;
-        cursor: pointer;
-        color: #0056b3;
-      }
-    }
-  }
 }
 
 .map-container {
-  position: relative;
-  width: 100%;
   height: $embed-body-height-sm;
 
   @media (min-width: $breakpoint-md) {
     height: $embed-body-height;
   }
 
-  #map {
-    height: 100%;
-    width: 100%;
-  }
-
   #map .label {
     color: #999;
-    font-size: 11px;
     font-weight: 400;
-    padding: 6px 0 2px 0;
     text-transform: uppercase;
-  }
-
-  #map .value {
-    font-weight: 400;
   }
 }
 
@@ -182,19 +142,12 @@ footer {
   opacity: 0.4;
 }
 
-.contact-modal .contact-error {
-  font-size: 0.8em;
-  color: red;
-  text-align: right;
-  margin-right: 20px;
+.filter-collapse {
+  padding: 0.5rem 1rem;
 }
 
-.contact-modal .contact-success {
-  display: none;
-  text-align: center;
-  height: 5em;
-}
-
-.contact-modal #message-text {
-  height: 120px;
+// overrides values from shared-styles
+#filter-container {
+  padding: 0.5rem 1rem;
+  top: 38px;
 }

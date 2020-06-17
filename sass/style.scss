@@ -1,10 +1,11 @@
 @import "colors";
 @import "typography";
 @import "icons.data.svg";
-@import "filter-styles";
+@import "shared-styles";
 @import "breakpoints";
 @import "legend";
 @import "globalAlert";
+@import "static-pages";
 
 html {
   height: 100%;
@@ -39,20 +40,12 @@ a {
   font-weight: 600;
 }
 
-.linkified {
-  word-break: break-word;
-}
-
 .bg-dark-blue {
   background: $blue-dark;
 }
 
 .translated-content {
   display: none; /* hidden until translations load */
-}
-
-.heading-container a {
-  color: white;
 }
 
 .search-filter-container {
@@ -80,7 +73,7 @@ a {
 }
 
 .search-filter-container p {
-  font-size: 1rem;
+  font-size: $font-size-default;
 }
 
 .search-filter-container .input-group-text {
@@ -94,16 +87,6 @@ a {
 
 .filter-collapse {
   background: $blue-light;
-}
-
-.logo {
-  height: 120px;
-  margin-bottom: 15px;
-}
-
-.fb-logo {
-  height: 1em;
-  margin-bottom: 4px;
 }
 
 .social-media-icons {
@@ -129,12 +112,6 @@ a {
   height: 25px;
 }
 
-.member-of {
-  font-style: italic;
-  font-size: 0.8125rem;
-  margin-bottom: 10px;
-}
-
 .subhead {
   margin: 20px auto 40px auto;
   display: flex;
@@ -143,92 +120,6 @@ a {
   width: 55%;
   padding: 10px 20px;
   border-radius: 2px;
-}
-
-.subhead-left {
-  border-right: 2px solid #ccc;
-  font-size: 0.9rem;
-  font-weight: light;
-  letter-spacing: 3px;
-  line-height: 1.8rem;
-  text-align: right;
-  text-transform: uppercase;
-  width: calc(40% + 40px);
-}
-
-.subhead-right {
-  font-size: $font-size-default;
-  text-align: left;
-  width: calc(60% + 40px);
-}
-
-.question {
-  font-weight: bold;
-}
-
-.need-ppe {
-  background: #fafafa;
-  border: 1px solid #ccc;
-  margin: 40px 0px;
-  padding: 30px 50px;
-  text-align: center;
-}
-
-.need-ppe h2 {
-  margin-top: 0;
-}
-
-.ppe-example {
-  align-items: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.ppe-example img {
-  height: 200px;
-  width: auto;
-}
-
-#masks-img {
-  height: 210px;
-}
-
-#goggle-img {
-  height: 140px;
-}
-
-#faceshield-img {
-  height: 185px;
-}
-
-.ppe-example-caption {
-  color: #444;
-  font-size: 12px;
-  font-weight: 300;
-  letter-spacing: 1.1px;
-  margin: 0.9rem 0 0.375rem 0;
-  text-transform: uppercase;
-}
-
-h2.state {
-  background: #eee;
-  color: #000;
-  font: 800 24px "Roboto";
-  letter-spacing: 3px;
-  margin: 0;
-  padding: 4px 15px;
-  text-align: left;
-}
-
-h3.city {
-  color: #666;
-  font-size: 20px;
-  font-weight: 300;
-  letter-spacing: 3px;
-  margin: 0 0 0 15px;
-  padding: 20px 0;
-  text-transform: uppercase;
 }
 
 .locations-container {
@@ -262,74 +153,12 @@ h3.city {
   }
 }
 
-.entry-external-link,
-.entry-zoom-link,
-.entry-copy-link {
-  cursor: pointer;
-  display: inline-block;
-  width: 24px;
-  height: 24px;
-  background-position: center;
-  vertical-align: middle;
-  padding: 0 1rem;
-}
-
 .location label {
   font-weight: 600;
 }
 
-.donation-sites h1 {
-  margin-bottom: -10px;
-}
-
-.filters-list div {
-  display: inline-block;
-  margin: 0 3px 3px 0;
-}
-
-.filters-list h4 {
-  display: block;
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin: 25px 0 20px 0;
-}
-
-.filters-list input {
-  display: none;
-}
-
-.filters-list label {
-  background: white;
-  border-radius: 5px;
-  border: 1px #ccc solid;
-  cursor: pointer;
-  font-size: 1.125rem;
-  min-width: 2.4em;
-  padding: 0.3rem;
-  text-align: center;
-}
-
-.filters-list label:hover {
-  background: #7c9bf7;
-  border-color: #7c9bf7;
-  color: white;
-}
-
-.filters-list label.selected {
-  background: royalblue;
-  border-color: #c2d1ff;
-  color: white;
-}
-
 .map-container {
-  position: relative;
   height: calc(100vh - 58px);
-  width: 100%;
-}
-
-#map {
-  width: 100%;
-  height: 100%;
 }
 
 #map .separator {
@@ -345,44 +174,13 @@ h3.city {
 #map .label {
   font-family: $font-stack-default;
   color: $text-color;
-  font-size: $font-size-small;
   font-weight: 600;
-  padding: 6px 0 2px 0;
 }
 
 #map .value {
   font-family: $font-stack-default;
-  font-weight: 400;
   font-size: $font-size-small;
   padding-bottom: 6px;
-}
-
-.donation-map-title {
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-}
-.donation-map-title h2 {
-  display: inline;
-  margin: 0;
-  padding: 0;
-}
-
-.map-link {
-  color: $blue;
-  text-decoration: underline;
-
-  &:not([href]) {
-    color: $blue;
-    text-decoration: underline;
-
-    &:hover {
-      text-decoration: underline;
-      cursor: pointer;
-      color: #0056b3;
-    }
-  }
 }
 
 .locations-loading {
@@ -419,115 +217,6 @@ h3.city {
 
 .secondarycluster {
   opacity: 0.4;
-}
-
-/*********************
- * Static page styles *
-   *********************/
-
-.page-title {
-  text-transform: uppercase;
-  font-size: $heading-size-1;
-  font-weight: 700;
-  margin-bottom: 2.5rem;
-}
-
-.email-button {
-  border: $pink;
-  background: $pink;
-  padding-left: 2rem;
-  padding-right: 2rem;
-}
-
-ul.volunteer-list {
-  list-style-type: none;
-}
-
-dl.volunteer-list {
-  dt,
-  dd {
-    margin-bottom: 0;
-  }
-}
-
-.regional-team:not(:last-child) {
-  border-bottom: 1px solid;
-  margin-bottom: 1rem;
-}
-
-/*********************
-  * Volunteer Icons *
-  *********************/
-.volunteer-needs {
-  background-repeat: no-repeat;
-  background-position: left top;
-  padding-left: 3rem;
-  background-size: 2rem 2rem;
-
-  &.translation {
-    background-image: $icon-translation;
-  }
-
-  &.tech {
-    background-image: $icon-tech;
-  }
-
-  &.internationalization {
-    background-image: $icon-internationalization;
-  }
-
-  &.moderators {
-    background-image: $icon-moderators;
-  }
-
-  &.outreach {
-    background-image: $icon-outreach;
-  }
-
-  &.social-media {
-    background-image: $icon-social-media;
-  }
-}
-
-/*********************
-  * FAQ STYLES *
-  *********************/
-
-.faq-header {
-  font-size: $heading-size-3;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-dl.faq-question {
-  .btn-link {
-    cursor: pointer;
-  }
-
-  & dt {
-    &:not(:first-child) {
-      border-top: 2px solid $gray;
-      padding-top: 0.75rem;
-    }
-
-    padding-bottom: 0.75rem;
-
-    h5 {
-      font-size: $font-size-default;
-      margin: 0;
-      background-position: left;
-      font-weight: 600;
-      padding-left: 1.75rem;
-      background-size: 1.5rem 1.5rem;
-      background-image: url(/images/icons/dash.svg);
-      background-repeat: no-repeat;
-      background-position: 0px -3px;
-    }
-
-    &:not(.open) h5 {
-      background-image: url(/images/icons/plus.svg);
-    }
-  }
 }
 
 /*********************
@@ -619,11 +308,6 @@ dl.faq-question {
   white-space: nowrap;
 }
 
-.navbar.ftm .nav-item.show,
-.navbar.ftm .nav-item.show .nav-link:hover {
-  background: #3f5cbb;
-}
-
 .navbar.ftm .dropdown-menu {
   border: none;
   border-radius: 0;
@@ -648,8 +332,9 @@ dl.faq-question {
 
 /* For IE10+, but *not Edge* ... */
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-  .btn-addplace, .btn-xlink {
-  transform: translateY(25%); /* ... need to adjust vertical position. */
+  .btn-addplace,
+  .btn-xlink {
+    transform: translateY(25%); /* ... need to adjust vertical position. */
   }
 }
 
@@ -725,50 +410,6 @@ dl.faq-question {
   background-size: cover;
 }
 
-/*********************
-  * PARTNERS STYLES *
-  *********************/
-
-.content section {
-  margin-bottom: 2rem;
-}
-
-.page-subhead {
-  font-size: $heading-size-3;
-  background-color: $yellow;
-  padding: 5px 8px;
-  display: inline-block;
-  margin-bottom: 1rem;
-}
-
-.partner-logos {
-  width: 100%;
-}
-
-.partner-logos-large {
-  .partner-logo-container {
-    text-align: center;
-  }
-  #img-logo-canva {
-    width: 49%; //should be same as partner-logos-small size
-  }
-}
-
-.partner-logos-small {
-  .partner-logo-container {
-    width: 49%;
-  }
-}
-
-.partner-logo-container {
-  display: inline-block;
-  padding: 1.5rem;
-
-  img {
-    width: 100%;
-  }
-}
-
 /* Mobile first: Desktop breakpoint overrides below */
 
 @media (min-width: $breakpoint-sm) {
@@ -778,23 +419,6 @@ dl.faq-question {
 }
 
 @media (min-width: $breakpoint-md) {
-  /*********************
-  * PARTNERS STYLES *
-  *********************/
-
-  .partner-logos-large {
-    .partner-logo-container {
-      width: 33%;
-      text-align: center;
-    }
-  }
-
-  .partner-logos-small {
-    .partner-logo-container {
-      width: 19.6%;
-    }
-  }
-
   .map-container {
     position: fixed;
     height: calc(100vh - 58px);
@@ -845,10 +469,6 @@ dl.faq-question {
 }
 
 @media (max-width: $breakpoint-xs) {
-  .search-controls {
-    justify-content: center;
-    padding-top: 5px;
-  }
   h2.state {
     padding: 4px 10px;
   }
@@ -882,51 +502,14 @@ dl.faq-question {
     width: auto;
   }
 
-  .logo {
-    height: 100px;
-  }
-
   .subhead {
     width: 100%;
     padding: 0;
     flex-direction: column;
   }
-  .subhead-left {
-    border: 0;
-    width: 100%;
-    padding: 0;
-    margin-bottom: 10px;
-    text-align: center;
-  }
-  .subhead-right {
-    font-size: 0.9rem;
-    width: 80%;
-    text-align: center;
-  }
 
   .nav-link {
-    font-size: 0.7rem;
-  }
-
-  .need-ppe {
-    margin-left: 0;
-    margin-right: 0;
-  }
-
-  #masks-img {
-    height: 160px;
-  }
-
-  #goggle-img {
-    height: 115px;
-  }
-
-  #faceshield-img {
-    height: 150px;
-  }
-  .ppe-example-caption {
-    margin-top: 4px;
-    margin-bottom: 10px;
+    font-size: $font-size-xs;
   }
 }
 /****************
@@ -954,36 +537,19 @@ div.figure img {
   display: block;
 }
 
-.contact-modal .contact-error {
-  font-size: 0.8em;
-  color: red;
-  text-align: right;
-  margin-right: 20px;
-}
-
-.contact-modal .contact-success {
-  display: none;
-  text-align: center;
-  height: 5em;
-}
-
-.contact-modal #message-text {
-  height: 120px;
-}
-
 /****************************************************************
   * NAVBAR LARGE TABLET / SMALL DESKTOP SIZE TRANSITIONAL STUFF *
  ****************************************************************/
 
 @media (max-width: 1265px) and (min-width: $breakpoint-md) {
   .navbar.ftm .navbar-nav .nav-link {
-    font-size: 0.67rem;
+    font-size: $font-size-xs;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }
 
   .navbar.ftm .btn-xlink,
   .navbar.ftm .btn-addplace {
-    font-size: 0.67rem;
+    font-size: $font-size-xs;
   }
 }
