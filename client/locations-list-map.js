@@ -1638,6 +1638,7 @@ function initMapSearch(data, filters) {
     document.getElementById('filter-container').lastElementChild.selectrReference.clear();
     document.getElementById('filter-container').lastElementChild.previousSibling.selectrReference.clear();
     sendEvent('map', 'reset', 'default-location');
+    $('.dataset-toggle').prop('checked', false);
   });
 }
 
@@ -1654,7 +1655,7 @@ const generateGMapDatasetLegend = (onChange) => {
     const id = `layer-${dataset.key}`;
     label.for = id;
 
-    const input = ce('input', null);
+    const input = ce('input', 'dataset-toggle');
     input.id = id;
     input.type = 'checkbox';
     input.checked = dataset.checked;
