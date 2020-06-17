@@ -208,11 +208,11 @@ function createFilters(data) {
     states: {},
     entryAge: {},
   };
-  filters.entryAge['1-7'] = { name: '1-7 days ago', isSet: false, value: '1-7' };
-  filters.entryAge['8-14'] = { name: '8-14 days ago', isSet: false, value: '8-14' };
-  filters.entryAge['15-21'] = { name: '15-21 days ago', isSet: false, value: '15-21' };
-  filters.entryAge['21+'] = { name: '21+ days ago', isSet: false, value: '21' };
-  filters.entryAge.placeholder = 'Last Updated';
+  filters.entryAge['1-7'] = { name: $.i18n('ftm-entry-age-1-7'), isSet: false, value: '1-7' };
+  filters.entryAge['8-14'] = { name: $.i18n('ftm-entry-age-8-14'), isSet: false, value: '8-14' };
+  filters.entryAge['15-21'] = { name: $.i18n('ftm-entry-age-15-21'), isSet: false, value: '15-21' };
+  filters.entryAge['21+'] = { name: $.i18n('ftm-entry-age-21-plus'), isSet: false, value: '21' };
+  filters.entryAge.placeholder = $.i18n('ftm-entry-age-placeholder');
 
   for (const state of Object.keys(data)) {
     filters.states[state] = { name: state, isSet: false };
