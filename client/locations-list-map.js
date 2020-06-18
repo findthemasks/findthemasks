@@ -2054,7 +2054,8 @@ $(() => {
   initContactModal();
   initGlobalAlert();
 
-  //Get the relevant json data file from findthemasks.com and calls renderListings on the data
+  //Get the relevant json data file based on country and requester/maker from findthemasks.com and 
+  //calls renderListings on the data
   $.getJSON(getDatasetFilename(gDataset, gCountryCode), (result) => {
     if (window.i18nReady) {
       renderListings(result);
