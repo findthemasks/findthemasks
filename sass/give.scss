@@ -55,8 +55,12 @@ body {
 }
 
 footer {
-  margin-top: 20px;
   text-align: center;
+  margin-top: 4px;
+
+  @media (min-width: $breakpoint-sm) {
+    margin-top: 20px;
+  }
 }
 
 .header-block {
@@ -235,7 +239,7 @@ footer {
   right: 0;
   left: 0;
   z-index: 1;
-  padding: 20px;
+  padding: 12px 20px;
   background-color: #fff;
 }
 
@@ -243,7 +247,6 @@ footer {
   justify-content: center;
   display: flex;
   margin: 0 -8px;
-  transform: translateX(-50%);
 
   @media (min-width: $breakpoint-sm) {
     display: none;
@@ -251,6 +254,6 @@ footer {
 }
 
 .emb-toggleButton {
-  width: 80px;
+  flex: 1;
   margin: 0 8px;
 }
