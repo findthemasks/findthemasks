@@ -208,22 +208,22 @@ function createFilters(data) {
     states: {},
     entryAge: {
       '1-7': {
-        name : $.i18n('ftm-entry-age-1-7'),
+        name: $.i18n('ftm-entry-age-1-7'),
         isSet: false,
         value: '1-7',
       },
       '8-14': {
-        name : $.i18n('ftm-entry-age-8-14'),
+        name: $.i18n('ftm-entry-age-8-14'),
         isSet: false,
         value: '8-14',
       },
       '15-21': {
-        name : $.i18n('ftm-entry-age-15-21'),
+        name: $.i18n('ftm-entry-age-15-21'),
         isSet: false,
         value: '15-21',
       },
       '21+': {
-        name : $.i18n('ftm-entry-age-21-plus'),
+        name: $.i18n('ftm-entry-age-21-plus'),
         isSet: false,
         value: '21',
       },
