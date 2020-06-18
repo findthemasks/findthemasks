@@ -1982,6 +1982,9 @@ const applyFilterParams = ((params, filterSet) => {
   });
 });
 
+//Checks if there is a date record in localStorage of the last time the dismissable banners were closed. 
+//If there are none or if it has been over 12 hours since the banners have been closed, display the banners and 
+//record the time when they are closed.
 const initGlobalAlert = () => {
   const alerts = $('.alert-dismissable');
 
@@ -2051,6 +2054,7 @@ $(() => {
   initContactModal();
   initGlobalAlert();
 
+  //Get the relevant json data file from findthemasks.com and calls renderListings on the data
   $.getJSON(getDatasetFilename(gDataset, gCountryCode), (result) => {
     if (window.i18nReady) {
       renderListings(result);
