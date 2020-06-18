@@ -368,5 +368,10 @@
   "ftm-residential-popover-content" : "Alrededor del 15% de nuestros destinatarios enumeran las direcciones de casa. Esto puede deberse a que es más seguro / fácil para los donantes dejarlo en un lugar cercano, porque sus horas de oficina son limitadas o porque tienen problemas para obtener el EPP en el trabajo. Si prefiere donar directamente a una institución de atención médica, seleccione otra entrada entre nuestros miles de destinatarios que lo necesitan.",
   "ftm-alert-systemic-racism-1" : "Find the Masks reconoce que la respuesta de la comunidad al racismo sistémico es esencial & no puedo esperar a que pase COVID-19. Hemos visto cómo se construyen comunidades en torno a la escasez mundial de EPP. & Creo que podemos mantener la solidaridad frente a la pandemia y los disturbios sociales de COVID-19.",
   "ftm-alert-systemic-racism-2" : "Aunque COVID-19 no es lo único que afecta la seguridad de la comunidad, tampoco ha desaparecido. FTM apoya la acción social & quiere ayudar a las personas a participar de la manera más segura posible.",
-  "ftm-alert-systemic-racism-3" : "Use EPP para limitar el riesgo para usted y para los demás. Echa un vistazo a <a href=\"https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0\" target=\"_blank\" rel=\"noopener noreferrer\"> este recurso </a> elaborado por socios <a href=\"https://opensourcemedicalsupplies.org/\" target=\"_blank\" rel=\"noopener noreferrer\"> OSMS </a> si estás participando en limpiezas o protestas."
+  "ftm-alert-systemic-racism-3" : "Use EPP para limitar el riesgo para usted y para los demás. Echa un vistazo a <a href=\"https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0\" target=\"_blank\" rel=\"noopener noreferrer\"> este recurso </a> elaborado por socios <a href=\"https://opensourcemedicalsupplies.org/\" target=\"_blank\" rel=\"noopener noreferrer\"> OSMS </a> si estás participando en limpiezas o protestas.",
+  "ftm-entry-age-1-7" : "1-7 días atrás",
+  "ftm-entry-age-8-14" : "Hace 8-14 días",
+  "ftm-entry-age-15-21" : "Hace 15-21 días",
+  "ftm-entry-age-21-plus" : "Hace más de 21 días",
+  "ftm-entry-age-placeholder" : "Última actualización"
 }

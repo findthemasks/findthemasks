@@ -368,5 +368,10 @@
   "ftm-residential-popover-content" : "我们约有15％的收件人列出了家庭住址。这可能是因为捐助者下班时间有限，或者因为他们在使PPE上班方面遇到困难，所以更安全/更容易将捐助者送到附近的地方。如果您希望直接捐赠给医疗机构，请从我们成千上万需要帮助的接收者中选择另一个条目！",
   "ftm-alert-systemic-racism-1" : "“发现面具”认识到社区对系统种族主义的反应必不可少&不能等待COVID-19通过。我们已经看到社区围绕全球个人防护设备短缺而建立&我们相信面对COVID-19大流行和社会动荡，我们可以保持团结。",
   "ftm-alert-systemic-racism-2" : "尽管COVID-19并不是影响社区安全的唯一因素，但它也没有消失。 FTM支持社会行动&希望帮助人们尽可能安全地参与。",
-  "ftm-alert-systemic-racism-3" : "请穿着个人防护装备，以限制自己和他人的危险。如果您正在参加清理或抗议活动，请检查<a href=\"https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0\" target=\"_blank\" rel=\"noopener noreferrer\">此资源</a>由合作伙伴放在一起<a href=\"https://opensourcemedicalsupplies.org/\" target=\"_blank\" rel=\"noopener noreferrer\"> OSMS </a> 。"
+  "ftm-alert-systemic-racism-3" : "请穿着个人防护装备，以限制自己和他人的危险。如果您正在参加清理或抗议活动，请检查<a href=\"https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0\" target=\"_blank\" rel=\"noopener noreferrer\">此资源</a>由合作伙伴放在一起<a href=\"https://opensourcemedicalsupplies.org/\" target=\"_blank\" rel=\"noopener noreferrer\"> OSMS </a> 。",
+  "ftm-entry-age-1-7" : "1-7天前",
+  "ftm-entry-age-8-14" : "8-14天前",
+  "ftm-entry-age-15-21" : "15-21天前",
+  "ftm-entry-age-21-plus" : "21天以上",
+  "ftm-entry-age-placeholder" : "最近更新时间"
 }
