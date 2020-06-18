@@ -206,13 +206,30 @@ function createFilters(data) {
 
   const filters = {
     states: {},
-    entryAge: {},
+    entryAge: {
+      '1-7': {
+        name : $.i18n('ftm-entry-age-1-7'),
+        isSet: false,
+        value: '1-7',
+      },
+      '8-14': {
+        name : $.i18n('ftm-entry-age-8-14'),
+        isSet: false,
+        value: '8-14',
+      },
+      '15-21': {
+        name : $.i18n('ftm-entry-age-15-21'),
+        isSet: false,
+        value: '15-21',
+      },
+      '21+': {
+        name : $.i18n('ftm-entry-age-21-plus'),
+        isSet: false,
+        value: '21',
+      },
+      placeholder: $.i18n('ftm-entry-age-placeholder'),
+    },
   };
-  filters.entryAge['1-7'] = { name: $.i18n('ftm-entry-age-1-7'), isSet: false, value: '1-7' };
-  filters.entryAge['8-14'] = { name: $.i18n('ftm-entry-age-8-14'), isSet: false, value: '8-14' };
-  filters.entryAge['15-21'] = { name: $.i18n('ftm-entry-age-15-21'), isSet: false, value: '15-21' };
-  filters.entryAge['21+'] = { name: $.i18n('ftm-entry-age-21-plus'), isSet: false, value: '21' };
-  filters.entryAge.placeholder = $.i18n('ftm-entry-age-placeholder');
 
   for (const state of Object.keys(data)) {
     filters.states[state] = { name: state, isSet: false };
