@@ -200,6 +200,7 @@ const filtersByDataset = {
 //    are included
 // If two or more values in a category are true, the filter is the union of those values
 // If multiple categories have set values, the result is the intersection of those categories
+// The filters which are selectable on the webpage will also be translated here
 function createFilters(data) {
   const datasetFilters = filtersByDataset[gDataset];
 
@@ -1395,6 +1396,8 @@ function refreshList(data, filters) {
   }
 }
 
+// When a filter gets selected/deselected, check if such filter exists
+// Then set the isSet property of all filters with the same display name correspondingly and call updating methods
 function onFilterChange(data, prefix, idx, selected, filters) {
   const primaryFilter = filters[prefix] && filters[prefix][Object.keys(filters[prefix])[idx]];
   if (!primaryFilter) {
@@ -1416,9 +1419,11 @@ function onFilterChange(data, prefix, idx, selected, filters) {
     }
   });
 
+  // Calls on updateFilters to update the applied property of the filters
+  // Calls on refreshList to re-render the displayed list
+  // Call on showMarkers to re-render the marker and clusters
   updateFilters(filters);
   refreshList(data, filters);
-
   showMarkers(data, filters, false);
 }
 
@@ -1458,7 +1463,12 @@ function createFilterElements(data, filters) {
         searchable: false,
         placeholder: placeholderLabel,
       });
+      
+      // Attach reference to each selectr object to the each filter DOM node for the ability to clear filters on map
+      // reset
       document.getElementById('filter-container').lastElementChild.selectrReference = selectr;
+      
+      // Attach event listeners to the selectr items on selecting and deselecting a filter
       selectr.on('selectr.select', (option) => {
         onFilterChange(data, f, option.idx, true, filters);
         sendEvent('filters', f, option.value);
@@ -1966,6 +1976,8 @@ function loadMapScript(data, filters) {
   document.head.appendChild(scriptTag);
 }
 
+// Takes in params from query string in URL and decodes it.
+// Then, set any filter with the same key as param to be true.
 const applyFilterParams = ((params, filterSet) => {
   params.filter((param) => param && param.trim().length > 0).forEach((param) => {
     const filter = filterSet[decodeURIComponent(param)];
@@ -2052,9 +2064,11 @@ const toggleMobileView = (index) => {
 
 $(() => {
   const renderListings = (result) => {
+    // Checks each entry of raw data for approval. Then, parses the approved data by states then cities
+    // This parsed data will be used by methods later on
     const data = toDataByLocation(result, gDataset);
 
-    // calculates total entries from parsed dataset
+    // calculates total entries from parsed data
     // we can't just use `result.values.length - 2` because the makers dataset
     // has some entries that do not have valid lat/lng, so we want to count the entries
     // after we've cleaned the data
@@ -2068,15 +2082,17 @@ $(() => {
     if (searchParams['hide-search'] !== null) {
       gShowMapSearch = searchParams['hide-search'] !== 'true';
     }
-
+    
     const filters = createFilters(data);
 
     // Update filters to match any ?state= params
     const states = (searchParams.state || '').toUpperCase().split(',');
     applyFilterParams(states, filters.states);
 
+    // Gets all the possible filter types associated with a particular dataset
     const datasetFilters = filtersByDataset[gDataset];
 
+    // Checks searchParams for any filters to be applied on webapage load and apply them.
     Object.keys(datasetFilters).forEach((datasetFilterKey) => {
       const { searchParamKey } = datasetFilters[datasetFilterKey];
 
@@ -2099,12 +2115,11 @@ $(() => {
   initContactModal();
   initGlobalAlert();
 
-  // Get the relevant json data file based on country and requester/maker from findthemasks.com and
-  // calls renderListings on the data
   if (isEmbed) {
     initEmbedEventListeners();
   }
-
+  // Get the relevant json data file based on country and requester/maker from findthemasks.com and
+  // calls renderListings on the data
   $.getJSON(getDatasetFilename(gDataset, gCountryCode), (result) => {
     if (window.i18nReady) {
       renderListings(result);
