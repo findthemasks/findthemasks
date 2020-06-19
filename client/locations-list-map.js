@@ -2118,7 +2118,7 @@ $(() => {
   if (isEmbed) {
     initEmbedEventListeners();
   }
-  // Get the relevant json data file based on country and requester/maker from findthemasks.com and
+  // Get the relevant json data file based on country and dataset from findthemasks.com and
   // calls renderListings on the data
   $.getJSON(getDatasetFilename(gDataset, gCountryCode), (result) => {
     if (window.i18nReady) {
