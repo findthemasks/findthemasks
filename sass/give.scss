@@ -7,9 +7,6 @@
 @import "legend";
 @import "globalAlert";
 
-$embed-body-height: 70vh;
-$embed-body-height-sm: 35vh;
-
 html {
   height: 100%;
   width: 100%;
@@ -20,11 +17,24 @@ body {
   box-sizing: border-box;
   color: #222;
   font: normal normal normal #{$font-size-default}/ 1.65 "Open Sans",
-    "Helvetica", sans-serif;
+  "Helvetica", sans-serif;
   height: 100%;
   margin: 0;
   padding: 0;
   text-rendering: optimizeLegibility;
+}
+
+.emb-embed {
+  flex-direction: column;
+  display: flex !important;
+  height: 100vh;
+}
+
+.embed-main {
+  position: relative;
+  display: flex;
+  height: 100%;
+  overflow: hidden;
 }
 
 .translated-content {
@@ -33,16 +43,24 @@ body {
 
 .locations-loading {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-top: -30px;
-  margin-left: -90px;
-  z-index: 1020;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  z-index: 200;
+  background-color: #fff;
 }
 
 footer {
-  margin-top: 20px;
   text-align: center;
+  margin-top: 4px;
+
+  @media (min-width: $breakpoint-sm) {
+    margin-top: 20px;
+  }
 }
 
 .header-block {
@@ -65,11 +83,13 @@ footer {
 }
 
 .locations-list {
-  height: $embed-body-height-sm;
-  @media (min-width: $breakpoint-md) {
-    height: $embed-body-height;
-  }
+  height: 100%;
+  padding-bottom: 50px;
   overflow-y: scroll;
+
+  @media (min-width: $breakpoint-sm) {
+    padding-bottom: 0;
+  }
 }
 
 .location {
@@ -93,6 +113,10 @@ footer {
     text-align: right;
   }
 
+  &:last-child {
+    border-bottom: none;
+  }
+
   // adds dropdown caret icon to support collapse logic
   & > .d-flex {
     background-image: $icon-dropdown;
@@ -112,11 +136,9 @@ footer {
 }
 
 .map-container {
-  height: $embed-body-height-sm;
-
-  @media (min-width: $breakpoint-md) {
-    height: $embed-body-height;
-  }
+  position: relative;
+  width: 100%;
+  height: 100%;
 
   #map .label {
     color: #999;
@@ -132,7 +154,7 @@ footer {
   flex-direction: row;
   font-weight: 700;
   text-transform: uppercase;
-  height: 54px;
+
   .icon {
     height: 48px;
     width: 48px;
@@ -152,4 +174,89 @@ footer {
 #filter-container {
   padding: 0.5rem 1rem;
   top: 38px;
+}
+
+.emb-col {
+  width: 100%;
+}
+
+.emb-col-list {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  height: 100%;
+  background-color: #fff;
+  transform: translateX(-100%);
+  transition: transform 0.2s;
+
+  @media (min-width: $breakpoint-sm) {
+    position: relative;
+    max-width: 0;
+    transform: translateX(0);
+  }
+
+  .list-open & {
+    transform: translateX(0);
+
+    @media (min-width: $breakpoint-sm) {
+      max-width: calc(4 / 12 * 100%);
+      transform: none;
+    }
+  }
+}
+
+.emb-col-map {
+  max-width: 100%;
+
+  .list-open & {
+    @media (min-width: $breakpoint-sm) {
+      max-width: calc(8 / 12 * 100%);
+    }
+  }
+}
+
+.emb-toggleListButton {
+  position: absolute;
+  top: 50%;
+  right: 2px;
+  display: none;
+  width: 120px;
+  transform: translate(76px, -50%) rotate(90deg);
+  border: none;
+
+  @media (min-width: $breakpoint-sm) {
+    display: block;
+  }
+}
+
+.emb-mobileTopFooter {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+  padding: 12px 20px;
+  background-color: #fff;
+
+  @media (min-width: $breakpoint-sm) {
+    padding: 0;
+  }
+}
+
+.emb-toggleButtons {
+  justify-content: center;
+  display: flex;
+  margin: 0 -8px;
+
+  @media (min-width: $breakpoint-sm) {
+    display: none;
+  }
+}
+
+.emb-toggleButton {
+  flex: 1;
+  margin: 0 8px;
 }
