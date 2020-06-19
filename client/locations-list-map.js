@@ -1463,11 +1463,11 @@ function createFilterElements(data, filters) {
         searchable: false,
         placeholder: placeholderLabel,
       });
-      
+
       // Attach reference to each selectr object to the each filter DOM node for the ability to clear filters on map
       // reset
       document.getElementById('filter-container').lastElementChild.selectrReference = selectr;
-      
+
       // Attach event listeners to the selectr items on selecting and deselecting a filter
       selectr.on('selectr.select', (option) => {
         onFilterChange(data, f, option.idx, true, filters);
@@ -2082,7 +2082,7 @@ $(() => {
     if (searchParams['hide-search'] !== null) {
       gShowMapSearch = searchParams['hide-search'] !== 'true';
     }
-    
+
     const filters = createFilters(data);
 
     // Update filters to match any ?state= params
