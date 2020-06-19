@@ -2094,8 +2094,11 @@ $(() => {
   };
 
   initContactModal();
-  initEmbedEventListeners();
   initGlobalAlert();
+
+  if (isEmbed) {
+    initEmbedEventListeners();
+  }
 
   $.getJSON(getDatasetFilename(gDataset, gCountryCode), (result) => {
     if (window.i18nReady) {

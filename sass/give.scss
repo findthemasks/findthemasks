@@ -50,7 +50,7 @@ body {
   align-items: center;
   justify-content: center;
   display: flex;
-  z-index: 10;
+  z-index: 200;
   background-color: #fff;
 }
 
@@ -220,7 +220,6 @@ footer {
 
 .emb-toggleListButton {
   position: absolute;
-  z-index: 1;
   top: 50%;
   right: 2px;
   display: none;
@@ -241,6 +240,10 @@ footer {
   z-index: 1;
   padding: 12px 20px;
   background-color: #fff;
+
+  @media (min-width: $breakpoint-sm) {
+    padding: 0;
+  }
 }
 
 .emb-toggleButtons {
