@@ -55,6 +55,10 @@ router.get(['/give', '/give.html', '/embed'], (req, res) => {
     }
   }
 
+  // Get notice configuration. "none" is the only support value currently
+  // and disables all notices.
+  res.locals.notices = req.query['notices'];
+
   const isMaker = res.locals.dataset === 'makers';
   res.render('give', {
     version: herokuVersion,
