@@ -370,5 +370,10 @@
   "ftm-residential-popover-content" : "Etwa 15% unserer Empfänger geben Privatadressen an. Dies kann daran liegen, dass es für Spender sicherer / einfacher ist, an einem nahe gelegenen Ort abzusetzen, weil ihre Bürozeiten begrenzt sind oder weil sie Probleme haben, PSA bei der Arbeit zu bekommen. Wenn Sie lieber direkt an eine Gesundheitseinrichtung spenden möchten, wählen Sie bitte einen anderen Eintrag aus unseren Tausenden von Empfängern in Not aus!",
   "ftm-alert-systemic-racism-1" : "Find the Masks erkennt an, dass die Reaktion der Community auf systemischen Rassismus unerlässlich ist. & kann es kaum erwarten, bis COVID-19 erfolgreich ist. Wir haben gesehen, wie Gemeinschaften um den globalen Mangel an PSA herum aufgebaut wurden. & Wir glauben, dass wir angesichts der COVID-19-Pandemie und der sozialen Unruhen Solidarität aufrechterhalten können.",
   "ftm-alert-systemic-racism-2" : "Obwohl COVID-19 nicht das einzige ist, das die Sicherheit in der Gemeinde beeinträchtigt, ist es auch nicht verschwunden. FTM unterstützt soziales Handeln & möchte Menschen helfen, so sicher wie möglich teilzunehmen.",
-  "ftm-alert-systemic-racism-3" : "Bitte tragen Sie PSA, um das Risiko für sich und andere zu begrenzen. Schauen Sie sich <a href=\"https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0\" target=\"_blank\" rel=\"noopener noreferrer\"> diese Ressource </a> die von Partnern <a href=\"https://opensourcemedicalsupplies.org/\" target=\"_blank\" rel=\"noopener noreferrer\"> OSMS </a> wenn Sie an Aufräumarbeiten teilnehmen oder protestieren."
+  "ftm-alert-systemic-racism-3" : "Bitte tragen Sie PSA, um das Risiko für sich und andere zu begrenzen. Schauen Sie sich <a href=\"https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0\" target=\"_blank\" rel=\"noopener noreferrer\"> diese Ressource </a> die von Partnern <a href=\"https://opensourcemedicalsupplies.org/\" target=\"_blank\" rel=\"noopener noreferrer\"> OSMS </a> wenn Sie an Aufräumarbeiten teilnehmen oder protestieren.",
+  "ftm-entry-age-1-7" : "Vor 1-7 Tagen",
+  "ftm-entry-age-8-14" : "Vor 8-14 Tagen",
+  "ftm-entry-age-15-21" : "Vor 15-21 Tagen",
+  "ftm-entry-age-21-plus" : "Vor mehr als 21 Tagen",
+  "ftm-entry-age-placeholder" : "Letzte Aktualisierung"
 }

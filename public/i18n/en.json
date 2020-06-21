@@ -373,5 +373,10 @@
   "ftm-residential-popover-content": "About 15% of our recipients list home addresses. This may be because it is safer/easier for donors to drop off at a nearby location, because their office hours are limited, or because they are having trouble getting PPE at work. If you prefer to donate directly to a healthcare institution, please select another entry from among our thousands of recipients in need!",
   "ftm-alert-systemic-racism-1": "Find the Masks recognizes community response to systemic racism is essential & cannot wait for COVID-19 to pass. We have seen communities build around global PPE shortages & believe we can maintain solidarity in the face of the COVID-19 pandemic and social unrest.",
   "ftm-alert-systemic-racism-2": "Although COVID-19 is not the only thing affecting community safety, it has not disappeared either. FTM supports social action & wants to help people participate as safely as possible.",
-  "ftm-alert-systemic-racism-3": "Please wear PPE to limit risk to yourself and others. Check out <a href=\"https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0\" target=\"_blank\" rel=\"noopener noreferrer\">this resource</a> put together by partners <a href=\"https://opensourcemedicalsupplies.org/\" target=\"_blank\" rel=\"noopener noreferrer\">OSMS</a> if you are participating in clean-ups or protesting."
+  "ftm-alert-systemic-racism-3": "Please wear PPE to limit risk to yourself and others. Check out <a href=\"https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0\" target=\"_blank\" rel=\"noopener noreferrer\">this resource</a> put together by partners <a href=\"https://opensourcemedicalsupplies.org/\" target=\"_blank\" rel=\"noopener noreferrer\">OSMS</a> if you are participating in clean-ups or protesting.",
+  "ftm-entry-age-1-7": "1-7 days ago",
+  "ftm-entry-age-8-14": "8-14 days ago",
+  "ftm-entry-age-15-21": "15-21 days ago",
+  "ftm-entry-age-21-plus": "21+ days ago",
+  "ftm-entry-age-placeholder": "Last updated"
 }

@@ -370,5 +370,10 @@
   "ftm-residential-popover-content" : "Około 15% naszych odbiorców podaje adresy domowe. Może to wynikać z tego, że dawcy są bezpieczniejsi / łatwiejsi do oddania w pobliskim miejscu, ponieważ ich godziny urzędowania są ograniczone lub mają problemy z uzyskaniem środków ochrony osobistej w pracy. Jeśli wolisz przekazać darowiznę bezpośrednio na rzecz instytucji opieki zdrowotnej, wybierz inny wpis spośród tysięcy naszych potrzebujących odbiorców!",
   "ftm-alert-systemic-racism-1" : "Find the Masks rozpoznaje, że reakcja społeczności na rasizm systemowy jest niezbędna. & nie może się doczekać, aż minie COVID-19. Widzieliśmy, jak społeczności budują się wokół globalnych niedoborów środków ochrony osobistej & wierzą, że możemy zachować solidarność w obliczu pandemii i niepokojów społecznych w sprawie COVID-19.",
   "ftm-alert-systemic-racism-2" : "Chociaż COVID-19 nie jest jedyną rzeczą wpływającą na bezpieczeństwo społeczności, nie zniknął również. FTM wspiera akcję społecznościową. & chce pomóc ludziom w jak najbezpieczniejszym uczestnictwie.",
-  "ftm-alert-systemic-racism-3" : "Noś środki ochrony osobistej, aby ograniczyć ryzyko dla siebie i innych. Sprawdź <a href=\"https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0\" target=\"_blank\" rel=\"noopener noreferrer\"> ten zasób </a> ułożony przez partnerów <a href=\"https://opensourcemedicalsupplies.org/\" target=\"_blank\" rel=\"noopener noreferrer\"> OSMS </a> jeśli uczestniczysz w porządkach lub protestach."
+  "ftm-alert-systemic-racism-3" : "Noś środki ochrony osobistej, aby ograniczyć ryzyko dla siebie i innych. Sprawdź <a href=\"https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0\" target=\"_blank\" rel=\"noopener noreferrer\"> ten zasób </a> ułożony przez partnerów <a href=\"https://opensourcemedicalsupplies.org/\" target=\"_blank\" rel=\"noopener noreferrer\"> OSMS </a> jeśli uczestniczysz w porządkach lub protestach.",
+  "ftm-entry-age-1-7" : "1-7 dni temu",
+  "ftm-entry-age-8-14" : "8-14 dni temu",
+  "ftm-entry-age-15-21" : "15-21 dni temu",
+  "ftm-entry-age-21-plus" : "21+ dni temu",
+  "ftm-entry-age-placeholder" : "Ostatnio zaktualizowany"
 }

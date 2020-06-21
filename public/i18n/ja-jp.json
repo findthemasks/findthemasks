@@ -370,5 +370,10 @@
   "ftm-residential-popover-content" : "受信者の約15％が自宅の住所をリストしています。これは、寄付者が近くの場所に立ち寄るほうが安全/簡単である、事務所の営業時間が限られている、またはPPEを職場で取得するのに問題があるためと考えられます。医療機関に直接寄付することをご希望の場合は、必要な数千人の受領者の中から別のエントリを選択してください！",
   "ftm-alert-systemic-racism-1" : "検索マスクは、全身人種差別へのコミュニティ応答が不可欠である認識&渡すCOVID-19のを待つことはできません。私たちは、コミュニティがグローバルなPPE不足を取り巻くのを見てきました& COVID-19の大流行と社会不安に直面しても連帯を維持できると信じています",
   "ftm-alert-systemic-racism-2" : "コミュニティの安全性に影響を与えるのはCOVID-19だけではありませんが、それも消滅していません。 FTMはソーシャルアクションをサポートしています&は、人々ができるだけ安全に参加できるようにしたいと考えています。",
-  "ftm-alert-systemic-racism-3" : "自分自身と他人へのリスクを制限するためにPPEを着用してください。チェックアウト<a href=\"https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0\" target=\"_blank\" rel=\"noopener noreferrer\">このリソース</a>パートナーが一緒に入れて<a href=\"https://opensourcemedicalsupplies.org/\" target=\"_blank\" rel=\"noopener noreferrer\"> OSMS </a>あなたはクリーンアップに参加したり抗議している場合。"
+  "ftm-alert-systemic-racism-3" : "自分自身と他人へのリスクを制限するためにPPEを着用してください。チェックアウト<a href=\"https://docs.google.com/spreadsheets/d/1E9dSt6EE0a3uJaRj4ojaoF-EFbC6IPYA1upLVrL1M-s/edit#gid=0\" target=\"_blank\" rel=\"noopener noreferrer\">このリソース</a>パートナーが一緒に入れて<a href=\"https://opensourcemedicalsupplies.org/\" target=\"_blank\" rel=\"noopener noreferrer\"> OSMS </a>あなたはクリーンアップに参加したり抗議している場合。",
+  "ftm-entry-age-1-7" : "1〜7日前",
+  "ftm-entry-age-8-14" : "8〜14日前",
+  "ftm-entry-age-15-21" : "15〜21日前",
+  "ftm-entry-age-21-plus" : "21日以上前",
+  "ftm-entry-age-placeholder" : "最終更新"
 }
