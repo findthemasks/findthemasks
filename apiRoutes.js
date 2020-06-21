@@ -1,7 +1,11 @@
 const express = require('express');
 const https = require('https');
+const setCurrentUrl = require('./middleware/setCurrentUrl.js');
 
 const router = express.Router();
+router.use(setCurrentUrl);
+
+const herokuVersion = process.env.HEROKU_RELEASE_VERSION;
 
 router.get('/exec', (req, res, next) => {
   if (!req.query.cmd) {
@@ -20,12 +24,24 @@ router.get('/exec', (req, res, next) => {
   const dataReq = https.request(options, (dataRes) => {
     dataRes.on('data', (d) => { newData += d; });
     dataRes.on('end', () => {
-      if (dataRes.statusCode === 200) {
-        res.status(200).send('success!');
-      } else {
-        console.log(dataRes);
-        res.status(400).send('Encounted an error. Please email contact@findthemasks.com for further assistance.');
+      let message = newData;
+      let alertClass = 'alert-success';
+      if (dataRes.statusCode !== 200) {
+        message = 'Encounted an error. Please email contact@findthemasks.com for further assistance.';
+        alertClass = 'alert-danger';
+        console.log(dataRes.statusCode, newData);
       }
+
+      res.render('apiresult', {
+        version: herokuVersion,
+        layout: 'static',
+        title: 'Error failure',
+        ogTitle: 'Command Result',
+        ogUrl: `http://${req.hostname}${req.originalUrl}`,
+        ogDescription: 'Result of command request',
+        commandResult: message,
+        alertClass,
+      });
     });
   });
 
