@@ -237,7 +237,7 @@ function createFilters(data) {
     filters.states[state] = { name: state, isSet: false };
   }
 
-  //Load all other possible whitelisted filters with their accepted, translated values
+  // Load all other possible whitelisted filters with their accepted, translated values
   try {
     const dataFilters = parseFiltersFromData(data, datasetFilters);
     Object.keys(datasetFilters).forEach((datasetFilterKey) => {
@@ -1861,7 +1861,7 @@ function initMap(data, filters) {
 
   const mapBounds = gMap.getBounds();
   
-  //On initialization, set global variable to current center of map
+  // On initialization, set global variable to current center of map
   if (mapBounds) {
     const mapCenter = mapBounds.getCenter();
     gCurrentViewportCenter = {
