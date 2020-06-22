@@ -1531,7 +1531,7 @@ function getDatasetFilename(dataset, countryCode) {
   return `/${dataset}-${countryCode}.json`;
 }
 
-// If our dataset is requester, grab the country codes of other countries and load their json data upon 
+// If our dataset is requester, grab the country codes of other countries and load their json data upon
 // map initialization. Markers are generated for all the new datasets and grouped under gOtherMarkers and displayed as
 // secondary markers.
 function loadOtherCountries() {
