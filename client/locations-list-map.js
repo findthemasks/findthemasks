@@ -46,7 +46,7 @@ const gOtherMarkers = [];
 let gPrimaryCluster = null;
 // Secondary + other markers shown in secondary cluster
 let gSecondaryCluster = null;
-
+// The longitude and latitude of the center of Google Maps
 let gCurrentViewportCenter = {};
 
 const gDatasetMarkers = {
@@ -64,6 +64,7 @@ const gDatasetMarkers = {
   },
 };
 
+// All other datasets that are not the dataset we are currently on
 const ALL_DATASETS = [
   {
     key: 'requester',
@@ -231,10 +232,12 @@ function createFilters(data) {
     },
   };
 
+  // All states are included as potential filters through query and not selectable.
   for (const state of Object.keys(data)) {
     filters.states[state] = { name: state, isSet: false };
   }
 
+  //Load all other possible whitelisted filters with their accepted, translated values
   try {
     const dataFilters = parseFiltersFromData(data, datasetFilters);
     Object.keys(datasetFilters).forEach((datasetFilterKey) => {
