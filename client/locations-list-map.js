@@ -1860,7 +1860,7 @@ function initMap(data, filters) {
   });
 
   const mapBounds = gMap.getBounds();
-  
+
   // On initialization, set global variable to current center of map
   if (mapBounds) {
     const mapCenter = mapBounds.getCenter();
@@ -1878,7 +1878,7 @@ function initMap(data, filters) {
   loadOtherCountries();
 
   // Add map control for adding additional datasets
-  // Checking additional layers in the google maps legend will fetch and process the related data (if it does not exist 
+  // Checking additional layers in the google maps legend will fetch and process the related data (if it does not exist
   // in datasetData) and push it to the secondary marker set for it to be visible.
   const onChange = (dataset, event) => {
     const { checked } = event.target;
