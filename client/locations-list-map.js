@@ -914,7 +914,7 @@ function centerMapToBounds(map, bounds, maxZoom) {
 }
 
 /**
- * Changes the markers currently rendered on the map based strictly on . This will reset the
+ * Changes the markers currently rendered on the map based strictly on filters or lack thereof. This will reset the
  * 'markers' module variable as well.
  */
 function showMarkers(data, filters, recenterMap = true) {
@@ -1527,6 +1527,7 @@ function getDatasetFilename(dataset, countryCode) {
   return `/${dataset}-${countryCode}.json`;
 }
 
+// Grabs the country codes of other countries and load their json data too
 function loadOtherCountries() {
   if (gDataset !== 'requester') {
     return;
@@ -1706,6 +1707,8 @@ function initMapSearch(data, filters) {
   });
 }
 
+// Create the html element for the legend in google Maps and populate it with all datasets other than the one we are
+// currently on. Then, attach event listener for when an additional dataset is checked.
 const generateGMapDatasetLegend = (onChange) => {
   const legend = ce('div', 'legend-container');
   legend.index = 1;
@@ -1833,6 +1836,7 @@ function initMap(data, filters) {
     sendEvent('map', 'click', 'secondaryCluster');
   });
 
+  // Event listener for when we zoom/move the maps which causes the bounds to change.
   google.maps.event.addListener(gMap, 'bounds_changed', () => {
     const mapBounds = gMap.getBounds();
 
@@ -1853,7 +1857,8 @@ function initMap(data, filters) {
   });
 
   const mapBounds = gMap.getBounds();
-
+  
+  //On initialization, set global variable to current center of map
   if (mapBounds) {
     const mapCenter = mapBounds.getCenter();
     gCurrentViewportCenter = {
@@ -1870,6 +1875,8 @@ function initMap(data, filters) {
   loadOtherCountries();
 
   // Add map control for adding additional datasets
+  // Checking additional layers in the google maps legend will fetch and process the related data (if it does not exist 
+  // in datasetData) and push it to the secondary marker set for it to be visible.
   const onChange = (dataset, event) => {
     const { checked } = event.target;
     dataset.checked = checked;
@@ -1921,6 +1928,7 @@ function initMap(data, filters) {
 
   const legend = generateGMapDatasetLegend(onChange);
 
+  // Append the newly created legend with its event listener to top left of google Maps
   gMap.controls[google.maps.ControlPosition.TOP_LEFT].push(legend);
 
   if (!isEmbed) {
