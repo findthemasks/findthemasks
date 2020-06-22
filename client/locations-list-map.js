@@ -1527,7 +1527,7 @@ function getDatasetFilename(dataset, countryCode) {
   return `/${dataset}-${countryCode}.json`;
 }
 
-// Grabs the country codes of other countries and load their json data too
+// Grab the country codes of other countries and load their json data too
 function loadOtherCountries() {
   if (gDataset !== 'requester') {
     return;
