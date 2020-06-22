@@ -46,7 +46,7 @@ const gOtherMarkers = [];
 let gPrimaryCluster = null;
 // Secondary + other markers shown in secondary cluster
 let gSecondaryCluster = null;
-// The longitude and latitude of the center of Google Maps
+// The longitude and latitude of the center of Google Maps.
 let gCurrentViewportCenter = {};
 
 const gDatasetMarkers = {
@@ -128,7 +128,7 @@ function translatedFilterItems(filterItems) {
 
 // get list of possible values for `Accepted Items`
 // iterates through data to extract all unique "accepting" items
-// matches against whitelist FILTER_ITEMS (from formEnumLookups.js)
+// matches against allowlist FILTER_ITEMS (from formEnumLookups.js)
 // and returns the i18n keys from FILTER_ITEMS for accepting items that match
 //
 // NOTE: the incoming data structure is very brittle; if that changes at all, this will break
@@ -232,12 +232,13 @@ function createFilters(data) {
     },
   };
 
-  // All states are included as potential filters through query and not selectable.
+  // All states are included as potential filters. These are not selectable through dropdown lists,
+  // but are available via URL query parameters.
   for (const state of Object.keys(data)) {
     filters.states[state] = { name: state, isSet: false };
   }
 
-  // Load all other possible whitelisted filters with their accepted, translated values
+  // Load all other possible allowlisted filters with their accepted, translated values
   try {
     const dataFilters = parseFiltersFromData(data, datasetFilters);
     Object.keys(datasetFilters).forEach((datasetFilterKey) => {
@@ -1530,7 +1531,9 @@ function getDatasetFilename(dataset, countryCode) {
   return `/${dataset}-${countryCode}.json`;
 }
 
-// Grab the country codes of other countries and load their json data too
+// If our dataset is requester, grab the country codes of other countries and load their json data upon 
+// map initialization. Markers are generated for all the new datasets and grouped under gOtherMarkers and displayed as
+// secondary markers.
 function loadOtherCountries() {
   if (gDataset !== 'requester') {
     return;
@@ -1861,7 +1864,7 @@ function initMap(data, filters) {
 
   const mapBounds = gMap.getBounds();
 
-  // On initialization, set global variable to current center of map
+  // On initialization, set global variable gCurrentViewportCenter to current center of map.
   if (mapBounds) {
     const mapCenter = mapBounds.getCenter();
     gCurrentViewportCenter = {
@@ -1877,7 +1880,7 @@ function initMap(data, filters) {
 
   loadOtherCountries();
 
-  // Add map control for adding additional datasets
+  // Add map control for adding additional datasets.
   // Checking additional layers in the google maps legend will fetch and process the related data (if it does not exist
   // in datasetData) and push it to the secondary marker set for it to be visible.
   const onChange = (dataset, event) => {
@@ -1931,7 +1934,7 @@ function initMap(data, filters) {
 
   const legend = generateGMapDatasetLegend(onChange);
 
-  // Append the newly created legend with its event listener to top left of google Maps
+  // Append the newly created legend with its event listener to top left of google Maps.
   gMap.controls[google.maps.ControlPosition.TOP_LEFT].push(legend);
 
   if (!isEmbed) {
