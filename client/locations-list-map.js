@@ -677,7 +677,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
             const min = parseInt(rangeArray[0], 10);
             const entryDate = new Date(entry.timestamp);
             const dateDifference = Math.round((today.getTime() - entryDate.getTime()) / dateConversion);
-            if (rangeArray.length === 2 &&  dateDifference>= min && dateDifference <= parseInt(rangeArray[1], 10)) {
+            if (rangeArray.length === 2 && dateDifference >= min && dateDifference <= parseInt(rangeArray[1], 10)) {
               return true;
             }
             if (rangeArray.length === 1 && dateDifference >= min) {
@@ -1003,7 +1003,7 @@ function getFlatFilteredEntries(data, filters) {
         const min = parseInt(rangeArray[0], 10);
         const entryDate = new Date(entry.timestamp);
         const dateDifference = Math.round((today.getTime() - entryDate.getTime()) / dateConversion);
-        if (rangeArray.length === 2 &&  dateDifference>= min && dateDifference <= parseInt(rangeArray[1], 10)) {
+        if (rangeArray.length === 2 && dateDifference >= min && dateDifference <= parseInt(rangeArray[1], 10)) {
           return true;
         }
         if (rangeArray.length === 1 && dateDifference >= min) {
