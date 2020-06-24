@@ -207,7 +207,7 @@ function createFilters(data) {
   const filters = {
     states: {},
     entryAge: {
-      '1-7': {
+      '0-7': {
         name: $.i18n('ftm-entry-age-1-7'),
         isSet: false,
         value: '1-7',
@@ -670,13 +670,17 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
           }
         });
         if (hasEntryFilter) {
+          const today = new Date();
+          const dateConversion = 86400000;
           if (!Object.keys(entryAge).some((entryFilter) => {
             const rangeArray = entryFilter.split('-');
             const min = parseInt(rangeArray[0], 10);
-            if (rangeArray.length === 2 && entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)) {
+            const entryDate = new Date(entry.timestamp);
+            const dateDifference = Math.round((today.getTime() - entryDate.getTime()) / dateConversion);
+            if (rangeArray.length === 2 &&  dateDifference>= min && dateDifference <= parseInt(rangeArray[1], 10)) {
               return true;
             }
-            if (rangeArray.length === 1 && entry.entry_age >= min) {
+            if (rangeArray.length === 1 && dateDifference >= min) {
               return true;
             }
             return false;
@@ -992,13 +996,17 @@ function getFlatFilteredEntries(data, filters) {
   const onEntry = (entry, cityName, stateName) => {
     let notInFilters = false;
     if (entryAge) {
+      const today = new Date();
+      const dateConversion = 86400000;
       if (!Object.keys(entryAge).some((entryFilter) => {
         const rangeArray = entryFilter.split('-');
         const min = parseInt(rangeArray[0], 10);
-        if (rangeArray.length === 2 && entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)) {
+        const entryDate = new Date(entry.timestamp);
+        const dateDifference = Math.round((today.getTime() - entryDate.getTime()) / dateConversion);
+        if (rangeArray.length === 2 &&  dateDifference>= min && dateDifference <= parseInt(rangeArray[1], 10)) {
           return true;
         }
-        if (rangeArray.length === 1 && entry.entry_age >= min) {
+        if (rangeArray.length === 1 && dateDifference >= min) {
           return true;
         }
         return false;
