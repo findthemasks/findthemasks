@@ -674,13 +674,13 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
             const rangeArray = entryFilter.split('-');
             const entryDate = new Date(entry.timestamp);
             const minDate = new Date();
-            minDate.setDate(min.getDate() - parseInt(rangeArray[0], 10));
-            if (entryDate > minDate){
+            minDate.setDate(minDate.getDate() - parseInt(rangeArray[0], 10));
+            if (entryDate > minDate) {
               return false;
             }
-            else if (rangeArray.length === 2){
+            if (rangeArray.length === 2) {
               const maxDate = new Date();
-              maxDate.setDate(max.getDate() - parseInt(rangeArray[1], 10));
+              maxDate.setDate(maxDate.getDate() - parseInt(rangeArray[1], 10));
               if (entryDate < maxDate){
                 return false;
               }
@@ -1002,13 +1002,13 @@ function getFlatFilteredEntries(data, filters) {
         const rangeArray = entryFilter.split('-');
         const entryDate = new Date(entry.timestamp);
         const minDate = new Date();
-        minDate.setDate(min.getDate() - parseInt(rangeArray[0], 10));
-        if (entryDate > minDate){
+        minDate.setDate(minDate.getDate() - parseInt(rangeArray[0], 10));
+        if (entryDate > minDate) {
           return false;
         }
-        else if (rangeArray.length === 2){
+        if (rangeArray.length === 2) {
           const maxDate = new Date();
-          maxDate.setDate(max.getDate() - parseInt(rangeArray[1], 10));
+          maxDate.setDate(maxDate.getDate() - parseInt(rangeArray[1], 10));
           if (entryDate < maxDate){
             return false;
           }
