@@ -33,10 +33,10 @@ const isEmbed = document.body.dataset.embed;
 let gAutocomplete;
 let gMap = null;
 
-// Markers shown with primary prominDateence: in current country, in selected state(s), matching filters
+// Markers shown with primary prominence: in current country, in selected state(s), matching filters
 let gPrimaryMarkers = [];
 
-// Markers shown with secondary prominDateence: in current country, outside selected state(s), matching filters
+// Markers shown with secondary prominence: in current country, outside selected state(s), matching filters
 let gSecondaryMarkers = [];
 
 // Markers from outside the current country
@@ -130,7 +130,7 @@ function translatedFilterItems(filterItems) {
 // matches against whitelist FILTER_ITEMS (from formEnumLookups.js)
 // and returns the i18n keys from FILTER_ITEMS for accepting items that match
 //
-// NOTE: the incominDateg data structure is very brittle; if that changes at all, this will break
+// NOTE: the incoming data structure is very brittle; if that changes at all, this will break
 function parseFiltersFromData(data, datasetFilters) {
   const filters = {};
 
@@ -390,7 +390,7 @@ function createMakerMarkerContent(entry, separator) {
   addLine($.i18n('ftm-makers-products'), addSpaceAfterComma(entry.products));
   addLine($.i18n('ftm-makers-other-product'), addSpaceAfterComma(entry.other_product));
   addLine($.i18n('ftm-makers-face-shield-type'), addSpaceAfterComma(entry.face_shield_type));
-  addLine($.i18n('ftm-makers-minDate-request'), addSpaceAfterComma(entry.minDate_request));
+  addLine($.i18n('ftm-makers-min-request'), addSpaceAfterComma(entry.min_request));
   addLine($.i18n('ftm-makers-collecting-question'), entry.collecting_site);
   addLine($.i18n('ftm-makers-shipping-question'), entry.shipping);
   addLine($.i18n('ftm-makers-volunteers-question'), entry.accepting_volunteers);
@@ -670,19 +670,17 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
           }
         });
         if (hasEntryFilter) {
-          const today = new Date();
-          const dateConversion = 86400000;
           if (!Object.keys(entryAge).some((entryFilter) => {
             const rangeArray = entryFilter.split('-');
             const entryDate = new Date(entry.timestamp);
             const minDate = new Date();
-            minDate.setDate(minDate.getDate() - parseInt(rangeArray[0], 10));
+            minDate.setDate(min.getDate() - parseInt(rangeArray[0], 10));
             if (entryDate > minDate){
               return false;
             }
             else if (rangeArray.length === 2){
               const maxDate = new Date();
-              maxDate.setDate(maxDate.getDate() - parseInt(rangeArray[1], 10));
+              maxDate.setDate(max.getDate() - parseInt(rangeArray[1], 10));
               if (entryDate < maxDate){
                 return false;
               }
@@ -708,7 +706,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
           const lat = Number(entry.lat);
           const lng = Number(entry.lng);
 
-          // Guard against non-geocoded entries. AssuminDateg no location exactly on the equator or
+          // Guard against non-geocoded entries. Assuming no location exactly on the equator or
           // prime meridian
           if (lat && lng) {
             const otherEntries = entriesByAddress[`${lat} ${lng}`].filter((e) => e.name !== entry.name);
@@ -903,7 +901,7 @@ function getMapInitialView() {
   return MAP_INITIAL_VIEW[gCountryCode];
 }
 
-function centerMapToBounds(map, bounds, maxDateZoom) {
+function centerMapToBounds(map, bounds, maxZoom) {
   if (bounds.isEmpty()) {
     const params = getMapInitialView();
     // Default view if no specific bounds
@@ -911,10 +909,10 @@ function centerMapToBounds(map, bounds, maxDateZoom) {
     gMap.setZoom(params.zoom);
   } else {
     google.maps.event.addListenerOnce(map, 'zoom_changed', () => {
-      // Prevent zoominDateg in too far if only one or two locations determinDatee the bounds
-      if (maxDateZoom && gMap.getZoom() > maxDateZoom) {
+      // Prevent zooming in too far if only one or two locations determine the bounds
+      if (maxZoom && gMap.getZoom() > maxZoom) {
         // Apparently calling setZoom inside a zoom_changed handler freaks out maps?
-        setTimeout(() => gMap.setZoom(maxDateZoom), 0);
+        setTimeout(() => gMap.setZoom(maxZoom), 0);
       }
     });
     gMap.fitBounds(bounds);
@@ -1004,13 +1002,13 @@ function getFlatFilteredEntries(data, filters) {
         const rangeArray = entryFilter.split('-');
         const entryDate = new Date(entry.timestamp);
         const minDate = new Date();
-        minDate.setDate(minDate.getDate() - parseInt(rangeArray[0], 10));
+        minDate.setDate(min.getDate() - parseInt(rangeArray[0], 10));
         if (entryDate > minDate){
           return false;
         }
         else if (rangeArray.length === 2){
           const maxDate = new Date();
-          maxDate.setDate(maxDate.getDate() - parseInt(rangeArray[1], 10));
+          maxDate.setDate(max.getDate() - parseInt(rangeArray[1], 10));
           if (entryDate < maxDate){
             return false;
           }
@@ -1158,7 +1156,7 @@ function createMakerListItemEl(entry) {
   addLine($.i18n('ftm-makers-products'), addSpaceAfterComma(entry.products));
   addLine($.i18n('ftm-makers-other-product'), addSpaceAfterComma(entry.other_product));
   addLine($.i18n('ftm-makers-face-shield-type'), addSpaceAfterComma(entry.face_shield_type));
-  addLine($.i18n('ftm-makers-minDate-request'), addSpaceAfterComma(entry.minDate_request));
+  addLine($.i18n('ftm-makers-min-request'), addSpaceAfterComma(entry.min_request));
   addLine($.i18n('ftm-makers-collecting-question'), entry.collecting_site);
   addLine($.i18n('ftm-makers-shipping-question'), entry.shipping);
   addLine($.i18n('ftm-makers-volunteers-question'), entry.accepting_volunteers);
@@ -1601,7 +1599,7 @@ function fitMapToMarkersNearBounds(bounds) {
     // zoom to fit user loc + nearest markers
     gMap.fitBounds(bounds);
   } else {
-    // just has user loc - shift view without zoominDateg
+    // just has user loc - shift view without zooming
     gMap.setCenter(center);
   }
 }
@@ -1645,7 +1643,7 @@ function centerMapToMarkersNearUser() {
       // Hide the "User my location" link since we know that will not work.
       $('#use-location').hide();
     }, {
-      maxDateimumAge: Infinity,
+      maximumAge: Infinity,
       timeout: 10000,
     });
   }
@@ -1826,7 +1824,7 @@ function initMap(data, filters) {
   gSecondaryCluster = new MarkerClusterer(gMap, [], {
     clusterClass: 'secondarycluster',
     imagePath: '/images/markercluster/m',
-    minDateimumClusterSize: 5,
+    minimumClusterSize: 5,
     zIndex: 1,
   });
   gPrimaryCluster = new MarkerClusterer(
@@ -1834,7 +1832,7 @@ function initMap(data, filters) {
     [],
     {
       imagePath: '/images/markercluster/m',
-      minDateimumClusterSize: 5,
+      minimumClusterSize: 5,
       zIndex: 2,
     }
   );
