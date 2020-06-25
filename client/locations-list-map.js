@@ -681,7 +681,7 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
             if (rangeArray.length === 2) {
               const maxDate = new Date();
               maxDate.setDate(maxDate.getDate() - parseInt(rangeArray[1], 10));
-              if (entryDate < maxDate){
+              if (entryDate < maxDate) {
                 return false;
               }
             }
@@ -1009,7 +1009,7 @@ function getFlatFilteredEntries(data, filters) {
         if (rangeArray.length === 2) {
           const maxDate = new Date();
           maxDate.setDate(maxDate.getDate() - parseInt(rangeArray[1], 10));
-          if (entryDate < maxDate){
+          if (entryDate < maxDate) {
             return false;
           }
         }
