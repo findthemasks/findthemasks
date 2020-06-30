@@ -208,17 +208,17 @@ function createFilters(data) {
   const filters = {
     states: {},
     entryAge: {
-      '1-7': {
+      '0-7': {
         name: $.i18n('ftm-entry-age-1-7'),
         isSet: false,
         value: '1-7',
       },
-      '8-14': {
+      '7-14': {
         name: $.i18n('ftm-entry-age-8-14'),
         isSet: false,
         value: '8-14',
       },
-      '15-21': {
+      '14-21': {
         name: $.i18n('ftm-entry-age-15-21'),
         isSet: false,
         value: '15-21',
@@ -676,14 +676,20 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
         if (hasEntryFilter) {
           if (!Object.keys(entryAge).some((entryFilter) => {
             const rangeArray = entryFilter.split('-');
-            const min = parseInt(rangeArray[0], 10);
-            if (rangeArray.length === 2 && entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)) {
-              return true;
+            const entryDate = new Date(entry.timestamp);
+            const minDate = new Date();
+            minDate.setDate(minDate.getDate() - parseInt(rangeArray[0], 10));
+            if (entryDate > minDate) {
+              return false;
             }
-            if (rangeArray.length === 1 && entry.entry_age >= min) {
-              return true;
+            if (rangeArray.length === 2) {
+              const maxDate = new Date();
+              maxDate.setDate(maxDate.getDate() - parseInt(rangeArray[1], 10));
+              if (entryDate < maxDate) {
+                return false;
+              }
             }
-            return false;
+            return true;
           })) {
             inFilters.entryAge = false;
             secondaryFiltersApplied = true;
@@ -998,14 +1004,20 @@ function getFlatFilteredEntries(data, filters) {
     if (entryAge) {
       if (!Object.keys(entryAge).some((entryFilter) => {
         const rangeArray = entryFilter.split('-');
-        const min = parseInt(rangeArray[0], 10);
-        if (rangeArray.length === 2 && entry.entry_age >= min && entry.entry_age <= parseInt(rangeArray[1], 10)) {
-          return true;
+        const entryDate = new Date(entry.timestamp);
+        const minDate = new Date();
+        minDate.setDate(minDate.getDate() - parseInt(rangeArray[0], 10));
+        if (entryDate > minDate) {
+          return false;
         }
-        if (rangeArray.length === 1 && entry.entry_age >= min) {
-          return true;
+        if (rangeArray.length === 2) {
+          const maxDate = new Date();
+          maxDate.setDate(maxDate.getDate() - parseInt(rangeArray[1], 10));
+          if (entryDate < maxDate) {
+            return false;
+          }
         }
-        return false;
+        return true;
       })) {
         notInFilters = true;
       }
