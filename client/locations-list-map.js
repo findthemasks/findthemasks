@@ -739,7 +739,6 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
       }
     }
   }
-
   return {
     inFilters: inFiltersMarkers,
     outOfFilters: outOfFiltersMarkers,
@@ -928,6 +927,7 @@ function centerMapToBounds(map, bounds, maxZoom) {
  * 'markers' module variable as well.
  */
 function showMarkers(data, filters, recenterMap = true) {
+  // console.log(data);
   if (!gMap || !gPrimaryCluster) {
     return;
   }
@@ -944,9 +944,30 @@ function showMarkers(data, filters, recenterMap = true) {
   if (hasFilters) {
     gPrimaryMarkers = markers.inFilters;
     gSecondaryMarkers = markers.outOfFilters;
+    Object.keys(datasetData).forEach((secondDataKey) => {
+      const secondaryData = datasetData[secondDataKey].formattedDataset;
+      datasetData[secondDataKey].markers = getMarkers(secondaryData, applied, hasFilters && bounds, {
+        icon: getIcon(gDatasetMarkers[gDataset].standard),
+        datasetKey: gDataset,
+      }).inFilters;
+      console.log(datasetData[secondDataKey].markers);
+      gSecondaryMarkers.push(
+        ...datasetData[secondDataKey].markers
+      );
+    });
   } else {
     gPrimaryMarkers = markers.outOfFilters;
     gSecondaryMarkers = [];
+    Object.keys(datasetData).forEach((secondDataKey) => {
+      const secondaryData = datasetData[secondDataKey].formattedDataset;
+      datasetData[secondDataKey].markers = getMarkers(secondaryData, applied, hasFilters && bounds, {
+        icon: getIcon(gDatasetMarkers[gDataset].standard),
+        datasetKey: gDataset,
+      }).outOfFilters;
+      gSecondaryMarkers.push(
+        ...datasetData[secondDataKey].markers
+      );
+    });
   }
 
   if (gPrimaryCluster) {
@@ -1921,12 +1942,11 @@ function initMap(data, filters) {
               datasetData,
               {
                 [dataset.key]: {
-                  data,
+                  formattedDataset,
                   markers: getMarkers(formattedDataset, {}, null, markerOptions).outOfFilters,
                 },
               }
             );
-
             gSecondaryMarkers.push(
               ...datasetData[dataset.key].markers
             );
