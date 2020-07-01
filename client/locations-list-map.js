@@ -927,7 +927,7 @@ function centerMapToBounds(map, bounds, maxZoom) {
  * 'markers' module variable as well.
  */
 function showMarkers(data, filters, recenterMap = true) {
-  // console.log(data);
+
   if (!gMap || !gPrimaryCluster) {
     return;
   }
@@ -950,7 +950,6 @@ function showMarkers(data, filters, recenterMap = true) {
         icon: getIcon(gDatasetMarkers[gDataset].standard),
         datasetKey: gDataset,
       }).inFilters;
-      console.log(datasetData[secondDataKey].markers);
       gSecondaryMarkers.push(
         ...datasetData[secondDataKey].markers
       );
