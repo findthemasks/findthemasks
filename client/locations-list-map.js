@@ -927,7 +927,6 @@ function centerMapToBounds(map, bounds, maxZoom) {
  * 'markers' module variable as well.
  */
 function showMarkers(data, filters, recenterMap = true) {
-
   if (!gMap || !gPrimaryCluster) {
     return;
   }
