@@ -10,11 +10,8 @@
     "type": "git",
     "url": "https://github.com/findthemasks/findthemasks.git"
   },
-  "jest": {
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/functions"
-    ]
+  "jest":{
+    "testPathIgnorePatterns": ["/node_modules/","/functions"]
   },
   "scripts": {
     "build": "npm run webpack",
