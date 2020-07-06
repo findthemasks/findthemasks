@@ -6,6 +6,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const applicationRoutes = require('./applicationRoutes');
 const apiRoutes = require('./apiRoutes.js');
 const countries = require('./constants/countries.js');
+const { sendDataJson } = require ('./sendDataJson.js');
 
 const router = express.Router();
 
@@ -13,27 +14,10 @@ const cachedData = {};
 const cachedMakersData = {};
 const cachedGupData = {};
 
-function sendDataJson(cache, countryCode, res) {
-  const HEADERS = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-  };
-
-  if (countryCode in cache) {
-    // Return memoized data.
-    res.writeHead(200, HEADERS);
-    res.write(cache[countryCode].data);
-    res.end();
-  } else {
-    res.sendStatus(404);
-  }
-}
-
 function sendDataJsonFromCache(cache, prefix, countryCode, res) {
   const now = new Date();
   if (countryCode in cache && cache[countryCode].expires_at > now) {
-    sendDataJson(cache, countryCode, res);
-    return;
+    return sendDataJson(cache, countryCode, res);
   }
 
   // Otherwise go fetch it.
@@ -140,4 +124,7 @@ router.use('/', (req, res, next) => {
   applicationRoutes(req, res, next);
 });
 
-module.exports = router;
+module.exports = {
+  router,
+  sendDataJsonFromCache
+};
