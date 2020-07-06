@@ -16,4 +16,3 @@ test('Testing caching logic will not request new data if cache has not expired',
   };
   expect(sendDataJsonFromCache(cache, null, 'US', null)).toBeUndefined();
 });
-
