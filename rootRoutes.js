@@ -6,7 +6,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const applicationRoutes = require('./applicationRoutes');
 const apiRoutes = require('./apiRoutes.js');
 const countries = require('./constants/countries.js');
-const { sendDataJson } = require ('./sendDataJson.js');
+const { sendDataJson } = require('./sendDataJson.js');
 
 const router = express.Router();
 
@@ -126,5 +126,5 @@ router.use('/', (req, res, next) => {
 
 module.exports = {
   router,
-  sendDataJsonFromCache
+  sendDataJsonFromCache,
 };
