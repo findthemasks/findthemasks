@@ -1,8 +1,9 @@
+const nock = require('nock');
 const https = require('https');
 const regeneratorRuntime = require('regenerator-runtime');
 const { sendDataJsonFromCache } = require('./rootRoutes');
-const nock = require('nock');
 const mockDataJson = require('./sendDataJson');
+
 mockDataJson.sendDataJson = jest.fn((cache, countryCode, res) => {
   console.log('SendDataJson got called!');
   return cache[countryCode].data;
@@ -28,12 +29,12 @@ test('Testing whether it can insert a new cache entry', done => {
       expires_at: today.setDate(today.getDate() - 1),
     },
   };
-  
-  const countryCode = 'US'; 
+
+  const countryCode = 'US';
   const mockNode = nock('https://localhost:443')
     .persist()
     .get(`/findthemasks.appspot.com/testPrefix-${countryCode}.json`)
-    .reply(200,() => {'hello'});
+    .reply(200, () => { 'hello' });
   const spyOnPathGenerator = jest.spyOn(mockDataJson, 'generatePath');
   try {
     sendDataJsonFromCache(cache, 'testPrefix', 'US', null);

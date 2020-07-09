@@ -16,7 +16,7 @@ function sendDataJson(cache, countryCode, res) {
   }
 }
 
-function generatePath(prefix, countryCode){
+function generatePath(prefix, countryCode) {
   return `/findthemasks.appspot.com/${prefix}-${countryCode}.json`;
 }
 
@@ -42,5 +42,6 @@ const methods = {
   sendDataJson,
   generatePath,
   updateCachedData,
-}
+};
+
 module.exports = methods;

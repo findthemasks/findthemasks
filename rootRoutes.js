@@ -28,10 +28,9 @@ function sendDataJsonFromCache(cache, prefix, countryCode, res) {
     method: 'GET',
   };
 
-  const dataReq = https.request(options, async dataRes => {
-      methods.updateCachedData(dataRes, cache, countryCode, now, res);
-    }
-  );
+  const dataReq = https.request(options, async (dataRes) => {
+    methods.updateCachedData(dataRes, cache, countryCode, now, res);
+  });
 
   dataReq.on('error', (error) => {
     console.error(`unable to fetch data for ${countryCode}: ${error}. Sending stale data.`);

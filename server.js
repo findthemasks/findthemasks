@@ -4,7 +4,7 @@ const vhost = require('vhost');
 const rootRoutes = require('./rootRoutes').router;
 const navHelpers = require('./viewHelpers/navHelpers');
 const setDataset = require('./utils/setDataset');
-require('./sendDatajson');
+require('./sendDataJson');
 require('dotenv').config();
 require('handlebars-helpers')();
 
