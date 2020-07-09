@@ -6,7 +6,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 const applicationRoutes = require('./applicationRoutes');
 const apiRoutes = require('./apiRoutes.js');
 const countries = require('./constants/countries.js');
-const { sendDataJson } = require('./sendDataJson.js');
+const methods = require('./sendDataJson');
 
 const router = express.Router();
 
@@ -17,39 +17,26 @@ const cachedGupData = {};
 function sendDataJsonFromCache(cache, prefix, countryCode, res) {
   const now = new Date();
   if (countryCode in cache && cache[countryCode].expires_at > now) {
-    return sendDataJson(cache, countryCode, res);
+    return methods.sendDataJson(cache, countryCode, res);
   }
 
   // Otherwise go fetch it.
   const options = {
-    hostname: 'storage.googleapis.com',
+    hostname: 'localhost',
     port: 443,
-    path: `/findthemasks.appspot.com/${prefix}-${countryCode}.json`,
+    path: methods.generatePath(prefix, countryCode),
     method: 'GET',
   };
 
-  let newData = '';
-  const dataReq = https.request(options, (dataRes) => {
-    dataRes.on('data', (d) => { newData += d; });
-    dataRes.on('end', () => {
-      if (dataRes.statusCode === 200) {
-        // Cache for 5 mins.
-        const newExpiresAt = new Date(now.getTime() + (5 * 60 * 1000));
-        // eslint-disable-next-line no-param-reassign
-        cache[countryCode] = {
-          expires_at: newExpiresAt,
-          data: newData,
-        };
-      }
-
-      sendDataJson(cache, countryCode, res);
-    });
-  });
+  const dataReq = https.request(options, async dataRes => {
+      methods.updateCachedData(dataRes, cache, countryCode, now, res);
+    }
+  );
 
   dataReq.on('error', (error) => {
     console.error(`unable to fetch data for ${countryCode}: ${error}. Sending stale data.`);
     // Send stale data.
-    sendDataJson(cache, countryCode, res);
+    methods.sendDataJson(cache, countryCode, res);
   });
 
   dataReq.end();
