@@ -1,4 +1,6 @@
+const https = require('https');
 
+const now = new Date();
 
 function sendDataJson(cache, countryCode, res) {
   const HEADERS = {
@@ -20,27 +22,43 @@ function generatePath(prefix, countryCode) {
   return `/findthemasks.appspot.com/${prefix}-${countryCode}.json`;
 }
 
-function updateCachedData(response, cache, countryCode, now, res) {
-  let newData = '';
-  response.on('data', (d) => { newData += d; });
-  response.on('end', () => {
-    console.log('we hit end');
-    if (response.statusCode === 200) {
-      // Cache for 5 mins.
-      const newExpiresAt = new Date(now.getTime() + (5 * 60 * 1000));
-      // eslint-disable-next-line no-param-reassign
-      cache[countryCode] = {
-        expires_at: newExpiresAt,
-        data: newData,
-      };
-    }
-    sendDataJson(cache, countryCode, res);
+function updateCachedData (cache, countryCode, newData) {
+  const newExpiresAt = new Date(now.getTime() + (5 * 60 * 1000));
+  // eslint-disable-next-line no-param-reassign
+  cache[countryCode] = {
+    expires_at: newExpiresAt,
+    data: newData,
+  };
+}
+
+function makeHttpRequest (options) {
+  return new Promise((resolve, reject) => {
+    const dataReq = new https.request(options, (res) => {
+      let newData = '';
+      res.on('data', (d) => { newData += d });
+      res.on('end', () => {
+        if (res.statusCode === 200) {
+          resolve(newData);
+        }
+        else{
+          reject(new Error(`Bad status code: ${res.statusCode}`));
+        }
+      });
+    });
+
+    dataReq.on('error', (error) => {
+      reject(error);
+    });
+
+    dataReq.end();
   });
 }
 
 const methods = {
+  now,
   sendDataJson,
   generatePath,
+  makeHttpRequest,
   updateCachedData,
 };
 

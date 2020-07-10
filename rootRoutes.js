@@ -14,31 +14,26 @@ const cachedData = {};
 const cachedMakersData = {};
 const cachedGupData = {};
 
-function sendDataJsonFromCache(cache, prefix, countryCode, res) {
-  const now = new Date();
+async function sendDataJsonFromCache(cache, prefix, countryCode, res) {
+  const now = methods.now;
   if (countryCode in cache && cache[countryCode].expires_at > now) {
     return methods.sendDataJson(cache, countryCode, res);
   }
-
   // Otherwise go fetch it.
   const options = {
-    hostname: 'localhost',
+    hostname: 'storage.googleapis.com',
     port: 443,
     path: methods.generatePath(prefix, countryCode),
     method: 'GET',
   };
-
-  const dataReq = https.request(options, async (dataRes) => {
-    methods.updateCachedData(dataRes, cache, countryCode, now, res);
-  });
-
-  dataReq.on('error', (error) => {
+  const fetchData = await methods.makeHttpRequest(options).catch((e) => {
     console.error(`unable to fetch data for ${countryCode}: ${error}. Sending stale data.`);
     // Send stale data.
     methods.sendDataJson(cache, countryCode, res);
+    return;
   });
-
-  dataReq.end();
+  methods.updateCachedData(cache, countryCode, fetchData);
+  methods.sendDataJson(cache, countryCode, res);
 }
 
 router.use(express.static('public'));
