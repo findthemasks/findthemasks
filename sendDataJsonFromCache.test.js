@@ -56,7 +56,7 @@ describe('Testing that the promisified http request works', () => {
     const mockNode = nock('https://storage.googleapis.com:443')
       .get('/findthemasks.appspot.com/prefix-US.json')
       .reply(500, 'Stop');
-    expect(mockDataJson.makeHttpRequest(options)).rejects.toThrow(new Error(`Bad status code: 500`));
+    expect(mockDataJson.makeHttpRequest(options)).rejects.toThrow(new Error('Bad status code: 500'));
   });
 });
 
@@ -75,10 +75,10 @@ describe('Testing how sendDataJson deals with the returned value/error', () => {
     expect(spyOnSendDataJson).toHaveBeenCalled();
   });
 
-  test('Testing if we can handle a rejected promise and send some stale data', async() => {
+  test('Testing if we can handle a rejected promise and send some stale data', async () => {
     cache = {
       US: {
-        expires_at: new Date(today.getTime() - (24*60*60*1000)),
+        expires_at: new Date(today.getTime() - (24 * 60 * 60 * 1000)),
       },
     };
     spyOnHttpRequest.mockRejectedValueOnce(new Error('Bad status code: 500'));
