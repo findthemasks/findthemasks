@@ -15,7 +15,7 @@ const cachedMakersData = {};
 const cachedGupData = {};
 
 async function sendDataJsonFromCache(cache, prefix, countryCode, res) {
-  const now = methods.now;
+  const { now }= methods;
   if (countryCode in cache && cache[countryCode].expires_at > now) {
     return methods.sendDataJson(cache, countryCode, res);
   }
@@ -27,10 +27,9 @@ async function sendDataJsonFromCache(cache, prefix, countryCode, res) {
     method: 'GET',
   };
   const fetchData = await methods.makeHttpRequest(options).catch((e) => {
-    console.error(`unable to fetch data for ${countryCode}: ${error}. Sending stale data.`);
+    console.error(`unable to fetch data for ${countryCode}: ${e}. Sending stale data.`);
     // Send stale data.
     methods.sendDataJson(cache, countryCode, res);
-    return;
   });
   methods.updateCachedData(cache, countryCode, fetchData);
   methods.sendDataJson(cache, countryCode, res);

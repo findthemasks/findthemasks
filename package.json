@@ -23,7 +23,7 @@
     "lint-node": "eslint '**/*.js' --ignore-pattern 'client/**/*'",
     "start": "node server.js",
     "webpack": "NODE_ENV='production' webpack -p --config webpack.config.js",
-    "test-root": "jest  --verbose --testPathIgnorePatterns='/functions'",
+    "test-root": "jest  --verbose --silent --testPathIgnorePatterns='/functions'",
     "test-functions": "jest --testPathPattern=./functions"
   },
   "dependencies": {

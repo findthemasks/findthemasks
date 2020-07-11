@@ -22,7 +22,7 @@ function generatePath(prefix, countryCode) {
   return `/findthemasks.appspot.com/${prefix}-${countryCode}.json`;
 }
 
-function updateCachedData (cache, countryCode, newData) {
+function updateCachedData(cache, countryCode, newData) {
   const newExpiresAt = new Date(now.getTime() + (5 * 60 * 1000));
   // eslint-disable-next-line no-param-reassign
   cache[countryCode] = {
@@ -31,16 +31,15 @@ function updateCachedData (cache, countryCode, newData) {
   };
 }
 
-function makeHttpRequest (options) {
+function makeHttpRequest(options) {
   return new Promise((resolve, reject) => {
-    const dataReq = new https.request(options, (res) => {
+    const dataReq = https.request(options, (res) => {
       let newData = '';
-      res.on('data', (d) => { newData += d });
+      res.on('data', (d) => { newData += d; });
       res.on('end', () => {
         if (res.statusCode === 200) {
           resolve(newData);
-        }
-        else{
+        } else {
           reject(new Error(`Bad status code: ${res.statusCode}`));
         }
       });

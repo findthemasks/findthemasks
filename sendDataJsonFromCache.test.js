@@ -3,18 +3,17 @@ const https = require('https');
 const regeneratorRuntime = require('regenerator-runtime');
 const { sendDataJsonFromCache } = require('./rootRoutes');
 const mockDataJson = require('./sendDataJson');
-const { hasUncaughtExceptionCaptureCallback } = require('process');
 
-const spyOnPathGenerator = jest.spyOn(mockDataJson, 'generatePath');
 const spyOnHttpRequest = jest.spyOn(mockDataJson, 'makeHttpRequest');
+const spyOnSendDataJson = jest.spyOn(mockDataJson, 'sendDataJson');
+const spyOnPathGenerator = jest.spyOn(mockDataJson, 'generatePath');
+const today = new Date();
 
 test('Testing caching logic will not request new data if cache has not expired', () => {
-  const spyOnSendDataJson = jest.spyOn(mockDataJson, 'sendDataJson');
   spyOnSendDataJson.mockReturnValueOnce('');
-  const today = new Date();
   const cache = {
     US: {
-      expires_at: today.setDate(today.getDate() + 1),
+      expires_at: new Date(today.getTime() + (24*60*60*1000)),
     },
   };
   sendDataJsonFromCache(cache, 'prefix', 'US', null);
@@ -27,9 +26,9 @@ test('Testing that we are making a correct path for different prefices and count
     1: 'US',
     2: 'CA',
     3: 'FR',
-  }
+  };
   Object.keys(countries).forEach((key) => {
-    expect(mockDataJson.generatePath('prefix', countries[key])).toBe(`/findthemasks.appspot.com/prefix-${countries[key]}.json`)
+    expect(mockDataJson.generatePath('prefix', countries[key])).toBe(`/findthemasks.appspot.com/prefix-${countries[key]}.json`);
   });
 });
 
@@ -47,7 +46,7 @@ describe('Testing that the promisified http request works', () => {
     expect(mockDataJson.makeHttpRequest(options)).resolves.toBe('Hello');
   });
 
-  test ('Testing that we are rejecting promisses on bad status code', () => {
+  test('Testing that we are rejecting promisses on bad status code', () => {
     const options = {
       hostname: 'storage.googleapis.com',
       port: 443,
@@ -61,14 +60,11 @@ describe('Testing that the promisified http request works', () => {
   });
 });
 
-//Not done with these tests but everything else seems functional
 describe('Testing how sendDataJson deals with the returned value/error', () => {
   test('Testing if we are able to update cached data on a success data fetch', async () => {
-    const spyOnSendDataJson = jest.spyOn(mockDataJson, 'sendDataJson');
-    const today = new Date();
     const cache = {
       US: {
-        expires_at: today.setDate(today.getDate() - 1),
+        expires_at: new Date(today.getTime() - (24*60*60*1000)),
       },
     };
     spyOnHttpRequest.mockResolvedValueOnce('Hello');
@@ -77,6 +73,19 @@ describe('Testing how sendDataJson deals with the returned value/error', () => {
     });
     // The spy seems to be keeping track of previous sendDataJson calls too, need to come back to this.
     await sendDataJsonFromCache(cache, 'prefix', 'US', null);
-    // expect(spyOnSendDataJson).toHaveBeenCalledTimes(1);
+    expect(spyOnSendDataJson).toHaveBeenCalled();
   });
+  test('Testing if we can handle a rejected promise and send some stale data', async() => {
+    const cache = {
+      US: {
+        expires_at: new Date(today.getTime() - (24*60*60*1000)),
+      },
+    };
+    spyOnHttpRequest.mockRejectedValueOnce(new Error('Bad status code: 500'));
+    spyOnSendDataJson.mockImplementation((cache, countryCode, res) => {
+      expect(cache[countryCode].data).toBeUndefined();
+    });
+    await sendDataJsonFromCache(cache, 'prefix', 'US', null);
+    expect(spyOnSendDataJson).toHaveBeenCalled();
+  })
 });
