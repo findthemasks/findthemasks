@@ -13,7 +13,7 @@ test('Testing caching logic will not request new data if cache has not expired',
   spyOnSendDataJson.mockReturnValueOnce('');
   const cache = {
     US: {
-      expires_at: new Date(today.getTime() + (24*60*60*1000)),
+      expires_at: new Date(today.getTime() + (24 * 60 * 60 * 1000)),
     },
   };
   sendDataJsonFromCache(cache, 'prefix', 'US', null);
@@ -41,7 +41,7 @@ describe('Testing that the promisified http request works', () => {
       method: 'GET',
     };
     const mockNode = nock('https://storage.googleapis.com:443')
-      .get(`/findthemasks.appspot.com/prefix-US.json`)
+      .get('/findthemasks.appspot.com/prefix-US.json')
       .reply(200, 'Hello');
     expect(mockDataJson.makeHttpRequest(options)).resolves.toBe('Hello');
   });
@@ -54,29 +54,29 @@ describe('Testing that the promisified http request works', () => {
       method: 'GET',
     };
     const mockNode = nock('https://storage.googleapis.com:443')
-    .get(`/findthemasks.appspot.com/prefix-US.json`)
-    .reply(500, 'Stop');
+      .get('/findthemasks.appspot.com/prefix-US.json')
+      .reply(500, 'Stop');
     expect(mockDataJson.makeHttpRequest(options)).rejects.toThrow(new Error(`Bad status code: 500`));
   });
 });
 
 describe('Testing how sendDataJson deals with the returned value/error', () => {
   test('Testing if we are able to update cached data on a success data fetch', async () => {
-    const cache = {
+    cache = {
       US: {
-        expires_at: new Date(today.getTime() - (24*60*60*1000)),
+        expires_at: new Date(today.getTime() - (24 * 60 * 60 * 1000)),
       },
     };
     spyOnHttpRequest.mockResolvedValueOnce('Hello');
     spyOnSendDataJson.mockImplementation((cache, countryCode, res) => {
       expect(cache[countryCode].data).toBe('Hello');
     });
-    // The spy seems to be keeping track of previous sendDataJson calls too, need to come back to this.
     await sendDataJsonFromCache(cache, 'prefix', 'US', null);
     expect(spyOnSendDataJson).toHaveBeenCalled();
   });
+
   test('Testing if we can handle a rejected promise and send some stale data', async() => {
-    const cache = {
+    cache = {
       US: {
         expires_at: new Date(today.getTime() - (24*60*60*1000)),
       },
@@ -87,5 +87,5 @@ describe('Testing how sendDataJson deals with the returned value/error', () => {
     });
     await sendDataJsonFromCache(cache, 'prefix', 'US', null);
     expect(spyOnSendDataJson).toHaveBeenCalled();
-  })
+  });
 });

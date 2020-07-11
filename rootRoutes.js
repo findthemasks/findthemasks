@@ -15,7 +15,7 @@ const cachedMakersData = {};
 const cachedGupData = {};
 
 async function sendDataJsonFromCache(cache, prefix, countryCode, res) {
-  const { now }= methods;
+  const { now } = methods;
   if (countryCode in cache && cache[countryCode].expires_at > now) {
     return methods.sendDataJson(cache, countryCode, res);
   }
