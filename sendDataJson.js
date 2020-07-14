@@ -1,5 +1,4 @@
 const https = require('https');
-
 const now = new Date();
 
 function sendDataJson(cache, countryCode, res) {
