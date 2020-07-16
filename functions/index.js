@@ -206,7 +206,7 @@ async function annotateGeocode(data, sheet_id, client) {
     const write_response = await google.sheets('v4').spreadsheets.values.batchUpdate(write_request);
   }
 
-  return {numGeocodes: promises.length, numWritebacks: to_write_back.length};
+  return { numGeocodes: promises.length, numWritebacks: to_write_back.length };
 }
 
 async function getSpreadsheet(prefix, country, client) {
@@ -217,7 +217,7 @@ async function getSpreadsheet(prefix, country, client) {
   };
 
   if (prefix === 'getusppe-affiliates') {
-   request.spreadsheetId = constants.GETUSPPE_AFFILIATES_SHEET_ID;
+    request.spreadsheetId = constants.GETUSPPE_AFFILIATES_SHEET_ID;
   }
 
   request.auth = client;
@@ -423,7 +423,7 @@ module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
   let data = 'data';
   if (country === 'getusppe-affiliates') {
     [data] = await snapshotData('getusppe-affiliates', 'us');
-  } else  {
+  } else {
     if (!(country in constants.SHEETS)) {
       res.status(400).send(`invalid country: ${country} for ${req.path}`);
       return;
@@ -469,7 +469,7 @@ module.exports.geocode = functions.https.onRequest(async (req, res) => {
   const stats = await updateSheetWithGeocodes(spreadsheetId);
   res.status(200).send(
     'Geocoded and updated spreadsheet successfully. ' +
-      `${stats.numGeocodes} geocodes and ${stats.numWritebacks} writebacks`);
+    `${stats.numGeocodes} geocodes and ${stats.numWritebacks} writebacks`);
 });
 
 
@@ -816,20 +816,31 @@ module.exports.exec = functions.https.onRequest(async (req, res) => {
       ],
     }
   };
-  const client = await getAuthorizedClient();
-  request.auth = client;
-  const scriptResp = await script.scripts.run(request);
-  if (!scriptResp.data.done) {
-    console.error(`appscript hung? ${JSON.stringify(scriptResp)}`);
-    res.status(500).send(`server is hung ${JSON.stringify(scriptResp)}`);
-    return;
-  }
+  try {
+    const client = await getAuthorizedClient();
+    request.auth = client;
+    const scriptResp = await script.scripts.run(request);
+    if (!scriptResp.data.done) {
+      console.error(`appscript hung? ${JSON.stringify(scriptResp)}`);
+      res.status(500).send(`server is hung ${JSON.stringify(scriptResp)}`);
+      return;
+    }
 
-  const result = scriptResp.data.response.result;
-  if (result.status !== 200) {
-    console.error(`error: ${JSON.stringify(scriptResp.data)}`);
-    res.status(result.status).send('error');
-    return;
+    const result = scriptResp.data.response.result;
+    if (result.status !== 200) {
+      console.error(`error: ${JSON.stringify(scriptResp.data)}`);
+      res.status(result.status).send('error');
+      return;
+    }
+    res.status(200).send(result.msg);
+  } catch (e) {
+    console.error(e);
+    res.status(500).send(
+      'Request received. Thank you for updating FindTheMasks! ' +
+      'There was a server error, but your update or removal request was likely handled correctly ' +
+      'nonetheless. If your entry has not received an updated date on the FindTheMasks.com map ' +
+      'or been removed from the FindTheMasks.com map within 24 hours, please contact us at ' +
+      'data@findthemasks.com.'
+    );
   }
-  res.status(200).send(result.msg);
 });
