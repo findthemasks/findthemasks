@@ -88,42 +88,49 @@ function makeAddress(street, city, state, zip, country) {
 
   return address;
 }
-
-function writeBack(to_write_back, sheet_id, columns) {
-  const { latColumn, lngColumn, addressColumn } = columns;
-  const data = [];
-    const write_request = {
-      spreadsheetId: sheet_id,
-      resource: {
-        valueInputOption: 'USER_ENTERED',
-        data: data
-      }
-    };
-    write_request.auth = client;
-
-    to_write_back.forEach(e => {
-      console.log(`writing lat-long,address cols ${latColumn},${lngColumn},${addressColumn} : ${JSON.stringify(e)}`);
-      // TODO(awong): Don't hardcode the columns. Make it more robust somehow.
-      if (e.geocode.location) {
-        data.push({
-          range: `${COMBINED_WRITEBACK_SHEET}!${latColumn}${e.row_num}`,
-          values: [[e.geocode.location.lat]]
-        });
-
-        data.push({
-          range: `${COMBINED_WRITEBACK_SHEET}!${lngColumn}${e.row_num}`,
-          values: [[e.geocode.location.lng]]
-        });
-      }
-
-      if (e.geocode.canonical_address) {
-        data.push({
-          range: `${COMBINED_WRITEBACK_SHEET}!${addressColumn}${e.row_num}`,
-          values: [[e.geocode.canonical_address]]
-        });
-      }
-    });
+function initiateWriteRequest (sheet_id, client) {
+  const write_request = {
+    spreadsheetId: sheet_id,
+    resource: {
+      valueInputOption: 'USER_ENTERED',
+    }
+  };
+  write_request.auth = client;
   return write_request;
 }
+function fillWriteRequest(to_write_back, columns, COMBINED_WRITEBACK_SHEET) {
+  const { latColumn, lngColumn, addressColumn } = columns;
+  const data = [];
+  to_write_back.forEach(e => {
+    console.log(`writing lat-long,address cols ${latColumn},${lngColumn},${addressColumn} : ${JSON.stringify(e)}`);
+    // TODO(awong): Don't hardcode the columns. Make it more robust somehow.
+    if (e.geocode.location) {
+      data.push({
+        range: `${COMBINED_WRITEBACK_SHEET}!${latColumn}${e.row_num}`,
+        values: [[e.geocode.location.lat]]
+      });
 
-module.exports = { geocodeAddress, makeAddress, writeBack }
+      data.push({
+        range: `${COMBINED_WRITEBACK_SHEET}!${lngColumn}${e.row_num}`,
+        values: [[e.geocode.location.lng]]
+      });
+    }
+
+    if (e.geocode.canonical_address) {
+      data.push({
+        range: `${COMBINED_WRITEBACK_SHEET}!${addressColumn}${e.row_num}`,
+        values: [[e.geocode.canonical_address]]
+      });
+    }
+  });
+  return data;
+}
+
+const methods = {
+  geocodeAddress,
+  makeAddress,
+  fillWriteRequest,
+  initiateWriteRequest,
+};
+
+module.exports.methods = methods;

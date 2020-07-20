@@ -2,10 +2,11 @@ const admin = require('firebase-admin');
 const constants = require('./constants.js');
 const crypto = require('crypto');
 const csv_stringify = require('csv-stringify');
-// const ftmEncrypt = require('./ftm-encrypt.js');
-const functions = require('firebase-functions');
+// // const ftmEncrypt = require('./ftm-encrypt.js');
+// const functions = require('firebase-functions');
 const urlsafeBase64 = require('url-safe-base64');
-const { geocodeAddress, makeAddress, writeBack } = require('./geocode.js');
+const geocodeMethods = require('./geocode.js').methods;
+// const { geocodeAddress, makeAddress, writeBack } = methods;
 const { loadMakerData } = require('./airtable-connector.js');
 const { request } = require('gaxios');
 const regeneratorRuntime = require('regenerator-runtime');
@@ -100,25 +101,32 @@ function get_country_from_path(req) {
 }
 
 module.exports.testRefactor = {
-  getIndex,
-  initiateGeoCode,
+  getIndexColumn,
+  createGeocodePromises,
   annotateGeocode,
 };
 
-function getIndex(col_labels) {
+// Match column labels to their index and store within one object to be taken in as a parameter.
+// Also found the relevant columsn for geocode annotation and sotred them in one object.
+function getIndexColumn(col_labels) {
   const indices = {};
   col_labels.forEach((header, index) => {
     indices[header] = index;
   });
-  const columns = {
-    'latColumn' : COLUMNS[indices.lat],
-    'lngColumn' : COLUMNS[indices.lng],
-    'addressColumn' : COLUMNS[indices.address],
-  }
+  const columns = {};
+  // try {
+    columns['latColumn'] = COLUMNS[indices.lat];
+    columns['lngColumn'] = COLUMNS[indices.lng];
+    columns['addressColumn'] = COLUMNS[indices.address];
+  // } catch(e) {
+    // throw(e);
+  // }
   return { indices, columns };
 }
 
-function initiateGeoCode(real_values, indices, doGeocode) {
+// Iterate through all data entries and look for those that need annotation and are approved to do so.
+// For all the eligible entries, call doGeocode() on them and push promises into a returned array.
+function createGeocodePromises(real_values, indices, doGeocode) {
   const promises = [];
   real_values.forEach((entry, index) => {
     const final_address = entry[indices.address];
@@ -132,11 +140,10 @@ function initiateGeoCode(real_values, indices, doGeocode) {
     const missing_lat_lng = (entry.length < (indices.lat + 1)) || !entry[indices.lat] || !entry[indices.lng];
 
     if (!final_address || (needs_latlong && missing_lat_lng)) {
-      const address = final_address || makeAddress(entry[indices.orig_address], entry[indices.city], entry[indices.state]);
-
+      const address = final_address || geocodeMethods.makeAddress(entry[indices.orig_address], entry[indices.city], entry[indices.state]);
       console.debug(`Calling geocoder for entry: ${entry} on row: ${row_num} and address: ${address} `);
       if (address) {
-        promises.push(doGeocode(address, entry, row_num, needs_latlong));
+        promises.push(doGeocode(address, entry, row_num, needs_latlong, indices));
       }
     }
   });
@@ -145,38 +152,21 @@ function initiateGeoCode(real_values, indices, doGeocode) {
 
 async function annotateGeocode(data, sheet_id, client) {
   // Annotate Geocodes for missing items. Track the updated rows. Write back.
-  
   const [header_values, col_labels, real_values] = splitValues(data);
-  const { indices, columns }  = getIndex(col_labels);
-  // const approvedIndex = headers.findIndex(e => e === 'approved');
-  // const addressIndex = headers.findIndex(e => e === 'address');
-  // const stateIndex = headers.findIndex(e => e === 'state');
-  // const cityIndex = headers.findIndex(e => e === 'city');
-  // const origAddressIndex = headers.findIndex(e => e === 'orig_address');
-  // const latIndex = headers.findIndex(e => e === 'lat');
-  // const lngIndex = headers.findIndex(e => e === 'lng');
-  // const timestampIdx = headers.findIndex(e => e === 'timestamp');
-
-  // The timestamp column is the first of the form response columns.
-  // Subtracting it off gives us the right column ordinal for the
-  // form response sheet.
-
-  
-
+  const { indices, columns } = getIndexColumn(col_labels);
   const to_write_back = [];
-  // const promises = [];
-  const doGeocode = (address, entry, row_num, do_latlong) => {
-    return geocodeAddress(address).then(geocode => {
-      if (entry[addressIndex]) {
+  const doGeocode = (address, entry, row_num, do_latlong, indices) => {
+    return geocodeMethods.geocodeAddress(address).then(geocode => {
+      if (entry[indices.address]) {
         // Do not overwrite if there is already an address listed.
         geocode.canonical_address = null;
       } else {
-        entry[addressIndex] = geocode.canonical_address;
+        entry[indices.address] = geocode.canonical_address;
       }
 
       if (do_latlong) {
-        entry[latIndex] = geocode.location.lat;
-        entry[lngIndex] = geocode.location.lng;
+        entry[indices.lat] = geocode.location.lat;
+        entry[indices.lng] = geocode.location.lng;
       } else {
         geocode.location = null;
       }
@@ -185,40 +175,20 @@ async function annotateGeocode(data, sheet_id, client) {
       return geocode;
     }).catch(e => {
       console.error(e);
-      entry[latIndex] = 'N/A';
-      entry[lngIndex] = 'N/A';
+      entry[indices.lat] = 'N/A';
+      entry[indices.lng] = 'N/A';
     });
   };
 
-  // real_values.forEach((entry, index) => {
-  //   const final_address = entry[addressIndex];
-  //   const needs_latlong = entry[approvedIndex] === "x";
-
-  //   // Row numbers start at 1.  First 2 rows are headers, so we need to add 2.
-  //   const row_num = index + 1 + 2;
-
-  //   // Check if entry's length is too short to possibly have a latitude, we need
-  //   // to geocode.  If the value for lat or lng is "", we also need to geocode.
-  //   const missing_lat_lng = (entry.length < (latIndex + 1)) || !entry[latIndex] || !entry[lngIndex];
-
-  //   if (!final_address || (needs_latlong && missing_lat_lng)) {
-  //     const address = final_address || makeAddress(entry[origAddressIndex], entry[cityIndex], entry[stateIndex]);
-
-  //     console.debug(`Calling geocoder for entry: ${entry} on row: ${row_num} and address: ${address} `);
-  //     // if (address) {
-  //     //   promises.push(doGeocode(address, entry, row_num, needs_latlong));
-  //     // }
-  //   }
-  // });
-  const promises = initiateGeoCode(real_values, indices, doGeocode);
+  const promises = createGeocodePromises(real_values, indices, doGeocode);
   console.log(`Performing ${promises.length} geocodes`);
   await Promise.all(promises);
   // Attempt to write back now.
   if (to_write_back.length > 0) {
-    const write_request = writeBack(to_write_back, sheet_id, columns);
+    const write_request = geocodeMethods.initiateWriteRequest(sheet_id, client);
+    write_request.resource.data = geocodeMethods.fillWriteRequest(to_write_back, columns, COMBINED_WRITEBACK_SHEET);
     // const write_response = await google.sheets('v4').spreadsheets.values.batchUpdate(write_request);
   }
-
   return {numGeocodes: promises.length, numWritebacks: to_write_back.length};
 }
 
