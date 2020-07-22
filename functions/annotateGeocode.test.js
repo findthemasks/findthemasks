@@ -59,8 +59,6 @@ jest.mock('bottleneck', () => {
         }
     });
 });
-jest.mock('@googlemaps/google-maps-services-js');
-
 
 // test ('End to end testing to make sure every function gets ran once on an address that needs annotation', async() => {
 //     const spyOnGeocodeAddress = jest.spyOn(mockGeocode, 'geocodeAddress').mockImplementation(() => Promise.resolve(fakeGeocode));
