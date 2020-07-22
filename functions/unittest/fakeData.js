@@ -300,11 +300,31 @@ const fakeIndices = {
 }
 
 const fakeGeocode = {
-    'canonical_address': 'fake address',
-    'location': {
-        'lat': 400,
-        'lng': 200,
-    }
+    complete_1 : {
+      'canonical_address': 'fake address of complete geocode 1',
+      'location': {
+         'lat': 100,
+         'lng': 111,
+      }
+   },
+   complete_2: {
+      'canonical_address': 'fake address of complete geocode 2',
+      'location': {
+         'lat': 200,
+         'lng': 222,
+      }
+   },
+   nullAddress: {
+      'canonical_address': null,
+      'location': {
+         'lat': 300,
+         'lng': 333,
+      }
+   },
+   nullLocation: {
+      'canonical_address': 'fake address of geocode missing location coordinates',
+      'location': null,
+   },
 };
 
 const mockMapsResponse = {
@@ -332,7 +352,7 @@ const mockMapsResponse = {
 };
 
 const fakeWriteBack = {
-   geocode: fakeGeocode,
+   geocode: fakeGeocode.complete_1,
    row_num: 5,
 };
 
