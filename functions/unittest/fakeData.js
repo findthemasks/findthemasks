@@ -353,11 +353,35 @@ const noAnnotation = {
 };
 
 const fakeGeocode = {
-    'canonical_address' : 'fake address',
-    'location' : {
+    'canonical_address': 'fake address',
+    'location': {
         'lat': 400,
         'lng': 200,
     }
+};
+
+const mockMapsResponse = {
+   status: 200,
+   data: {
+       status: 'OK',
+       results: [
+           {
+               formatted_address: '123 Wash',
+               geometry:{
+                   location: {
+                       lat: '123',
+                       lng: '345',
+                   }
+               }
+           }
+       ]
+   },
+   config: {
+      url: 'Config URL',
+      params: {
+         param: 'Config Param',
+      },
+   },
 };
 
 module.exports = {
@@ -366,4 +390,5 @@ module.exports = {
     approvedNoLatLng,
     noAnnotation,
     fakeGeocode,
+    mockMapsResponse
 };

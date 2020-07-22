@@ -1,11 +1,70 @@
 const mockIndex = require ('./index.js').testRefactor;
 const mockGeocode = require('./geocode.js').methods;
-const {notApprovedMissingGeocode, missingColumns, approvedNoLatLng, noAnnotation, fakeGeocode} = require('./unittest/fakeData.js');
+const mockFirebaseFunctions = require('firebase-functions');
+const mockAdmin = require ('firebase-admin');
+const mockBottleneck = require('bottleneck');
+const mockClient = require("@googlemaps/google-maps-services-js").Client;
+const {notApprovedMissingGeocode, missingColumns, approvedNoLatLng, noAnnotation, fakeGeocode, mockMapsResponse} = require('./unittest/fakeData.js');
 const regeneratorRuntime = require('regenerator-runtime');
+
+// Due to limitations with jest mocking need to declare some mock function to be used for module mocks
+const mockFirebaseVal = jest.fn(() => {
+    return {
+        geocode: 'Cached geocode'
+    };
+});
+const mockFirebaseSet = jest.fn();
+let mockExist = true;
+
+
+// Mocking out firebase-functions to have predetermined config variables which probably wont get used
+jest.mock('firebase-functions', () => {
+    return {
+        config: jest.fn(() => {
+            return {
+                googleapi: 'fakeGoogleAPi',
+                findthemasks: {
+                    geocode_key: 'Hello',
+                }
+            };
+        })
+    };
+});
+// Mocked out any possible reference to the database. This is used to test functionality within geocodeAddress
+jest.mock('firebase-admin', () => {
+    return {
+        database: jest.fn(() => ({
+            ref: jest.fn(() => {
+                return {
+                    once: jest.fn(() => {
+                        return {
+                            val: mockFirebaseVal,
+                            exists: jest.fn(() => mockExist),
+                        };
+                    }),
+                    set: mockFirebaseSet
+                }
+            })
+        })),
+        initializeApp: jest.fn(),
+    };
+});
+// Mocked out the entire bottleneck that controls our call to maps API
+jest.mock('bottleneck', () => {
+    return jest.fn().mockImplementation(() => {
+        return {
+            schedule: jest.fn(() => {
+                return mockMapsResponse;
+            })
+        }
+    });
+});
+jest.mock('@googlemaps/google-maps-services-js');
+
 
 // test ('End to end testing to make sure every function gets ran once on an address that needs annotation', async() => {
 //     const spyOnGeocodeAddress = jest.spyOn(mockGeocode, 'geocodeAddress').mockImplementation(() => Promise.resolve(fakeGeocode));
-//     const data = await mockIndex.annotateGeocode(notApprovedMissingGeocode);
+//     const data = await mockIndex.annotateGeocode(approvedNoLatLng);
 //     expect(data).toStrictEqual({
 //         numGeocodes : 1,
 //         numWritebacks : 1,
@@ -14,5 +73,30 @@ const regeneratorRuntime = require('regenerator-runtime');
 
 test('Testing whether or not we are able to find the column of corresponding labels', () => {
     expect(() => {mockIndex.getIndexColumn(missingColumns)}).toThrow();
+    expect(() => {mockIndex.getIndexColumn(approvedNoLatLng.values[1])}).not.toThrow();
 });
 
+describe('Testing functionality within geocodeAddress()', () => {
+    test('If the entry is cached in realtime db, simply return it', async() => {
+        mockExist = true;
+        expect(await mockGeocode.geocodeAddress('Hello')).toBe('Cached geocode');
+    });
+    test('On a good response, cache geocode values and return them', async() => {
+        mockExist = false;
+        expect(await mockGeocode.geocodeAddress('Hello')).not.toBeUndefined();
+        expect(mockFirebaseVal).toHaveBeenCalled();
+        expect(mockFirebaseSet).toHaveBeenCalled();
+    });
+    test('On a bad response status, code should throw an error', () => {
+        mockMapsResponse.status = 300;
+        const expectedError = new Error(`status: ${mockMapsResponse.status} req: ${mockMapsResponse.config.url} ${JSON.stringify(mockMapsResponse.config.params)} result: ${mockMapsResponse.data}`);
+        expect(mockGeocode.geocodeAddress('Hello')).rejects.toEqual(expectedError);
+    });
+//     // It seems like we are still returning data even when the data is bad? Need to check with someone
+//     // test('On bad data results, code should also throw an error', () => {
+//     //     mockMapsResponse.status = 200;
+//     //     mockMapsResponse.data.results = [];
+//     //     const expectedError = new Error(`status: ${mockMapsResponse.status} req: ${mockMapsResponse.config.url} ${JSON.stringify(mockMapsResponse.config.params)} result: ${mockMapsResponse.data}`);
+//     //     expect(mockGeocode.geocodeAddress('Hello')).rejects.toEqual(expectedError);
+//     // });
+});

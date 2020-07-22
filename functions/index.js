@@ -115,13 +115,15 @@ function getIndexColumn(col_labels) {
   });
   const columns = {};
   // try {
+  if (!COLUMNS[indices.lat] || !COLUMNS[indices.lng] || !COLUMNS[indices.address]){
+    throw new Error("Cannot determine the corresponding column for one of the indices!");
+  }
+  else{
     columns['latColumn'] = COLUMNS[indices.lat];
     columns['lngColumn'] = COLUMNS[indices.lng];
     columns['addressColumn'] = COLUMNS[indices.address];
-  // } catch(e) {
-    // throw(e);
-  // }
-  return { indices, columns };
+    return { indices, columns };
+  }
 }
 
 // Iterate through all data entries and look for those that need annotation and are approved to do so.
