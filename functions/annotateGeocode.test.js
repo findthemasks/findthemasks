@@ -4,13 +4,13 @@ const mockFirebaseFunctions = require('firebase-functions');
 const mockAdmin = require ('firebase-admin');
 const mockBottleneck = require('bottleneck');
 const mockClient = require("@googlemaps/google-maps-services-js").Client;
-const {notApprovedMissingGeocode, missingColumns, approvedNoLatLng, noAnnotation, fakeGeocode, mockMapsResponse} = require('./unittest/fakeData.js');
+const {notApprovedMissingGeocode, missingColumns, approvedNoLatLng, noAnnotation, fakeGeocode, mockMapsResponse, fakeWriteBack, fakeColumns, fakeSheetID} = require('./unittest/fakeData.js');
 const regeneratorRuntime = require('regenerator-runtime');
 
 // Due to limitations with jest mocking need to declare some mock function to be used for module mocks
 const mockFirebaseVal = jest.fn(() => {
     return {
-        geocode: 'Cached geocode'
+        geocode: 'Cached geocode',
     };
 });
 const mockFirebaseSet = jest.fn();
@@ -73,7 +73,30 @@ jest.mock('@googlemaps/google-maps-services-js');
 
 test('Testing whether or not we are able to find the column of corresponding labels', () => {
     expect(() => {mockIndex.getIndexColumn(missingColumns)}).toThrow();
-    expect(() => {mockIndex.getIndexColumn(approvedNoLatLng.values[1])}).not.toThrow();
+});
+
+test('Testing a one-to-three correspondence between each location and their corresponding data entries in fillWriteRequest', () => {
+    var result = mockGeocode.fillWriteRequest(fakeWriteBack, fakeColumns, fakeSheetID);
+
+    var rowNum = fakeWriteBack[0].row_num;
+    var latCol = fakeColumns.latColumn;
+    var lngCol = fakeColumns.lngColumn;
+    var addressCol = fakeColumns.addressColumn;
+
+    var val1 = fakeWriteBack[0].geocode.location.lat;
+    var val2 = fakeWriteBack[0].geocode.location.lng;
+    var val3 = fakeWriteBack[0].geocode.canonical_address;
+
+    expect(result.length).toBe(3);
+
+    expect(result[0].range).toBe(`${fakeSheetID}!${latCol}${rowNum}`);
+    expect(result[1].range).toBe(`${fakeSheetID}!${lngCol}${rowNum}`);
+    expect(result[2].range).toBe(`${fakeSheetID}!${addressCol}${rowNum}`);
+
+    expect(result[0].values[0][0]).toBe(val1);
+    expect(result[1].values[0][0]).toBe(val2);
+    expect(result[2].values[0][0]).toBe(val3);
+    
 });
 
 describe('Testing functionality within geocodeAddress()', () => {
@@ -92,11 +115,11 @@ describe('Testing functionality within geocodeAddress()', () => {
         const expectedError = new Error(`status: ${mockMapsResponse.status} req: ${mockMapsResponse.config.url} ${JSON.stringify(mockMapsResponse.config.params)} result: ${mockMapsResponse.data}`);
         expect(mockGeocode.geocodeAddress('Hello')).rejects.toEqual(expectedError);
     });
-//     // It seems like we are still returning data even when the data is bad? Need to check with someone
-//     // test('On bad data results, code should also throw an error', () => {
-//     //     mockMapsResponse.status = 200;
-//     //     mockMapsResponse.data.results = [];
-//     //     const expectedError = new Error(`status: ${mockMapsResponse.status} req: ${mockMapsResponse.config.url} ${JSON.stringify(mockMapsResponse.config.params)} result: ${mockMapsResponse.data}`);
-//     //     expect(mockGeocode.geocodeAddress('Hello')).rejects.toEqual(expectedError);
-//     // });
+    // It seems like we are still returning data even when the data is bad? Need to check with someone
+    // test('On bad data results, code should also throw an error', () => {
+    //     mockMapsResponse.status = 200;
+    //     mockMapsResponse.data.results = [];
+    //     const expectedError = new Error(`status: ${mockMapsResponse.status} req: ${mockMapsResponse.config.url} ${JSON.stringify(mockMapsResponse.config.params)} result: ${mockMapsResponse.data}`);
+    //     expect(mockGeocode.geocodeAddress('Hello')).rejects.toEqual(expectedError);
+    // });
 });

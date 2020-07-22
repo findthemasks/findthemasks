@@ -114,7 +114,6 @@ function getIndexColumn(col_labels) {
     indices[header] = index;
   });
   const columns = {};
-  // try {
   if (!COLUMNS[indices.lat] || !COLUMNS[indices.lng] || !COLUMNS[indices.address]){
     throw new Error("Cannot determine the corresponding column for one of the indices!");
   }
