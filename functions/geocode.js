@@ -23,6 +23,8 @@ const maps_client = new Client({});
 
 const GEOCODE_CACHE_PATH = '/geocode_cache';
 
+const to_write_back = [];
+
 // Fetch lat & lng for the given address by making a call to the Google Maps API.
 // Returns an object with numeric lat and lng fields.
 async function geocodeAddress(address) {
@@ -98,7 +100,8 @@ function initiateWriteRequest (sheet_id, client) {
   write_request.auth = client;
   return write_request;
 }
-function fillWriteRequest(to_write_back, columns, COMBINED_WRITEBACK_SHEET) {
+
+function fillWriteRequest(columns, COMBINED_WRITEBACK_SHEET) {
   const { latColumn, lngColumn, addressColumn } = columns;
   const data = [];
   to_write_back.forEach(e => {
@@ -126,11 +129,32 @@ function fillWriteRequest(to_write_back, columns, COMBINED_WRITEBACK_SHEET) {
   return data;
 }
 
+function doGeocodeCallback (geocode, entry, row_num, do_latlong, indices) {
+  if (entry[indices.address]) {
+    // Do not overwrite if there is already an address listed.
+    geocode.canonical_address = null;
+  } else {
+    entry[indices.address] = geocode.canonical_address;
+  }
+
+  if (do_latlong) {
+    entry[indices.lat] = geocode.location.lat;
+    entry[indices.lng] = geocode.location.lng;
+  } else {
+    geocode.location = null;
+  }
+  console.log("Writing ", geocode);
+  to_write_back.push({ row_num, geocode });
+  return geocode;
+}
+
 const methods = {
   geocodeAddress,
   makeAddress,
   fillWriteRequest,
   initiateWriteRequest,
+  doGeocodeCallback,
+  to_write_back,
 };
 
 module.exports.methods = methods;

@@ -127,7 +127,7 @@ function getIndexColumn(col_labels) {
 
 // Iterate through all data entries and look for those that need annotation and are approved to do so.
 // For all the eligible entries, call doGeocode() on them and push promises into a returned array.
-function createGeocodePromises(real_values, indices, doGeocode) {
+function createGeocodePromises(real_values, indices) {
   const promises = [];
   real_values.forEach((entry, index) => {
     const final_address = entry[indices.address];
@@ -139,7 +139,6 @@ function createGeocodePromises(real_values, indices, doGeocode) {
     // Check if entry's length is too short to possibly have a latitude, we need
     // to geocode.  If the value for lat or lng is "", we also need to geocode.
     const missing_lat_lng = (entry.length < (indices.lat + 1)) || !entry[indices.lat] || !entry[indices.lng];
-
     if (!final_address || (needs_latlong && missing_lat_lng)) {
       const address = final_address || geocodeMethods.makeAddress(entry[indices.orig_address], entry[indices.city], entry[indices.state]);
       console.debug(`Calling geocoder for entry: ${entry} on row: ${row_num} and address: ${address} `);
@@ -151,46 +150,32 @@ function createGeocodePromises(real_values, indices, doGeocode) {
   return promises;
 }
 
+function doGeocode (address, entry, row_num, do_latlong, indices) {
+  return geocodeMethods.geocodeAddress(address).then(geocode => {
+    geocodeMethods.doGeocodeCallback(geocode, entry, row_num, do_latlong, indices);
+  }).catch(e => {
+    console.error(e);
+    entry[indices.lat] = 'N/A';
+    entry[indices.lng] = 'N/A';
+  });
+};
+
 async function annotateGeocode(data, sheet_id, client) {
   // Annotate Geocodes for missing items. Track the updated rows. Write back.
   const [header_values, col_labels, real_values] = splitValues(data);
   const { indices, columns } = getIndexColumn(col_labels);
   const to_write_back = [];
-  const doGeocode = (address, entry, row_num, do_latlong, indices) => {
-    return geocodeMethods.geocodeAddress(address).then(geocode => {
-      if (entry[indices.address]) {
-        // Do not overwrite if there is already an address listed.
-        geocode.canonical_address = null;
-      } else {
-        entry[indices.address] = geocode.canonical_address;
-      }
-
-      if (do_latlong) {
-        entry[indices.lat] = geocode.location.lat;
-        entry[indices.lng] = geocode.location.lng;
-      } else {
-        geocode.location = null;
-      }
-      console.log("Writing ", geocode);
-      to_write_back.push({ row_num, geocode });
-      return geocode;
-    }).catch(e => {
-      console.error(e);
-      entry[indices.lat] = 'N/A';
-      entry[indices.lng] = 'N/A';
-    });
-  };
 
   const promises = createGeocodePromises(real_values, indices, doGeocode);
   console.log(`Performing ${promises.length} geocodes`);
   await Promise.all(promises);
   // Attempt to write back now.
-  if (to_write_back.length > 0) {
+  if (geocodeMethods.to_write_back.length > 0) {
     const write_request = geocodeMethods.initiateWriteRequest(sheet_id, client);
-    write_request.resource.data = geocodeMethods.fillWriteRequest(to_write_back, columns, COMBINED_WRITEBACK_SHEET);
+    write_request.resource.data = geocodeMethods.fillWriteRequest(columns, COMBINED_WRITEBACK_SHEET);
     // const write_response = await google.sheets('v4').spreadsheets.values.batchUpdate(write_request);
   }
-  return {numGeocodes: promises.length, numWritebacks: to_write_back.length};
+  return {numGeocodes: promises.length, numWritebacks: geocodeMethods.to_write_back.length};
 }
 
 async function getSpreadsheet(prefix, country, client) {
