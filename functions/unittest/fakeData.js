@@ -1,4 +1,4 @@
-const { NamedModulesPlugin } = require("webpack");
+//const { NamedModulesPlugin } = require("webpack");
 
 const missingColumns = [
     "row_id",
@@ -360,10 +360,34 @@ const fakeGeocode = {
     }
 };
 
+const fakeWriteBack = [
+   {
+      geocode: fakeGeocode,
+      row_num: 5,
+   }, 
+]
+
+const fakeColumns = {
+   latColumn: "lat",
+   lngColumn: "lng",
+   addressColumn: "address",
+};
+
+const fakeSheetID = "4242";
+
+const testLength = {
+   "1": 1,
+   "2": 2,
+};
+
 module.exports = {
     notApprovedMissingGeocode,
     missingColumns,
     approvedNoLatLng,
     noAnnotation,
     fakeGeocode,
+    fakeWriteBack,
+    fakeColumns,
+    fakeSheetID,
+    testLength,
 };

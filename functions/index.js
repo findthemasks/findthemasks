@@ -114,11 +114,11 @@ function getIndexColumn(col_labels) {
     indices[header] = index;
   });
   const columns = {};
-  // try {
+  // try
+  // } catch(e) { {
     columns['latColumn'] = COLUMNS[indices.lat];
     columns['lngColumn'] = COLUMNS[indices.lng];
     columns['addressColumn'] = COLUMNS[indices.address];
-  // } catch(e) {
     // throw(e);
   // }
   return { indices, columns };
