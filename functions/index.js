@@ -129,6 +129,7 @@ function getIndexColumn(col_labels) {
 // For all the eligible entries, call doGeocode() on them and push promises into a returned array.
 function createGeocodePromises(real_values, indices) {
   const promises = [];
+  const to_write_back = [];
   real_values.forEach((entry, index) => {
     const final_address = entry[indices.address];
     const needs_latlong = entry[indices.approved] === "x";
@@ -143,16 +144,16 @@ function createGeocodePromises(real_values, indices) {
       const address = final_address || geocodeMethods.makeAddress(entry[indices.orig_address], entry[indices.city], entry[indices.state]);
       console.debug(`Calling geocoder for entry: ${entry} on row: ${row_num} and address: ${address} `);
       if (address) {
-        promises.push(doGeocode(address, entry, row_num, needs_latlong, indices));
+        promises.push(doGeocode(to_write_back, address, entry, row_num, needs_latlong, indices));
       }
     }
   });
-  return promises;
+  return { promises, to_write_back };
 }
 
-function doGeocode (address, entry, row_num, do_latlong, indices) {
+function doGeocode (to_write_back, address, entry, row_num, do_latlong, indices) {
   return geocodeMethods.geocodeAddress(address).then(geocode => {
-    geocodeMethods.doGeocodeCallback(geocode, entry, row_num, do_latlong, indices);
+    geocodeMethods.doGeocodeCallback(to_write_back, geocode, entry, row_num, do_latlong, indices);
   }).catch(e => {
     console.log(e);
     entry[indices.lat] = 'N/A';
@@ -164,18 +165,16 @@ async function annotateGeocode(data, sheet_id, client) {
   // Annotate Geocodes for missing items. Track the updated rows. Write back.
   const [header_values, col_labels, real_values] = splitValues(data);
   const { indices, columns } = getIndexColumn(col_labels);
-  const to_write_back = [];
-
-  const promises = createGeocodePromises(real_values, indices, doGeocode);
+  const { promises, to_write_back } = createGeocodePromises(real_values, indices, doGeocode);
   console.log(`Performing ${promises.length} geocodes`);
   await Promise.all(promises);
   // Attempt to write back now.
-  if (geocodeMethods.to_write_back.length > 0) {
+  if (to_write_back.length > 0) {
     const write_request = geocodeMethods.initiateWriteRequest(sheet_id, client);
-    write_request.resource.data = geocodeMethods.fillWriteRequest(columns, COMBINED_WRITEBACK_SHEET);
+    write_request.resource.data = geocodeMethods.fillWriteRequest(to_write_back, columns, COMBINED_WRITEBACK_SHEET);
     // const write_response = await google.sheets('v4').spreadsheets.values.batchUpdate(write_request);
   }
-  return {numGeocodes: promises.length, numWritebacks: geocodeMethods.to_write_back.length};
+  return {numGeocodes: promises.length, numWritebacks: to_write_back.length};
 }
 
 async function getSpreadsheet(prefix, country, client) {

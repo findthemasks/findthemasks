@@ -213,10 +213,26 @@ describe('Testing functionality within geocodeAddress()', () => {
 });
 
 describe('Testing functionality for createGeocodePromises() + doGeocode()', () => {
-    test('With multiple entries, code should return an array of promises for each entry', () => {
-        const spyOnGeocodeAddress = jest.spyOn(mockGeocode, 'geocodeAddress').mockResolvedValue(fakeGeocode);
-        const returnPromiseArray = mockIndex.createGeocodePromises(noAnnotation, fakeIndices);
-        
-        expect(returnPromiseArray.length).toEqual(3);
+    test('With multiple entries and succesfull geocode, code should return an array of promises for each entry', async() => {
+        const copyNoAnnotation = JSON.parse(JSON.stringify(noAnnotation));
+        const spyOnGeocodeAddress = jest.spyOn(mockGeocode, 'geocodeAddress').mockResolvedValue(fakeGeocode.complete_1);
+        const { promises } = mockIndex.createGeocodePromises(copyNoAnnotation, fakeIndices);
+        expect(promises.length).toEqual(3);
     });
+    test('With multiple entries, code should have well-defined behavior for successful and failed geocodeAddress calls', async() => {
+        const copyNoAnnotation = JSON.parse(JSON.stringify(noAnnotation));
+        const spyOnGeocodeAddress = jest.spyOn(mockGeocode, 'geocodeAddress')
+            .mockResolvedValueOnce(fakeGeocode.complete_1)
+            .mockRejectedValueOnce(new Error('Some error with geocodeAddress!'))
+            .mockResolvedValueOnce(fakeGeocode.complete_2);
+        const { promises, to_write_back } = mockIndex.createGeocodePromises(copyNoAnnotation, fakeIndices);
+        await Promise.all(promises);
+        expect(promises.length).toEqual(3);
+        expect(to_write_back.length).toEqual(2);
+        expect(copyNoAnnotation[1][fakeIndices.lat]).toEqual('N/A');
+        expect(copyNoAnnotation[1][fakeIndices.lng]).toEqual('N/A');
+        expect(copyNoAnnotation[0][fakeIndices.lat]).toEqual(fakeGeocode.complete_1.location.lat);
+        expect(copyNoAnnotation[0][fakeIndices.lng]).toEqual(fakeGeocode.complete_1.location.lng);
+    });
+
 });
