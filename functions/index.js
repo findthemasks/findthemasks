@@ -154,7 +154,7 @@ function doGeocode (address, entry, row_num, do_latlong, indices) {
   return geocodeMethods.geocodeAddress(address).then(geocode => {
     geocodeMethods.doGeocodeCallback(geocode, entry, row_num, do_latlong, indices);
   }).catch(e => {
-    console.error(e);
+    console.log(e);
     entry[indices.lat] = 'N/A';
     entry[indices.lng] = 'N/A';
   });

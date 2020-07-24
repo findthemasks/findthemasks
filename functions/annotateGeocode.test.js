@@ -4,7 +4,7 @@ const mockFirebaseFunctions = require('firebase-functions');
 const mockAdmin = require ('firebase-admin');
 const mockBottleneck = require('bottleneck');
 const mockClient = require("@googlemaps/google-maps-services-js").Client;
-const {notApprovedMissingGeocode, missingColumns, approvedNoLatLng, noAnnotation, fakeGeocode, mockMapsResponse, fakeIndices, fakeWriteBack, fakeColumns, fakeSheetID} = require('./unittest/fakeData.js');
+const {notApprovedMissingGeocode, missingColumns, approvedNoLatLng, noAnnotation, fakeGeocode, mockMapsResponse, fakeIndices, fakeWriteBack, fakeComplete_2, fakeNullAddress, fakeNullLocation, fakeColumns, fakeSheetID} = require('./unittest/fakeData.js');
 const regeneratorRuntime = require('regenerator-runtime');
 const fakeData = require('./unittest/fakeData.js');
 
@@ -74,30 +74,118 @@ test('Testing whether or not we are able to find the column of corresponding lab
     expect(() => {mockIndex.getIndexColumn(missingColumns)}).toThrow();
 });
 
-test('Testing a one-to-three correspondence between each location and their corresponding data entries in fillWriteRequest', () => {
-    mockGeocode.to_write_back.push(fakeWriteBack);
-    var result = mockGeocode.fillWriteRequest(fakeColumns, fakeSheetID);
+describe('Testing a one-to-three correspondence between each location and their corresponding data entries in fillWriteRequest', () => {
+    var currIndex = 0;
+    test('Null canonical address', () => {
+        mockGeocode.to_write_back.push(fakeNullAddress);
+        var result = mockGeocode.fillWriteRequest(fakeColumns, fakeSheetID);
 
-    var rowNum = fakeWriteBack.row_num;
-    var latCol = fakeColumns.latColumn;
-    var lngCol = fakeColumns.lngColumn;
-    var addressCol = fakeColumns.addressColumn;
+        var rowNum = fakeNullAddress.row_num;
 
-    var val1 = fakeWriteBack.geocode.location.lat;
-    var val2 = fakeWriteBack.geocode.location.lng;
-    var val3 = fakeWriteBack.geocode.canonical_address;
+        var latCol = fakeColumns.latColumn;
+        var lngCol = fakeColumns.lngColumn;
+        var addressCol = fakeColumns.addressColumn;
+            
+        var val1 = fakeNullAddress.geocode.location.lat;
+        var val2 = fakeNullAddress.geocode.location.lng;
+        var val3 = fakeNullAddress.geocode.canonical_address;
 
-    expect(result.length).toBe(3);
-
-    expect(result[0].range).toBe(`${fakeSheetID}!${latCol}${rowNum}`);
-    expect(result[1].range).toBe(`${fakeSheetID}!${lngCol}${rowNum}`);
-    expect(result[2].range).toBe(`${fakeSheetID}!${addressCol}${rowNum}`);
-
-    expect(result[0].values[0][0]).toBe(val1);
-    expect(result[1].values[0][0]).toBe(val2);
-    expect(result[2].values[0][0]).toBe(val3);
+        expect(result.length).toBe(2);
     
+        expect(result[currIndex].range).toBe(`${fakeSheetID}!${latCol}${rowNum}`);
+        expect(result[currIndex].values[0][0]).toBe(val1);
+        ++currIndex;
+        expect(result[currIndex].range).toBe(`${fakeSheetID}!${lngCol}${rowNum}`);
+        expect(result[currIndex].values[0][0]).toBe(val2);
+        ++currIndex;
+
+    });
+
+    test('Non-null canonical address (1)', () => {
+
+        mockGeocode.to_write_back.push(fakeWriteBack);
+
+        var result = mockGeocode.fillWriteRequest(fakeColumns, fakeSheetID);
+    
+        var rowNum = fakeWriteBack.row_num;
+
+        var latCol = fakeColumns.latColumn;
+        var lngCol = fakeColumns.lngColumn;
+        var addressCol = fakeColumns.addressColumn;
+    
+        var val1 = fakeWriteBack.geocode.location.lat;
+        var val2 = fakeWriteBack.geocode.location.lng;
+        var val3 = fakeWriteBack.geocode.canonical_address;
+
+        expect(result.length).toBe(3 + 2); // previous test should have length 2
+    
+        expect(result[currIndex].range).toBe(`${fakeSheetID}!${latCol}${rowNum}`);
+        expect(result[currIndex].values[0][0]).toBe(val1);
+        ++currIndex;
+        expect(result[currIndex].range).toBe(`${fakeSheetID}!${lngCol}${rowNum}`);
+        expect(result[currIndex].values[0][0]).toBe(val2);
+        ++currIndex;
+        expect(result[currIndex].range).toBe(`${fakeSheetID}!${addressCol}${rowNum}`);
+        expect(result[currIndex].values[0][0]).toBe(val3);
+        ++currIndex;
+    });
+
+    test('Non-null canonical address (2)', () => {
+        mockGeocode.to_write_back.push(fakeComplete_2);
+
+        var result = mockGeocode.fillWriteRequest(fakeColumns, fakeSheetID);
+    
+        var rowNum = fakeComplete_2.row_num;
+
+        var latCol = fakeColumns.latColumn;
+        var lngCol = fakeColumns.lngColumn;
+        var addressCol = fakeColumns.addressColumn;
+    
+        var val1 = fakeComplete_2.geocode.location.lat;
+        var val2 = fakeComplete_2.geocode.location.lng;
+        var val3 = fakeComplete_2.geocode.canonical_address;
+    
+        expect(result.length).toBe(3 + 3 + 2);
+    
+        expect(result[currIndex].range).toBe(`${fakeSheetID}!${latCol}${rowNum}`);
+        expect(result[currIndex].values[0][0]).toBe(val1);
+        ++currIndex;
+        expect(result[currIndex].range).toBe(`${fakeSheetID}!${lngCol}${rowNum}`);
+        expect(result[currIndex].values[0][0]).toBe(val2);
+        ++currIndex;
+        expect(result[currIndex].range).toBe(`${fakeSheetID}!${addressCol}${rowNum}`);
+        expect(result[currIndex].values[0][0]).toBe(val3);
+        ++currIndex;
+    });
+
+    test('Null location', () => {
+        mockGeocode.to_write_back.push(fakeNullLocation);
+
+        var result = mockGeocode.fillWriteRequest(fakeColumns, fakeSheetID);
+    
+        var rowNum = fakeNullLocation.row_num;
+
+        var latCol = fakeColumns.latColumn;
+        var lngCol = fakeColumns.lngColumn;
+        var addressCol = fakeColumns.addressColumn;
+    
+        var val3 = fakeNullLocation.geocode.canonical_address;
+    
+        expect(result.length).toBe(3 + 3 + 3 + 2);
+    
+        expect(result[currIndex].range).toBe(`${fakeSheetID}!${latCol}${rowNum}`);
+        expect(result[currIndex].values[0][0]).toBe(undefined);
+        ++currIndex;
+        expect(result[currIndex].range).toBe(`${fakeSheetID}!${lngCol}${rowNum}`);
+        expect(result[currIndex].values[0][0]).toBe(undefined);
+        ++currIndex;
+        expect(result[currIndex].range).toBe(`${fakeSheetID}!${addressCol}${rowNum}`);
+        expect(result[currIndex].values[0][0]).toBe(val3);
+
+    });
+
 });
+
 
 describe('Testing functionality within geocodeAddress()', () => {
     test('If the entry is cached in realtime db, simply return it', async() => {
