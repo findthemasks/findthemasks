@@ -12,8 +12,7 @@
   },
   "jest": {
     "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/functions"
+      "/node_modules/"
     ]
   },
   "scripts": {
@@ -24,7 +23,8 @@
     "lint-node": "eslint '**/*.js' --ignore-pattern 'client/**/*'",
     "start": "node server.js",
     "webpack": "NODE_ENV='production' webpack -p --config webpack.config.js",
-    "test": "jest"
+    "test": "jest  --verbose --silent --testPathIgnorePatterns='/functions'",
+    "test-functions": "jest --testPathPattern=./functions"
   },
   "dependencies": {
     "banana-i18n": "^1.2.1",
@@ -60,6 +60,7 @@
     "mini-css-extract-plugin": "^0.9.0",
     "mobius1-selectr": "^2.4.13",
     "mocha": "^7.1.1",
+    "nock": "^13.0.2",
     "node-sass": "^4.14.1",
     "nodemon": "^2.0.3",
     "sass": "^1.26.3",
