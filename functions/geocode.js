@@ -2,6 +2,7 @@ const admin = require('firebase-admin');
 const Bottleneck = require('bottleneck');
 const Client = require("@googlemaps/google-maps-services-js").Client;
 const functions = require('firebase-functions');
+const { ResultStorage } = require('firebase-functions/lib/providers/testLab');
 
 let GOOGLE_MAPS_API_KEY = null;
 
@@ -51,8 +52,10 @@ async function geocodeAddress(address) {
   if (response.status === 200 && response.data.status === 'OK') {
     if (response.data.results && response.data.results.length > 0) {
       const result = response.data.results[0];
+      console.log("ERROR VALUE : " + result);
       retval.canonical_address = result.formatted_address;
       retval.location = result.geometry.location;
+      console.log("HELLO: " + retval.location + "WORLD " + retval.canonical_address);
     }
   } else {
     throw new Error(`status: ${response.status} req: ${response.config.url} ${JSON.stringify(response.config.params)} result: ${response.data}`);
@@ -60,6 +63,7 @@ async function geocodeAddress(address) {
 
   // Store the unencoded address too so it's readable in the firebase data dumps.
   await geocodeCacheRef.set({address, geocode: retval});
+  console.log("HELLO: " + retval.location + "WORLD " + retval.canonical_address);
   return retval;
 }
 
@@ -124,6 +128,7 @@ function fillWriteRequest(to_write_back, columns, COMBINED_WRITEBACK_SHEET) {
       });
     }
   });
+  console.log(data);
   return data;
 }
 

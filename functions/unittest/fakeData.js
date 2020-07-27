@@ -391,9 +391,14 @@ const fakeGeocode = {
          'lng': 333,
       }
    },
+   /* location will never be null (see lines 49-52 in geocode.js)-only lat and lng can be undefined. */
    nullLocation: {
       'canonical_address': 'fake address of geocode missing location coordinates',
-      'location': null,
+
+      'location': {
+         'lat': undefined,
+         'lng': undefined,
+      }
    },
 };
 
@@ -425,6 +430,21 @@ const fakeWriteBack = {
    geocode: fakeGeocode.complete_1,
    row_num: 5,
 };
+
+const fakeComplete_2 = {
+   geocode: fakeGeocode.complete_2,
+   row_num: 10,
+}
+
+const fakeNullAddress = {
+   geocode: fakeGeocode.nullAddress,
+   row_num: 7,
+}
+
+const fakeNullLocation = {
+   geocode: fakeGeocode.nullLocation,
+   row_num: 20,
+}
 
 const fakeColumns = {
    latColumn: "lat",
