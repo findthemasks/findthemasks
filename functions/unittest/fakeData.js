@@ -123,12 +123,23 @@ const geocodeTemplate = {
    },
 };
 
+let fakeWriteBack = {
+   geocode:{
+      canonical_address: 'template address',
+      location: {
+         lat: 100,
+         lng: 111,
+      },
+   },
+   row_num:3,
+}
+
 const fakeIndices = {
    lat: 20,
    lng: 21,
    address: 9,
    approved: 1,
-}
+};
 
 const fakeColumns = {
    latColumn: "lat",
@@ -139,6 +150,7 @@ const fakeColumns = {
 module.exports = {
    originalDataTemplate,
    geocodeTemplate,
+   fakeWriteBack,
    fakeIndices,
    fakeColumns,
 };
