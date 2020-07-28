@@ -10,8 +10,7 @@ const geocodeMethods = require('./geocode.js').methods;
 const { loadMakerData } = require('./airtable-connector.js');
 const { request } = require('gaxios');
 const regeneratorRuntime = require('regenerator-runtime');
-
-admin.initializeApp();
+   
 
 const { OAuth2Client } = require('google-auth-library');
 const { google } = require('googleapis');
@@ -103,6 +102,7 @@ function get_country_from_path(req) {
 module.exports.testRefactor = {
   getIndexColumn,
   createGeocodePromises,
+  doGeocode,
   annotateGeocode,
 };
 
@@ -151,9 +151,9 @@ function createGeocodePromises(real_values, indices) {
   return { promises, to_write_back };
 }
 
-function doGeocode (to_write_back, address, entry, row_num, do_latlong, indices) {
+async function doGeocode (to_write_back, address, entry, row_num, do_latlong, indices) {
   return geocodeMethods.geocodeAddress(address).then(geocode => {
-    geocodeMethods.doGeocodeCallback(to_write_back, geocode, entry, row_num, do_latlong, indices);
+    return geocodeMethods.doGeocodeCallback(to_write_back, geocode, entry, row_num, do_latlong, indices);
   }).catch(e => {
     console.log(e);
     entry[indices.lat] = 'N/A';
@@ -175,7 +175,7 @@ async function annotateGeocode(data, sheet_id, client) {
     // const write_response = await google.sheets('v4').spreadsheets.values.batchUpdate(write_request);
   }
   return {numGeocodes: promises.length, numWritebacks: to_write_back.length};
-}
+}                                                                                                                                                                                                                                                                                          
 
 async function getSpreadsheet(prefix, country, client) {
   const sheets = google.sheets('v4');
