@@ -3,7 +3,7 @@ const mockGeocode = require('../geocode.js').methods;
 const {originalDataTemplate, geocodeTemplate, fakeIndices, fakeColumns} = require('./fakeData.js');
 const regeneratorRuntime = require('regenerator-runtime');
 
-beforeEach(() =>{
+beforeEach(() => {
     jest.clearAllMocks();
 });
 
