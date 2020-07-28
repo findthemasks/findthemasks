@@ -299,38 +299,13 @@ const fakeIndices = {
    approved: 1,
 }
 
-const fakeGeocode = {
-    complete_1 : {
-      'canonical_address': 'fake address of complete geocode 1',
-      'location': {
-         'lat': 100,
-         'lng': 111,
-      }
-   },
-   complete_2: {
-      'canonical_address': 'fake address of complete geocode 2',
-      'location': {
-         'lat': 200,
-         'lng': 222,
-      }
-   },
-   nullAddress: {
-      'canonical_address': null,
-      'location': {
-         'lat': 300,
-         'lng': 333,
-      }
-   },
-   /* location will never be null (see lines 49-52 in geocode.js)-only lat and lng can be undefined. */
-   nullLocation: {
-      'canonical_address': 'fake address of geocode missing location coordinates',
-
-      'location': {
-         'lat': undefined,
-         'lng': undefined,
-      }
-   },
-};
+let fakeGeocode = {
+   'canonical_address': 'fake address of complete geocode 1',
+   'location': {
+       'lat': 100,
+       'lng': 101,
+   }
+}
 
 const mockMapsResponse = {
    status: 200,
@@ -356,25 +331,10 @@ const mockMapsResponse = {
    },
 };
 
-const fakeWriteBack = {
-   geocode: fakeGeocode.complete_1,
+let fakeWriteBack = {
+   geocode: fakeGeocode,
    row_num: 5,
 };
-
-const fakeComplete_2 = {
-   geocode: fakeGeocode.complete_2,
-   row_num: 10,
-}
-
-const fakeNullAddress = {
-   geocode: fakeGeocode.nullAddress,
-   row_num: 7,
-}
-
-const fakeNullLocation = {
-   geocode: fakeGeocode.nullLocation,
-   row_num: 20,
-}
 
 const fakeColumns = {
    latColumn: "lat",
@@ -393,9 +353,6 @@ module.exports = {
     mockMapsResponse,
     fakeIndices,
     fakeWriteBack,
-    fakeComplete_2,
-    fakeNullAddress,
-    fakeNullLocation,
     fakeColumns,
     fakeSheetID,
 };
