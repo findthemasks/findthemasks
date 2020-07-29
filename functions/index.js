@@ -159,7 +159,7 @@ async function doGeocode (to_write_back, address, entry, row_num, do_latlong, in
     entry[indices.lat] = 'N/A';
     entry[indices.lng] = 'N/A';
   });
-};
+}
 
 async function annotateGeocode(data, sheet_id, client) {
   // Annotate Geocodes for missing items. Track the updated rows. Write back.
