@@ -1,9 +1,10 @@
 const express = require('express');
 const expressHandlebars = require('express-handlebars');
 const vhost = require('vhost');
-const rootRoutes = require('./rootRoutes');
+const rootRoutes = require('./rootRoutes').router;
 const navHelpers = require('./viewHelpers/navHelpers');
 const setDataset = require('./utils/setDataset');
+require('./sendDataJson');
 require('dotenv').config();
 require('handlebars-helpers')();
 

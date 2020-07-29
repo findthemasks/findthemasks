@@ -174,8 +174,9 @@ async function annotateGeocode(data, sheet_id, client) {
     write_request.resource.data = geocodeMethods.fillWriteRequest(to_write_back, columns, COMBINED_WRITEBACK_SHEET);
     // const write_response = await google.sheets('v4').spreadsheets.values.batchUpdate(write_request);
   }
-  return {numGeocodes: promises.length, numWritebacks: to_write_back.length};
-}                                                                                                                                                                                                                                                                                          
+
+  return { numGeocodes: promises.length, numWritebacks: to_write_back.length };
+}
 
 async function getSpreadsheet(prefix, country, client) {
   const sheets = google.sheets('v4');
@@ -185,7 +186,7 @@ async function getSpreadsheet(prefix, country, client) {
   };
 
   if (prefix === 'getusppe-affiliates') {
-   request.spreadsheetId = constants.GETUSPPE_AFFILIATES_SHEET_ID;
+    request.spreadsheetId = constants.GETUSPPE_AFFILIATES_SHEET_ID;
   }
 
   request.auth = client;
