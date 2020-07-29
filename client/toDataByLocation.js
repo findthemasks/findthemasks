@@ -34,4 +34,4 @@ module.exports = function toDataByLocation(data, datasetKey) {
   });
 
   return dataByLocation;
-}
+};
