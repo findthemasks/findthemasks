@@ -39,11 +39,8 @@ function createSelectTranslator(colMetadata) {
 
 function identityTranslator(x) { return x.trim(); }
 
-// Takes the airtable json from readSharedViewData and converts it into an array
-// of values in the style FindTheMasks expects.
-function parseAirtableData(airtableData) {
-  // Get all the column names and data translation setup.
-  //
+// Get all the column names and data translation setup.
+function mapColumns(airtableDataColumns) {
   // Column types are:
   // "type": "foreignKey",
   // "type": "formula",
@@ -53,7 +50,7 @@ function parseAirtableData(airtableData) {
   // "type": "select",
   // "type": "text",
   const columnNames = {};
-  for (const col of airtableData.data.table.columns) {
+  for (const col of airtableDataColumns) {
     const match = col.name.match(/\[(\S+)\]$/);
     if (match) {
       col.ftm_name = match[1];
@@ -70,6 +67,13 @@ function parseAirtableData(airtableData) {
 
     columnNames[col.id] = col;
   }
+  return columnNames;
+}
+
+// Takes the airtable json from readSharedViewData and converts it into an array
+// of values in the style FindTheMasks expects.
+function parseAirtableData(airtableData) {
+  const columnNames = mapColumns(airtableData.data.table.columns);
 
   // Go through data rows and create a data struct for us.
   const data = [];
@@ -95,4 +99,11 @@ function parseAirtableData(airtableData) {
   return data;
 }
 
-module.exports = { readAirtableSharedView, parseAirtableData };
+const unitTestFunctions = {
+  mapColumns, 
+  createMultiSelectTranslator,
+  createSelectTranslator,
+  identityTranslator,
+}
+
+module.exports = { readAirtableSharedView, unitTestFunctions, parseAirtableData };
