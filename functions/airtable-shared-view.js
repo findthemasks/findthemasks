@@ -99,11 +99,4 @@ function parseAirtableData(airtableData) {
   return data;
 }
 
-const unitTestFunctions = {
-  mapColumns, 
-  createMultiSelectTranslator,
-  createSelectTranslator,
-  identityTranslator,
-}
-
-module.exports = { readAirtableSharedView, unitTestFunctions, parseAirtableData };
+module.exports = { readAirtableSharedView, parseAirtableData, mapColumns, createMultiSelectTranslator, createSelectTranslator, identityTranslator, };
