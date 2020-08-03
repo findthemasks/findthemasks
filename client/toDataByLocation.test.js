@@ -10,11 +10,11 @@ test('filters out entries without approval', () => {
     ]
   };
   const expected = {
-    "WA": {
-      "cities": {
-        "seattle": {
-          "entries": [
-            {"approved": "x", "city": "Seattle", "datasetKey": "makers", "lat": "47.6674625", "lng": "-122.3795306", "state": "WA"}
+    'WA': {
+      'cities': {
+        'seattle': {
+          'entries': [
+            {'approved': 'x', 'city': 'Seattle', 'datasetKey': 'makers', 'lat': '47.6674625', 'lng': '-122.3795306', 'state': 'WA'}
           ]
         }
       }
@@ -33,11 +33,11 @@ test('filters out entries without valid longitude', () => {
     ]
   };
   const expected = {
-    "WA": {
-      "cities": {
-        "seattle": {
-          "entries": [
-            {"approved": "x", "city": "Seattle", "datasetKey": "makers", "lat": "47.6674625", "lng": "-122.3795306", "state": "WA"}
+    'WA': {
+      'cities': {
+        'seattle': {
+          'entries': [
+            {'approved': 'x', 'city': 'Seattle', 'datasetKey': 'makers', 'lat': '47.6674625', 'lng': '-122.3795306', 'state': 'WA'}
           ]
         }
       }
@@ -56,11 +56,11 @@ test('filters out entries without valid latitude', () => {
     ]
   };
   const expected = {
-    "WA": {
-      "cities": {
-        "seattle": {
-          "entries": [
-            {"approved": "x", "city": "Seattle", "datasetKey": "makers", "lat": "47.6674625", "lng": "-122.3795306", "state": "WA"}
+    'WA': {
+      'cities': {
+        'seattle': {
+          'entries': [
+            {'approved': 'x', 'city': 'Seattle', 'datasetKey': 'makers', 'lat': '47.6674625', 'lng': '-122.3795306', 'state': 'WA'}
           ]
         }
       }
@@ -79,11 +79,11 @@ test ('checks two entries with same state are under the same state obj', () => {
     ]
   }; 
   const expected = {
-    "WA": {
-      "cities": {
-        "burien": {
-          "entries": [
-            {"approved": "x", "city": "Burien", "datasetKey": "makers", "lat": "57.4585642", "lng": "-100.3339504", "state": "WA"}]}, "seattle": {"entries": [{"approved": "x", "city": "Seattle", "datasetKey": "makers", "lat": "47.6674625", "lng": "-122.3795306", "state": "WA"}
+    'WA': {
+      'cities': {
+        'burien': {
+          'entries': [
+            {'approved': 'x', 'city': 'Burien', 'datasetKey': 'makers', 'lat': '57.4585642', 'lng': '-100.3339504', 'state': 'WA'}]}, 'seattle': {'entries': [{'approved': 'x', 'city': 'Seattle', 'datasetKey': 'makers', 'lat': '47.6674625', 'lng': '-122.3795306', 'state': 'WA'}
           ]
         }
       }
@@ -102,20 +102,20 @@ test ('checks two entries with different states are under different state objs',
       ]
   }; 
   expected = {
-    "CA": {
-      "cities": {
-        "san francisco": {
-          "entries": [
-            {"approved": "x", "city": "San Francisco", "datasetKey": "makers", "lat": "47.6674625", "lng": "-122.3795306", "state": "CA"}
+    'CA': {
+      'cities': {
+        'san francisco': {
+          'entries': [
+            {'approved': 'x', 'city': 'San Francisco', 'datasetKey': 'makers', 'lat': '47.6674625', 'lng': '-122.3795306', 'state': 'CA'}
           ]
         }
       }
     },
-    "WA": {
-      "cities": {
-        "burien": {
-          "entries": [
-            {"approved": "x", "city": "Burien", "datasetKey": "makers", "lat": "57.4585642", "lng": "-100.3339504", "state": "WA"}
+    'WA': {
+      'cities': {
+        'burien': {
+          'entries': [
+            {'approved': 'x', 'city': 'Burien', 'datasetKey': 'makers', 'lat': '57.4585642', 'lng': '-100.3339504', 'state': 'WA'}
           ]
         }
       }
@@ -134,11 +134,11 @@ test ('checks two entries with same city are under the same city object', () => 
     ]
   }; 
   const expected = {
-    "CA": {
-      "cities": {
-        "san francisco": {
-          "entries": [
-            {"approved": "x", "city": "San Francisco", "datasetKey": "makers", "lat": "47.6674625", "lng": "-122.3795306", "state": "CA"}, {"approved": "x", "city": "San Francisco", "datasetKey": "makers", "lat": "57.4585642", "lng": "-100.3339504", "state": "CA"}
+    'CA': {
+      'cities': {
+        'san francisco': {
+          'entries': [
+            {'approved': 'x', 'city': 'San Francisco', 'datasetKey': 'makers', 'lat': '47.6674625', 'lng': '-122.3795306', 'state': 'CA'}, {'approved': 'x', 'city': 'San Francisco', 'datasetKey': 'makers', 'lat': '57.4585642', 'lng': '-100.3339504', 'state': 'CA'}
           ]
         }
       }
@@ -157,11 +157,11 @@ test ('checks two entries with different cities are under the different city obj
     ]
   }; 
   const expected = {
-    "CA": {
-      "cities": {
-        "los angeles": {
-          "entries": [
-            {"approved": "x", "city": "Los Angeles", "datasetKey": "makers", "lat": "57.4585642", "lng": "-100.3339504", "state": "CA"}]}, "san francisco": {"entries": [{"approved": "x", "city": "San Francisco", "datasetKey": "makers", "lat": "47.6674625", "lng": "-122.3795306", "state": "CA"}
+    'CA': {
+      'cities': {
+        'los angeles': {
+          'entries': [
+            {'approved': 'x', 'city': 'Los Angeles', 'datasetKey': 'makers', 'lat': '57.4585642', 'lng': '-100.3339504', 'state': 'CA'}]}, 'san francisco': {'entries': [{'approved': 'x', 'city': 'San Francisco', 'datasetKey': 'makers', 'lat': '47.6674625', 'lng': '-122.3795306', 'state': 'CA'}
           ]
         }
       }
@@ -180,16 +180,16 @@ test('if entry is undefined, the objects val should be ""', () => {
     ]
   }; 
   const expected = {
-    "CA": {
-      "cities": {
-        "san francisco": {
-          "entries": [
-            {"approved": "x", "city": "San Francisco", "datasetKey": "makers", "lat": "47.6674625", "lng": "-122.3795306", "reason": "", "state": "CA"}
+    'CA': {
+      'cities': {
+        'san francisco': {
+          'entries': [
+            {'approved': 'x', 'city': 'San Francisco', 'datasetKey': 'makers', 'lat': '47.6674625', 'lng': '-122.3795306', 'reason': '', 'state': 'CA'}
           ]
         }, 
-        "santa monica": {
-          "entries": [
-            {"approved": "x", "city": "Santa Monica", "datasetKey": "makers", "lat": "57.4585642", "lng": "-100.3339504", "reason": "", "state": "CA"}
+        'santa monica': {
+          'entries': [
+            {'approved': 'x', 'city': 'Santa Monica', 'datasetKey': 'makers', 'lat': '57.4585642', 'lng': '-100.3339504', 'reason': '', 'state': 'CA'}
           ]
         }
       }
