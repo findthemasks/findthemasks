@@ -99,4 +99,4 @@ function parseAirtableData(airtableData) {
   return data;
 }
 
-module.exports = { readAirtableSharedView, parseAirtableData, mapColumns, createMultiSelectTranslator, createSelectTranslator, identityTranslator, };
+module.exports = { readAirtableSharedView, parseAirtableData, mapColumns, identityTranslator };
