@@ -69,7 +69,7 @@ test('filters out entries without valid latitude', () => {
   expect(toDataByLocation(fakeDataLat, 'makers')).toEqual(expected);
 });
 
-test ('checks two entries with same state are under the same state obj', () => {
+test('checks two entries with same state are under the same state obj', () => {
   const sameStates = {
     values: [
       [],
@@ -97,7 +97,7 @@ test ('checks two entries with same state are under the same state obj', () => {
   expect(toDataByLocation(sameStates, 'makers')).toEqual(expected);
 });
 
-test ('checks two entries with different states are under different state objs', () => {
+test('checks two entries with different states are under different state objs', () => {
   const diffStates = {
     values: [
       [],
@@ -106,7 +106,7 @@ test ('checks two entries with different states are under different state objs',
       ['x', 'Burien', 'WA', '57.4585642', '-100.3339504'],
     ],
   };
-  expected = {
+  const expected = {
     CA: {
       cities: {
         'san francisco': {
@@ -129,7 +129,7 @@ test ('checks two entries with different states are under different state objs',
   expect(toDataByLocation(diffStates, 'makers')).toEqual(expected);
 });
 
-test ('checks two entries with same city are under the same city object', () => {
+test('checks two entries with same city are under the same city object', () => {
   const sameCities = {
     values: [
       [],
@@ -137,7 +137,7 @@ test ('checks two entries with same city are under the same city object', () => 
       ['x', 'San Francisco', 'CA', '47.6674625', '-122.3795306'],
       ['x', 'San Francisco', 'CA', '57.4585642', '-100.3339504'],
     ],
-  }; 
+  };
   const expected = {
     CA: {
       cities: {
@@ -152,7 +152,7 @@ test ('checks two entries with same city are under the same city object', () => 
   expect(toDataByLocation(sameCities, 'makers')).toEqual(expected);
 });
 
-test ('checks two entries with different cities are under the different city objects', () => {
+test('checks two entries with different cities are under the different city objects', () => {
   const diffCities = {
     values: [
       [],
@@ -168,7 +168,7 @@ test ('checks two entries with different cities are under the different city obj
           entries: [
             { approved: 'x', city: 'Los Angeles', datasetKey: 'makers', lat: '57.4585642', lng: '-100.3339504', state: 'CA' },
           ],
-        }, 
+        },
         'san francisco': {
           entries: [
             { approved: 'x', city: 'San Francisco', datasetKey: 'makers', lat: '47.6674625', lng: '-122.3795306', state: 'CA' },
