@@ -50,9 +50,9 @@ test('filters out entries without valid latitude', () => {
   const fakeDataLat = {
     values: [
       [],
-      ['approved', 'city', 'state', 'lat', 'lng'], // headers 
+      ['approved', 'city', 'state', 'lat', 'lng'], // headers
       ['x', 'Seattle', 'WA', '47.6674625', '-122.3795306'], // valid entry
-      ['x', 'Seattle', 'WA', '', '-122.3795306'], // invalid latitude 
+      ['x', 'Seattle', 'WA', '', '-122.3795306'], // invalid latitude
     ],
   };
   const expected = {
@@ -73,17 +73,22 @@ test ('checks two entries with same state are under the same state obj', () => {
   const sameStates = {
     values: [
       [],
-      ['approved', 'city', 'state', 'lat', 'lng'], 
-      ['x', 'Seattle', 'WA', '47.6674625', '-122.3795306'], 
-      ['x', 'Burien', 'WA', '57.4585642', '-100.3339504'], 
+      ['approved', 'city', 'state', 'lat', 'lng'],
+      ['x', 'Seattle', 'WA', '47.6674625', '-122.3795306'],
+      ['x', 'Burien', 'WA', '57.4585642', '-100.3339504'],
     ],
-  }; 
+  };
   const expected = {
     WA: {
       cities: {
         burien: {
           entries: [
-            { approved: 'x', city: 'Burien', datasetKey: 'makers', lat: '57.4585642', lng: '-100.3339504', state: 'WA' }]}, seattle: { entries: [{ approved: 'x', city: 'Seattle', datasetKey: 'makers', lat: '47.6674625', lng: '-122.3795306', state: 'WA' },
+            { approved: 'x', city: 'Burien', datasetKey: 'makers', lat: '57.4585642', lng: '-100.3339504', state: 'WA' }
+          ],
+        }, 
+        seattle: {
+          entries: [
+            { approved: 'x', city: 'Seattle', datasetKey: 'makers', lat: '47.6674625', lng: '-122.3795306', state: 'WA' },
           ],
         },
       },
@@ -94,12 +99,12 @@ test ('checks two entries with same state are under the same state obj', () => {
 
 test ('checks two entries with different states are under different state objs', () => {
   const diffStates = {
-      values: [
-        [],
-        ['approved', 'city', 'state', 'lat', 'lng'], 
-        ['x', 'San Francisco', 'CA', '47.6674625', '-122.3795306'], 
-        ['x', 'Burien', 'WA', '57.4585642', '-100.3339504'], 
-      ],
+    values: [
+      [],
+      ['approved', 'city', 'state', 'lat', 'lng'],
+      ['x', 'San Francisco', 'CA', '47.6674625', '-122.3795306'],
+      ['x', 'Burien', 'WA', '57.4585642', '-100.3339504'],
+    ],
   }; 
   expected = {
     CA: {
@@ -128,9 +133,9 @@ test ('checks two entries with same city are under the same city object', () => 
   const sameCities = {
     values: [
       [],
-      ['approved', 'city', 'state', 'lat', 'lng'], 
-      ['x', 'San Francisco', 'CA', '47.6674625', '-122.3795306'], 
-      ['x', 'San Francisco', 'CA', '57.4585642', '-100.3339504'], 
+      ['approved', 'city', 'state', 'lat', 'lng'],
+      ['x', 'San Francisco', 'CA', '47.6674625', '-122.3795306'],
+      ['x', 'San Francisco', 'CA', '57.4585642', '-100.3339504'],
     ],
   }; 
   const expected = {
@@ -151,9 +156,9 @@ test ('checks two entries with different cities are under the different city obj
   const diffCities = {
     values: [
       [],
-      ['approved', 'city', 'state', 'lat', 'lng'], 
-      ['x', 'San Francisco', 'CA', '47.6674625', '-122.3795306'], 
-      ['x', 'Los Angeles', 'CA', '57.4585642', '-100.3339504'], 
+      ['approved', 'city', 'state', 'lat', 'lng'],
+      ['x', 'San Francisco', 'CA', '47.6674625', '-122.3795306'],
+      ['x', 'Los Angeles', 'CA', '57.4585642', '-100.3339504'],
     ],
   }; 
   const expected = {
@@ -174,9 +179,9 @@ test('if entry is undefined, the objects val should be ""', () => {
   const undefinedEntries = {
     values: [
       [],
-      ['approved', 'city', 'state', 'lat', 'lng', 'reason'], 
-      ['x', 'San Francisco', 'CA', '47.6674625', '-122.3795306'], 
-      ['x', 'Santa Monica', 'CA', '57.4585642', '-100.3339504'], 
+      ['approved', 'city', 'state', 'lat', 'lng', 'reason'],
+      ['x', 'San Francisco', 'CA', '47.6674625', '-122.3795306'],
+      ['x', 'Santa Monica', 'CA', '57.4585642', '-100.3339504'],
     ],
   }; 
   const expected = {
