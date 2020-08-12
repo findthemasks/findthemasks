@@ -26,8 +26,15 @@ router.get('/exec', (req, res, next) => {
     dataRes.on('end', () => {
       let message = newData;
       let alertClass = 'alert-success';
+      let title = 'Success';
+
       if (dataRes.statusCode !== 200) {
-        message = 'Encounted an error. Please email contact@findthemasks.com for further assistance.';
+        title = 'Error Failure';
+        message = 'Request received. Thank you for updating FindTheMasks! ' +
+          'There was a server error, but your update or removal request was likely handled correctly ' +
+          'nonetheless. If your entry has not received an updated date on the FindTheMasks.com map ' +
+          'or been removed from the FindTheMasks.com map within 24 hours, please contact us at ' +
+          'data@findthemasks.com.';
         alertClass = 'alert-danger';
         console.log(dataRes.statusCode, newData);
       }
@@ -35,7 +42,7 @@ router.get('/exec', (req, res, next) => {
       res.render('apiresult', {
         version: herokuVersion,
         layout: 'static',
-        title: 'Error failure',
+        title,
         ogTitle: 'Command Result',
         ogUrl: `http://${req.hostname}${req.originalUrl}`,
         ogDescription: 'Result of command request',
