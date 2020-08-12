@@ -11,7 +11,8 @@
   "extends": ["airbnb", "plugin:compat/recommended"],
   "env": {
     "browser": true,
-    "jquery": true
+    "jquery": true,
+    "jest": true
   },
   "rules": {
     // Removed rule "disallow the use of console" from recommended eslint rules

@@ -1,4 +1,4 @@
-export default function toDataByLocation(data, datasetKey) {
+module.exports = function toDataByLocation(data, datasetKey) {
   const headers = data.values[1];
   const approvedIndex = headers.indexOf('approved');
   const stateIndex = headers.indexOf('state');
@@ -34,4 +34,4 @@ export default function toDataByLocation(data, datasetKey) {
   });
 
   return dataByLocation;
-}
+};
