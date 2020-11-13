@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "engines": {
-    "node": ">= 12.x.x"
+    "node": ">= 12.x.x < 15.x.x"
   },
   "repository": {
     "type": "git",
