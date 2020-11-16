@@ -186,10 +186,10 @@
   "ftm-about-us-who-details" : "Questo sito è stato lanciato il <a href='https://twitter.com/arrkay/status/1240704610186092546'> marzo </a> da <a href='https://www.linkedin.com/in/rachelpopkin/'> Rachel Popkin </a> ed è stato costruito e migliorato da molti fantastici volontari in tutto il mondo. <br /> <br /> <strong> Il team è composto interamente da volontari </strong> e comprende medici, scienziati, fisici, epidemiologi, ingegneri di aziende tecnologiche come DropBox, Amazon, Google e Amperity e persino moderatori di dati professionali con sede nelle Filippine. <br/> <br/> Dai un'occhiata ai nostri collaboratori sviluppatori <a href='https://github.com/findthemasks/findthemasks/graphs/contributors'> qui </a> ! <br /> Siamo lieti di offrire le nostre competenze e di fare il possibile per aiutare in questa crisi!",
   "ftm-about-us-who" : "Chi è #findthemasks?",
   "ftm-about-us-can-i-help" : "Posso aiutare #findthemasks?",
-  "ftm-about-us-can-i-help-details" : "Dai un'occhiata alla nostra pagina <a href='/volunteer'> Unisciti a noi </a> per opportunità di volontariato! <br /> <br /> Puoi anche aiutare condividendo &amp; seguenti #findthemasks sui social media:",
+  "ftm-about-us-can-i-help-details" : "Dai un'occhiata alla nostra pagina <a href=\"javascript:;\" onclick=\"window.location='volunteer'+window.location.search;\"> Unisciti a noi </a> per opportunità di volontariato! <br /> <br /> Puoi anche aiutare condividendo &amp; seguenti #findthemasks sui social media:",
   "ftm-about-us-where" : "Dov'è #findthemasks?",
   "ftm-about-us-where-details-1" : "Al momento disponiamo di siti DPI e supporto nei seguenti Paesi:",
-  "ftm-about-us-where-details-2" : "<strong> Hai visto un Paese o una lingua mancanti? </strong> unire le nostre <a href='/volunteer'> traduzioni di squadra </a> o il nostro <a href='/volunteer'> team di internazionalizzazione </a> per aiutare ad espandere #findthemasks alla vostra comunità!",
+  "ftm-about-us-where-details-2" : "<strong> Hai visto un Paese o una lingua mancanti? </strong> unire le nostre <a href=\"javascript:;\" onclick=\"window.location='volunteer'+window.location.search;\"> traduzioni di squadra </a> o il nostro <a href=\"javascript:;\" onclick=\"window.location='volunteer'+window.location.search;\"> team di internazionalizzazione </a> per aiutare ad espandere #findthemasks alla vostra comunità!",
   "ftm-about-us-lead-label" : "Condurre",
   "ftm-about-us-tech-label" : "Tech",
   "ftm-about-us-ux-ui-label" : "UX / UI",
@@ -375,5 +375,6 @@
   "ftm-entry-age-8-14" : "8-14 giorni fa",
   "ftm-entry-age-15-21" : "15-21 giorni fa",
   "ftm-entry-age-21-plus" : "21+ giorni fa",
-  "ftm-entry-age-placeholder" : "Ultimo aggiornamento"
+  "ftm-entry-age-placeholder" : "Ultimo aggiornamento",
+  "ftm-entry-age-june-later" : "Giugno e successivi"
 }
