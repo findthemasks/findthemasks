@@ -228,7 +228,7 @@ function createFilters(data) {
         isSet: false,
         value: '21',
       },
-      '6++':{
+      '6++': {
         name: $.i18n('ftm-entry-age-june-later'),
         isSet: true,
         value: 'June+',
@@ -683,15 +683,14 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
             const rangeArray = entryFilter.split('-');
             const entryDate = new Date(entry.timestamp);
             const minDate = new Date();
-            const minValue = rangeArray[0].split("++");
-            if (minValue.length==2){
-              minDate.setMonth(parseInt(minValue[0],10)-1);
+            const minValue = rangeArray[0].split('++');
+            if (minValue.length === 2) {
+              minDate.setMonth(parseInt(minValue[0], 10) - 1);
               minDate.setDate(1);
               if (entryDate < minDate) {
                 return false;
               }
-            }
-            else{
+            } else {
               minDate.setDate(minDate.getDate() - parseInt(rangeArray[0], 10));
               if (entryDate > minDate) {
                 return false;
@@ -1040,15 +1039,14 @@ function getFlatFilteredEntries(data, filters) {
         const rangeArray = entryFilter.split('-');
         const entryDate = new Date(entry.timestamp);
         const minDate = new Date();
-        const minValue = rangeArray[0].split("++");
-        if (minValue.length==2){
-          minDate.setMonth(parseInt(minValue[0],10)-1);
+        const minValue = rangeArray[0].split('++');
+        if (minValue.length === 2){
+          minDate.setMonth(parseInt(minValue[0], 10) - 1);
           minDate.setDate(1);
           if (entryDate < minDate) {
             return false;
           }
-        }
-        else{
+        } else {
           minDate.setDate(minDate.getDate() - parseInt(rangeArray[0], 10));
           if (entryDate > minDate) {
             return false;
