@@ -186,10 +186,10 @@
   "ftm-about-us-who-details" : "Ta strona została uruchomiona na <a href='https://twitter.com/arrkay/status/1240704610186092546'> 19 marca </a> przez <a href='https://www.linkedin.com/in/rachelpopkin/'> Rachel Popkin </a> i został zbudowany i poprawione przez wielu fantastycznych wolontariuszy na całym świecie. <br /> <br /> <strong> Zespół składa się wyłącznie z wolontariuszy </strong> i obejmuje lekarzy, naukowców, fizyków, epidemiologów, inżynierów z firm technologicznych, takich jak DropBox, Amazon, Google i Amperity, a nawet profesjonalnych moderatorów danych z siedzibą na Filipinach. <br/> <br/> Sprawdź naszych autorów <a href='https://github.com/findthemasks/findthemasks/graphs/contributors'> tutaj </a> ! <br /> Z przyjemnością oferujemy nasze umiejętności i robimy, co możemy, aby pomóc w tym kryzysie!",
   "ftm-about-us-who" : "Kim jest #findthemasks?",
   "ftm-about-us-can-i-help" : "Czy mogę pomóc #findthemasks?",
-  "ftm-about-us-can-i-help-details" : "Sprawdź naszą stronę <a href='/volunteer'> Dołącz do nas </a> aby zobaczyć oferty dla wolontariuszy! <br /> <br /> Możesz także pomóc, udostępniając &amp; następujące #findthemasks w mediach społecznościowych:",
+  "ftm-about-us-can-i-help-details" : "Sprawdź naszą stronę <a href=\"javascript:;\" onclick=\"window.location='volunteer'+window.location.search;\"> Dołącz do nas </a> aby zobaczyć oferty dla wolontariuszy! <br /> <br /> Możesz także pomóc, udostępniając &amp; następujące #findthemasks w mediach społecznościowych:",
   "ftm-about-us-where" : "Gdzie jest #findthemasks?",
   "ftm-about-us-where-details-1" : "Obecnie posiadamy witryny i wsparcie PPE w następujących krajach:",
-  "ftm-about-us-where-details-2" : "<strong> Zobacz brakujący kraj lub język? </strong> Dołącz do naszych <a href='/volunteer'> tłumaczenia zespół </a> lub nasze <a href='/volunteer'> zespół umiędzynarodowienie </a> pomóc nam rozwijać #findthemasks do społeczności!",
+  "ftm-about-us-where-details-2" : "<strong> Zobacz brakujący kraj lub język? </strong> Dołącz do naszych <a href=\"javascript:;\" onclick=\"window.location='volunteer'+window.location.search;\"> tłumaczenia zespół </a> lub nasze <a href=\"javascript:;\" onclick=\"window.location='volunteer'+window.location.search;\"> zespół umiędzynarodowienie </a> pomóc nam rozwijać #findthemasks do społeczności!",
   "ftm-about-us-lead-label" : "Prowadzić",
   "ftm-about-us-tech-label" : "Tech",
   "ftm-about-us-ux-ui-label" : "UX / UI",
@@ -375,5 +375,6 @@
   "ftm-entry-age-8-14" : "8-14 dni temu",
   "ftm-entry-age-15-21" : "15-21 dni temu",
   "ftm-entry-age-21-plus" : "21+ dni temu",
-  "ftm-entry-age-placeholder" : "Ostatnio zaktualizowany"
+  "ftm-entry-age-placeholder" : "Ostatnio zaktualizowany",
+  "ftm-entry-age-june-later" : "Czerwiec i później"
 }
