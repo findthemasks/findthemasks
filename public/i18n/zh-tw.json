@@ -186,10 +186,10 @@
   "ftm-about-us-who-details" : "這個網站由<a href='https://www.linkedin.com/in/rachelpopkin/'> Rachel Popkin </a>於</a>月3日<a href='https://twitter.com/arrkay/status/1240704610186092546'>於</a>月<a href='https://twitter.com/arrkay/status/1240704610186092546'>啟動，並由世界各地許多出色的志願者進行構建和完善。 <br /> <br /> <strong>該團隊完全由志願者</strong> ，包括醫師，科學家，物理學家，流行病學家，DropBox，亞馬遜，谷歌和Amperity等高科技公司的工程師，甚至是菲律賓的專業數據主持人。 <br/> <br/>退房我們的開發者貢獻者<a href='https://github.com/findthemasks/findthemasks/graphs/contributors'>這裡</a> ！ <br />我們很高興提供自己的技能，並儘我們所能在這場危機中提供幫助！",
   "ftm-about-us-who" : "誰是#findthemasks？",
   "ftm-about-us-can-i-help" : "我可以幫忙#findthemasks嗎？",
-  "ftm-about-us-can-i-help-details" : "查看我們的<a href='/volunteer'>加入我們</a>頁面，了解志願者機會！ <br /> <br />您還可以通過在社交媒體上分享以下&amp; #findthemasks來幫助您：",
+  "ftm-about-us-can-i-help-details" : "查看我們的<a href=\"javascript:;\" onclick=\"window.location='volunteer'+window.location.search;\">加入我們</a>頁面，了解志願者機會！ <br /> <br />您還可以通過在社交媒體上分享以下&amp; #findthemasks來幫助您：",
   "ftm-about-us-where" : "#findthemasks在哪裡？",
   "ftm-about-us-where-details-1" : "目前，我們在以下國家/地區擁有PPE網站和支持：",
-  "ftm-about-us-where-details-2" : "<strong>看到缺少的國家或語言？ </strong>加入我們的<a href='/volunteer'>翻譯團隊</a>或我們的<a href='/volunteer'>國際化團隊</a>以幫助我們將#findthemasks擴展到您的社區！",
+  "ftm-about-us-where-details-2" : "<strong>看到缺少的國家或語言？ </strong>加入我們的<a href=\"javascript:;\" onclick=\"window.location='volunteer'+window.location.search;\">翻譯團隊</a>或我們的<a href=\"javascript:;\" onclick=\"window.location='volunteer'+window.location.search;\">國際化團隊</a>以幫助我們將#findthemasks擴展到您的社區！",
   "ftm-about-us-lead-label" : "鉛",
   "ftm-about-us-tech-label" : "科技類",
   "ftm-about-us-ux-ui-label" : "UX / UI",
@@ -375,5 +375,6 @@
   "ftm-entry-age-8-14" : "8-14天前",
   "ftm-entry-age-15-21" : "15-21天前",
   "ftm-entry-age-21-plus" : "21天以上",
-  "ftm-entry-age-placeholder" : "最近更新時間"
+  "ftm-entry-age-placeholder" : "最近更新時間",
+  "ftm-entry-age-june-later" : "六月及以後"
 }
