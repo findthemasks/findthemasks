@@ -186,10 +186,10 @@
   "ftm-about-us-who-details" : "Deze site is op <a href='https://twitter.com/arrkay/status/1240704610186092546'> maart </a> gelanceerd door <a href='https://www.linkedin.com/in/rachelpopkin/'> Rachel Popkin </a> en is gebouwd en verbeterd door vele fantastische vrijwilligers over de hele wereld. <br /> <br /> <strong> Het team bestaat volledig uit vrijwilligers </strong> en bestaat uit artsen, wetenschappers, natuurkundigen, epidemiologen, ingenieurs van technologiebedrijven zoals DropBox, Amazon, Google en Amperity, en zelfs professionele datamoderators in de Filipijnen. <br/> <br/> Bekijk hier onze ontwikkelaarsbijdragers <a href='https://github.com/findthemasks/findthemasks/graphs/contributors'> </a> ! <br /> We bieden onze vaardigheden graag aan en doen wat we kunnen om deze crisis te helpen!",
   "ftm-about-us-who" : "Wie is #findthemasks?",
   "ftm-about-us-can-i-help" : "Kan ik #findthemasks helpen?",
-  "ftm-about-us-can-i-help-details" : "Bekijk onze <a href='/volunteer'> Doe mee </a> pagina voor vrijwilligersmogelijkheden! <br /> <br /> U kunt ook helpen door &amp; volgende #findthemasks op sociale media te delen:",
+  "ftm-about-us-can-i-help-details" : "Bekijk onze <a href=\"javascript:;\" onclick=\"window.location='volunteer'+window.location.search;\"> Doe mee </a> pagina voor vrijwilligersmogelijkheden! <br /> <br /> U kunt ook helpen door &amp; volgende #findthemasks op sociale media te delen:",
   "ftm-about-us-where" : "Waar is #findthemasks?",
   "ftm-about-us-where-details-1" : "We hebben momenteel PBM-sites en ondersteuning in de volgende landen:",
-  "ftm-about-us-where-details-2" : "<strong> Zie je een land of taal ontbreken? </strong> Word lid van ons <a href='/volunteer'> vertaalteam </a> of ons <a href='/volunteer'> internationaliseringsteam </a> om ons te helpen #findthemasks uit te breiden naar uw gemeenschap!",
+  "ftm-about-us-where-details-2" : "<strong> Zie je een land of taal ontbreken? </strong> Word lid van ons <a href=\"javascript:;\" onclick=\"window.location='volunteer'+window.location.search;\"> vertaalteam </a> of ons <a href=\"javascript:;\" onclick=\"window.location='volunteer'+window.location.search;\"> internationaliseringsteam </a> om ons te helpen #findthemasks uit te breiden naar uw gemeenschap!",
   "ftm-about-us-lead-label" : "Lood",
   "ftm-about-us-tech-label" : "Tech",
   "ftm-about-us-ux-ui-label" : "UX / UI",
@@ -375,5 +375,6 @@
   "ftm-entry-age-8-14" : "8-14 dagen geleden",
   "ftm-entry-age-15-21" : "15-21 dagen geleden",
   "ftm-entry-age-21-plus" : "21+ dagen geleden",
-  "ftm-entry-age-placeholder" : "Laatst bijgewerkt"
+  "ftm-entry-age-placeholder" : "Laatst bijgewerkt",
+  "ftm-entry-age-june-later" : "Juni en later"
 }
