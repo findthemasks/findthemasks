@@ -228,6 +228,11 @@ function createFilters(data) {
         isSet: false,
         value: '21',
       },
+      '6++': {
+        name: $.i18n('ftm-entry-age-june-later'),
+        isSet: true,
+        value: 'June+',
+      },
       placeholder: $.i18n('ftm-entry-age-placeholder'),
     },
   };
@@ -678,9 +683,18 @@ function getMarkers(data, appliedFilters, bounds, markerOptions) {
             const rangeArray = entryFilter.split('-');
             const entryDate = new Date(entry.timestamp);
             const minDate = new Date();
-            minDate.setDate(minDate.getDate() - parseInt(rangeArray[0], 10));
-            if (entryDate > minDate) {
-              return false;
+            const minValue = rangeArray[0].split('++');
+            if (minValue.length === 2) {
+              minDate.setMonth(parseInt(minValue[0], 10) - 1);
+              minDate.setDate(1);
+              if (entryDate < minDate) {
+                return false;
+              }
+            } else {
+              minDate.setDate(minDate.getDate() - parseInt(rangeArray[0], 10));
+              if (entryDate > minDate) {
+                return false;
+              }
             }
             if (rangeArray.length === 2) {
               const maxDate = new Date();
@@ -1025,9 +1039,18 @@ function getFlatFilteredEntries(data, filters) {
         const rangeArray = entryFilter.split('-');
         const entryDate = new Date(entry.timestamp);
         const minDate = new Date();
-        minDate.setDate(minDate.getDate() - parseInt(rangeArray[0], 10));
-        if (entryDate > minDate) {
-          return false;
+        const minValue = rangeArray[0].split('++');
+        if (minValue.length === 2) {
+          minDate.setMonth(parseInt(minValue[0], 10) - 1);
+          minDate.setDate(1);
+          if (entryDate < minDate) {
+            return false;
+          }
+        } else {
+          minDate.setDate(minDate.getDate() - parseInt(rangeArray[0], 10));
+          if (entryDate > minDate) {
+            return false;
+          }
         }
         if (rangeArray.length === 2) {
           const maxDate = new Date();
@@ -1062,7 +1085,6 @@ function getFlatFilteredEntries(data, filters) {
         return;
       }
     }
-
     entry.cityName = cityName;
     entry.stateName = stateName;
     entries.push(entry);

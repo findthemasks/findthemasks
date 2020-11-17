@@ -378,5 +378,6 @@
   "ftm-entry-age-8-14": "8-14 days ago",
   "ftm-entry-age-15-21": "15-21 days ago",
   "ftm-entry-age-21-plus": "21+ days ago",
-  "ftm-entry-age-placeholder": "Last updated"
+  "ftm-entry-age-placeholder": "Last updated",
+  "ftm-entry-age-june-later": "June and later"
 }
