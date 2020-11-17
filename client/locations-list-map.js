@@ -1040,7 +1040,7 @@ function getFlatFilteredEntries(data, filters) {
         const entryDate = new Date(entry.timestamp);
         const minDate = new Date();
         const minValue = rangeArray[0].split('++');
-        if (minValue.length === 2){
+        if (minValue.length === 2) {
           minDate.setMonth(parseInt(minValue[0], 10) - 1);
           minDate.setDate(1);
           if (entryDate < minDate) {
