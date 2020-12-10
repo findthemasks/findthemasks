@@ -2,14 +2,15 @@ const admin = require('firebase-admin');
 const constants = require('./constants.js');
 const crypto = require('crypto');
 const csv_stringify = require('csv-stringify');
-const ftmEncrypt = require('./ftm-encrypt.js');
-const functions = require('firebase-functions');
+// // const ftmEncrypt = require('./ftm-encrypt.js');
+// const functions = require('firebase-functions');
 const urlsafeBase64 = require('url-safe-base64');
-const { geocodeAddress, makeAddress } = require('./geocode.js');
+const geocodeMethods = require('./geocode.js').methods;
+// const { geocodeAddress, makeAddress, writeBack } = methods;
 const { loadMakerData } = require('./airtable-connector.js');
 const { request } = require('gaxios');
-
-admin.initializeApp();
+const regeneratorRuntime = require('regenerator-runtime');
+   
 
 const { OAuth2Client } = require('google-auth-library');
 const { google } = require('googleapis');
@@ -19,12 +20,12 @@ const { google } = require('googleapis');
 // googleapi.client_secret = client secret, and
 // googleapi.sheet_id = Google Sheet id (long string in middle of sheet URL)
 //
-const CONFIG_CLIENT_ID = functions.config().googleapi.client_id;
-const CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
-const SMARTY_STREETS_AUTH_ID = functions.config().findthemasks.smarty_streets_auth_id;
-const SMARTY_STREETS_AUTH_TOKEN = functions.config().findthemasks.smarty_streets_auth_token;
-const APPSCRIPT_AUTH_SECRET = functions.config().findthemasks.appscript_auth_secret;
-const EMAIL_ENCRYPTION_KEY = functions.config().findthemasks.email_encryption_key;
+// const CONFIG_CLIENT_ID = functions.config().googleapi.client_id;
+// const CONFIG_CLIENT_SECRET = functions.config().googleapi.client_secret;
+// const SMARTY_STREETS_AUTH_ID = functions.config().findthemasks.smarty_streets_auth_id;
+// const SMARTY_STREETS_AUTH_TOKEN = functions.config().findthemasks.smarty_streets_auth_token;
+// const APPSCRIPT_AUTH_SECRET = functions.config().findthemasks.appscript_auth_secret;
+// const EMAIL_ENCRYPTION_KEY = functions.config().findthemasks.email_encryption_key;
 
 const COLUMNS = [
   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -40,44 +41,44 @@ const SMARTY_STREETS_US_API_URL = 'https://us-street.api.smartystreets.com/stree
 const SMARTY_STREETS_INTL_API_URL = 'https://international-street.api.smartystreets.com/verify';
 
 // The OAuth Callback Redirect.
-const FUNCTIONS_REDIRECT = `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com/oauthcallback`;
+// const FUNCTIONS_REDIRECT = `https://${process.env.GCLOUD_PROJECT}.firebaseapp.com/oauthcallback`;
 
 // setup for authGoogleAPI
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
-const functionsOauthClient = new OAuth2Client(CONFIG_CLIENT_ID, CONFIG_CLIENT_SECRET,
-  FUNCTIONS_REDIRECT);
+// const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
+// const functionsOauthClient = new OAuth2Client(CONFIG_CLIENT_ID, CONFIG_CLIENT_SECRET,
+//   FUNCTIONS_REDIRECT);
 
 // OAuth token cached locally.
 let oauthTokens = null;
 
 // visit the URL for this Function to request tokens
-module.exports.authgoogleapi = functions.https.onRequest((req, res) => {
-  res.set('Cache-Control', 'private, max-age=0, s-maxage=0');
-  res.redirect(functionsOauthClient.generateAuthUrl({
-    access_type: 'offline',
-    scope: SCOPES,
-    prompt: 'consent'
-  }));
-});
+// module.exports.authgoogleapi = functions.https.onRequest((req, res) => {
+//   res.set('Cache-Control', 'private, max-age=0, s-maxage=0');
+//   res.redirect(functionsOauthClient.generateAuthUrl({
+//     access_type: 'offline',
+//     scope: SCOPES,
+//     prompt: 'consent'
+//   }));
+// });
 
 // setup for OauthCallback
 const DB_TOKEN_PATH = '/api_tokens';
 
 // after you grant access, you will be redirected to the URL for this Function
 // this Function stores the tokens to your Firebase database
-module.exports.oauthcallback = functions.https.onRequest(async (req, res) => {
-  res.set('Cache-Control', 'private, max-age=0, s-maxage=0');
-  const code = req.query.code;
-  try {
-    const { tokens } = await functionsOauthClient.getToken(code);
-    // Now tokens contains an access_token and an optional refresh_token. Save them.
-    await admin.database().ref(DB_TOKEN_PATH).set(tokens);
-    return res.status(200).send('App successfully configured with new Credentials. '
-      + 'You can now close this page.');
-  } catch (error) {
-    return res.status(400).send(error);
-  }
-});
+// module.exports.oauthcallback = functions.https.onRequest(async (req, res) => {
+//   res.set('Cache-Control', 'private, max-age=0, s-maxage=0');
+//   const code = req.query.code;
+//   try {
+//     const { tokens } = await functionsOauthClient.getToken(code);
+//     // Now tokens contains an access_token and an optional refresh_token. Save them.
+//     await admin.database().ref(DB_TOKEN_PATH).set(tokens);
+//     return res.status(200).send('App successfully configured with new Credentials. '
+//       + 'You can now close this page.');
+//   } catch (error) {
+//     return res.status(400).send(error);
+//   }
+// });
 
 // checks if oauthTokens have been loaded into memory, and if not, retrieves them
 async function getAuthorizedClient() {
@@ -98,112 +99,80 @@ function get_country_from_path(req) {
   return req.path.split('/', 2)[1] || 'us';
 }
 
-async function annotateGeocode(data, sheet_id, client) {
-  // Annotate Geocodes for missing items. Track the updated rows. Write back.
-  const headers = data.values[1];
-  const [header_values, col_labels, real_values] = splitValues(data);
+module.exports.testRefactor = {
+  getIndexColumn,
+  createGeocodePromises,
+  doGeocode,
+  annotateGeocode,
+};
 
-  const approvedIndex = headers.findIndex(e => e === 'approved');
-  const addressIndex = headers.findIndex(e => e === 'address');
-  const stateIndex = headers.findIndex(e => e === 'state');
-  const cityIndex = headers.findIndex(e => e === 'city');
-  const origAddressIndex = headers.findIndex(e => e === 'orig_address');
-  const latIndex = headers.findIndex(e => e === 'lat');
-  const lngIndex = headers.findIndex(e => e === 'lng');
-  const timestampIdx = headers.findIndex(e => e === 'timestamp');
+// Match column labels to their index and store within one object to be taken in as a parameter.
+// Also found the relevant columsn for geocode annotation and sotred them in one object.
+function getIndexColumn(col_labels) {
+  const indices = {};
+  col_labels.forEach((header, index) => {
+    indices[header] = index;
+  });
+  const columns = {};
+  if (!COLUMNS[indices.lat] || !COLUMNS[indices.lng] || !COLUMNS[indices.address]){
+    throw new Error("Cannot determine the corresponding column for one of the indices!");
+  }
+  else{
+    columns['latColumn'] = COLUMNS[indices.lat];
+    columns['lngColumn'] = COLUMNS[indices.lng];
+    columns['addressColumn'] = COLUMNS[indices.address];
+    return { indices, columns };
+  }
+}
 
-  // The timestamp column is the first of the form response columns.
-  // Subtracting it off gives us the right column ordinal for the
-  // form response sheet.
-  const latColumn = COLUMNS[latIndex];
-  const lngColumn = COLUMNS[lngIndex];
-  const addressColumn = COLUMNS[addressIndex];
-
-  const to_write_back = [];
+// Iterate through all data entries and look for those that need annotation and are approved to do so.
+// For all the eligible entries, call doGeocode() on them and push promises into a returned array.
+function createGeocodePromises(real_values, indices) {
   const promises = [];
-  const doGeocode = (address, entry, row_num, do_latlong) => {
-    return geocodeAddress(address).then(geocode => {
-      if (entry[addressIndex]) {
-        // Do not overwrite if there is already an address listed.
-        geocode.canonical_address = null;
-      } else {
-        entry[addressIndex] = geocode.canonical_address;
-      }
-
-      if (do_latlong) {
-        entry[latIndex] = geocode.location.lat;
-        entry[lngIndex] = geocode.location.lng;
-      } else {
-        geocode.location = null;
-      }
-      console.log("Writing ", geocode);
-      to_write_back.push({ row_num, geocode });
-      return geocode;
-    }).catch(e => {
-      console.error(e);
-      entry[latIndex] = 'N/A';
-      entry[lngIndex] = 'N/A';
-    });
-  };
-
+  const to_write_back = [];
   real_values.forEach((entry, index) => {
-    const final_address = entry[addressIndex];
-    const needs_latlong = entry[approvedIndex] === "x";
+    const final_address = entry[indices.address];
+    const needs_latlong = entry[indices.approved] === "x";
 
     // Row numbers start at 1.  First 2 rows are headers, so we need to add 2.
     const row_num = index + 1 + 2;
 
     // Check if entry's length is too short to possibly have a latitude, we need
     // to geocode.  If the value for lat or lng is "", we also need to geocode.
-    const missing_lat_lng = (entry.length < (latIndex + 1)) || !entry[latIndex] || !entry[lngIndex];
-
+    const missing_lat_lng = (entry.length < (indices.lat + 1)) || !entry[indices.lat] || !entry[indices.lng];
     if (!final_address || (needs_latlong && missing_lat_lng)) {
-      const address = final_address || makeAddress(entry[origAddressIndex], entry[cityIndex], entry[stateIndex]);
-
+      const address = final_address || geocodeMethods.makeAddress(entry[indices.orig_address], entry[indices.city], entry[indices.state]);
       console.debug(`Calling geocoder for entry: ${entry} on row: ${row_num} and address: ${address} `);
       if (address) {
-        promises.push(doGeocode(address, entry, row_num, needs_latlong));
+        promises.push(doGeocode(to_write_back, address, entry, row_num, needs_latlong, indices));
       }
     }
   });
+  return { promises, to_write_back };
+}
 
+async function doGeocode (to_write_back, address, entry, row_num, do_latlong, indices) {
+  return geocodeMethods.geocodeAddress(address).then(geocode => {
+    return geocodeMethods.doGeocodeCallback(to_write_back, geocode, entry, row_num, do_latlong, indices);
+  }).catch(e => {
+    console.log(e);
+    entry[indices.lat] = 'N/A';
+    entry[indices.lng] = 'N/A';
+  });
+}
+
+async function annotateGeocode(data, sheet_id, client) {
+  // Annotate Geocodes for missing items. Track the updated rows. Write back.
+  const [header_values, col_labels, real_values] = splitValues(data);
+  const { indices, columns } = getIndexColumn(col_labels);
+  const { promises, to_write_back } = createGeocodePromises(real_values, indices, doGeocode);
   console.log(`Performing ${promises.length} geocodes`);
   await Promise.all(promises);
   // Attempt to write back now.
   if (to_write_back.length > 0) {
-    const data = [];
-    const write_request = {
-      spreadsheetId: sheet_id,
-      resource: {
-        valueInputOption: 'USER_ENTERED',
-        data: data
-      }
-    };
-    write_request.auth = client;
-
-    to_write_back.forEach(e => {
-      console.log(`writing lat-long,address cols ${latColumn},${lngColumn},${addressColumn} : ${JSON.stringify(e)}`);
-      // TODO(awong): Don't hardcode the columns. Make it more robust somehow.
-      if (e.geocode.location) {
-        data.push({
-          range: `${COMBINED_WRITEBACK_SHEET}!${latColumn}${e.row_num}`,
-          values: [[e.geocode.location.lat]]
-        });
-
-        data.push({
-          range: `${COMBINED_WRITEBACK_SHEET}!${lngColumn}${e.row_num}`,
-          values: [[e.geocode.location.lng]]
-        });
-      }
-
-      if (e.geocode.canonical_address) {
-        data.push({
-          range: `${COMBINED_WRITEBACK_SHEET}!${addressColumn}${e.row_num}`,
-          values: [[e.geocode.canonical_address]]
-        });
-      }
-    });
-    const write_response = await google.sheets('v4').spreadsheets.values.batchUpdate(write_request);
+    const write_request = geocodeMethods.initiateWriteRequest(sheet_id, client);
+    write_request.resource.data = geocodeMethods.fillWriteRequest(to_write_back, columns, COMBINED_WRITEBACK_SHEET);
+    // const write_response = await google.sheets('v4').spreadsheets.values.batchUpdate(write_request);
   }
 
   return { numGeocodes: promises.length, numWritebacks: to_write_back.length };
@@ -412,27 +381,27 @@ async function snapshotData(prefix, country) {
   return [data];
 }
 
-module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
-  const country = get_country_from_path(req);
-  console.log(`reloadsheetdata for ${country}`);
-  if (country === 'makers') {
-    await loadMakerData(admin, req, res);
-    return;
-  }
+// module.exports.reloadsheetdata = functions.https.onRequest(async (req, res) => {
+//   const country = get_country_from_path(req);
+//   console.log(`reloadsheetdata for ${country}`);
+//   if (country === 'makers') {
+//     await loadMakerData(admin, req, res);
+//     return;
+//   }
 
-  let data = 'data';
-  if (country === 'getusppe-affiliates') {
-    [data] = await snapshotData('getusppe-affiliates', 'us');
-  } else {
-    if (!(country in constants.SHEETS)) {
-      res.status(400).send(`invalid country: ${country} for ${req.path}`);
-      return;
-    }
-    [data] = await snapshotData(data, country);
-  }
+//   let data = 'data';
+//   if (country === 'getusppe-affiliates') {
+//     [data] = await snapshotData('getusppe-affiliates', 'us');
+//   } else  {
+//     if (!(country in constants.SHEETS)) {
+//       res.status(400).send(`invalid country: ${country} for ${req.path}`);
+//       return;
+//     }
+//     [data] = await snapshotData(data, country);
+//   }
 
-  res.status(200).send(`<pre>${JSON.stringify(data, null, 2)}</pre>`);
-});
+//   res.status(200).send(`<pre>${JSON.stringify(data, null, 2)}</pre>`);
+// });
 
 async function updateSheetWithGeocodes(spreadsheetId) {
   const client = await getAuthorizedClient();
@@ -453,24 +422,24 @@ async function updateSheetWithGeocodes(spreadsheetId) {
   return await annotateGeocode(response.data, spreadsheetId, client);
 }
 
-module.exports.geocode = functions.https.onRequest(async (req, res) => {
-  const country = get_country_from_path(req);
-  console.log(`geocode for ${country}`);
-  let spreadsheetId = null;
-  if (country === 'getusppe-affiliates') {
-    spreadsheetId = constants.GETUSPPE_AFFILIATES_SHEET_ID;
-  } else if (country in constants.SHEETS) {
-    spreadsheetId = constants.SHEETS[country];
-  } else {
-    res.status(400).send(`invalid country: ${country} for ${req.path}`);
-    return;
-  }
+// module.exports.geocode = functions.https.onRequest(async (req, res) => {
+//   const country = get_country_from_path(req);
+//   console.log(`geocode for ${country}`);
+//   let spreadsheetId = null;
+//   if (country === 'getusppe-affiliates') {
+//     spreadsheetId = constants.GETUSPPE_AFFILIATES_SHEET_ID;
+//   } else if (country in constants.SHEETS) {
+//     spreadsheetId = constants.SHEETS[country];
+//   } else {
+//     res.status(400).send(`invalid country: ${country} for ${req.path}`);
+//     return;
+//   }
 
-  const stats = await updateSheetWithGeocodes(spreadsheetId);
-  res.status(200).send(
-    'Geocoded and updated spreadsheet successfully. ' +
-    `${stats.numGeocodes} geocodes and ${stats.numWritebacks} writebacks`);
-});
+//   const stats = await updateSheetWithGeocodes(spreadsheetId);
+//   res.status(200).send(
+//     'Geocoded and updated spreadsheet successfully. ' +
+//       `${stats.numGeocodes} geocodes and ${stats.numWritebacks} writebacks`);
+// });
 
 
 // Local Dev Tooling to get a copy of data to play with
@@ -669,17 +638,17 @@ const annotateSmartyStreetsAddresses = async (country) => {
   }
 };
 
-module.exports.smarty_streets_analysis = functions.https.onRequest(async (req, res) => {
-  const country = get_country_from_path(req);
-  console.log(`smarty_streets_analysis for ${country}`);
-  if (!(country in constants.SHEETS)) {
-    res.status(400).send(`invalid country: ${country} for ${req.path}`);
-    return;
-  }
+// module.exports.smarty_streets_analysis = functions.https.onRequest(async (req, res) => {
+//   const country = get_country_from_path(req);
+//   console.log(`smarty_streets_analysis for ${country}`);
+//   if (!(country in constants.SHEETS)) {
+//     res.status(400).send(`invalid country: ${country} for ${req.path}`);
+//     return;
+//   }
 
-  await annotateSmartyStreetsAddresses(country);
-  res.status(200).send("Smarty Streets Output tab updated successfully!");
-});
+//   await annotateSmartyStreetsAddresses(country);
+//   res.status(200).send("Smarty Streets Output tab updated successfully!");
+// });
 
 async function writeCommandLinks(country) {
   const client = await getAuthorizedClient();
@@ -762,85 +731,74 @@ async function writeCommandLinks(country) {
   await google.sheets('v4').spreadsheets.values.batchUpdate(writeRequest);
 }
 
-module.exports.make_command_links = functions.https.onRequest(async (req, res) => {
-  const country = get_country_from_path(req);
-  console.log(`make_command_links for ${country}`);
-  if (!(country in constants.SHEETS)) {
-    res.status(400).send(`invalid country: ${country} for ${req.path}`);
-    return;
-  }
+// module.exports.make_command_links = functions.https.onRequest(async (req, res) => {
+//   const country = get_country_from_path(req);
+//   console.log(`make_command_links for ${country}`);
+//   if (!(country in constants.SHEETS)) {
+//     res.status(400).send(`invalid country: ${country} for ${req.path}`);
+//     return;
+//   }
 
-  try {
-    await writeCommandLinks(country);
-    res.status(200).send("Write back mail links");
-  } catch (e) {
-    console.log(e);
-    res.status(500).send("Failed to write back email links");
-  }
-});
+//   try {
+//     await writeCommandLinks(country);
+//     res.status(200).send("Write back mail links");
+//   } catch (e) {
+//     console.log(e);
+//     res.status(500).send("Failed to write back email links");
+//   }
+// });
 
-module.exports.exec = functions.https.onRequest(async (req, res) => {
-  if (!req.query.cmd) {
-    res.status(400).send("Missing command");
-    return;
-  }
+// module.exports.exec = functions.https.onRequest(async (req, res) => {
+//   if (!req.query.cmd) {
+//     res.status(400).send("Missing command");
+//     return;
+//   }
 
-  let cmd = null;
-  try {
-    cmd = ftmEncrypt.decryptCommand(req.query.cmd);
-    console.log(cmd);
-  } catch(e) {
-    console.error(e);
-    res.status(403).send("Invalid command");
-    return;
-  }
+//   let cmd = null;
+//   try {
+//     cmd = ftmEncrypt.decryptCommand(req.query.cmd);
+//     console.log(cmd);
+//   } catch(e) {
+//     console.error(e);
+//     res.status(403).send("Invalid command");
+//     return;
+//   }
 
-  const scriptId = "MQPwW8kpoHYv45_afG7B_v2XJ7hljrEEe";
+//   const scriptId = "MQPwW8kpoHYv45_afG7B_v2XJ7hljrEEe";
 
-  // Call the Apps Script API run method
-  //   'scriptId' is the URL parameter that states what script to run
-  //   'resource' describes the run request body (with the function name
-  //              to execute)
-  const script = google.script('v1');
-  const command = { action: cmd, ts: (new Date()).getTime() };
-  const cmdJson = JSON.stringify(command);
-  const signature = crypto.createHmac("sha256", APPSCRIPT_AUTH_SECRET).update(cmdJson).digest("base64");
+//   // Call the Apps Script API run method
+//   //   'scriptId' is the URL parameter that states what script to run
+//   //   'resource' describes the run request body (with the function name
+//   //              to execute)
+//   const script = google.script('v1');
+//   const command = { action: cmd, ts: (new Date()).getTime() };
+//   const cmdJson = JSON.stringify(command);
+//   const signature = crypto.createHmac("sha256", APPSCRIPT_AUTH_SECRET).update(cmdJson).digest("base64");
 
-  const request = {
-    scriptId,
-    resource: {
-      function: 'executeCommand',
-      parameters: [
-        cmdJson,
-        signature,
-      ],
-    }
-  };
-  try {
-    const client = await getAuthorizedClient();
-    request.auth = client;
-    const scriptResp = await script.scripts.run(request);
-    if (!scriptResp.data.done) {
-      console.error(`appscript hung? ${JSON.stringify(scriptResp)}`);
-      res.status(500).send(`server is hung ${JSON.stringify(scriptResp)}`);
-      return;
-    }
+//   const request = {
+//     scriptId,
+//     resource: {
+//       function: 'executeCommand',
+//       parameters: [
+//         cmdJson,
+//         signature,
+//       ],
+//     }
+//   };
+//   const client = await getAuthorizedClient();
+//   request.auth = client;
+//   const scriptResp = await script.scripts.run(request);
+//   if (!scriptResp.data.done) {
+//     console.error(`appscript hung? ${JSON.stringify(scriptResp)}`);
+//     res.status(500).send(`server is hung ${JSON.stringify(scriptResp)}`);
+//     return;
+//   }
 
-    const result = scriptResp.data.response.result;
-    if (result.status !== 200) {
-      console.error(`error: ${JSON.stringify(scriptResp.data)}`);
-      res.status(result.status).send('error');
-      return;
-    }
-    res.status(200).send(result.msg);
-  } catch (e) {
-    console.error(e);
-    res.status(500).send(
-      'Request received. Thank you for updating FindTheMasks! ' +
-      'There was a server error, but your update or removal request was likely handled correctly ' +
-      'nonetheless. If your entry has not received an updated date on the FindTheMasks.com map ' +
-      'or been removed from the FindTheMasks.com map within 24 hours, please contact us at ' +
-      'data@findthemasks.com.'
-    );
-  }
-});
+//   const result = scriptResp.data.response.result;
+//   if (result.status !== 200) {
+//     console.error(`error: ${JSON.stringify(scriptResp.data)}`);
+//     res.status(result.status).send('error');
+//     return;
+//   }
+//   res.status(200).send(result.msg);
+// });

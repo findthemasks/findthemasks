@@ -2,6 +2,7 @@ const admin = require('firebase-admin');
 const Bottleneck = require('bottleneck');
 const Client = require("@googlemaps/google-maps-services-js").Client;
 const functions = require('firebase-functions');
+const { ResultStorage } = require('firebase-functions/lib/providers/testLab');
 
 let GOOGLE_MAPS_API_KEY = null;
 
@@ -51,8 +52,10 @@ async function geocodeAddress(address) {
   if (response.status === 200 && response.data.status === 'OK') {
     if (response.data.results && response.data.results.length > 0) {
       const result = response.data.results[0];
+      console.log("ERROR VALUE : " + result);
       retval.canonical_address = result.formatted_address;
       retval.location = result.geometry.location;
+      console.log("HELLO: " + retval.location + "WORLD " + retval.canonical_address);
     }
   } else {
     throw new Error(`status: ${response.status} req: ${response.config.url} ${JSON.stringify(response.config.params)} result: ${response.data}`);
@@ -60,6 +63,7 @@ async function geocodeAddress(address) {
 
   // Store the unencoded address too so it's readable in the firebase data dumps.
   await geocodeCacheRef.set({address, geocode: retval});
+  console.log("HELLO: " + retval.location + "WORLD " + retval.canonical_address);
   return retval;
 }
 
@@ -88,5 +92,71 @@ function makeAddress(street, city, state, zip, country) {
 
   return address;
 }
+function initiateWriteRequest (sheet_id, client) {
+  const write_request = {
+    spreadsheetId: sheet_id,
+    resource: {
+      valueInputOption: 'USER_ENTERED',
+    }
+  };
+  write_request.auth = client;
+  return write_request;
+}
 
-module.exports = { geocodeAddress, makeAddress }
+function fillWriteRequest(to_write_back, columns, COMBINED_WRITEBACK_SHEET) {
+  const { latColumn, lngColumn, addressColumn } = columns;
+  const data = [];
+  to_write_back.forEach(e => {
+    console.log(`writing lat-long,address cols ${latColumn},${lngColumn},${addressColumn} : ${JSON.stringify(e)}`);
+    // TODO(awong): Don't hardcode the columns. Make it more robust somehow.
+    if (e.geocode.location) {
+      data.push({
+        range: `${COMBINED_WRITEBACK_SHEET}!${latColumn}${e.row_num}`,
+        values: [[e.geocode.location.lat]]
+      });
+
+      data.push({
+        range: `${COMBINED_WRITEBACK_SHEET}!${lngColumn}${e.row_num}`,
+        values: [[e.geocode.location.lng]]
+      });
+    }
+
+    if (e.geocode.canonical_address) {
+      data.push({
+        range: `${COMBINED_WRITEBACK_SHEET}!${addressColumn}${e.row_num}`,
+        values: [[e.geocode.canonical_address]]
+      });
+    }
+  });
+  console.log(data);
+  return data;
+}
+
+function doGeocodeCallback (to_write_back, geocode, entry, row_num, do_latlong, indices) {
+  if (entry[indices.address]) {
+    // Do not overwrite if there is already an address listed.
+    geocode.canonical_address = null;
+  } else {
+    entry[indices.address] = geocode.canonical_address;
+  }
+
+  if (do_latlong) {
+    entry[indices.lat] = geocode.location.lat;
+    entry[indices.lng] = geocode.location.lng;
+  } else {
+    geocode.location = null;
+  }
+  console.log("Writing ", geocode);
+  to_write_back.push({ row_num, geocode });
+  return geocode;
+}
+
+const methods = {
+  geocodeAddress,
+  makeAddress,
+  fillWriteRequest,
+  initiateWriteRequest,
+  doGeocodeCallback,
+};
+
+module.exports.methods = methods;

@@ -12,7 +12,8 @@
   },
   "jest": {
     "testPathIgnorePatterns": [
-      "/node_modules/"
+      "/node_modules/",
+      "/functions/"
     ]
   },
   "scripts": {
@@ -23,8 +24,7 @@
     "lint-node": "eslint '**/*.js' --ignore-pattern 'client/**/*'",
     "start": "node server.js",
     "webpack": "NODE_ENV='production' webpack -p --config webpack.config.js",
-    "test": "jest  --verbose --silent --testPathIgnorePatterns='/functions'",
-    "test-functions": "jest --testPathPattern=./functions"
+    "test": "jest --verbose --silent "
   },
   "dependencies": {
     "banana-i18n": "^1.2.1",
